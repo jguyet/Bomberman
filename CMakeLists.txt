@@ -39,7 +39,7 @@ find_package( OpenGL REQUIRED )
 set(HEADER_FILES
 	)
 set(CLIENT_SRC
-	./srcs/SimpleWindow.cpp
+	./srcs/Main.cpp
 	)
 add_executable(${project_name} ${CLIENT_SRC})
 
