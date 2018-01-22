@@ -7,8 +7,8 @@ Recompilation command `make compile`
 Clean build folder `make fclean`
 
 ##### developement :
-Trello -> [https://trello.com/b/GyST89x2/bomberman](https://trello.com/b/GyST89x2/bomberman)
-create cpp files on `srcs` directory and add file_path on set(HEADER_FILES) CMakelist.txt  
+Trello -> [https://trello.com/b/GyST89x2/bomberman](https://trello.com/b/GyST89x2/bomberman)  
+create cpp files on `srcs` directory and add file_path on set(HEADER_FILES) CMakelist.txt  
 create hpp headers on `includes` directory and add file_path on set(CLIENT_SRC) CMakelist.tx  
 
 ````
