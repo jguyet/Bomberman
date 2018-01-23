@@ -1,7 +1,6 @@
 ################################################################################
 # Project settings
 ################################################################################
-include(externalproject)
 find_package(Git REQUIRED)
 
 cmake_minimum_required( VERSION 3.2.2 )
