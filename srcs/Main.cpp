@@ -1,11 +1,4 @@
-#include <glfw3.h>
-#include <glm/vec3.hpp> // glm::vec3
-#include <glm/vec4.hpp> // glm::vec4
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
+#include "Bomberman.hpp"
 
 static void error_callback(int error, const char* description)
 {
@@ -30,24 +23,39 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     std::cout << "Mouse entry : " << button << " action : " << action << std::endl;
 }
 
+class HH : public IRenderLoop {
+	void controllerLoop( void ) {
+		std::cout << "HAHHAHA1" << std::endl;
+	}
+
+	void renderLoop( void ) {
+		std::cout << "HAHHAHA2" << std::endl;
+	}
+};
+
 int main(void)
 {
-    GLFWwindow* window;
-    glfwSetErrorCallback(error_callback);
-    if (!glfwInit())
-        exit(EXIT_FAILURE);
-    window = glfwCreateWindow(640, 480, "Bomberman", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetKeyCallback(window, key_callback);
-	glfwSetCursorPosCallback(window, cursor_position_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
-    while (!glfwWindowShouldClose(window))
-    {
+
+	RenderLoop *loop = new RenderLoop(new HH());
+
+	loop->start();
+
+    // GLFWwindow* window;
+    // glfwSetErrorCallback(error_callback);
+    // if (!glfwInit())
+    //     exit(EXIT_FAILURE);
+    // window = glfwCreateWindow(640, 480, "Bomberman", NULL, NULL);
+    // if (!window)
+    // {
+    //     glfwTerminate();
+    //     exit(EXIT_FAILURE);
+    // }
+    // glfwMakeContextCurrent(window);
+    // glfwSetKeyCallback(window, key_callback);
+	// glfwSetCursorPosCallback(window, cursor_position_callback);
+	// glfwSetMouseButtonCallback(window, mouse_button_callback);
+    // while (!glfwWindowShouldClose(window))
+    // {
         float ratio;
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
@@ -70,8 +78,8 @@ int main(void)
         glEnd();
         glfwSwapBuffers(window);
         glfwPollEvents();
-    }
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    exit(EXIT_SUCCESS);
+    // }
+    // glfwDestroyWindow(window);
+    // glfwTerminate();
+    // exit(EXIT_SUCCESS);
 }
