@@ -6,7 +6,9 @@
 #ifndef BOMBERMANCLIENT_HPP
 # define BOMBERMANCLIENT_HPP
 
-#include "Bomberman.hpp"
+//# include "graphics/IRenderLoop.hpp"
+
+# include "Bomberman.hpp"
 
 class BombermanClient : public IRenderLoop
 {
@@ -25,6 +27,7 @@ class BombermanClient : public IRenderLoop
 
 		void										initialize_properties( void );
 		void										initialize_resources( void );
+		void										initialize_inputs( void );
 		void										build_window( void );
 		void										run( void );
 		void										stop( void );

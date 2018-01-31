@@ -24,8 +24,28 @@
 # include <unistd.h>
 # include <iostream> //std::
 
+# define RELEASE GLFW_RELEASE
+# define PRESS GLFW_PRESS
+# define REPEAT GLFW_REPEAT
+
+/*
+** Interfaces
+*/
 # include "graphics/IRenderLoop.hpp"
+# include "controllers/IController.hpp"
+
+/*
+** Static Classes
+*/
+# include "utils/TimeUtils.hpp"
+
+/*
+** Classes
+*/
 # include "graphics/RenderLoop.hpp"
+# include "graphics/keys/Keyboard.hpp"
+# include "graphics/keys/Mouse.hpp"
+# include "client/BombermanClient.hpp"
 
 long			getCurrentNanoSeconds( void );
 

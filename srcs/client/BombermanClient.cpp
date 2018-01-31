@@ -1,4 +1,4 @@
-#include "client/BombermanClient.hpp"
+#include "Bomberman.hpp"
 
 // STATIC ########################################################
 
@@ -72,6 +72,16 @@ void						BombermanClient::build_window( void )
 	glfwMakeContextCurrent(this->window);
 }
 
+void						BombermanClient::initialize_inputs( void )
+{
+	Keyboard::instance = new Keyboard(this->window);
+	Mouse::instance = new Mouse(this->window);
+
+	glfwSetKeyCallback(this->window, Keyboard::key_callback);
+	glfwSetCursorPosCallback(this->window, Mouse::cursor_position_callback);
+	glfwSetMouseButtonCallback(this->window, Mouse::mouse_button_callback);
+}
+
 void						BombermanClient::run( void )
 {
 	//start controller/render looping
@@ -141,6 +151,7 @@ int main(void)
 	client->initialize_properties();
 	client->initialize_resources();
 	client->build_window();
+	client->initialize_inputs();
 	client->run();
 
 	delete client;

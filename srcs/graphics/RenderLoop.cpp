@@ -1,4 +1,4 @@
-#include "graphics/RenderLoop.hpp"
+#include "Bomberman.hpp"
 
 // CANONICAL #####################################################
 
@@ -62,13 +62,13 @@ void						RenderLoop::stop( void )
 void						RenderLoop::loopcontroller( void )
 {
 	long frames = 0;
-	long lastTime = getCurrentNanoSeconds();
+	long lastTime = TimeUtils::getCurrentNanoSeconds();
 
 	while (this->running) {
-		long passedTime = getCurrentNanoSeconds() - lastTime;
+		long passedTime = TimeUtils::getCurrentNanoSeconds() - lastTime;
 
 		if (passedTime > this->controllerRate) {
-			lastTime = getCurrentNanoSeconds();
+			lastTime = TimeUtils::getCurrentNanoSeconds();
 			this->renderloop->controllerLoop();
 			frames++;
 		} else {
@@ -83,13 +83,13 @@ void						RenderLoop::loopcontroller( void )
 void						RenderLoop::looprender( void )
 {
 	long frames = 0;
-	long lastTime = getCurrentNanoSeconds();
+	long lastTime = TimeUtils::getCurrentNanoSeconds();
 
 	while (this->running) {
-		long passedTime = getCurrentNanoSeconds() - lastTime;
+		long passedTime = TimeUtils::getCurrentNanoSeconds() - lastTime;
 
 		if (passedTime > this->renderRate) {
-			lastTime = getCurrentNanoSeconds();
+			lastTime = TimeUtils::getCurrentNanoSeconds();
 			this->renderloop->renderLoop();
 			frames++;
 		} else {

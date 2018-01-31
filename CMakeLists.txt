@@ -36,18 +36,12 @@ find_package( OpenGL REQUIRED )
 # Build executables
 ################################################################################
 
-SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11 -pthread")
 
-set(HEADER_FILES
-	./includes
-	)
-set(CLIENT_SRC
-	./srcs/client/BombermanClient.cpp
-	./srcs/graphics/RenderLoop.cpp
-	./srcs/utils/getCurrentNanoSeconds.cpp
-	)
+file(GLOB_RECURSE CLIENT_SRC srcs/*.cpp)
+
 add_executable(${project_name} ${CLIENT_SRC})
 
-include_directories(${project_name} ${HEADER_FILES})
+include_directories(${project_name} includes)
 
 target_link_libraries(${project_name} glfw ${OPENGL_gl_LIBRARY})

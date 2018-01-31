@@ -1,6 +1,8 @@
 #ifndef IRENDERLOOP_HPP
 # define IRENDERLOOP_HPP
 
+# include "Bomberman.hpp"
+
 class IRenderLoop
 {
 	public:
