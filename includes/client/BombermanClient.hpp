@@ -29,7 +29,7 @@ class BombermanClient : public IRenderLoop
 		Transform									*transform;
 		Camera										*camera;
 
-		AbstractView								*currentView;
+		IView										*currentView;
 
 	private:
 

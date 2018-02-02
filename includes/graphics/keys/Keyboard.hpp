@@ -19,9 +19,11 @@ class KeyBoard
 		friend std::ostream &				operator<<(std::ostream & o, KeyBoard const & i);
 
 		int									getKey(int key);
+		void								process( void );
 
 	private:
 		GLFWwindow							*window;
+		bool								pressedKeys[301];
 };
 
 #endif

@@ -6,8 +6,8 @@
 class IController
 {
 	public:
-		virtual ~IController( void );
-		virtual void process( void );
+		virtual ~IController( void ) {}
+		virtual void process( void ) = 0;
 };
 
 #endif

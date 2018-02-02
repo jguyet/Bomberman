@@ -2,9 +2,8 @@
 # define SIMPLEVIEW_HPP
 
 # include "Bomberman.hpp"
-# include "views/simple/macrocontrollers/PressKeyH.hpp"
 
-class SimpleView : public AbstractView
+class SimpleView : public IView
 {
 	public:
 
@@ -12,10 +11,28 @@ class SimpleView : public AbstractView
 		SimpleView( SimpleView const & src );
 		virtual ~SimpleView( void );
 
-		SimpleView &							operator=( SimpleView const & rhs );
-		friend std::ostream &					operator<<(std::ostream & o, SimpleView const & i);
+		SimpleView &								operator=( SimpleView const & rhs );
+		friend std::ostream &						operator<<(std::ostream & o, SimpleView const & i);
 
-		void									render( void );
+		void										render( void );
+
+		void 										pressUp( void );
+		void 										pressDown( void );
+		void 										pressLeft( void );
+		void 										pressRight( void );
+
+		void										pressKeyBoard(unsigned int key) {
+			if (this->keyBoard_map.count(key) == 1) {
+				(this->*keyBoard_map[key])();
+			}
+		}
+
+	private:
+			typedef void (SimpleView::*memberMethod)( void );
+
+			std::map<unsigned int, memberMethod>	keyBoard_map;
+			GLuint									matrixID;
+			GLuint									vertexBuffer;
 
 };
 

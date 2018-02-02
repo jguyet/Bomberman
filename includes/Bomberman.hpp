@@ -45,6 +45,7 @@ std::vector<std::string>		split(const std::string &s, char delim);
 */
 # include "graphics/IRenderLoop.hpp"
 # include "controllers/IController.hpp"
+# include "views/IView.hpp"
 
 /*
 ** Static Classes
@@ -59,9 +60,8 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/components/Transform.hpp"
 
 /*
-**
+** Micro controllers
 */
-# include "views/AbstractView.hpp"
 # include "views/simple/SimpleView.hpp"
 
 # include "graphics/RenderLoop.hpp"

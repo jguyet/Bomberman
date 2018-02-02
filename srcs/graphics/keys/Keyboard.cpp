@@ -9,6 +9,7 @@ void			KeyBoard::key_callback(GLFWwindow* window, int key, int scancode, int act
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
 	}
+	KeyBoard::instance->pressedKeys[key] = (action == PRESS || action == REPEAT) ? true : false;
 }
 
 // ###############################################################
@@ -18,6 +19,9 @@ void			KeyBoard::key_callback(GLFWwindow* window, int key, int scancode, int act
 KeyBoard::KeyBoard ( GLFWwindow *window )
 {
 	this->window = window;
+	for (int i = 0; i < 301; i++) {
+		this->pressedKeys[i] = false;
+	}
 	return ;
 }
 
@@ -54,6 +58,15 @@ std::ostream &				operator<<(std::ostream & o, KeyBoard const & i)
 int							KeyBoard::getKey(int key)
 {
 	return (glfwGetKey(this->window, key));
+}
+
+void						KeyBoard::process( void )
+{
+	for (int i = 0; i < 301; i++) {
+		if (this->pressedKeys[i] == true) {
+			BombermanClient::instance->currentView->pressKeyBoard(i);
+		}
+	}
 }
 
 // ###############################################################

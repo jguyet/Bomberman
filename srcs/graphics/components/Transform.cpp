@@ -57,7 +57,7 @@ glm::mat4					Transform::enableProjectionTransformation( void )
 
 
 	glm::mat4 view       = glm::lookAt(
-								glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
+								glm::vec3(this->camera->getPosition()->x,this->camera->getPosition()->y,this->camera->getPosition()->z), // Camera is at (4,3,3), in World Space
 								glm::vec3(0,0,0), // and looks at the origin
 								glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 						   );
