@@ -1,33 +1,26 @@
 #include "Bomberman.hpp"
 
 // STATIC ########################################################
-KeyBoard		*KeyBoard::instance = NULL;
-
-void			KeyBoard::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	std::cout << "Key entry : " << key << " action : " << action << std::endl;
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GL_TRUE);
-	}
-}
 
 // ###############################################################
 
 // CANONICAL #####################################################
 
-KeyBoard::KeyBoard ( GLFWwindow *window )
+SimpleView::SimpleView ( void ) : AbstractView()
 {
-	this->window = window;
+	this->map[GLFW_KEY_H] = new PressKeyH();
+
+	std::cout << "cococo" << std::endl;
 	return ;
 }
 
-KeyBoard::KeyBoard ( KeyBoard const & src )
+SimpleView::SimpleView ( SimpleView const & src )
 {
 	*this = src;
 	return ;
 }
 
-KeyBoard &				KeyBoard::operator=( KeyBoard const & rhs )
+SimpleView &				SimpleView::operator=( SimpleView const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -36,12 +29,20 @@ KeyBoard &				KeyBoard::operator=( KeyBoard const & rhs )
 	return (*this);
 }
 
-KeyBoard::~KeyBoard ( void )
+SimpleView::~SimpleView ( void )
 {
 	return ;
 }
 
-std::ostream &				operator<<(std::ostream & o, KeyBoard const & i)
+// ###############################################################
+
+// CONSTRUCTOR POLYMORPHISM ######################################
+
+// ###############################################################
+
+// OVERLOAD OPERATOR #############################################
+
+std::ostream &				operator<<(std::ostream & o, SimpleView const & i)
 {
 	(void)i;
 	return (o);
@@ -51,9 +52,9 @@ std::ostream &				operator<<(std::ostream & o, KeyBoard const & i)
 
 // PUBLIC METHOD #################################################
 
-int							KeyBoard::getKey(int key)
+void									pressHKey(AbstractView & view)
 {
-	return (glfwGetKey(this->window, key));
+	std::cout << "Im in pressHKey" << std::endl;
 }
 
 // ###############################################################

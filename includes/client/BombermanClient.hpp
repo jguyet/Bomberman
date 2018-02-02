@@ -1,12 +1,5 @@
-// ------------------------------------------------------------	//
-//																//
-//																//
-// ------------------------------------------------------------	//
-
 #ifndef BOMBERMANCLIENT_HPP
 # define BOMBERMANCLIENT_HPP
-
-//# include "graphics/IRenderLoop.hpp"
 
 # include "Bomberman.hpp"
 
@@ -32,6 +25,12 @@ class BombermanClient : public IRenderLoop
 		void										run( void );
 		void										stop( void );
 
+		GLFWwindow									*window;
+		Transform									*transform;
+		Camera										*camera;
+
+		AbstractView								*currentView;
+
 	private:
 
 		// PRIVATE METHODS #####################################################
@@ -40,7 +39,6 @@ class BombermanClient : public IRenderLoop
 		void								renderLoop( void );
 
 		RenderLoop							*loop;
-		GLFWwindow							*window;
 };
 
 #endif

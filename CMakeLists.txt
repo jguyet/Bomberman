@@ -29,19 +29,25 @@ execute_process(COMMAND git clone "https://github.com/g-truc/glm.git"
 				)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/glm)
 
-#OpenGL
-find_package( OpenGL REQUIRED )
+execute_process(COMMAND git clone "https://github.com/alelievr/SOIL2.git"
+				WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/
+				)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/SOIL2)
+execute_process(COMMAND make WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/SOIL2)
+
+find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
 
 ################################################################################
 # Build executables
 ################################################################################
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
 
 file(GLOB_RECURSE CLIENT_SRC srcs/*.cpp)
 
 add_executable(${project_name} ${CLIENT_SRC})
 
-include_directories(${project_name} includes)
+include_directories(${project_name} includes ${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/SOIL2/incs ${GLEW_INCLUDE_DIRS})
 
-target_link_libraries(${project_name} glfw ${OPENGL_gl_LIBRARY})
+target_link_libraries(${project_name} glfw ${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/SOIL2/libSOIL2.so ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARIES})

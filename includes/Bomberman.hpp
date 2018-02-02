@@ -14,6 +14,11 @@
 #ifndef BOMBERMAN_HPP
 # define BOMBERMAN_HPP
 
+# if __APPLE__
+#  define GLFW_INCLUDE_GLCOREARB
+# endif
+
+# include <SOIL2.h>
 # include <glfw3.h>
 # include <glm/vec3.hpp> // glm::vec3
 # include <glm/vec4.hpp> // glm::vec4
@@ -23,10 +28,17 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <iostream> //std::
+# include <vector>
+# include <list>
+# include <sstream>
+# include <fstream>
+# include <map>
 
 # define RELEASE GLFW_RELEASE
 # define PRESS GLFW_PRESS
 # define REPEAT GLFW_REPEAT
+
+std::vector<std::string>		split(const std::string &s, char delim);
 
 /*
 ** Interfaces
@@ -38,15 +50,23 @@
 ** Static Classes
 */
 # include "utils/TimeUtils.hpp"
+# include "utils/ShaderUtils.hpp"
 
 /*
 ** Classes
 */
+# include "graphics/components/Camera.hpp"
+# include "graphics/components/Transform.hpp"
+
+/*
+**
+*/
+# include "views/AbstractView.hpp"
+# include "views/simple/SimpleView.hpp"
+
 # include "graphics/RenderLoop.hpp"
-# include "graphics/keys/Keyboard.hpp"
+# include "graphics/keys/KeyBoard.hpp"
 # include "graphics/keys/Mouse.hpp"
 # include "client/BombermanClient.hpp"
-
-long			getCurrentNanoSeconds( void );
 
 #endif
