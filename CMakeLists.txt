@@ -35,7 +35,7 @@ execute_process(COMMAND git clone "https://github.com/alelievr/SOIL2.git"
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/SOIL2)
 execute_process(COMMAND make WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external_libraries/SOIL2)
 
-find_package(GLEW REQUIRED)
+#find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 
 ################################################################################

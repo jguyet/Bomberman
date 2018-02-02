@@ -89,6 +89,11 @@ void						BombermanClient::build_window( void )
 	glfwMakeContextCurrent(this->window);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
 }
 
 void						BombermanClient::initialize_inputs( void )

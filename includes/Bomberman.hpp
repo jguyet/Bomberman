@@ -47,6 +47,10 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "controllers/IController.hpp"
 # include "views/IView.hpp"
 
+//models
+
+# include "models/Cube.hpp"
+
 /*
 ** Static Classes
 */

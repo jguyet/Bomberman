@@ -33,6 +33,9 @@ class SimpleView : public IView
 			std::map<unsigned int, memberMethod>	keyBoard_map;
 			GLuint									matrixID;
 			GLuint									vertexBuffer;
+			GLuint									colorbuffer;
+
+			std::vector<Cube*> 			components;
 
 };
 

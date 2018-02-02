@@ -13,30 +13,13 @@ SimpleView::SimpleView ( void )
 	this->keyBoard_map[65] = &SimpleView::pressLeft;
 	this->keyBoard_map[83] = &SimpleView::pressDown;
 
-	//GEn vao
-	GLuint VertexArrayID;
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
+	for (int i = 0; i < 10; i++) {
+		this->components.insert(this->components.begin(), new Cube(1 + (i * 4),1,1,1));
+	}
 
-
-	static const GLfloat g_vertex_buffer_data[] = {
-	   -1.0f, -1.0f, 0.0f,
-	   1.0f, -1.0f, 0.0f,
-	   0.0f,  1.0f, 0.0f,
-	};
-
-	// Get a handle for our "MVP" uniform
-	// Only during the initialisation
-	this->matrixID = glGetUniformLocation(ShaderUtils::instance->get("simple"), "MVP");
-
-	glUseProgram(ShaderUtils::instance->get("simple"));
-
-	// Generate 1 buffer, put the resulting identifier in vertexbuffer
-	glGenBuffers(1, &this->vertexBuffer);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
-	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	for (int i = 0; i < 10; i++) {
+		this->components.at(i)->produce();
+	}
 
 	return ;
 }
@@ -81,28 +64,16 @@ std::ostream &				operator<<(std::ostream & o, SimpleView const & i)
 
 void						SimpleView::render( void )
 {
+
+
 	glUseProgram(ShaderUtils::instance->get("simple"));
 
 	BombermanClient::instance->transform->setProjection(45.0f, 16.0f, 9.0f, 0.1f, 100.0f);
 	glm::mat4 MVP = BombermanClient::instance->transform->enableProjectionTransformation();
 
-	glUniformMatrix4fv(this->matrixID, 1, GL_FALSE, &MVP[0][0]);
-
-	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
-	glVertexAttribPointer(
-	   0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	   3,                  // size
-	   GL_FLOAT,           // type
-	   GL_FALSE,           // normalized?
-	   0,                  // stride
-	   (void*)0            // array buffer offset
-	);
-	// Draw the triangle !
-	glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
-	glDisableVertexAttribArray(0);
+	for (int i = 0; i < 10; i++) {
+		this->components.at(i)->render(&MVP[0][0]);
+	}
 }
 
 void 						SimpleView::pressRight( void )
