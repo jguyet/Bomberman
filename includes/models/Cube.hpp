@@ -17,12 +17,14 @@ class Cube
 		Cube( Cube const & src );
 		virtual ~Cube( void );
 
-		Cube &							operator=( Cube const & rhs );
+		Cube &											operator=( Cube const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Cube const & i);
 
 
 		void									render( const GLfloat *mvp );
 		void 									produce(void);
+		void 									build_position(void);
+		void 									build_color(void);
 
 		glm::vec3 pos;
 		float scale;
@@ -30,6 +32,14 @@ class Cube
 		GLuint									matrixID;
 		GLuint									vertexBuffer;
 		GLuint									colorbuffer;
+
+
+		GLuint									Texture;
+		GLuint									TextureID;
+
+		GLuint 									uvbuffer;
+
+		float										nuit;
 };
 
 #endif

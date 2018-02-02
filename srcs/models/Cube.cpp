@@ -52,26 +52,18 @@ std::ostream &				operator<<(std::ostream & o, Cube const & i)
 	return (o);
 }
 
-void 									Cube::produce(void)
+void 									Cube::build_position(void)
 {
-	//vao
-	//vbo
-	//GEn vao
-	GLuint VertexArrayID;
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
-
-	this->matrixID = glGetUniformLocation(ShaderUtils::instance->get("simple"), "MVP");
-
 	float x = this->pos.x;
 	float y = this->pos.y;
 	float z = this->pos.z;
 
 	float scale = this->scale;
 
+	this->pos.x += 0.005f;
+	this->pos.y += 0.005f;
 
-
-	GLfloat g_vertex_buffer_data[] = {
+	GLfloat vertex_buffer_data2[] = {
 		x + -1.0f, y + -1.0f, z + -1.0f,
 		x + -1.0f, y + -1.0f, z +  1.0f,
 		x + -1.0f, y +  1.0f, z +  1.0f,
@@ -110,6 +102,14 @@ void 									Cube::produce(void)
 		x +  1.0f, y + -1.0f, z +  1.0f
 	};
 
+	glGenBuffers(1, &this->vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data2), vertex_buffer_data2, GL_STATIC_DRAW);
+
+}
+
+void 									Cube::build_color( void )
+{
 	// One color for each vertex. They were generated randomly.
 	GLfloat g_color_buffer_data[] = {
 		0.583f,  0.771f,  0.014f,
@@ -150,18 +150,87 @@ void 									Cube::produce(void)
 		0.982f,  0.099f,  0.879f
 	};
 
-	// Get a handle for our "MVP" uniform
-	// Only during the initialisation
-
-	glGenBuffers(1, &this->vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-
-
 	glGenBuffers(1, &this->colorbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+}
+
+void 									Cube::produce(void)
+{
+
+	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	// Generate mipmaps, by the way.
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
+	//vao
+	//vbo
+	//GEn vao
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
+
+	this->matrixID = glGetUniformLocation(ShaderUtils::instance->get("simple"), "MVP");
+
+	this->build_position();
+	//this->build_color();
+
+	this->Texture = SOIL_load_OGL_texture
+	(
+		"uvtemplate.DDS",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+
+	this->TextureID  = glGetUniformLocation(ShaderUtils::instance->get("simple"), "firstTexture");
+
+	GLfloat g_uv_buffer_data[] = {
+		0.000059f, 1.0f-0.000004f,
+		0.000103f, 1.0f-0.336048f,
+		0.335973f, 1.0f-0.335903f,
+		1.000023f, 1.0f-0.000013f,
+		0.667979f, 1.0f-0.335851f,
+		0.999958f, 1.0f-0.336064f,
+		0.667979f, 1.0f-0.335851f,
+		0.336024f, 1.0f-0.671877f,
+		0.667969f, 1.0f-0.671889f,
+		1.000023f, 1.0f-0.000013f,
+		0.668104f, 1.0f-0.000013f,
+		0.667979f, 1.0f-0.335851f,
+		0.000059f, 1.0f-0.000004f,
+		0.335973f, 1.0f-0.335903f,
+		0.336098f, 1.0f-0.000071f,
+		0.667979f, 1.0f-0.335851f,
+		0.335973f, 1.0f-0.335903f,
+		0.336024f, 1.0f-0.671877f,
+		1.000004f, 1.0f-0.671847f,
+		0.999958f, 1.0f-0.336064f,
+		0.667979f, 1.0f-0.335851f,
+		0.668104f, 1.0f-0.000013f,
+		0.335973f, 1.0f-0.335903f,
+		0.667979f, 1.0f-0.335851f,
+		0.335973f, 1.0f-0.335903f,
+		0.668104f, 1.0f-0.000013f,
+		0.336098f, 1.0f-0.000071f,
+		0.000103f, 1.0f-0.336048f,
+		0.000004f, 1.0f-0.671870f,
+		0.336024f, 1.0f-0.671877f,
+		0.000103f, 1.0f-0.336048f,
+		0.336024f, 1.0f-0.671877f,
+		0.335973f, 1.0f-0.335903f,
+		0.667969f, 1.0f-0.671889f,
+		1.000004f, 1.0f-0.671847f,
+		0.667979f, 1.0f-0.335851f
+	};
+
+
+	glGenBuffers(1, &this->uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
 
 
 }
@@ -171,6 +240,12 @@ void									Cube::render( const GLfloat *mvp )
 
 	glUniformMatrix4fv(this->matrixID, 1, GL_FALSE, mvp);
 	//rendu
+
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, this->Texture);
+	glUniform1i(this->TextureID, 0);
+
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
 	glVertexAttribPointer(
@@ -182,16 +257,29 @@ void									Cube::render( const GLfloat *mvp )
 		 (void*)0            // array buffer offset
 	);
 
+	// glEnableVertexAttribArray(1);
+	// glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
+	// glVertexAttribPointer(
+	// 		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+	// 		3,                                // size
+	// 		GL_FLOAT,                         // type
+	// 		GL_FALSE,                         // normalized?
+	// 		0,                                // stride
+	// 		(void*)0                          // array buffer offset
+	// );
+
+
 	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
-	glVertexAttribPointer(
+		glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
+		glVertexAttribPointer(
 			1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-			3,                                // size
+			2,                                // size : U+V => 2
 			GL_FLOAT,                         // type
 			GL_FALSE,                         // normalized?
 			0,                                // stride
 			(void*)0                          // array buffer offset
-	);
+		);
+
 
 	// Draw the triangle !
 	glDrawArrays(GL_TRIANGLES, 0, 12*3); // Starting from vertex 0; 3 vertices total -> 1 triangle

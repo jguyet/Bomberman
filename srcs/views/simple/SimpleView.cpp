@@ -65,6 +65,7 @@ std::ostream &				operator<<(std::ostream & o, SimpleView const & i)
 void						SimpleView::render( void )
 {
 
+	usleep(10000);
 
 	glUseProgram(ShaderUtils::instance->get("simple"));
 
@@ -73,6 +74,8 @@ void						SimpleView::render( void )
 
 	for (int i = 0; i < 10; i++) {
 		this->components.at(i)->render(&MVP[0][0]);
+
+		//this->components.at(i)->build_position();
 	}
 }
 
