@@ -49,6 +49,67 @@
 // 	return displayList;
 // }
 
+void					Model::loadMaterials(Model *model, std::string absolutePath, std::string filename)
+{
+	std::ifstream file;
+
+	file.open(absolutePath + filename);
+
+	if (!file.good()) {
+		printf("Impossible to open the file %s !\n", (absolutePath + filename).c_str());
+		return ;
+	}
+
+	std::string materialLine;
+	Model::Material *parseMaterial = NULL;
+	std::string parseMaterialName = "";
+
+	for (std::string materialLine; std::getline(file, materialLine);) {
+		std::vector<std::string> materialspl = split(materialLine, ' ');
+
+		if (materialLine == "" || materialspl.at(0) == "#") {
+			continue ;
+		}
+
+		if (materialspl.at(0) == "newmtl") { // indique le début d'un nouveau matériel
+			if (parseMaterialName != "" && model->getMaterials().count(parseMaterialName) == 0) {
+				model->getMaterials()[parseMaterialName] = parseMaterial;
+			}
+			parseMaterialName = materialspl.at(1);
+			parseMaterial = new Model::Material();
+
+		} else if (materialspl.at(0) == "Ns") { //pour le specular exponent entre 0 et 100
+			parseMaterial->specularCoefficient = std::stof(materialspl.at(1));
+		} else if (materialspl.at(0) == "Ka") { //nous donne la couleur ambiante (la couleur de l'objet sans lumière directe), RVB entre 0 (Min) et 1 (Max)
+			parseMaterial->ambientColour[0] = std::stof(materialspl.at(1));
+			parseMaterial->ambientColour[1] = std::stof(materialspl.at(2));
+			parseMaterial->ambientColour[2] = std::stof(materialspl.at(3));
+		} else if (materialspl.at(0) == "Ks") { //pour la couleur spéculaire (specular)
+			parseMaterial->specularColour[0] = std::stof(materialspl.at(1));
+			parseMaterial->specularColour[1] = std::stof(materialspl.at(2));
+			parseMaterial->specularColour[2] = std::stof(materialspl.at(3));
+		} else if (materialspl.at(0) == "Kd") { //est utilisé pour la couleur diffuse (la couleur de l'objet sous lumière blanche)
+			parseMaterial->diffuseColour[0] = std::stof(materialspl.at(1));
+			parseMaterial->diffuseColour[1] = std::stof(materialspl.at(2));
+			parseMaterial->diffuseColour[2] = std::stof(materialspl.at(3));
+		} else if (materialspl.at(0) == "map_Kd") { //"map_kd" (ks, ka) pour la texture utilisé diffuse (specular, ambiante)
+			parseMaterial->texture = (absolutePath + "/" + materialspl.at(1)).c_str();
+		} else if (materialspl.at(0) == "illum") {
+			//TODO paramtere de lumiere
+		} else if (materialspl.at(0) == "d") {
+			//TODO pour la transparence entre 0 et 1 (aucune transparence)
+		} else if (materialspl.at(0) == "Ni") {
+			//TODO pour la densité optique
+		} else if (materialspl.at(0) == "Ke") {
+			//TODO pour la couleur émissive (emissive)
+		}
+	}
+	if (parseMaterialName != "" && model->getMaterials().count(parseMaterialName) == 0) {
+		model->getMaterials()[parseMaterialName] = parseMaterial;
+	}
+	file.close();
+}
+
 Model				*Model::loadModel(std::string filename)
 {
 	std::ifstream file;
@@ -59,12 +120,31 @@ Model				*Model::loadModel(std::string filename)
 		return NULL;
 	}
 	Model *model = new Model();
+	Model::Material *currentMaterial = NULL;
+
+	int lastslash = filename.find_last_of("/");
+	std::string absolutePath = filename;
+
+	if (lastslash == -1) {
+		absolutePath = "";
+	} else {
+		absolutePath = absolutePath.substr(0, lastslash + 1);
+	}
 
 	for (std::string line; std::getline(file, line);) {
-		std::string prefix = split(line, ' ').at(0);
+		std::vector<std::string> spl = split(line, ' ');
+		std::string prefix = spl.at(0);
 
-		if (prefix == "#") {
+		if (line == "" || prefix == "#") {
 			continue ;
+		}
+		if (prefix == "mtllib") {
+			Model::loadMaterials(model, absolutePath, spl.at(1));
+		} else if (prefix == "usemtl") {
+			if (model->getMaterials().count(spl.at(1)) == 1)
+				currentMaterial = model->getMaterials()[spl.at(1)];
+			else
+				currentMaterial = NULL;
 		} else if (prefix == "v") {
 			Model::parseVertex(model, line);
 		} else if (prefix == "vn") {
@@ -72,17 +152,19 @@ Model				*Model::loadModel(std::string filename)
 		} else if (prefix == "vt") {
 			Model::parseTextureCoordinates(model, line);
 		} else if (prefix == "f") {
-			Model::parseFace(model, line, NULL);
+			Model::parseFace(model, line, currentMaterial);
+		} else if (spl.at(0) == "s") {
+			model->setSmoothShadingEnabled(line.find("off") != -1);
 		} else {
 			std::cout << "[OBJ] Unknown Line: " << line << std::endl;
 		}
 	}
-	for (int i = 0; i < model->getFaces().size(); i++) {
-		model->getFaces().at(i).build(model);
-	}
 	std::cout << "Vertex size: " << model->getVertices().size() << std::endl;
 	std::cout << "Normals size: " << model->getNormals().size() << std::endl;
 	std::cout << "Faces size: " << model->getFaces().size() << std::endl;
+	for (int i = 0; i < model->getFaces().size(); i++) {
+		model->getFaces().at(i).build(model);
+	}
 	file.close();
 	return model;
 }
@@ -195,7 +277,7 @@ void					Model::parseVertex(Model *model, std::string line)
     float y = std::stof(xyz.at(2));
     float z = std::stof(xyz.at(3));
 
-	model->getVertices().insert(model->getVertices().begin(), glm::vec3(x, y, z));
+	model->getVertices().push_back(glm::vec3(x, y, z));
 }
 
 void					Model::parseNormals(Model *model, std::string line)
@@ -204,7 +286,7 @@ void					Model::parseNormals(Model *model, std::string line)
     float x = std::stof(xyz.at(1));
     float y = std::stof(xyz.at(2));
     float z = std::stof(xyz.at(3));
-	model->getNormals().insert(model->getNormals().begin(), glm::vec3(x, y, z));
+	model->getNormals().push_back(glm::vec3(x, y, z));
 }
 
 void					Model::parseTextureCoordinates(Model *model, std::string line)
@@ -212,32 +294,49 @@ void					Model::parseTextureCoordinates(Model *model, std::string line)
     std::vector<std::string> xyz = split(line, ' ');
     float s = std::stof(xyz.at(1));
     float t = std::stof(xyz.at(2));
-	model->getTextureCoordinates().insert(model->getTextureCoordinates().begin(), glm::vec2(s, t));
+	model->getTextureCoordinates().push_back(glm::vec2(s, t));
 }
 
 
 void					Model::parseFace(Model *model, std::string line, Material *currentMaterial)
 {
+	if (line.find("/") == -1) {
+		Model::parseFaceVertex(model, line, currentMaterial);
+		return ;
+	}
 	std::vector<std::string> faceIndices = split(line, ' ');
 	int textureCoordinateIndicesArray[3] = {-1, -1, -1};
 	int	normalIndicesArray[3] = {-1, -1, -1};
 	int vertexIndicesArray[3] = {
-									std::stoi(split(faceIndices.at(1), '/').at(0)),
-									std::stoi(split(faceIndices.at(2), '/').at(0)),
-									std::stoi(split(faceIndices.at(3), '/').at(0))
+									std::stoi(split(faceIndices.at(1), '/').at(0)) - 1,
+									std::stoi(split(faceIndices.at(2), '/').at(0)) - 1,
+									std::stoi(split(faceIndices.at(3), '/').at(0)) - 1
 								};
 
-	if (model->hasTextureCoordinates()) {
-        textureCoordinateIndicesArray[0] = std::stoi(split(faceIndices.at(1), '/').at(1));
-        textureCoordinateIndicesArray[1] = std::stoi(split(faceIndices.at(2), '/').at(1));
-        textureCoordinateIndicesArray[2] = std::stoi(split(faceIndices.at(3), '/').at(1));
+	if (model->hasTextureCoordinates() && faceIndices.at(1).find("//") == -1) {
+        textureCoordinateIndicesArray[0] = std::stoi(split(faceIndices.at(1), '/').at(1)) - 1;
+        textureCoordinateIndicesArray[1] = std::stoi(split(faceIndices.at(2), '/').at(1)) - 1;
+        textureCoordinateIndicesArray[2] = std::stoi(split(faceIndices.at(3), '/').at(1)) - 1;
     }
 	if (model->hasNormals()) {
-		normalIndicesArray[0] = std::stoi(split(faceIndices.at(1), '/').at(2));
-		normalIndicesArray[1] = std::stoi(split(faceIndices.at(2), '/').at(2));
-		normalIndicesArray[2] = std::stoi(split(faceIndices.at(3), '/').at(2));
+		normalIndicesArray[0] = std::stoi(split(faceIndices.at(1), '/').at(2)) - 1;
+		normalIndicesArray[1] = std::stoi(split(faceIndices.at(2), '/').at(2)) - 1;
+		normalIndicesArray[2] = std::stoi(split(faceIndices.at(3), '/').at(2)) - 1;
 	}
-	model->getFaces().insert(model->getFaces().begin(), Model::Face(vertexIndicesArray, normalIndicesArray, textureCoordinateIndicesArray, currentMaterial));
+	model->getFaces().push_back(Model::Face(vertexIndicesArray, normalIndicesArray, textureCoordinateIndicesArray, currentMaterial));
+}
+
+void					Model::parseFaceVertex(Model *model, std::string line, Material *currentMaterial)
+{
+	std::vector<std::string> faceIndices = split(line, ' ');
+	int textureCoordinateIndicesArray[3] = {-1, -1, -1};
+	int	normalIndicesArray[3] = {-1, -1, -1};
+	int vertexIndicesArray[3] = {
+									std::stoi(faceIndices.at(1)) - 1,
+									std::stoi(faceIndices.at(2)) - 1,
+									std::stoi(faceIndices.at(3)) - 1
+								};
+	model->getFaces().push_back(Model::Face(vertexIndicesArray, normalIndicesArray, textureCoordinateIndicesArray, currentMaterial));
 }
 
 
@@ -247,10 +346,6 @@ void					Model::parseFace(Model *model, std::string line, Material *currentMater
 
 Model::Model ( void )
 {
-	this->vertices = std::vector<glm::vec3>();
-	this->textureCoordinates = std::vector<glm::vec2>();
-	this->normals = std::vector<glm::vec3>();
-	this->faces = std::vector<Model::Face>();
 	this->enableSmoothShading = false;
 	return ;
 }
@@ -345,7 +440,7 @@ void									Model::setSmoothShadingEnabled(bool smoothShadingEnabled)
 	this->enableSmoothShading = smoothShadingEnabled;
 }
 
-std::map<std::string, Model::Material>	&Model::getMaterials( void )
+std::map<std::string, Model::Material*>	&Model::getMaterials( void )
 {
 	return (this->materials);
 }

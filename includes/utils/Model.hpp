@@ -14,11 +14,13 @@ class Model
 		class Face;
 		class Material;
 
+		static void								loadMaterials(Model *model, std::string absolutePath, std::string filename);
 		static Model							*loadModel(std::string filename);
 		// static Model							*loadTexturedModel(std::string filename);
 		static void								parseVertex(Model *model, std::string line);
 		static void								parseNormals(Model *model, std::string line);
 		static void								parseFace(Model *model, std::string line, Material *currentMaterial);
+		static void								parseFaceVertex(Model *model, std::string line, Material *currentMaterial);
 		static void								parseTextureCoordinates(Model *model, std::string line);
 		//static int								createTexturedDisplayList(Model *model);
 
@@ -38,24 +40,91 @@ class Model
 		std::vector<Model::Face>				&getFaces( void );
 		bool									isSmoothShadingEnabled( void );
 		void									setSmoothShadingEnabled(bool smoothShadingEnabled);
-		std::map<std::string, Model::Material>	&getMaterials( void );
+		std::map<std::string, Model::Material*>	&getMaterials( void );
 
 		void									produce( void );
 		void									render( const GLfloat *mvp );
 
 	class Material {
 		public:
-			std::string		toString() {
-				std::ostringstream oss;
-				oss << "Material{" << "specularCoefficient=" << this->specularCoefficient << ", ambientColour=" << this->ambientColour << ", diffuseColour=" << this->diffuseColour << ", specularColour=" << this->specularColour << "}";
-				return (oss.str());
-			};
+
+			Material() {
+				this->texture = NULL;
+			}
+
+			bool								hasTexture( void )
+			{
+				return (this->texture != NULL);
+			}
+
+			bool								hasSpecularColor( void )
+			{
+				return (this->specularColour[0] != -1);
+			}
+
+			void								build_texture( void )
+			{
+				if (this->hasTexture() == false) {
+					return ;
+				}
+				this->textureSOIL = SOIL_load_OGL_texture
+				(
+					this->texture,
+					SOIL_LOAD_AUTO,
+					SOIL_CREATE_NEW_ID,
+					SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+				);
+				this->textureID  = glGetUniformLocation(ShaderUtils::instance->get("simple"), "myTextureSampler");
+			}
+
+			void								build_SpecularColors( void )
+			{
+				if (this->hasSpecularColor() == false) {
+					return ;
+				}
+				this->specularColorID = glGetUniformLocation(ShaderUtils::instance->get("simple"), "specularColor");
+			}
+
+			void								produce( void )
+			{
+				this->build_texture();
+				this->build_SpecularColors();
+			}
+
+			void								bind_texture( void )
+			{
+				if (this->hasTexture() == false) {
+					return ;
+				}
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, this->textureSOIL);
+				glUniform1i(this->textureID, 0);
+			}
+
+			void								bind_specularColors( void )
+			{
+				if (this->hasSpecularColor() == false) {
+					return ;
+				}
+				glUniform3fv(this->specularColorID, 1, &this->specularColour[0]);
+			}
+
+			void								render( void )
+			{
+				this->bind_texture();
+				this->bind_specularColors();
+			}
 
 			float			specularCoefficient = 100;
-			float			ambientColour[3] = {0.2f, 0.2f, 0.2f};
-			float			diffuseColour[3] = {0.3f, 1, 1};
-			float			specularColour[3] = {1, 1, 1};
-			std::string		texture;
+			float			ambientColour[3] = {-1, -1, -1};
+			float			diffuseColour[3] = {-1, -1, -1};
+			float			specularColour[3] = {-1, -1, -1};
+			const char		*texture;
+
+		private:
+			GLuint			specularColorID;
+			GLuint			textureSOIL;
+			GLuint			textureID;
 	};
 
 	class Face {
@@ -85,31 +154,16 @@ class Model
 			return (this->normalIndices);
 		};
 
-		Face(int vertexIndices[3]) {
-			this->vertexIndices[0] = vertexIndices[0] - 1;
-			this->vertexIndices[1] = vertexIndices[1] - 1;
-			this->vertexIndices[2] = vertexIndices[2] - 1;
-		}
-
-		Face(int vertexIndices[3], int normalIndices[3]) {
-			this->vertexIndices[0] = vertexIndices[0] - 1;
-			this->vertexIndices[1] = vertexIndices[1] - 1;
-			this->vertexIndices[2] = vertexIndices[2] - 1;
-			this->normalIndices[0] = normalIndices[0] - 1;
-			this->normalIndices[1] = normalIndices[1] - 1;
-			this->normalIndices[2] = normalIndices[2] - 1;
-		};
-
 		Face(int vertexIndices[3], int normalIndices[3], int textureCoordinateIndices[3], Material *material) {
-			this->vertexIndices[0] = vertexIndices[0] - 1;
-			this->vertexIndices[1] = vertexIndices[1] - 1;
-			this->vertexIndices[2] = vertexIndices[2] - 1;
-			this->normalIndices[0] = normalIndices[0] - 1;
-			this->normalIndices[1] = normalIndices[1] - 1;
-			this->normalIndices[2] = normalIndices[2] - 1;
-			this->textureCoordinateIndices[0] = textureCoordinateIndices[0] - 1;
-            this->textureCoordinateIndices[1] = textureCoordinateIndices[1] - 1;
-            this->textureCoordinateIndices[2] = textureCoordinateIndices[2] - 1;
+			this->vertexIndices[0] = vertexIndices[0];
+			this->vertexIndices[1] = vertexIndices[1];
+			this->vertexIndices[2] = vertexIndices[2];
+			this->normalIndices[0] = normalIndices[0];
+			this->normalIndices[1] = normalIndices[1];
+			this->normalIndices[2] = normalIndices[2];
+			this->textureCoordinateIndices[0] = textureCoordinateIndices[0];
+            this->textureCoordinateIndices[1] = textureCoordinateIndices[1];
+            this->textureCoordinateIndices[2] = textureCoordinateIndices[2];
 			this->material = material;
 		};
 
@@ -118,13 +172,11 @@ class Model
 			this->vertex[0] = model->getVertices().at(this->vertexIndices[0]);
 			this->vertex[1] = model->getVertices().at(this->vertexIndices[1]);
 			this->vertex[2] = model->getVertices().at(this->vertexIndices[2]);
-
 			if (this->hasNormals()) {
 				this->normals[0] = model->getNormals().at(this->normalIndices[0]);
 				this->normals[1] = model->getNormals().at(this->normalIndices[1]);
 				this->normals[2] = model->getNormals().at(this->normalIndices[2]);
 			}
-
 			if (this->hasTextureCoordinates()) {
 				this->textureCoordinate[0] = model->getTextureCoordinates().at(this->textureCoordinateIndices[0]);
 				this->textureCoordinate[1] = model->getTextureCoordinates().at(this->textureCoordinateIndices[1]);
@@ -174,18 +226,9 @@ class Model
 				this->build_normals();
 
 				//TODO materialbuild
-
-				//this->Texture = loadDDS("uvmap_2_.png");
-
-				this->Texture = SOIL_load_OGL_texture
-				(
-					"uvmap_2_.png",
-					SOIL_LOAD_AUTO,
-					SOIL_CREATE_NEW_ID,
-					SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-				);
-
-				this->textureID  = glGetUniformLocation(ShaderUtils::instance->get("simple"), "myTextureSampler");
+				if (this->material != NULL) {
+					this->material->produce();
+				}
 			}
 		}
 
@@ -197,9 +240,9 @@ class Model
 			glUniformMatrix4fv(this->modelmatrixID, 1, GL_FALSE, &BombermanClient::instance->camera->modelMatrix[0][0]);
 			glUniformMatrix4fv(this->viewmatrixID, 1, GL_FALSE, &BombermanClient::instance->camera->viewMatrix[0][0]);
 
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, this->Texture);
-			glUniform1i(this->textureID, 0);
+			if (this->material != NULL) {
+				this->material->render();
+			}
 
 			glEnableVertexAttribArray(0);
 			glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
@@ -246,9 +289,9 @@ class Model
 
 		~Face()
 		{
-			if (this->material != NULL) {
-				delete material;
-			}
+			// if (this->material != NULL) {
+			// 	delete material;
+			// }
 		}
 
 		glm::vec3							vertex[3];
@@ -293,7 +336,7 @@ class Model
 		std::vector<glm::vec2>					textureCoordinates;
 		std::vector<glm::vec3>					normals;
 		std::vector<Model::Face>				faces;
-		std::map<std::string, Model::Material>	materials;
+		std::map<std::string, Model::Material*>	materials;
 		bool									enableSmoothShading;
 };
 

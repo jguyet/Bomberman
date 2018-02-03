@@ -24,7 +24,7 @@ SimpleView::SimpleView ( void )
 	for (int i = 0; i < 2; i++) {
 		this->components.at(i)->produce();
 	}
-	this->modeltest = Model::loadModel("cub.obj");
+	this->modeltest = Model::loadModel("amyrose.obj");
 
 	this->modeltest->produce();
 	return ;
