@@ -6,9 +6,6 @@ KeyBoard		*KeyBoard::instance = NULL;
 void			KeyBoard::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	std::cout << "Key entry : " << key << " action : " << action << std::endl;
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GL_TRUE);
-	}
 	KeyBoard::instance->pressedKeys[key] = (action == PRESS || action == REPEAT) ? true : false;
 }
 
@@ -55,9 +52,9 @@ std::ostream &				operator<<(std::ostream & o, KeyBoard const & i)
 
 // PUBLIC METHOD #################################################
 
-int							KeyBoard::getKey(int key)
+bool						KeyBoard::getKey(unsigned int key)
 {
-	return (glfwGetKey(this->window, key));
+	return (this->pressedKeys[key]);
 }
 
 void						KeyBoard::process( void )

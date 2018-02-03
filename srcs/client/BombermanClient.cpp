@@ -10,9 +10,7 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 
 BombermanClient::BombermanClient ( void )
 {
-	this->transform = new Transform();
 	this->camera = new Camera();
-	this->transform->setCamera(this->camera);
 	return ;
 }
 
@@ -80,7 +78,7 @@ void						BombermanClient::build_window( void )
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);//Resizeable
 
-	this->window = glfwCreateWindow(640, 480, "Bomberman", NULL, NULL);
+	this->window = glfwCreateWindow(1680, 1050, "Bomberman", NULL, NULL);
 
 	if (!this->window) {
 		glfwTerminate();
@@ -94,12 +92,20 @@ void						BombermanClient::build_window( void )
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
+
+	// Cull triangles which normal is not towards the camera
+	glEnable(GL_CULL_FACE);
+
+	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetCursorPos(this->window, 640 / 2, 480 / 2);
 }
 
 void						BombermanClient::initialize_inputs( void )
 {
 	// Assure que l'on peut capturer la touche d'échappement enfoncée ci-dessous
 	glfwSetInputMode(this->window, GLFW_STICKY_KEYS, GL_TRUE);
+	glfwSetInputMode(this->window, GLFW_STICKY_MOUSE_BUTTONS, GL_TRUE);
 
 	KeyBoard::instance = new KeyBoard(this->window);
 	Mouse::instance = new Mouse(this->window);
@@ -145,7 +151,6 @@ void						BombermanClient::renderLoop( void )//60fps
 		return ;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	this->currentView->render();
 
 	//Swap Buffers

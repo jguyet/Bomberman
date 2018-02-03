@@ -18,7 +18,7 @@ class KeyBoard
 		KeyBoard &							operator=( KeyBoard const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, KeyBoard const & i);
 
-		int									getKey(int key);
+		bool								getKey(unsigned int key);
 		void								process( void );
 
 	private:

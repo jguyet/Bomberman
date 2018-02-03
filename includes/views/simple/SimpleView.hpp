@@ -16,10 +16,12 @@ class SimpleView : public IView
 
 		void										render( void );
 
+		void 										Escape( void );
 		void 										pressUp( void );
 		void 										pressDown( void );
 		void 										pressLeft( void );
 		void 										pressRight( void );
+		void 										pressSpace( void );
 
 		void										pressKeyBoard(unsigned int key) {
 			if (this->keyBoard_map.count(key) == 1) {
@@ -34,6 +36,7 @@ class SimpleView : public IView
 			GLuint									matrixID;
 			GLuint									vertexBuffer;
 			GLuint									colorbuffer;
+			Model									*modeltest;
 
 			std::vector<Cube*> 			components;
 

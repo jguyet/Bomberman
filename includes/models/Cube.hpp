@@ -25,6 +25,7 @@ class Cube
 		void 									produce(void);
 		void 									build_position(void);
 		void 									build_color(void);
+		void									build_texture(void);
 
 		glm::vec3 pos;
 		float scale;

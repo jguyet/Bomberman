@@ -21,13 +21,15 @@ class Mouse
 		friend std::ostream &			operator<<(std::ostream & o, Mouse const & i);
 
 		int								getMouseButton(int button);
+		void							process( void );
 
-		int								x;
-		int								y;
+		glm::vec2						position;
+		glm::vec2						lastPosition;
 
 	private:
 
 		GLFWwindow						*window;
+		bool							pressedButton[8];
 };
 
 #endif

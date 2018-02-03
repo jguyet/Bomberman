@@ -26,7 +26,6 @@ class BombermanClient : public IRenderLoop
 		void										stop( void );
 
 		GLFWwindow									*window;
-		Transform									*transform;
 		Camera										*camera;
 
 		IView										*currentView;

@@ -57,49 +57,51 @@ void 									Cube::build_position(void)
 	float x = this->pos.x;
 	float y = this->pos.y;
 	float z = this->pos.z;
-
-	float scale = this->scale;
-
-	this->pos.x += 0.005f;
-	this->pos.y += 0.005f;
+	float scale = this->scale / 2;
 
 	GLfloat vertex_buffer_data2[] = {
-		x + -1.0f, y + -1.0f, z + -1.0f,
-		x + -1.0f, y + -1.0f, z +  1.0f,
-		x + -1.0f, y +  1.0f, z +  1.0f,
-		x +  1.0f, y +  1.0f, z + -1.0f,
-		x + -1.0f, y + -1.0f, z + -1.0f,
-		x + -1.0f, y +  1.0f, z + -1.0f,
-		x +  1.0f, y + -1.0f, z +  1.0f,
-		x + -1.0f, y + -1.0f, z + -1.0f,
-		x +  1.0f, y + -1.0f, z + -1.0f,
-		x +  1.0f, y +  1.0f, z + -1.0f,
-		x +  1.0f, y + -1.0f, z + -1.0f,
-		x + -1.0f, y + -1.0f, z + -1.0f,
-		x + -1.0f, y + -1.0f, z + -1.0f,
-		x + -1.0f, y +  1.0f, z +  1.0f,
-		x + -1.0f, y +  1.0f, z + -1.0f,
-		x +  1.0f, y + -1.0f, z +  1.0f,
-		x + -1.0f, y + -1.0f, z +  1.0f,
-		x + -1.0f, y + -1.0f, z + -1.0f,
-		x + -1.0f, y +  1.0f, z +  1.0f,
-		x + -1.0f, y + -1.0f, z +  1.0f,
-		x +  1.0f, y + -1.0f, z +  1.0f,
-		x +  1.0f, y +  1.0f, z +  1.0f,
-		x +  1.0f, y + -1.0f, z + -1.0f,
-		x +  1.0f, y +  1.0f, z + -1.0f,
-		x +  1.0f, y + -1.0f, z + -1.0f,
-		x +  1.0f, y +  1.0f, z +  1.0f,
-		x +  1.0f, y + -1.0f, z +  1.0f,
-		x +  1.0f, y +  1.0f, z +  1.0f,
-		x +  1.0f, y +  1.0f, z + -1.0f,
-		x + -1.0f, y +  1.0f, z + -1.0f,
-		x +  1.0f, y +  1.0f, z +  1.0f,
-		x + -1.0f, y +  1.0f, z + -1.0f,
-		x + -1.0f, y +  1.0f, z +  1.0f,
-		x +  1.0f, y +  1.0f, z +  1.0f,
-		x + -1.0f, y +  1.0f, z +  1.0f,
-		x +  1.0f, y + -1.0f, z +  1.0f
+
+		x +  scale, y + scale, z + -scale,//back
+		x +  scale, y + -scale, z + -scale,
+		x + -scale, y + -scale, z + -scale,
+		x +  scale, y +  scale, z + -scale,
+		x + -scale, y + -scale, z + -scale,
+		x + -scale, y +  scale, z + -scale,
+
+		x + -scale, y + -scale, z + -scale,//left
+		x + -scale, y + -scale, z +  scale,
+		x + -scale, y +  scale, z +  scale,
+		x + -scale, y + -scale, z + -scale,
+		x + -scale, y +  scale, z +  scale,
+		x + -scale, y +  scale, z + -scale,
+
+		x + -scale, y +  scale, z +  scale,//face
+		x + -scale, y + -scale, z +  scale,
+		x +  scale, y + -scale, z +  scale,
+		x +  scale, y +  scale, z +  scale,
+		x + -scale, y +  scale, z +  scale,
+		x +  scale, y + -scale, z +  scale,
+
+		x +  scale, y +  scale, z +  scale,//right
+		x +  scale, y + -scale, z + -scale,
+		x +  scale, y +  scale, z + -scale,
+		x +  scale, y + -scale, z + -scale,
+		x +  scale, y +  scale, z +  scale,
+		x +  scale, y + -scale, z +  scale,
+
+		x +  scale, y +  scale, z +  scale,//top
+		x +  scale, y +  scale, z + -scale,
+		x + -scale, y +  scale, z + -scale,
+		x +  scale, y +  scale, z +  scale,
+		x + -scale, y +  scale, z + -scale,
+		x + -scale, y +  scale, z +  scale,
+
+		x +  scale, y + -scale, z +  scale,//down
+		x + -scale, y + -scale, z + -scale,
+		x +  scale, y + -scale, z + -scale,
+		x +  scale, y + -scale, z +  scale,
+		x + -scale, y + -scale, z +  scale,
+		x + -scale, y + -scale, z + -scale,
 	};
 
 	glGenBuffers(1, &this->vertexBuffer);
@@ -155,11 +157,61 @@ void 									Cube::build_color( void )
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 }
 
+void									Cube::build_texture(void)
+{
+	GLfloat g_uv_buffer_data[] = {
+		0, 1,//back
+		1, 0,
+		0, 1,
+		0, 1,
+		1, 0,
+		0, 1,
+
+		0, 1,//left
+		1, 0,
+		0, 1,
+		0, 1,
+		1, 0,
+		0, 1,
+
+		0, 0,//face
+		0, 0,
+		0, 0.5f,
+		0, 0,
+		0, 0.5f,
+		0, 0,
+
+		0, 1,//right
+		0, 1,
+		0, 1,
+		0, 1,
+		0, 1,
+		0, 1,
+
+		0, 1,//top
+		0, 1,
+		0, 1,
+		0, 1,
+		0, 1,
+		0, 1,
+
+		0, 1,//down
+		0, 1,
+		0, 1,
+		0, 1,
+		0, 1,
+		0, 1
+	};
+
+	glGenBuffers(1, &this->uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
+}
+
 void 									Cube::produce(void)
 {
-
 	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	// Generate mipmaps, by the way.
@@ -171,75 +223,37 @@ void 									Cube::produce(void)
 	//GEn vao
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
+	{
+		glBindVertexArray(VertexArrayID);
 
-	this->matrixID = glGetUniformLocation(ShaderUtils::instance->get("simple"), "MVP");
+		this->matrixID = glGetUniformLocation(ShaderUtils::instance->get("simple"), "MVP");
 
-	this->build_position();
-	//this->build_color();
+		this->build_position();
+		//this->build_color();
 
-	this->Texture = SOIL_load_OGL_texture
-	(
-		"uvtemplate.DDS",
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-	);
+		this->build_texture();
 
-	this->TextureID  = glGetUniformLocation(ShaderUtils::instance->get("simple"), "firstTexture");
+		this->Texture = SOIL_load_OGL_texture
+		(
+			"assets/textures/brique.png",
+			SOIL_LOAD_AUTO,
+			SOIL_CREATE_NEW_ID,
+			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
 
-	GLfloat g_uv_buffer_data[] = {
-		0.000059f, 1.0f-0.000004f,
-		0.000103f, 1.0f-0.336048f,
-		0.335973f, 1.0f-0.335903f,
-		1.000023f, 1.0f-0.000013f,
-		0.667979f, 1.0f-0.335851f,
-		0.999958f, 1.0f-0.336064f,
-		0.667979f, 1.0f-0.335851f,
-		0.336024f, 1.0f-0.671877f,
-		0.667969f, 1.0f-0.671889f,
-		1.000023f, 1.0f-0.000013f,
-		0.668104f, 1.0f-0.000013f,
-		0.667979f, 1.0f-0.335851f,
-		0.000059f, 1.0f-0.000004f,
-		0.335973f, 1.0f-0.335903f,
-		0.336098f, 1.0f-0.000071f,
-		0.667979f, 1.0f-0.335851f,
-		0.335973f, 1.0f-0.335903f,
-		0.336024f, 1.0f-0.671877f,
-		1.000004f, 1.0f-0.671847f,
-		0.999958f, 1.0f-0.336064f,
-		0.667979f, 1.0f-0.335851f,
-		0.668104f, 1.0f-0.000013f,
-		0.335973f, 1.0f-0.335903f,
-		0.667979f, 1.0f-0.335851f,
-		0.335973f, 1.0f-0.335903f,
-		0.668104f, 1.0f-0.000013f,
-		0.336098f, 1.0f-0.000071f,
-		0.000103f, 1.0f-0.336048f,
-		0.000004f, 1.0f-0.671870f,
-		0.336024f, 1.0f-0.671877f,
-		0.000103f, 1.0f-0.336048f,
-		0.336024f, 1.0f-0.671877f,
-		0.335973f, 1.0f-0.335903f,
-		0.667969f, 1.0f-0.671889f,
-		1.000004f, 1.0f-0.671847f,
-		0.667979f, 1.0f-0.335851f
-	};
+		this->TextureID  = glGetUniformLocation(ShaderUtils::instance->get("simple"), "firstTexture");
+	}
 
-
-	glGenBuffers(1, &this->uvbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
-
+	//TODO unbind array
 
 }
 
 void									Cube::render( const GLfloat *mvp )
 {
 
+	glUseProgram(ShaderUtils::instance->get("simple"));
+
 	glUniformMatrix4fv(this->matrixID, 1, GL_FALSE, mvp);
-	//rendu
 
 
 	glActiveTexture(GL_TEXTURE0);
@@ -249,12 +263,12 @@ void									Cube::render( const GLfloat *mvp )
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertexBuffer);
 	glVertexAttribPointer(
-		 0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		 3,                  // size
-		 GL_FLOAT,           // type
-		 GL_FALSE,           // normalized?
-		 0,                  // stride
-		 (void*)0            // array buffer offset
+		 0,                  // attribute id 0
+		 3,                  // vec3
+		 GL_FLOAT,           // object type
+		 false,              // normalized?
+		 0,                  // saut apres lecture du vec3
+		 0           		 // offset de depart
 	);
 
 	// glEnableVertexAttribArray(1);
@@ -270,21 +284,27 @@ void									Cube::render( const GLfloat *mvp )
 
 
 	glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
-		glVertexAttribPointer(
-			1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-			2,                                // size : U+V => 2
-			GL_FLOAT,                         // type
-			GL_FALSE,                         // normalized?
-			0,                                // stride
-			(void*)0                          // array buffer offset
-		);
+	glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
+	glVertexAttribPointer(
+		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+		2,                                // size : U+V => 2
+		GL_FLOAT,                         // type
+		GL_FALSE,                         // normalized?
+		0,                                // stride
+		(void*)0                          // array buffer offset
+	);
 
 
-	// Draw the triangle !
-	glDrawArrays(GL_TRIANGLES, 0, 12*3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+	//6 faces * 2 (2trirangle/face) * 3 vertex pars triangle
+	glDrawArrays(GL_TRIANGLES, 0, (6 * 2) * 3);
+
+	//unbind shaders attributes
 	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+	//glDisableVertexAttribArray(1);
+
+	//unbind buffer and shader
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glUseProgram(0);
 }
 
 // ###############################################################

@@ -5,14 +5,17 @@ Mouse					*Mouse::instance = NULL;
 
 void 					Mouse::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	Mouse::instance->x = xpos;
-	Mouse::instance->y = ypos;
+	Mouse::instance->lastPosition.x = Mouse::instance->position.x;
+	Mouse::instance->lastPosition.y = Mouse::instance->position.y;
+	Mouse::instance->position.x = xpos;
+	Mouse::instance->position.y = ypos;
+	BombermanClient::instance->camera->MouseMove(Mouse::instance->position.x, Mouse::instance->position.y);
 }
 
 void					Mouse::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    //if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
     std::cout << "Mouse entry : " << button << " action : " << action << std::endl;
+	Mouse::instance->pressedButton[button] = (action == PRESS || action == REPEAT) ? true : false;
 }
 
 
@@ -23,6 +26,9 @@ void					Mouse::mouse_button_callback(GLFWwindow* window, int button, int action
 Mouse::Mouse ( GLFWwindow *window )
 {
 	this->window = window;
+	for (int i = 0; i < 8; i++) {
+		this->pressedButton[i] = false;
+	}
 	return ;
 }
 
@@ -59,6 +65,15 @@ std::ostream &				operator<<(std::ostream & o, Mouse const & i)
 int							Mouse::getMouseButton(int button)
 {
 	return (glfwGetMouseButton(this->window, button));
+}
+
+void						Mouse::process( void )
+{
+	for (int i = 0; i < 8; i++) {
+		if (this->pressedButton[i] == true) {
+			//BombermanClient::instance->currentView->pressKeyBoard(i);
+		}
+	}
 }
 
 // ###############################################################

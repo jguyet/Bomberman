@@ -20,6 +20,7 @@
 
 # include <SOIL2.h>
 # include <glfw3.h>
+# include <glm/glm.hpp>
 # include <glm/vec3.hpp> // glm::vec3
 # include <glm/vec4.hpp> // glm::vec4
 # include <glm/mat4x4.hpp> // glm::mat4
@@ -39,6 +40,7 @@
 # define REPEAT GLFW_REPEAT
 
 std::vector<std::string>		split(const std::string &s, char delim);
+void computeMatricesFromInputs();
 
 /*
 ** Interfaces
@@ -56,12 +58,11 @@ std::vector<std::string>		split(const std::string &s, char delim);
 */
 # include "utils/TimeUtils.hpp"
 # include "utils/ShaderUtils.hpp"
-
+# include "utils/Model.hpp"
 /*
 ** Classes
 */
 # include "graphics/components/Camera.hpp"
-# include "graphics/components/Transform.hpp"
 
 /*
 ** Micro controllers

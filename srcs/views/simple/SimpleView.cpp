@@ -12,15 +12,21 @@ SimpleView::SimpleView ( void )
 	this->keyBoard_map[68] = &SimpleView::pressRight;
 	this->keyBoard_map[65] = &SimpleView::pressLeft;
 	this->keyBoard_map[83] = &SimpleView::pressDown;
+	this->keyBoard_map[32] = &SimpleView::pressSpace;
+	this->keyBoard_map[256] = &SimpleView::Escape;
 
-	for (int i = 0; i < 10; i++) {
-		this->components.insert(this->components.begin(), new Cube(1 + (i * 4),1,1,1));
+	for (int z = 0; z < 2; z++) {
+		for (int x = 0; x < 2; x++) {
+			this->components.insert(this->components.begin(), new Cube(1 + x,1,1 + z, 1.f));
+		}
 	}
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 2; i++) {
 		this->components.at(i)->produce();
 	}
+	this->modeltest = Model::loadModel("cub.obj");
 
+	this->modeltest->produce();
 	return ;
 }
 
@@ -64,43 +70,48 @@ std::ostream &				operator<<(std::ostream & o, SimpleView const & i)
 
 void						SimpleView::render( void )
 {
+	BombermanClient::instance->camera->setProjection(45.0f, 16.0f, 9.0f, 0.1f, 100.0f);
+	BombermanClient::instance->camera->buildFPSProjection();
 
-	usleep(10000);
+	glm::mat4 MVP = BombermanClient::instance->camera->modelviewprojectionMatrix;
 
-	glUseProgram(ShaderUtils::instance->get("simple"));
+	// for (int i = 0; i < 2; i++) {
+	// 	this->components.at(i)->render(&MVP[0][0]);
+	// }
 
-	BombermanClient::instance->transform->setProjection(45.0f, 16.0f, 9.0f, 0.1f, 100.0f);
-	glm::mat4 MVP = BombermanClient::instance->transform->enableProjectionTransformation();
 
-	for (int i = 0; i < 10; i++) {
-		this->components.at(i)->render(&MVP[0][0]);
 
-		//this->components.at(i)->build_position();
-	}
+	this->modeltest->render(&MVP[0][0]);
+}
+
+void 						SimpleView::Escape( void )
+{
+	BombermanClient::instance->stop();
 }
 
 void 						SimpleView::pressRight( void )
 {
-	BombermanClient::instance->camera->getPosition()->x += 1;
-	std::cout << "Right" << std::endl;
+	BombermanClient::instance->camera->move(glm::vec3(2, 0, 0));
 }
 
 void 						SimpleView::pressLeft( void )
 {
-	BombermanClient::instance->camera->getPosition()->x -= 1;
-	std::cout << "Left" << std::endl;
+	BombermanClient::instance->camera->move(glm::vec3(-2, 0, 0));
 }
 
 void 						SimpleView::pressUp( void )
 {
-	BombermanClient::instance->camera->getPosition()->y += 1;
-	std::cout << "Up" << std::endl;
+	BombermanClient::instance->camera->move(glm::vec3(0, 0, 2));
 }
 
 void 						SimpleView::pressDown( void )
 {
-	BombermanClient::instance->camera->getPosition()->y -= 1;
-	std::cout << "Down" << std::endl;
+	BombermanClient::instance->camera->move(glm::vec3(0, 0, -2));
+}
+
+void 						SimpleView::pressSpace( void )
+{
+	BombermanClient::instance->camera->getPosition().y += 0.5f;
 }
 
 
