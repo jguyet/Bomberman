@@ -26,6 +26,7 @@ all:	$(BUILD_DIR)
 	if test -f $(PROG1) ; then																\
 		echo "make: Nothing to be done for \`all\`.";										\
 	else																					\
+		$(MAKE) -j $(BUILD_DIR);															\
 		$(MAKE) -j $(PROG1);																\
 	fi
 

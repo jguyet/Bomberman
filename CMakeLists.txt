@@ -83,7 +83,7 @@ if (APPLE)
 						)
 	endif()
 		add_subdirectory(${PROJECT_DIR}/SOIL)
-		include_directories(${PROJECT_DIR}/SOIL)
+		include_directories(${PROJECT_DIR}/SOIL/inc/SOIL)
 endif()
 
 if (WIN32)
