@@ -9,6 +9,7 @@ project(${PROJECT_NAME})
 set(CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build")
 
 find_package(OpenGL REQUIRED)
+find_package(OpenAL REQUIRED)
 
 ################################################################################
 # APPLE INSTALL LIBS
@@ -210,4 +211,4 @@ add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
 
-target_link_libraries(${PROJECT_NAME} glfw glm assimp soil ${OPENGL_gl_LIBRARY})
+target_link_libraries(${PROJECT_NAME} glfw glm assimp soil ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
