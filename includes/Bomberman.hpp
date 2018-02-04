@@ -18,7 +18,7 @@
 #  define GLFW_INCLUDE_GLCOREARB
 # endif
 
-# include <SOIL2.h>
+// # include <SOIL2.h>
 # include <glfw3.h>
 # include <glm/glm.hpp>
 # include <glm/vec3.hpp> // glm::vec3
@@ -34,6 +34,10 @@
 # include <sstream>
 # include <fstream>
 # include <map>
+
+#include <assimp/Importer.hpp>      // C++ importer interface
+#include <assimp/scene.h>           // Output data structure
+#include <assimp/postprocess.h>     // Post processing flags
 
 # define RELEASE GLFW_RELEASE
 # define PRESS GLFW_PRESS

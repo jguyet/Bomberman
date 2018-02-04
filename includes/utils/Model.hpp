@@ -67,13 +67,13 @@ class Model
 				if (this->hasTexture() == false) {
 					return ;
 				}
-				this->textureSOIL = SOIL_load_OGL_texture
-				(
-					this->texture,
-					SOIL_LOAD_AUTO,
-					SOIL_CREATE_NEW_ID,
-					SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-				);
+				// this->textureSOIL = SOIL_load_OGL_texture
+				// (
+				// 	this->texture,
+				// 	SOIL_LOAD_AUTO,
+				// 	SOIL_CREATE_NEW_ID,
+				// 	SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+				// );
 				this->textureID  = glGetUniformLocation(ShaderUtils::instance->get("simple"), "myTextureSampler");
 			}
 

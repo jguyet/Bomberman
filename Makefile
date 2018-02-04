@@ -10,13 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-STUDENT			=	jguyet
-
 AUTHOR			=	auteur
 
 PROG1			=	Bomberman
 
 BUILD_DIR		=	build
+
+EXTERNAL_LIB_DIR =	lib
 
 CMAKE_BUILDER	=	$(BUILD_DIR)/build.sh
 
@@ -31,7 +31,7 @@ all:	$(BUILD_DIR)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
-	echo "cd build\nmkdir external_libraries\ncmake .." > $(CMAKE_BUILDER)
+	echo "cd build\ncmake .." > $(CMAKE_BUILDER)
 
 
 $(PROG1):
@@ -52,14 +52,21 @@ fclean:	clean
 	echo "\033[38;5;124mFCLEAN\033[00m $(PROG1)"
 	rm -rf $(BUILD_DIR)
 
-re:		fclean all
+libclean:
+	echo "\033[38;5;124mLIBCLEAN\033[00m $(PROG1)"
+	rm -rf $(EXTERNAL_LIB_DIR)
 
-compile:	clean
+cleanall: libclean fclean
+
+re:		compile
+
+compile:
 	echo "\033[38;5;124mCOMPILE\033[00m $(PROG1)"
 	make -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/$(PROG1) .
 	echo "\033[38;5;227mAUTHOR  :\033[0m"
 	cat -e $(AUTHOR)
 
+recompile: fclean all
 
-.PHONY: all clean fclean re
+recompilelib: cleanall recompile
