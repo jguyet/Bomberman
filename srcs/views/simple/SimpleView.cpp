@@ -71,6 +71,7 @@ std::ostream &				operator<<(std::ostream & o, SimpleView const & i)
 void						SimpleView::render( void )
 {
 	BombermanClient::instance->camera->setProjection(45.0f, 1680, 1050, 0.1f, 1000.0f);
+	//BombermanClient::instance->camera->buildLookAtProjection();
 	BombermanClient::instance->camera->buildFPSProjection();
 
 	glm::mat4 MVP = BombermanClient::instance->camera->modelviewprojectionMatrix;
@@ -79,13 +80,19 @@ void						SimpleView::render( void )
 	// 	this->components.at(i)->render(&MVP[0][0]);
 	// }
 
+	for (int z = 0; z < 19; z++) {
+		for (int x = 0; x < 13; x++) {
+			glm::vec3 scale = glm::vec3(1,1,1);
+			glm::vec3 pos = glm::vec3(x,0,z);
+			this->modeltest->draw(pos, scale);
+		}
+	}
+
 	glm::vec3 scale = glm::vec3(1,1,1);
-	glm::vec3 pos = glm::vec3(1,1,1);
+	glm::vec3 pos = glm::vec3(3,-5,3);
 	this->modeltest->draw(pos, scale);
-	scale = glm::vec3(1,1,1);
-	pos = glm::vec3(2 + 1,1,2 + 1);
-	this->modeltest->draw(pos, scale);
-	//this->modeltest->render(&MVP[0][0]);
+
+	//std::cout << "x:" << BombermanClient::instance->camera->getPosition().x << "y:" << BombermanClient::instance->camera->getPosition().y << "z:" << BombermanClient::instance->camera->getPosition().z << std::endl;
 }
 
 void 						SimpleView::Escape( void )

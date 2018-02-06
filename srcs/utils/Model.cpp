@@ -362,6 +362,7 @@ void					Model::draw( glm::vec3 &position, glm::vec3 &scale )
 {
 	glUseProgram(ShaderUtils::instance->get("dir"));
 
+	position = position * glm::vec3(2,2,2);
 	this->recursive_render(this->scene->mRootNode, position, scale);
 
 	glUseProgram(0);

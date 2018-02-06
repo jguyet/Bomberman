@@ -181,7 +181,7 @@ int main(void)
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	client->camera->setProjection(45.0f, 1680, 1050, 0.1f, 1000.0f);
-	client->camera->setPosition(0.294715f, 4.13507f, 12.293f);
+	client->camera->setPosition(11.31f, 31.3938f, -18.231f);
 	client->camera->setRotation(38.0f,94.0f,0.0f);
 	client->camera->buildFPSProjection();
 

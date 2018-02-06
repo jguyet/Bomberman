@@ -22,6 +22,7 @@ Camera::Camera (glm::vec3 &position, glm::vec3 &rotation)
 	this->position = position;
 	this->rotation = rotation;
 	this->direction = glm::vec3(0, 0, 0);
+	this->mousePosition = glm::vec3(-1, -1, -1);
 }
 
 Camera::Camera ( Camera const & src )
@@ -58,7 +59,7 @@ void						Camera::buildLookAtProjection( void )
 {
 	this->projectionMatrix = glm::perspective(glm::radians(this->fov), this->width / this->height, this->zNear, this->zFar);
 	this->modelMatrix = glm::mat4(1.0f);
-	this->viewMatrix = glm::lookAt(this->position, this->lookAt, glm::vec3(0,1,0));
+	this->viewMatrix = glm::lookAt(this->position, glm::vec3(-13.f,1,-18.f), glm::vec3(0,1,0));
 	this->modelviewprojectionMatrix = this->projectionMatrix * this->viewMatrix * this->modelMatrix;
 }
 
@@ -161,6 +162,10 @@ void					Camera::move(glm::vec3 const &toDirection)
 
 void					Camera::MouseMove(int x, int y)
 {
+	if (this->mousePosition.x == -1 && this->mousePosition.y == -1) {
+		this->mousePosition = glm::vec2(x, y);
+		return ;
+	}
 	glm::vec2 mouse_delta = glm::vec2(x, y) - this->mousePosition;
 
 	const float mouseX_Sensitivity = 0.025f;
@@ -169,7 +174,14 @@ void					Camera::MouseMove(int x, int y)
 	this->rotation.y += mouseX_Sensitivity * mouse_delta.x;
 	this->rotation.x += mouseY_Sensitivity * mouse_delta.y;
 
+	if (this->rotation.x > 58) {
+	 	this->rotation.x = 58;
+	} else if (this->rotation.x < 55) {
+		this->rotation.x = 55;
+	}
+
 	this->mousePosition = glm::vec2(x, y);
+	std::cout << "x:" << this->rotation.x << "y:" << this->rotation.y << "z:" << this->rotation.z << std::endl;
 }
 
 void					Camera::UpdateView()
