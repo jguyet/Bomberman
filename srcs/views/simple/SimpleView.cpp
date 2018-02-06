@@ -15,18 +15,18 @@ SimpleView::SimpleView ( void )
 	this->keyBoard_map[32] = &SimpleView::pressSpace;
 	this->keyBoard_map[256] = &SimpleView::Escape;
 
-	for (int z = 0; z < 2; z++) {
-		for (int x = 0; x < 2; x++) {
-			this->components.insert(this->components.begin(), new Cube(1 + x,1,1 + z, 1.f));
-		}
-	}
+	// for (int z = 0; z < 2; z++) {
+	// 	for (int x = 0; x < 2; x++) {
+	// 		this->components.insert(this->components.begin(), new Cube(1 + x,1,1 + z, 1.f));
+	// 	}
+	// }
+    //
+	// for (int i = 0; i < 2; i++) {
+	// 	this->components.at(i)->produce();
+	// }
+	this->modeltest = Model::load("assets/cub.obj");
 
-	for (int i = 0; i < 2; i++) {
-		this->components.at(i)->produce();
-	}
-	this->modeltest = Model::loadModel("assets/amyrose.obj");
-
-	this->modeltest->produce();
+	//this->modeltest->produce();
 	return ;
 }
 
@@ -70,7 +70,7 @@ std::ostream &				operator<<(std::ostream & o, SimpleView const & i)
 
 void						SimpleView::render( void )
 {
-	BombermanClient::instance->camera->setProjection(45.0f, 16.0f, 9.0f, 0.1f, 100.0f);
+	BombermanClient::instance->camera->setProjection(45.0f, 1680, 1050, 0.1f, 1000.0f);
 	BombermanClient::instance->camera->buildFPSProjection();
 
 	glm::mat4 MVP = BombermanClient::instance->camera->modelviewprojectionMatrix;
@@ -80,8 +80,8 @@ void						SimpleView::render( void )
 	// }
 
 
-
-	this->modeltest->render(&MVP[0][0]);
+	this->modeltest->draw(&MVP[0][0]);
+	//this->modeltest->render(&MVP[0][0]);
 }
 
 void 						SimpleView::Escape( void )

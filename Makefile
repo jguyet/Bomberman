@@ -68,6 +68,6 @@ compile:
 	echo "\033[38;5;227mAUTHOR  :\033[0m"
 	cat -e $(AUTHOR)
 
-recompile: fclean all
+install: all
 
 recompilelib: cleanall recompile

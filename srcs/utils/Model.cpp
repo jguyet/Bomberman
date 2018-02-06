@@ -2,342 +2,318 @@
 
 // STATIC ########################################################
 
-// int					Model::createTexturedDisplayList(Model *model)
+// #define aisgl_min(x,y) (x<y?x:y)
+// #define aisgl_max(x,y) (y>x?y:x)
+//
+// void	get_bounding_box_for_node(Model *model, const aiNode* nd,
+// 	aiVector3D* min,
+// 	aiVector3D* max)
+//
 // {
-// 	int displayList = glGenLists(1);
+// 	aiMatrix4x4 prev;
+// 	unsigned int n = 0, t;
 //
-// 	glNewList(displayList, GL_COMPILE);
-// 	{
-// 		glBegin(GL_TRIANGLES);
-// 		for (std::vector<Model::Face*>::iterator it = model->getFaces()->begin() ; it != model->getFaces()->end(); ++it) {
-// 			Model::Face *face = *it;
-// 			if (face->hasTextureCoordinates()) {
-// 				float mat_diffuse[4] = {
-// 									face->getMaterial()->diffuseColour[0],
-// 									face->getMaterial()->diffuseColour[1],
-// 									face->getMaterial()->diffuseColour[2],
-// 									1.0f
-// 									};
-// 				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+// 	for (; n < nd->mNumMeshes; ++n) {
+// 		const aiMesh* mesh = model->scene->mMeshes[nd->mMeshes[n]];
+// 		for (t = 0; t < mesh->mNumVertices; ++t) {
 //
-// 				float no_mat[4] = {
-// 									face->getMaterial()->ambientColour[0],
-// 									face->getMaterial()->ambientColour[1],
-// 									face->getMaterial()->ambientColour[2],
-// 									1.0f
-// 									};
-// 				glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
-// 				glMaterialf(GL_FRONT, GL_SHININESS, face->getMaterial()->specularCoefficient);
-// 			}
-// 			for (int i = 0; i < 2; i++) {
-// 				if (face->hasNormals()) {
-// 					glm::vec3 *n1 = model->getNormals()->at(face->getNormalIndices()[i] - 1);
-// 					glNormal3f(n1->x, n1->y, n1->z);
-// 				}
-// 				if (face->hasTextureCoordinates()) {
-// 					glm::vec2 *t1 = model->getTextureCoordinates()->at(face->getTextureCoordinatesIndices()[i] - 1);
-// 					glTexCoord2f(t1->x, t1->y);
-// 				}
-// 				glm::vec3 *v1 = model->getVertices()->at(face->getVertexIndices()[i] - 1);
-// 				glVertex3f(v1->x, v1->y, v1->z);
-// 			}
+// 			aiVector3D tmp = mesh->mVertices[t];
+//
+// 			min->x = aisgl_min(min->x,tmp.x);
+// 			min->y = aisgl_min(min->y,tmp.y);
+// 			min->z = aisgl_min(min->z,tmp.z);
+//
+// 			max->x = aisgl_max(max->x,tmp.x);
+// 			max->y = aisgl_max(max->y,tmp.y);
+// 			max->z = aisgl_max(max->z,tmp.z);
 // 		}
-// 		glEnd();
 // 	}
-// 	glEndList();
-// 	return displayList;
+//
+// 	for (n = 0; n < nd->mNumChildren; ++n) {
+// 		get_bounding_box_for_node(model, nd->mChildren[n],min,max);
+// 	}
+// }
+//
+// void get_bounding_box (Model *model, aiVector3D* min, aiVector3D* max)
+// {
+//
+// 	min->x = min->y = min->z =  1e10f;
+// 	max->x = max->y = max->z = -1e10f;
+// 	get_bounding_box_for_node(model, model->scene->mRootNode, min, max);
 // }
 
-void					Model::loadMaterials(Model *model, std::string absolutePath, std::string filename)
+inline void set_float4(float f[4], float a, float b, float c, float d)
 {
-	std::ifstream file;
-
-	file.open(absolutePath + filename);
-
-	if (!file.good()) {
-		printf("Impossible to open the file %s !\n", (absolutePath + filename).c_str());
-		return ;
-	}
-
-	std::string materialLine;
-	Model::Material *parseMaterial = NULL;
-	std::string parseMaterialName = "";
-
-	for (std::string materialLine; std::getline(file, materialLine);) {
-		std::vector<std::string> materialspl = split(materialLine, ' ');
-
-		if (materialLine == "" || materialspl.at(0) == "#") {
-			continue ;
-		}
-
-		if (materialspl.at(0) == "newmtl") { // indique le début d'un nouveau matériel
-			if (parseMaterialName != "" && model->getMaterials().count(parseMaterialName) == 0) {
-				model->getMaterials()[parseMaterialName] = parseMaterial;
-			}
-			parseMaterialName = materialspl.at(1);
-			parseMaterial = new Model::Material();
-
-		} else if (materialspl.at(0) == "Ns") { //pour le specular exponent entre 0 et 100
-			parseMaterial->specularCoefficient = std::stof(materialspl.at(1));
-		} else if (materialspl.at(0) == "Ka") { //nous donne la couleur ambiante (la couleur de l'objet sans lumière directe), RVB entre 0 (Min) et 1 (Max)
-			parseMaterial->ambientColour[0] = std::stof(materialspl.at(1));
-			parseMaterial->ambientColour[1] = std::stof(materialspl.at(2));
-			parseMaterial->ambientColour[2] = std::stof(materialspl.at(3));
-		} else if (materialspl.at(0) == "Ks") { //pour la couleur spéculaire (specular)
-			parseMaterial->specularColour[0] = std::stof(materialspl.at(1));
-			parseMaterial->specularColour[1] = std::stof(materialspl.at(2));
-			parseMaterial->specularColour[2] = std::stof(materialspl.at(3));
-		} else if (materialspl.at(0) == "Kd") { //est utilisé pour la couleur diffuse (la couleur de l'objet sous lumière blanche)
-			parseMaterial->diffuseColour[0] = std::stof(materialspl.at(1));
-			parseMaterial->diffuseColour[1] = std::stof(materialspl.at(2));
-			parseMaterial->diffuseColour[2] = std::stof(materialspl.at(3));
-		} else if (materialspl.at(0) == "map_Kd") { //"map_kd" (ks, ka) pour la texture utilisé diffuse (specular, ambiante)
-			parseMaterial->texture = (absolutePath + "/" + materialspl.at(1)).c_str();
-		} else if (materialspl.at(0) == "illum") {
-			//TODO paramtere de lumiere
-		} else if (materialspl.at(0) == "d") {
-			//TODO pour la transparence entre 0 et 1 (aucune transparence)
-		} else if (materialspl.at(0) == "Ni") {
-			//TODO pour la densité optique
-		} else if (materialspl.at(0) == "Ke") {
-			//TODO pour la couleur émissive (emissive)
-		}
-	}
-	if (parseMaterialName != "" && model->getMaterials().count(parseMaterialName) == 0) {
-		model->getMaterials()[parseMaterialName] = parseMaterial;
-	}
-	file.close();
+	f[0] = a;
+	f[1] = b;
+	f[2] = c;
+	f[3] = d;
 }
 
-Model				*Model::loadModel(std::string filename)
+inline void color4_to_float4(const aiColor4D *c, float f[4])
 {
-	std::ifstream file;
-
-	file.open(filename);
-	if(!file.good()) {
-		printf("Impossible to open the file %s !\n", filename.c_str());
-		return NULL;
-	}
-	Model *model = new Model();
-	Model::Material *currentMaterial = NULL;
-
-	int lastslash = filename.find_last_of("/");
-	std::string absolutePath = filename;
-
-	if (lastslash == -1) {
-		absolutePath = "";
-	} else {
-		absolutePath = absolutePath.substr(0, lastslash + 1);
-	}
-
-	for (std::string line; std::getline(file, line);) {
-		std::vector<std::string> spl = split(line, ' ');
-		std::string prefix = spl.at(0);
-
-		if (line == "" || prefix == "#") {
-			continue ;
-		}
-		if (prefix == "mtllib") {
-			Model::loadMaterials(model, absolutePath, spl.at(1));
-		} else if (prefix == "usemtl") {
-			if (model->getMaterials().count(spl.at(1)) == 1)
-				currentMaterial = model->getMaterials()[spl.at(1)];
-			else
-				currentMaterial = NULL;
-		} else if (prefix == "v") {
-			Model::parseVertex(model, line);
-		} else if (prefix == "vn") {
-			Model::parseNormals(model, line);
-		} else if (prefix == "vt") {
-			Model::parseTextureCoordinates(model, line);
-		} else if (prefix == "f") {
-			Model::parseFace(model, line, currentMaterial);
-		} else if (spl.at(0) == "s") {
-			model->setSmoothShadingEnabled(line.find("off") != -1);
-		} else {
-			std::cout << "[OBJ] Unknown Line: " << line << std::endl;
-		}
-	}
-	std::cout << "Vertex size: " << model->getVertices().size() << std::endl;
-	std::cout << "Normals size: " << model->getNormals().size() << std::endl;
-	std::cout << "Faces size: " << model->getFaces().size() << std::endl;
-	for (int i = 0; i < model->getFaces().size(); i++) {
-		model->getFaces().at(i).build(model);
-	}
-	file.close();
-	return model;
-}
-//
-// Model				*Model::loadTexturedModel(std::string filename)
-// {
-// 	std::ifstream file;
-//
-// 	file.open(filename);
-// 	if(!file.good()) {
-// 		printf("Impossible to open the file %s !\n", filename.c_str());
-// 		return NULL;
-// 	}
-// 	Model *model = new Model();
-// 	Model::Material *currentMaterial = new Model::Material();
-//
-// 	int lastslash = filename.find_last_of("/");
-// 	std::string absolutePath = filename;
-//
-// 	if (lastslash == -1) {
-// 		absolutePath = "";
-// 	} else {
-// 		absolutePath = absolutePath.substr(0, lastslash + 1);
-// 	}
-//
-// 	for (std::string line; std::getline(file, line);) {
-// 		std::vector<std::string> spl = split(line, ' ');
-//
-// 		if (spl.at(0) == "#") {
-// 			continue ;
-// 		}
-//
-// 		if (spl.at(0) == "mtllib") {
-// 			std::string materialFileName = split(line, ' ').at(1);
-// 			std::ifstream materialFile;
-//
-// 			materialFile.open(absolutePath + materialFileName);
-//
-// 			if (!materialFile.good()) {
-// 				printf("Impossible to open the file %s !\n", (absolutePath + materialFileName).c_str());
-// 				return NULL;
-// 			}
-//
-// 			std::string materialLine;
-// 			Model::Material *parseMaterial = new Model::Material();
-// 			std::string parseMaterialName = "";
-//
-// 			for (std::string materialLine; std::getline(materialFile, materialLine);) {
-// 				std::vector<std::string> materialspl = split(materialLine, ' ');
-//
-// 				if (materialLine == "" || materialspl.at(0) == "#") {
-// 					continue ;
-// 				}
-//
-// 				if (materialspl.at(0) == "newmtl") {
-// 					if (parseMaterialName != "") {
-// 						model->getMaterials()[parseMaterialName] = parseMaterial;
-// 					}
-// 					parseMaterialName = materialspl.at(1);
-// 					parseMaterial = new Model::Material();
-//
-// 				} else if (materialspl.at(0) == "Ns") {
-// 					parseMaterial->specularCoefficient = std::stof(materialspl.at(1));
-// 				} else if (materialspl.at(0) == "Ka") {
-// 					parseMaterial->ambientColour[0] = std::stof(materialspl.at(1));
-// 					parseMaterial->ambientColour[1] = std::stof(materialspl.at(2));
-// 					parseMaterial->ambientColour[2] = std::stof(materialspl.at(3));
-// 				} else if (materialspl.at(0) == "Ks") {
-// 					parseMaterial->specularColour[0] = std::stof(materialspl.at(1));
-// 					parseMaterial->specularColour[1] = std::stof(materialspl.at(2));
-// 					parseMaterial->specularColour[2] = std::stof(materialspl.at(3));
-// 				} else if (materialspl.at(0) == "Kd") {
-// 					parseMaterial->diffuseColour[0] = std::stof(materialspl.at(1));
-// 					parseMaterial->diffuseColour[1] = std::stof(materialspl.at(2));
-// 					parseMaterial->diffuseColour[2] = std::stof(materialspl.at(3));
-// 				} else if (materialspl.at(0) == "map_Kd") {
-// 					parseMaterial->texture = (absolutePath + "/" + materialspl.at(1) + ".png");
-// 				} else {
-//
-// 				}
-// 			}
-// 			model->getMaterials()[parseMaterialName] = parseMaterial;
-// 			materialFile.close();
-// 		} else if (spl.at(0) == "usemtl") {
-// 			currentMaterial = model->getMaterials()[spl.at(1)];
-// 		} else if (spl.at(0) == "v") {
-// 			model->getVertices().insert(model.getVertices()->begin(), Model::parseVertex(line));
-// 		} else if (spl.at(0) == "vn") {
-// 			model->getNormals()->insert(model.getNormals()->begin(), Model::parseNormals(line));
-// 		} else if (spl.at(0) == "vt") {
-// 			model->getTextureCoordinates().insert(model->getTextureCoordinates()->begin(), Model::parseTextureCoordinates(line));
-// 		} else if (spl.at(0) == "f") {
-// 			model->getFaces().insert(model->getFaces().begin(), Model::parseFace(model, line, currentMaterial));
-// 		} else if (spl.at(0) == "s") {
-// 			model->setSmoothShadingEnabled(line.find("off") != -1);
-// 		} else if (spl.at(0) == "o") {
-// 			//Name
-// 		} else {
-// 			std::cout << "[OBJ] Unknown Line: " << spl.at(0) << std::endl;
-// 		}
-// 	}
-// 	file.close();
-// 	return model;
-// }
-
-void					Model::parseVertex(Model *model, std::string line)
-{
-    std::vector<std::string> xyz = split(line, ' ');
-    float x = std::stof(xyz.at(1));
-    float y = std::stof(xyz.at(2));
-    float z = std::stof(xyz.at(3));
-
-	model->getVertices().push_back(glm::vec3(x, y, z));
+	f[0] = c->r;
+	f[1] = c->g;
+	f[2] = c->b;
+	f[3] = c->a;
 }
 
-void					Model::parseNormals(Model *model, std::string line)
+Model				*Model::load( const std::string& pFile )
 {
-    std::vector<std::string> xyz = split(line, ' ');
-    float x = std::stof(xyz.at(1));
-    float y = std::stof(xyz.at(2));
-    float z = std::stof(xyz.at(3));
-	model->getNormals().push_back(glm::vec3(x, y, z));
-}
-
-void					Model::parseTextureCoordinates(Model *model, std::string line)
-{
-    std::vector<std::string> xyz = split(line, ' ');
-    float s = std::stof(xyz.at(1));
-    float t = std::stof(xyz.at(2));
-	model->getTextureCoordinates().push_back(glm::vec2(s, t));
-}
-
-
-void					Model::parseFace(Model *model, std::string line, Material *currentMaterial)
-{
-	if (line.find("/") == -1) {
-		Model::parseFaceVertex(model, line, currentMaterial);
-		return ;
-	}
-	std::vector<std::string> faceIndices = split(line, ' ');
-	int textureCoordinateIndicesArray[3] = {-1, -1, -1};
-	int	normalIndicesArray[3] = {-1, -1, -1};
-	int vertexIndicesArray[3] = {
-									std::stoi(split(faceIndices.at(1), '/').at(0)) - 1,
-									std::stoi(split(faceIndices.at(2), '/').at(0)) - 1,
-									std::stoi(split(faceIndices.at(3), '/').at(0)) - 1
-								};
-
-	if (model->hasTextureCoordinates() && faceIndices.at(1).find("//") == -1) {
-        textureCoordinateIndicesArray[0] = std::stoi(split(faceIndices.at(1), '/').at(1)) - 1;
-        textureCoordinateIndicesArray[1] = std::stoi(split(faceIndices.at(2), '/').at(1)) - 1;
-        textureCoordinateIndicesArray[2] = std::stoi(split(faceIndices.at(3), '/').at(1)) - 1;
+    std::ifstream fin(pFile.c_str());
+    if(!fin.fail()) {
+        fin.close();
     }
-	if (model->hasNormals()) {
-		normalIndicesArray[0] = std::stoi(split(faceIndices.at(1), '/').at(2)) - 1;
-		normalIndicesArray[1] = std::stoi(split(faceIndices.at(2), '/').at(2)) - 1;
-		normalIndicesArray[2] = std::stoi(split(faceIndices.at(3), '/').at(2)) - 1;
-	}
-	model->getFaces().push_back(Model::Face(vertexIndicesArray, normalIndicesArray, textureCoordinateIndicesArray, currentMaterial));
+    else{
+        printf("Couldn't open file: %s\n", pFile.c_str());
+        return NULL;
+    }
+
+	Model *model = new Model();
+
+    model->scene = model->importer.ReadFile( pFile, aiProcessPreset_TargetRealtime_Quality);
+
+    // If the import failed, report it
+    if( !model->scene)
+    {
+        printf("%s\n", model->importer.GetErrorString());
+		delete model;
+        return NULL;
+    }
+
+    // Now we can access the file's contents.
+    printf("Import of scene %s succeeded.\n",pFile.c_str());
+
+	Model::loadGLTextures(model);
+
+	model->buildShader();
+
+	Model::genVAOsAndUniformBuffer(model);
+
+    //aiVector3D scene_min, scene_max, scene_center;
+    //get_bounding_box(model, &scene_min, &scene_max);
+    //float tmp;
+    //tmp = scene_max.x-scene_min.x;
+    //tmp = scene_max.y - scene_min.y > tmp?scene_max.y - scene_min.y:tmp;
+    //tmp = scene_max.z - scene_min.z > tmp?scene_max.z - scene_min.z:tmp;
+    //scaleFactor = 1.f / tmp;
+
+    return model;
 }
 
-void					Model::parseFaceVertex(Model *model, std::string line, Material *currentMaterial)
+void					Model::loadGLTextures(Model *model)
 {
-	std::vector<std::string> faceIndices = split(line, ' ');
-	int textureCoordinateIndicesArray[3] = {-1, -1, -1};
-	int	normalIndicesArray[3] = {-1, -1, -1};
-	int vertexIndicesArray[3] = {
-									std::stoi(faceIndices.at(1)) - 1,
-									std::stoi(faceIndices.at(2)) - 1,
-									std::stoi(faceIndices.at(3)) - 1
-								};
-	model->getFaces().push_back(Model::Face(vertexIndicesArray, normalIndicesArray, textureCoordinateIndicesArray, currentMaterial));
+
+	/* scan scene's materials for textures */
+	for (unsigned int m=0; m<model->scene->mNumMaterials; ++m)
+	{
+		int texIndex = 0;
+		aiString path;	// filename
+
+		aiReturn texFound = model->scene->mMaterials[m]->GetTexture(aiTextureType_DIFFUSE, texIndex, &path);
+		while (texFound == AI_SUCCESS) {
+			//fill map with textures, OpenGL image ids set to 0
+			model->textureIdMap[path.data] = 0;
+			// more textures?
+			texIndex++;
+			texFound = model->scene->mMaterials[m]->GetTexture(aiTextureType_DIFFUSE, texIndex, &path);
+		}
+	}
+
+	int numTextures = model->textureIdMap.size();
+
+	/* create and fill array with GL texture ids */
+	GLuint* textureIds = new GLuint[numTextures];
+	glGenTextures(numTextures, textureIds); /* Texture name generation */
+
+	/* get iterator */
+	std::map<std::string, GLuint>::iterator itr = model->textureIdMap.begin();
+	int i=0;
+	for (; itr != model->textureIdMap.end(); ++i, ++itr)
+	{
+		//save IL image ID
+		std::string filename = (*itr).first;  // get filename
+
+		textureIds[i] = SOIL_load_OGL_texture
+		(
+			filename.c_str(),
+			SOIL_LOAD_AUTO,
+        	SOIL_CREATE_NEW_ID,
+        	SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_MIPMAPS | SOIL_FLAG_TEXTURE_REPEATS
+		);
+
+		if (textureIds[i] == 0) {
+			printf("Couldn't load Image: %s\n", filename.c_str());
+		} else {
+			printf("Image: %s Loaded\n", filename.c_str());
+
+			(*itr).second = textureIds[i];	  // save texture id for filename in map
+		}
+
+		// ilBindImage(imageIds[i]); /* Binding of DevIL image name */
+		// ilEnable(IL_ORIGIN_SET);
+		// ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+		// success = ilLoadImage((ILstring)filename.c_str());
+        //
+		// if (success) {
+		// 	/* Convert image to RGBA */
+		// 	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+        //
+		// 	/* Create and load textures to OpenGL */
+		// 	glBindTexture(GL_TEXTURE_2D, textureIds[i]);
+		// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		// 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH),
+		// 		ilGetInteger(IL_IMAGE_HEIGHT), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+		// 		ilGetData());
+		// }
+		// else
+		// 	printf("Couldn't load Image: %s\n", filename.c_str());
+	}
+	delete [] textureIds;
 }
 
+void						Model::genVAOsAndUniformBuffer(Model *model)
+{
+
+    struct MyMesh aMesh;
+    struct MyMaterial aMat;
+    GLuint buffer;
+
+    // For each mesh
+	std::cout << "Number of meshs : " << model->scene->mNumMeshes << std::endl;
+    for (unsigned int n = 0; n < model->scene->mNumMeshes; ++n)
+    {
+        const aiMesh* mesh = model->scene->mMeshes[n];
+
+        // create array with faces
+        // have to convert from Assimp format to array
+        unsigned int *faceArray;
+        faceArray = (unsigned int *)malloc(sizeof(unsigned int) * mesh->mNumFaces * 3);
+        unsigned int faceIndex = 0;
+
+        for (unsigned int t = 0; t < mesh->mNumFaces; ++t) {
+            const aiFace* face = &mesh->mFaces[t];
+
+            memcpy(&faceArray[faceIndex], face->mIndices,3 * sizeof(unsigned int));
+            faceIndex += 3;
+        }
+        aMesh.numFaces = model->scene->mMeshes[n]->mNumFaces;
+
+        // generate Vertex Array for mesh
+        glGenVertexArrays(1,&(aMesh.vao));
+        glBindVertexArray(aMesh.vao);
+
+        // buffer for faces
+        glGenBuffers(1, &buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->mNumFaces * 3, faceArray, GL_STATIC_DRAW);
+        // buffer for vertex positions
+        if (mesh->HasPositions()) {
+            glGenBuffers(1, &buffer);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*mesh->mNumVertices, mesh->mVertices, GL_STATIC_DRAW);
+            glEnableVertexAttribArray(model->vertexLoc);
+            glVertexAttribPointer(model->vertexLoc, 3, GL_FLOAT, false, 0, 0);
+        }
+
+        // buffer for vertex normals
+        if (mesh->HasNormals()) {
+			//std::cout << mesh->mNumVertices << std::endl;
+			//std::cout << sizeof(mesh->mNormals) << std::endl;
+            glGenBuffers(1, &buffer);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*mesh->mNumVertices, mesh->mNormals, GL_STATIC_DRAW);
+            glEnableVertexAttribArray(model->normalLoc);
+            glVertexAttribPointer(model->normalLoc, 3, GL_FLOAT, false, 0, 0);
+        }
+
+        // buffer for vertex texture coordinates
+        if (mesh->HasTextureCoords(0)) {
+            float *texCoords = (float *)malloc(sizeof(float)*2*mesh->mNumVertices);
+			int i = 0;
+			// for(unsigned int f = 0; f < mesh->mNumFaces; f++)
+	        // {
+	        //     const aiFace* face = &mesh->mFaces[f];
+	        //     // retrieve all indices of the face and store them in the indices vector
+	        //     for(unsigned int j = 0; j < face->mNumIndices; j++) {
+			// 		std::cout << face->mIndices[j] << std::endl;
+			// 		texCoords[i++]   = mesh->mTextureCoords[0][face->mIndices[j]].x;
+	        //         texCoords[i++] = mesh->mTextureCoords[0][face->mIndices[j]].y;
+			// 	}
+	        // }
+            for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
+                texCoords[i++]   = mesh->mTextureCoords[0][k].x;
+                texCoords[i++] = mesh->mTextureCoords[0][k].y;
+
+				 //std::cout << " ---- " << std::endl;
+				// std::cout << mesh->mTextureCoords[0][0].x << " " << mesh->mTextureCoords[0][0].y << std::endl;
+				// std::cout << mesh->mVertices[k].x << " " << mesh->mVertices[k].y << " " << mesh->mVertices[k].z << std::endl;
+            }
+            glGenBuffers(1, &buffer);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(float)*2*mesh->mNumVertices, texCoords, GL_STATIC_DRAW);
+            glEnableVertexAttribArray(model->texCoordLoc);
+            glVertexAttribPointer(model->texCoordLoc, 2, GL_FLOAT, false, 0, 0);
+        }
+
+        // unbind buffers
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER,0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+        //create material uniform buffer
+        aiMaterial *mtl = model->scene->mMaterials[mesh->mMaterialIndex];
+
+        aiString texPath;   //contains filename of texture
+        if(AI_SUCCESS == mtl->GetTexture(aiTextureType_DIFFUSE, 0, &texPath)){
+                //bind texture
+                unsigned int texId = model->textureIdMap[texPath.data];
+                aMesh.texIndex = texId;
+                aMat.texCount = 1;
+            }
+        else
+            aMat.texCount = 0;
+
+        float c[4];
+        set_float4(c, 0.8f, 0.8f, 0.8f, 1.0f);
+        aiColor4D diffuse;
+        if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
+            color4_to_float4(&diffuse, c);
+        memcpy(aMat.diffuse, c, sizeof(c));
+
+        set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
+        aiColor4D ambient;
+        if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &ambient))
+            color4_to_float4(&ambient, c);
+        memcpy(aMat.ambient, c, sizeof(c));
+
+        set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
+        aiColor4D specular;
+        if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR, &specular))
+            color4_to_float4(&specular, c);
+        memcpy(aMat.specular, c, sizeof(c));
+
+        set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
+        aiColor4D emission;
+        if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &emission))
+            color4_to_float4(&emission, c);
+        memcpy(aMat.emissive, c, sizeof(c));
+
+        float shininess = 0.0;
+        unsigned int max;
+        aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
+        aMat.shininess = shininess;
+
+        glGenBuffers(1,&(aMesh.uniformBlockIndex));
+        glBindBuffer(GL_UNIFORM_BUFFER,aMesh.uniformBlockIndex);
+        glBufferData(GL_UNIFORM_BUFFER, sizeof(aMat), (void *)(&aMat), GL_STATIC_DRAW);
+
+		std::cout << "Number of Faces : " << aMesh.numFaces << std::endl;
+
+        model->myMeshes.push_back(aMesh);
+    }
+}
 
 // ###############################################################
 
@@ -345,7 +321,6 @@ void					Model::parseFaceVertex(Model *model, std::string line, Material *curren
 
 Model::Model ( void )
 {
-	this->enableSmoothShading = false;
 	return ;
 }
 
@@ -387,76 +362,82 @@ std::ostream &				operator<<(std::ostream & o, Model const & i)
 
 // PUBLIC METHOD #################################################
 
-// void									Model::enableStates( void )
-// {
-// 	if (this->hasTextureCoordinates()) {
-// 		glEnable(GL_TEXTURE_2D);
-// 	}
-// 	if (this->isSmoothShadingEnabled()) {
-// 		glShadeModel(GL_SMOOTH);
-// 	} else {
-// 		glShadeModel(GL_FLAT);
-// 	}
-// }
-
-bool									Model::hasTextureCoordinates( void )
+void					Model::draw( const GLfloat *mvp )
 {
-	return (this->textureCoordinates.size() > 0);
+	glEnable(GL_MULTISAMPLE);
+	glUseProgram(ShaderUtils::instance->get("dir"));
+
+	this->recursive_render(this->scene->mRootNode);
+
+	glUseProgram(0);
 }
 
-bool									Model::hasNormals( void )
+void					Model::buildShader( void )
 {
-	return (this->normals.size() > 0);
+	glBindFragDataLocation(ShaderUtils::instance->get("dir"), 0, "o_color");
+
+	glBindAttribLocation(ShaderUtils::instance->get("dir"),this->vertexLoc,"a_pos");
+	glBindAttribLocation(ShaderUtils::instance->get("dir"),this->normalLoc,"a_norm");
+	glBindAttribLocation(ShaderUtils::instance->get("dir"),this->texCoordLoc,"a_texCoord");
+
+
+	this->projectionMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_projMatrix");
+	this->viewMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_viewMatrix");
+	this->modelMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_modelMatrix");
+	this->transformMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_transformMatrix");
+
+	GLuint m = glGetUniformBlockIndex(ShaderUtils::instance->get("dir"),"u_material");
+	glUniformBlockBinding(ShaderUtils::instance->get("dir"), m, this->materialUniLoc);
+
+	this->texUnit = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_texUnit");
 }
 
-std::vector<glm::vec3>					&Model::getVertices( void )
+void 					Model::recursive_render(const aiNode* nd)
 {
-	return (this->vertices);
-}
-
-std::vector<glm::vec2>					&Model::getTextureCoordinates( void )
-{
-	return (this->textureCoordinates);
-}
-
-std::vector<Model::Face>				&Model::getFaces( void )
-{
-	return (this->faces);
-}
-
-std::vector<glm::vec3>					&Model::getNormals( void )
-{
-	return (this->normals);
-}
-
-bool									Model::isSmoothShadingEnabled( void )
-{
-	return (this->enableSmoothShading);
-}
-
-void									Model::setSmoothShadingEnabled(bool smoothShadingEnabled)
-{
-	this->enableSmoothShading = smoothShadingEnabled;
-}
-
-std::map<std::string, Model::Material*>	&Model::getMaterials( void )
-{
-	return (this->materials);
-}
-
-void									Model::produce( void )
-{
-
-
-	for (int i = 0; i < this->faces.size(); i++) {
-		this->faces.at(i).produce();
+	if (nd->mNumMeshes == 0) {
+		for (unsigned int n=0; n < nd->mNumChildren; ++n){
+			this->recursive_render(nd->mChildren[n]);
+		}
+		return ;
 	}
-}
+	// Get node transformation matrix
+	aiMatrix4x4 m = nd->mTransformation;
+	glm::mat4 transformedModelMatrix;
+	glm::mat4 transformMatrix;
 
-void									Model::render( const GLfloat *mvp )
-{
-	for (int i = 0; i < this->faces.size(); i++) {
-		this->faces.at(i).render();
+	for (int y = 0; y < 4; y++) {
+		for (int x = 0; x < 4; x++) {
+			transformedModelMatrix[y][x] = m[y][x];
+			transformMatrix[y][x] += m[y][x];
+		}
+	}
+
+	glm::mat4 modelMatrix = BombermanClient::instance->camera->modelMatrix + transformedModelMatrix;
+
+	glUniformMatrix4fv(this->projectionMatrixLoc, 1, GL_FALSE, &BombermanClient::instance->camera->projectionMatrix[0][0]);
+	glUniformMatrix4fv(this->viewMatrixLoc, 1, GL_FALSE, &BombermanClient::instance->camera->viewMatrix[0][0]);
+	glUniformMatrix4fv(this->modelMatrixLoc, 1, GL_FALSE, &modelMatrix[0][0]);
+	glUniformMatrix4fv(this->transformMatrixLoc, 1, GL_FALSE, &transformMatrix[0][0]);
+
+	glUniform1i(this->texUnit,0);
+
+	// draw all meshes assigned to this node
+
+	for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
+		// bind material uniform
+		glBindBufferRange(GL_UNIFORM_BUFFER, this->materialUniLoc, this->myMeshes[nd->mMeshes[n]].uniformBlockIndex, 0, sizeof(struct MyMaterial));
+		// bind texture
+		//std::cout << this->myMeshes[nd->mMeshes[n]].texIndex << std::endl;
+		glBindTexture(GL_TEXTURE_2D, this->myMeshes[nd->mMeshes[n]].texIndex);
+		// bind VAO
+		glBindVertexArray(this->myMeshes[nd->mMeshes[n]].vao);
+		// draw
+		glDrawElements(GL_TRIANGLES,this->myMeshes[nd->mMeshes[n]].numFaces*3,GL_UNSIGNED_INT,0);
+	}
+
+	// draw all children
+	for (unsigned int n=0; n < nd->mNumChildren; ++n){
+		this->recursive_render(nd->mChildren[n]);
 	}
 }
 

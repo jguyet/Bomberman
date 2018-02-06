@@ -56,6 +56,7 @@ void						BombermanClient::initialize_properties( void )
 void						BombermanClient::initialize_resources( void )
 {
 	ShaderUtils::instance->loadShader("simple", "./assets/shaders/Simple.vs", "./assets/shaders/Simple.fs");
+	ShaderUtils::instance->loadShader("dir", "./assets/shaders/dirlightdiffambpix.vert", "./assets/shaders/dirlightdiffambpix.frag");
 }
 
 void						BombermanClient::build_window( void )
@@ -91,7 +92,7 @@ void						BombermanClient::build_window( void )
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
+	//glDepthFunc(GL_LESS);
 
 	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
@@ -177,7 +178,10 @@ int main(void)
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-	client->camera->setPosition(4,3,3);
+	client->camera->setProjection(45.0f, 1680, 1050, 0.1f, 1000.0f);
+	client->camera->setPosition(0.294715f, 4.13507f, 12.293f);
+	client->camera->setRotation(38.0f,94.0f,0.0f);
+	client->camera->buildFPSProjection();
 
 	client->run();
 

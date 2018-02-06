@@ -18,7 +18,7 @@
 #  define GLFW_INCLUDE_GLCOREARB
 # endif
 
-# include <SOIL.h>
+# include <SOIL2.h>
 # include <glfw3.h>
 # include <glm/glm.hpp>
 # include <glm/vec3.hpp> // glm::vec3

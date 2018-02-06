@@ -78,12 +78,19 @@ if (APPLE)
 	#SOIL
 	############################################################################
 	if(NOT EXISTS "${PROJECT_DIR}/SOIL")
-		execute_process(COMMAND git clone "https://github.com/paralin/soil.git" "SOIL"
+		execute_process(COMMAND git clone "https://github.com/alelievr/SOIL2.git" "SOIL"
 						WORKING_DIRECTORY ${PROJECT_DIR}/
 						)
 	endif()
-		add_subdirectory(${PROJECT_DIR}/SOIL)
-		include_directories(${PROJECT_DIR}/SOIL/inc/SOIL)
+	if(NOT EXISTS "${PROJECT_DIR}/SOIL/lib")
+		execute_process(COMMAND make
+					WORKING_DIRECTORY ${PROJECT_DIR}/SOIL
+					)
+	endif()
+		link_directories(
+		  ${PROJECT_DIR}/SOIL
+		)
+		include_directories(${PROJECT_DIR}/SOIL/incs)
 endif()
 
 if (WIN32)
@@ -211,4 +218,4 @@ add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
 
-target_link_libraries(${PROJECT_NAME} glfw glm assimp soil ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} glfw glm assimp SOIL2 ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
