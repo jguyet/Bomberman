@@ -24,7 +24,9 @@ SimpleView::SimpleView ( void )
 	// for (int i = 0; i < 2; i++) {
 	// 	this->components.at(i)->produce();
 	// }
-	this->modeltest = Model::load("assets/grass.obj");
+	this->models[0] = Model::load("assets/ground.obj");
+	this->models[1] = Model::load("assets/brick.obj");
+	this->models[2] = Model::load("assets/grass.obj");
 
 	//this->modeltest->produce();
 	return ;
@@ -81,16 +83,29 @@ void						SimpleView::render( void )
 	// }
 
 	for (int z = 0; z < 19; z++) {
-		for (int x = 0; x < 13; x++) {
+		for (int x = 0; x < 13;) {
 			glm::vec3 scale = glm::vec3(1,1,1);
-			glm::vec3 pos = glm::vec3(x,0,z);
-			this->modeltest->draw(pos, scale);
+			glm::vec3 pos = glm::vec3(x,-0.5f,z);
+			this->models[1]->draw(pos, scale);
+			if (z == 0 || z == 18 || x == 12)
+				x++;
+			else
+				x = 12;
 		}
 	}
 
+
+
 	glm::vec3 scale = glm::vec3(1,1,1);
-	glm::vec3 pos = glm::vec3(3,-5,3);
-	this->modeltest->draw(pos, scale);
+	glm::vec3 pos = glm::vec3(0,0,0);
+	this->models[0]->draw(pos, scale);
+
+
+	pos = glm::vec3(1,-0.5f,1);
+	this->models[1]->draw(pos, scale);
+
+	pos = glm::vec3(4,-0.5f,1);
+	this->models[2]->draw(pos, scale);
 
 	//std::cout << "x:" << BombermanClient::instance->camera->getPosition().x << "y:" << BombermanClient::instance->camera->getPosition().y << "z:" << BombermanClient::instance->camera->getPosition().z << std::endl;
 }

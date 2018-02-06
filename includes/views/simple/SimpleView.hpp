@@ -36,7 +36,7 @@ class SimpleView : public IView
 			GLuint									matrixID;
 			GLuint									vertexBuffer;
 			GLuint									colorbuffer;
-			Model									*modeltest;
+			std::map<unsigned int, Model*>			models;
 
 			std::vector<Cube*> 			components;
 

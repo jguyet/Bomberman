@@ -168,8 +168,8 @@ void					Camera::MouseMove(int x, int y)
 	}
 	glm::vec2 mouse_delta = glm::vec2(x, y) - this->mousePosition;
 
-	const float mouseX_Sensitivity = 0.025f;
-	const float mouseY_Sensitivity = 0.025f;
+	const float mouseX_Sensitivity = 0.0025f;
+	const float mouseY_Sensitivity = 0.0025f;
 
 	this->rotation.y += mouseX_Sensitivity * mouse_delta.x;
 	this->rotation.x += mouseY_Sensitivity * mouse_delta.y;
