@@ -31,6 +31,7 @@ class Model
 		static Model							*load( const std::string& pFile );
 		static void								loadGLTextures(Model *model);
 		static void								genVAOsAndUniformBuffer(Model *model);
+		static void								buildShader(Model *model);
 
 
 		Model( void );
@@ -40,9 +41,8 @@ class Model
 		Model &									operator=( Model const & rhs );
 		friend std::ostream &					operator<<(std::ostream & o, Model const & i);
 
-		void									draw( const GLfloat *mvp );
-		void									buildShader( void );
-		void 									recursive_render(const aiNode* nd);
+		void									draw( glm::vec3 &position , glm::vec3 &scale);
+		void 									recursive_render(const aiNode* nd, glm::vec3 &position, glm::vec3 &scale);
 
 		Assimp::Importer 						importer;
 		const aiScene							*scene;
@@ -62,6 +62,7 @@ class Model
 
 		std::map<std::string, GLuint>			textureIdMap;
 		std::vector<struct MyMesh>				myMeshes;
+		std::vector<unsigned int> 				indices;
 };
 
 #endif

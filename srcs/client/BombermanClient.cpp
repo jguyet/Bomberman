@@ -97,6 +97,8 @@ void						BombermanClient::build_window( void )
 	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
 
+	glEnable(GL_MULTISAMPLE);
+
 	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	//glfwSetCursorPos(this->window, 640 / 2, 480 / 2);

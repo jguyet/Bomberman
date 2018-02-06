@@ -24,7 +24,7 @@ SimpleView::SimpleView ( void )
 	// for (int i = 0; i < 2; i++) {
 	// 	this->components.at(i)->produce();
 	// }
-	this->modeltest = Model::load("assets/cub.obj");
+	this->modeltest = Model::load("assets/grass.obj");
 
 	//this->modeltest->produce();
 	return ;
@@ -79,8 +79,12 @@ void						SimpleView::render( void )
 	// 	this->components.at(i)->render(&MVP[0][0]);
 	// }
 
-
-	this->modeltest->draw(&MVP[0][0]);
+	glm::vec3 scale = glm::vec3(1,1,1);
+	glm::vec3 pos = glm::vec3(1,1,1);
+	this->modeltest->draw(pos, scale);
+	scale = glm::vec3(1,1,1);
+	pos = glm::vec3(2 + 1,1,2 + 1);
+	this->modeltest->draw(pos, scale);
 	//this->modeltest->render(&MVP[0][0]);
 }
 

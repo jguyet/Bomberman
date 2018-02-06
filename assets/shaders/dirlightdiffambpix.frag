@@ -12,7 +12,7 @@ layout (std140) uniform u_material {
 uniform	sampler2D u_texUnit;
 
 in vec3 v_norm;
-in vec2 v_texCoord;
+in vec3 v_texCoord;
 
 out vec4 o_color;
 
@@ -22,7 +22,7 @@ void main()
 	vec3 lightDir = normalize(vec3(1.0,1.0,1.0));
 
 	float ndotl = dot(v_norm, lightDir);
-	vec3 vdiffuse = vec3(diffuse.xyz) * clamp(ndotl, 1.0, 1.0);
+	vec3 vdiffuse = vec3(diffuse.xyz) * clamp(ndotl, 0.0, 1.0);
 	vec4 color;
 	vec3 amb;
 
@@ -30,8 +30,8 @@ void main()
 		color = vec4(vdiffuse.xyz, 1.0);
 	}
 	else {
-		color = texture(u_texUnit, v_texCoord) * vec4(vdiffuse, 1.0);
+		color = texture(u_texUnit, v_texCoord.xy) * vec4(vdiffuse, 1.0);
 	}
 
-	o_color = (color * 1.5) + ambient;
+	o_color = color;
 }

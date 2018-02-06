@@ -85,9 +85,7 @@ Model				*Model::load( const std::string& pFile )
     printf("Import of scene %s succeeded.\n",pFile.c_str());
 
 	Model::loadGLTextures(model);
-
-	model->buildShader();
-
+	Model::buildShader(model);
 	Model::genVAOsAndUniformBuffer(model);
 
     //aiVector3D scene_min, scene_max, scene_center;
@@ -132,7 +130,7 @@ void					Model::loadGLTextures(Model *model)
 	for (; itr != model->textureIdMap.end(); ++i, ++itr)
 	{
 		//save IL image ID
-		std::string filename = (*itr).first;  // get filename
+		std::string filename = "assets/" + (*itr).first;  // get filename
 
 		textureIds[i] = SOIL_load_OGL_texture
 		(
@@ -171,6 +169,26 @@ void					Model::loadGLTextures(Model *model)
 		// 	printf("Couldn't load Image: %s\n", filename.c_str());
 	}
 	delete [] textureIds;
+}
+
+void						Model::buildShader( Model *model )
+{
+	glBindFragDataLocation(ShaderUtils::instance->get("dir"), 0, "o_color");
+
+	glBindAttribLocation(ShaderUtils::instance->get("dir"),model->vertexLoc,"a_pos");
+	glBindAttribLocation(ShaderUtils::instance->get("dir"),model->normalLoc,"a_norm");
+	glBindAttribLocation(ShaderUtils::instance->get("dir"),model->texCoordLoc,"a_texCoord");
+
+
+	model->projectionMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_projMatrix");
+	model->viewMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_viewMatrix");
+	model->modelMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_modelMatrix");
+	model->transformMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_transformMatrix");
+
+	GLuint m = glGetUniformBlockIndex(ShaderUtils::instance->get("dir"),"u_material");
+	glUniformBlockBinding(ShaderUtils::instance->get("dir"), m, model->materialUniLoc);
+
+	model->texUnit = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_texUnit");
 }
 
 void						Model::genVAOsAndUniformBuffer(Model *model)
@@ -219,8 +237,6 @@ void						Model::genVAOsAndUniformBuffer(Model *model)
 
         // buffer for vertex normals
         if (mesh->HasNormals()) {
-			//std::cout << mesh->mNumVertices << std::endl;
-			//std::cout << sizeof(mesh->mNormals) << std::endl;
             glGenBuffers(1, &buffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*mesh->mNumVertices, mesh->mNormals, GL_STATIC_DRAW);
@@ -230,31 +246,11 @@ void						Model::genVAOsAndUniformBuffer(Model *model)
 
         // buffer for vertex texture coordinates
         if (mesh->HasTextureCoords(0)) {
-            float *texCoords = (float *)malloc(sizeof(float)*2*mesh->mNumVertices);
-			int i = 0;
-			// for(unsigned int f = 0; f < mesh->mNumFaces; f++)
-	        // {
-	        //     const aiFace* face = &mesh->mFaces[f];
-	        //     // retrieve all indices of the face and store them in the indices vector
-	        //     for(unsigned int j = 0; j < face->mNumIndices; j++) {
-			// 		std::cout << face->mIndices[j] << std::endl;
-			// 		texCoords[i++]   = mesh->mTextureCoords[0][face->mIndices[j]].x;
-	        //         texCoords[i++] = mesh->mTextureCoords[0][face->mIndices[j]].y;
-			// 	}
-	        // }
-            for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
-                texCoords[i++]   = mesh->mTextureCoords[0][k].x;
-                texCoords[i++] = mesh->mTextureCoords[0][k].y;
-
-				 //std::cout << " ---- " << std::endl;
-				// std::cout << mesh->mTextureCoords[0][0].x << " " << mesh->mTextureCoords[0][0].y << std::endl;
-				// std::cout << mesh->mVertices[k].x << " " << mesh->mVertices[k].y << " " << mesh->mVertices[k].z << std::endl;
-            }
             glGenBuffers(1, &buffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(float)*2*mesh->mNumVertices, texCoords, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*mesh->mNumVertices, &mesh->mTextureCoords[0][0], GL_STATIC_DRAW);
             glEnableVertexAttribArray(model->texCoordLoc);
-            glVertexAttribPointer(model->texCoordLoc, 2, GL_FLOAT, false, 0, 0);
+            glVertexAttribPointer(model->texCoordLoc, 3, GL_FLOAT, false, 0, 0);
         }
 
         // unbind buffers
@@ -362,41 +358,20 @@ std::ostream &				operator<<(std::ostream & o, Model const & i)
 
 // PUBLIC METHOD #################################################
 
-void					Model::draw( const GLfloat *mvp )
+void					Model::draw( glm::vec3 &position, glm::vec3 &scale )
 {
-	glEnable(GL_MULTISAMPLE);
 	glUseProgram(ShaderUtils::instance->get("dir"));
 
-	this->recursive_render(this->scene->mRootNode);
+	this->recursive_render(this->scene->mRootNode, position, scale);
 
 	glUseProgram(0);
 }
 
-void					Model::buildShader( void )
-{
-	glBindFragDataLocation(ShaderUtils::instance->get("dir"), 0, "o_color");
-
-	glBindAttribLocation(ShaderUtils::instance->get("dir"),this->vertexLoc,"a_pos");
-	glBindAttribLocation(ShaderUtils::instance->get("dir"),this->normalLoc,"a_norm");
-	glBindAttribLocation(ShaderUtils::instance->get("dir"),this->texCoordLoc,"a_texCoord");
-
-
-	this->projectionMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_projMatrix");
-	this->viewMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_viewMatrix");
-	this->modelMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_modelMatrix");
-	this->transformMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_transformMatrix");
-
-	GLuint m = glGetUniformBlockIndex(ShaderUtils::instance->get("dir"),"u_material");
-	glUniformBlockBinding(ShaderUtils::instance->get("dir"), m, this->materialUniLoc);
-
-	this->texUnit = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_texUnit");
-}
-
-void 					Model::recursive_render(const aiNode* nd)
+void 					Model::recursive_render(const aiNode* nd, glm::vec3 &position, glm::vec3 &scale)
 {
 	if (nd->mNumMeshes == 0) {
 		for (unsigned int n=0; n < nd->mNumChildren; ++n){
-			this->recursive_render(nd->mChildren[n]);
+			this->recursive_render(nd->mChildren[n], position, scale);
 		}
 		return ;
 	}
@@ -412,7 +387,10 @@ void 					Model::recursive_render(const aiNode* nd)
 		}
 	}
 
-	glm::mat4 modelMatrix = BombermanClient::instance->camera->modelMatrix + transformedModelMatrix;
+	glm::mat4 modelMatrix = BombermanClient::instance->camera->modelMatrix;
+	modelMatrix = glm::scale(modelMatrix, scale);
+	modelMatrix = glm::translate(modelMatrix, -position);
+	//modelMatrix = (modelMatrix + transformedModelMatrix);
 
 	glUniformMatrix4fv(this->projectionMatrixLoc, 1, GL_FALSE, &BombermanClient::instance->camera->projectionMatrix[0][0]);
 	glUniformMatrix4fv(this->viewMatrixLoc, 1, GL_FALSE, &BombermanClient::instance->camera->viewMatrix[0][0]);
@@ -433,11 +411,13 @@ void 					Model::recursive_render(const aiNode* nd)
 		glBindVertexArray(this->myMeshes[nd->mMeshes[n]].vao);
 		// draw
 		glDrawElements(GL_TRIANGLES,this->myMeshes[nd->mMeshes[n]].numFaces*3,GL_UNSIGNED_INT,0);
+		//unbind VAO
+		//glBindVertexArray(0);
 	}
 
 	// draw all children
 	for (unsigned int n=0; n < nd->mNumChildren; ++n){
-		this->recursive_render(nd->mChildren[n]);
+		this->recursive_render(nd->mChildren[n], position, scale);
 	}
 }
 
