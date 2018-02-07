@@ -1,0 +1,22 @@
+# Blender MTL File: ''
+# Material Count: 2
+newmtl bom_face01_bom_face01.png
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.115385 0.115385 0.115385
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd WhiteBomber/bom_face01.png
+
+
+newmtl bomberman00_bomberman00.png
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.153846 0.153846 0.153846
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd WhiteBomber/bomberman00.png

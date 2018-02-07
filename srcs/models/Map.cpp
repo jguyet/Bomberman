@@ -17,7 +17,7 @@ Map::Map ( void )
 			Block *block = new Block(Model::model["grass"]);
 
 			block->gameObject.transform.position = glm::vec3(x,0.5f,z);
-			block->gameObject.transform.scale = glm::vec3(2,2,2);
+			block->gameObject.transform.scale = glm::vec3(1,1,1);
 
 			Case *c = new Case();
 			c->obstacle = NULL;
@@ -33,7 +33,7 @@ Map::Map ( void )
 			Block *block = new Block(Model::model["brick"]);
 
 			block->gameObject.transform.position = glm::vec3(x,-0.5f,z);
-			block->gameObject.transform.scale = glm::vec3(2,2,2);
+			block->gameObject.transform.scale = glm::vec3(1,1,1);
 
 			this->cases[i]->obstacle = block;
 
@@ -56,7 +56,7 @@ Map::Map ( void )
 			}
 			Block *block = new Block(Model::model["brick"]);
 			block->gameObject.transform.position = glm::vec3(x,-0.5f,z);
-			block->gameObject.transform.scale = glm::vec3(2,2,2);
+			block->gameObject.transform.scale = glm::vec3(1,1,1);
 
 			this->cases[i]->obstacle = block;
 			i++;

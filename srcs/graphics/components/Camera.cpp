@@ -53,7 +53,7 @@ void						Camera::buildLookAtProjection( void )
 {
 	this->projectionMatrix = glm::perspective(glm::radians(this->fov), this->width / this->height, this->zNear, this->zFar);
 	this->modelMatrix = glm::mat4(1.0f);
-	this->viewMatrix = glm::lookAt(this->transform.position, glm::vec3(-13.f,1,-18.f), glm::vec3(0,1,0));
+	this->viewMatrix = glm::lookAt(this->transform.position, glm::vec3(-6.f,1,-9.f), glm::vec3(0,1,0));
 	this->modelviewprojectionMatrix = this->projectionMatrix * this->viewMatrix * this->modelMatrix;
 }
 
@@ -107,7 +107,7 @@ void					Camera::MouseMove(int x, int y)
 	}
 
 	this->mousePosition = glm::vec2(x, y);
-	std::cout << "x:" << this->transform.rotation.x << "y:" << this->transform.rotation.y << "z:" << this->transform.rotation.z << std::endl;
+	//std::cout << "x:" << this->transform.rotation.x << "y:" << this->transform.rotation.y << "z:" << this->transform.rotation.z << std::endl;
 }
 
 void					Camera::UpdateView()

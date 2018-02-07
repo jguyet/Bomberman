@@ -343,7 +343,6 @@ void					Model::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale,
 	matYaw   = glm::rotate(matYaw,  rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 rotate = matRoll * matPitch * matYaw;
 	modelMatrix = rotate * modelMatrix;
-
 	//POSITION
 	modelMatrix = glm::translate(modelMatrix, -p);
 
@@ -374,6 +373,7 @@ void 					Model::recursive_render(const aiNode* nd)
 	}
 	glUniformMatrix4fv(this->transformMatrixLoc, 1, GL_FALSE, &transformMatrix[0][0]);
 	glUniform1i(this->texUnit,0);
+
 	for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
 		// bind material uniform
 		glBindBufferRange(GL_UNIFORM_BUFFER, this->materialUniLoc, this->myMeshes[nd->mMeshes[n]].uniformBlockIndex, 0, sizeof(struct MyMaterial));
