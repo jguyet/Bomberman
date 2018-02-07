@@ -43,39 +43,55 @@
 # define PRESS GLFW_PRESS
 # define REPEAT GLFW_REPEAT
 
-std::vector<std::string>		split(const std::string &s, char delim);
-void computeMatricesFromInputs();
-
 /*
-** Interfaces
+** Utils Methodes
 */
-# include "graphics/IRenderLoop.hpp"
-# include "controllers/IController.hpp"
-# include "views/IView.hpp"
-
-//models
-
-# include "models/Cube.hpp"
+std::vector<std::string>		split(const std::string &s, char delim);
 
 /*
 ** Static Classes
 */
 # include "utils/TimeUtils.hpp"
 # include "utils/ShaderUtils.hpp"
-# include "utils/Model.hpp"
+
 /*
-** Classes
+** Components
 */
+# include "graphics/components/Component.hpp"
 # include "graphics/components/Camera.hpp"
+# include "graphics/components/Model.hpp"
+# include "graphics/components/GameObject.hpp"
 
 /*
-** Micro controllers
+** Interfaces
 */
-# include "views/simple/SimpleView.hpp"
+# include "graphics/IRenderLoop.hpp"
 
-# include "graphics/RenderLoop.hpp"
+
+/*
+** Models
+*/
+# include "models/IModel.hpp"
+# include "models/Block.hpp"
+# include "models/Map.hpp"
+
+/*
+** Controllers
+*/
+# include "controllers/IController.hpp"
+# include "controllers/GameController.hpp"
+
+/*
+** Others
+*/
 # include "graphics/keys/KeyBoard.hpp"
 # include "graphics/keys/Mouse.hpp"
+# include "graphics/IRenderLoop.hpp"
+# include "graphics/RenderLoop.hpp"
+
+/*
+** Main_Client
+*/
 # include "client/BombermanClient.hpp"
 
 #endif

@@ -8,20 +8,14 @@
 
 Camera::Camera ( void )
 {
-	this->position = glm::vec3(0, 0, 0);
-	this->direction = glm::vec3(0, 0, 0);
-	this->rotation = glm::vec3(0, 0, 0);
-	this->right = glm::vec3(0, 0, 0);
-	this->up = glm::vec3(0, 0, 0);
 	this->UpdateView();
 	return ;
 }
 
 Camera::Camera (glm::vec3 &position, glm::vec3 &rotation)
 {
-	this->position = position;
-	this->rotation = rotation;
-	this->direction = glm::vec3(0, 0, 0);
+	this->transform.position = position;
+	this->transform.rotation = rotation;
 	this->mousePosition = glm::vec3(-1, -1, -1);
 }
 
@@ -59,7 +53,7 @@ void						Camera::buildLookAtProjection( void )
 {
 	this->projectionMatrix = glm::perspective(glm::radians(this->fov), this->width / this->height, this->zNear, this->zFar);
 	this->modelMatrix = glm::mat4(1.0f);
-	this->viewMatrix = glm::lookAt(this->position, glm::vec3(-13.f,1,-18.f), glm::vec3(0,1,0));
+	this->viewMatrix = glm::lookAt(this->transform.position, glm::vec3(-13.f,1,-18.f), glm::vec3(0,1,0));
 	this->modelviewprojectionMatrix = this->projectionMatrix * this->viewMatrix * this->modelMatrix;
 }
 
@@ -80,84 +74,16 @@ void						Camera::setProjection(float fov, float width, float height, float zNea
 	this->zFar = zFar;
 }
 
-void						Camera::setLookAt(float x, float y, float z)
-{
-	this->lookAt.x = x;
-	this->lookAt.y = y;
-	this->lookAt.z = z;
-}
-
-void						Camera::setLookAt(glm::vec3 const &v)
-{
-	this->setLookAt(v.x, v.y, v.z);
-}
-
-glm::vec3					&Camera::getLookAt( void )
-{
-	return (this->lookAt);
-}
-
-void						Camera::setPosition(float x, float y, float z)
-{
-	this->position.x = x;
-	this->position.y = y;
-	this->position.z = z;
-}
-
-void						Camera::setPosition(glm::vec3 const &v)
-{
-	this->setPosition(v.x, v.y, v.z);
-}
-
-glm::vec3					&Camera::getPosition( void )
-{
-	return (this->position);
-}
-
-void						Camera::setDirection(float x, float y, float z)
-{
-	this->direction.x = x;
-	this->direction.y = y;
-	this->direction.z = z;
-}
-
-void						Camera::setDirection(glm::vec3 const &v)
-{
-	this->setDirection(v.x, v.y, v.z);
-}
-
-glm::vec3					&Camera::getDirection( void )
-{
-	return (this->direction);
-}
-
-void						Camera::setRotation(float x, float y, float z)
-{
-	this->rotation.x = x;
-	this->rotation.y = y;
-	this->rotation.z = z;
-}
-
-void						Camera::setRotation(glm::vec3 const &v)
-{
-	this->setRotation(v.x, v.y, v.z);
-}
-
-glm::vec3					&Camera::getRotation( void )
-{
-	return (this->rotation);
-}
-
 void					Camera::move(glm::vec3 const &toDirection)
 {
 	glm::mat4 mat = this->viewMatrix;
 	//row major
-	glm::vec3 forward(mat[0][2], mat[1][2], mat[2][2]);
-	glm::vec3 strafe(mat[0][0], mat[1][0], mat[2][0]);
+	glm::vec3 forward = glm::vec3(mat[0][2], mat[1][2], mat[2][2]);
+	glm::vec3 strafe = glm::vec3(mat[0][0], mat[1][0], mat[2][0]);
 
 	const float speed = 0.09f;//how fast we move
 
-	this->position += (-toDirection.z * forward + toDirection.x * strafe) * speed;
+	this->transform.position += (-toDirection.z * forward + toDirection.x * strafe) * speed;
 }
 
 void					Camera::MouseMove(int x, int y)
@@ -171,17 +97,17 @@ void					Camera::MouseMove(int x, int y)
 	const float mouseX_Sensitivity = 0.0025f;
 	const float mouseY_Sensitivity = 0.0025f;
 
-	this->rotation.y += mouseX_Sensitivity * mouse_delta.x;
-	this->rotation.x += mouseY_Sensitivity * mouse_delta.y;
+	this->transform.rotation.y += mouseX_Sensitivity * mouse_delta.x;
+	this->transform.rotation.x += mouseY_Sensitivity * mouse_delta.y;
 
-	if (this->rotation.x > 58) {
-	 	this->rotation.x = 58;
-	} else if (this->rotation.x < 55) {
-		this->rotation.x = 55;
+	if (this->transform.rotation.x > 58.6f) {
+	 	this->transform.rotation.x = 58.6f;
+	} else if (this->transform.rotation.x < 55) {
+		this->transform.rotation.x = 55;
 	}
 
 	this->mousePosition = glm::vec2(x, y);
-	std::cout << "x:" << this->rotation.x << "y:" << this->rotation.y << "z:" << this->rotation.z << std::endl;
+	std::cout << "x:" << this->transform.rotation.x << "y:" << this->transform.rotation.y << "z:" << this->transform.rotation.z << std::endl;
 }
 
 void					Camera::UpdateView()
@@ -191,14 +117,14 @@ void					Camera::UpdateView()
 	glm::mat4 matYaw   = glm::mat4(1.0f);//identity matrix
 
 	//roll, pitch and yaw are used to store our angles in our class
-	matRoll  = glm::rotate(matRoll,  this->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	matPitch = glm::rotate(matPitch, this->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	matYaw   = glm::rotate(matYaw,  this->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	matRoll  = glm::rotate(matRoll,  this->transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	matPitch = glm::rotate(matPitch, this->transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	matYaw   = glm::rotate(matYaw,  this->transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	glm::mat4 rotate = matRoll * matPitch * matYaw;
 
 	glm::mat4 translate = glm::mat4(1.0f);
-	translate = glm::translate(translate, -this->position);
+	translate = glm::translate(translate, -this->transform.position);
 
 	this->viewMatrix = rotate * translate;
 }

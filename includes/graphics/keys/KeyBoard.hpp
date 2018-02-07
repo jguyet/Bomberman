@@ -6,24 +6,26 @@
 class KeyBoard
 {
 	public:
-
-		static KeyBoard			*instance;
-		static void				key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-
-		KeyBoard( GLFWwindow *window );
-		KeyBoard( KeyBoard const & src );
-		virtual ~KeyBoard( void );
-
+		// STATICS #############################################################
+		static KeyBoard						*instance;
+		static void							key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		// #####################################################################
+		// CANONICAL ###########################################################
+											KeyBoard( GLFWwindow *window );
+											KeyBoard( KeyBoard const & src );
+		virtual								~KeyBoard( void );
 		KeyBoard &							operator=( KeyBoard const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, KeyBoard const & i);
-
+		// #####################################################################
+		// PUBLIC ##############################################################
 		bool								getKey(unsigned int key);
-		void								process( void );
-
+		void								process( IController *controller );
+		// #####################################################################
 	private:
+		// PRIVATE #############################################################
 		GLFWwindow							*window;
 		bool								pressedKeys[301];
+		// #####################################################################
 };
 
 #endif

@@ -10,7 +10,6 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 
 BombermanClient::BombermanClient ( void )
 {
-	this->camera = new Camera();
 	return ;
 }
 
@@ -57,6 +56,10 @@ void						BombermanClient::initialize_resources( void )
 {
 	ShaderUtils::instance->loadShader("simple", "./assets/shaders/Simple.vs", "./assets/shaders/Simple.fs");
 	ShaderUtils::instance->loadShader("dir", "./assets/shaders/dirlightdiffambpix.vert", "./assets/shaders/dirlightdiffambpix.frag");
+
+	Model::load("ground", ShaderUtils::instance->get("dir"), "assets/ground.obj");
+	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/brick.obj");
+	Model::load("grass", ShaderUtils::instance->get("dir"), "assets/grass.obj");
 }
 
 void						BombermanClient::build_window( void )
@@ -140,11 +143,11 @@ void						BombermanClient::glfw_error_callback( int error, const char* descripti
 
 // ###############################################################
 
-// HERITANCE METHODS #############################################
+// @Override METHODS #############################################
 
 void						BombermanClient::controllerLoop( void )//100fps
 {
-	KeyBoard::instance->process();
+	this->currentController->process();
 }
 
 void						BombermanClient::renderLoop( void )//60fps
@@ -154,8 +157,7 @@ void						BombermanClient::renderLoop( void )//60fps
 		return ;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	this->currentView->render();
-
+	this->currentController->render();
 	//Swap Buffers
     glfwSwapBuffers(this->window);
 	glfwPollEvents();
@@ -175,20 +177,15 @@ int main(void)
 	client->initialize_resources();
 	client->initialize_inputs();
 
-	client->currentView = new SimpleView();
+	client->currentController = new GameController();
 
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-	client->camera->setProjection(45.0f, 1680, 1050, 0.1f, 1000.0f);
-	client->camera->setPosition(11.31f, 31.3938f, -18.231f);
-	client->camera->setRotation(38.0f,94.0f,0.0f);
-	client->camera->buildFPSProjection();
-
 	client->run();
 
+	Model::deleteModels();
 	delete client;
-
 	return (0);
 }
 

@@ -2,47 +2,9 @@
 
 // STATIC ########################################################
 
-// #define aisgl_min(x,y) (x<y?x:y)
-// #define aisgl_max(x,y) (y>x?y:x)
-//
-// void	get_bounding_box_for_node(Model *model, const aiNode* nd,
-// 	aiVector3D* min,
-// 	aiVector3D* max)
-//
-// {
-// 	aiMatrix4x4 prev;
-// 	unsigned int n = 0, t;
-//
-// 	for (; n < nd->mNumMeshes; ++n) {
-// 		const aiMesh* mesh = model->scene->mMeshes[nd->mMeshes[n]];
-// 		for (t = 0; t < mesh->mNumVertices; ++t) {
-//
-// 			aiVector3D tmp = mesh->mVertices[t];
-//
-// 			min->x = aisgl_min(min->x,tmp.x);
-// 			min->y = aisgl_min(min->y,tmp.y);
-// 			min->z = aisgl_min(min->z,tmp.z);
-//
-// 			max->x = aisgl_max(max->x,tmp.x);
-// 			max->y = aisgl_max(max->y,tmp.y);
-// 			max->z = aisgl_max(max->z,tmp.z);
-// 		}
-// 	}
-//
-// 	for (n = 0; n < nd->mNumChildren; ++n) {
-// 		get_bounding_box_for_node(model, nd->mChildren[n],min,max);
-// 	}
-// }
-//
-// void get_bounding_box (Model *model, aiVector3D* min, aiVector3D* max)
-// {
-//
-// 	min->x = min->y = min->z =  1e10f;
-// 	max->x = max->y = max->z = -1e10f;
-// 	get_bounding_box_for_node(model, model->scene->mRootNode, min, max);
-// }
+std::map<const std::string, Model*>		Model::model = std::map<const std::string, Model*>();
 
-inline void set_float4(float f[4], float a, float b, float c, float d)
+inline void 			set_float4(float f[4], float a, float b, float c, float d)
 {
 	f[0] = a;
 	f[1] = b;
@@ -50,7 +12,7 @@ inline void set_float4(float f[4], float a, float b, float c, float d)
 	f[3] = d;
 }
 
-inline void color4_to_float4(const aiColor4D *c, float f[4])
+inline void 			color4_to_float4(const aiColor4D *c, float f[4])
 {
 	f[0] = c->r;
 	f[1] = c->g;
@@ -58,7 +20,7 @@ inline void color4_to_float4(const aiColor4D *c, float f[4])
 	f[3] = c->a;
 }
 
-Model				*Model::load( const std::string& pFile )
+bool					Model::load(const std::string& key, unsigned int shader, const std::string& pFile)
 {
     std::ifstream fin(pFile.c_str());
     if(!fin.fail()) {
@@ -66,10 +28,10 @@ Model				*Model::load( const std::string& pFile )
     }
     else{
         printf("Couldn't open file: %s\n", pFile.c_str());
-        return NULL;
+		return false;
     }
 
-	Model *model = new Model();
+	Model *model = new Model(shader);
 
     model->scene = model->importer.ReadFile( pFile, aiProcessPreset_TargetRealtime_Quality);
 
@@ -78,7 +40,7 @@ Model				*Model::load( const std::string& pFile )
     {
         printf("%s\n", model->importer.GetErrorString());
 		delete model;
-        return NULL;
+		return false;
     }
 
     // Now we can access the file's contents.
@@ -88,15 +50,8 @@ Model				*Model::load( const std::string& pFile )
 	Model::buildShader(model);
 	Model::genVAOsAndUniformBuffer(model);
 
-    //aiVector3D scene_min, scene_max, scene_center;
-    //get_bounding_box(model, &scene_min, &scene_max);
-    //float tmp;
-    //tmp = scene_max.x-scene_min.x;
-    //tmp = scene_max.y - scene_min.y > tmp?scene_max.y - scene_min.y:tmp;
-    //tmp = scene_max.z - scene_min.z > tmp?scene_max.z - scene_min.z:tmp;
-    //scaleFactor = 1.f / tmp;
-
-    return model;
+	Model::model[key] = model;
+	return true;
 }
 
 void					Model::loadGLTextures(Model *model)
@@ -147,53 +102,58 @@ void					Model::loadGLTextures(Model *model)
 
 			(*itr).second = textureIds[i];	  // save texture id for filename in map
 		}
-
-		// ilBindImage(imageIds[i]); /* Binding of DevIL image name */
-		// ilEnable(IL_ORIGIN_SET);
-		// ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-		// success = ilLoadImage((ILstring)filename.c_str());
-        //
-		// if (success) {
-		// 	/* Convert image to RGBA */
-		// 	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-        //
-		// 	/* Create and load textures to OpenGL */
-		// 	glBindTexture(GL_TEXTURE_2D, textureIds[i]);
-		// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		// 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH),
-		// 		ilGetInteger(IL_IMAGE_HEIGHT), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-		// 		ilGetData());
-		// }
-		// else
-		// 	printf("Couldn't load Image: %s\n", filename.c_str());
 	}
 	delete [] textureIds;
 }
 
-void						Model::buildShader( Model *model )
+/*
+ * DEFAULT SHADER FOR THIS MODELS :
+ *
+ * add on vertex shader :
+ * in vec3 a_pos;
+ * in vec3 a_norm;
+ * in vec2 a_texCoord;
+ *
+ * uniform mat4 u_projMatrix
+ * uniform mat4 u_viewMatrix
+ * uniform mat4 u_modelMatrix
+ * uniform mat4 u_transformMatrix
+ *
+ * add on fragment shader :
+ * layout (std140) uniform u_material {
+ * 	vec4 diffuse;
+ * 	vec4 ambient;
+ * 	vec4 specular;
+ * 	vec4 emissive;
+ * 	float shininess;
+ * 	int texCount;
+ * }
+ * uniform	sampler2D u_texUnit;
+ * out vec4 o_color;
+ */
+void						Model::buildShader(Model *model)
 {
-	glBindFragDataLocation(ShaderUtils::instance->get("dir"), 0, "o_color");
+	//vertex shader
+	model->vertexLoc = glGetAttribLocation(model->shader,"a_pos");
+	model->normalLoc = glGetAttribLocation(model->shader,"a_norm");
+	model->texCoordLoc = glGetAttribLocation(model->shader,"a_texCoord");
 
-	glBindAttribLocation(ShaderUtils::instance->get("dir"),model->vertexLoc,"a_pos");
-	glBindAttribLocation(ShaderUtils::instance->get("dir"),model->normalLoc,"a_norm");
-	glBindAttribLocation(ShaderUtils::instance->get("dir"),model->texCoordLoc,"a_texCoord");
+	model->projectionMatrixLoc = glGetUniformLocation(model->shader, "u_projMatrix");
+	model->viewMatrixLoc = glGetUniformLocation(model->shader, "u_viewMatrix");
+	model->modelMatrixLoc = glGetUniformLocation(model->shader, "u_modelMatrix");
+	model->transformMatrixLoc = glGetUniformLocation(model->shader, "u_transformMatrix");
 
+	//fragment shader
+	GLuint m = glGetUniformBlockIndex(model->shader,"u_material");
+	glUniformBlockBinding(model->shader, m, model->materialUniLoc);
 
-	model->projectionMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_projMatrix");
-	model->viewMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_viewMatrix");
-	model->modelMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_modelMatrix");
-	model->transformMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_transformMatrix");
+	model->texUnit = glGetUniformLocation(model->shader, "u_texUnit");
 
-	GLuint m = glGetUniformBlockIndex(ShaderUtils::instance->get("dir"),"u_material");
-	glUniformBlockBinding(ShaderUtils::instance->get("dir"), m, model->materialUniLoc);
-
-	model->texUnit = glGetUniformLocation(ShaderUtils::instance->get("dir"), "u_texUnit");
+	glBindFragDataLocation(model->shader, 0, "o_color");
 }
 
 void						Model::genVAOsAndUniformBuffer(Model *model)
 {
-
     struct MyMesh aMesh;
     struct MyMaterial aMat;
     GLuint buffer;
@@ -311,12 +271,22 @@ void						Model::genVAOsAndUniformBuffer(Model *model)
     }
 }
 
+void								Model::deleteModels(void)
+{
+	for (std::map<const std::string, Model*>::iterator it = Model::model.begin(); it != Model::model.end(); ++it)
+	{
+		Model *m = it->second;
+		delete m;
+	}
+}
+
 // ###############################################################
 
 // CANONICAL #####################################################
 
-Model::Model ( void )
+Model::Model (unsigned int shader)
 {
+	this->shader = shader;
 	return ;
 }
 
@@ -340,14 +310,6 @@ Model::~Model ( void )
 	return ;
 }
 
-// ###############################################################
-
-// CONSTRUCTOR POLYMORPHISM ######################################
-
-// ###############################################################
-
-// OVERLOAD OPERATOR #############################################
-
 std::ostream &				operator<<(std::ostream & o, Model const & i)
 {
 	(void)i;
@@ -358,50 +320,60 @@ std::ostream &				operator<<(std::ostream & o, Model const & i)
 
 // PUBLIC METHOD #################################################
 
-void					Model::draw( glm::vec3 &position, glm::vec3 &scale )
+void					Model::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale, glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix)
 {
-	glUseProgram(ShaderUtils::instance->get("dir"));
+	glUseProgram(this->shader);
 
-	position = position * glm::vec3(2,2,2);
-	this->recursive_render(this->scene->mRootNode, position, scale);
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
+
+	glm::vec3 p = position * glm::vec3(2,2,2);
+	glm::vec3 s = glm::vec3(scale);
+	s.x = s.x / 2;
+	s.y = s.y / 2;
+	s.z = s.z / 2;
+
+	//SCALE
+	modelMatrix = glm::scale(modelMatrix, s);
+	//ROTATION
+	glm::mat4 matRoll  = glm::mat4(1.0f);//identity matrix;
+	glm::mat4 matPitch = glm::mat4(1.0f);//identity matrix
+	glm::mat4 matYaw   = glm::mat4(1.0f);//identity matrix
+	matRoll  = glm::rotate(matRoll,  rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	matPitch = glm::rotate(matPitch, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	matYaw   = glm::rotate(matYaw,  rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 rotate = matRoll * matPitch * matYaw;
+	modelMatrix = rotate * modelMatrix;
+
+	//POSITION
+	modelMatrix = glm::translate(modelMatrix, -p);
+
+	glUniformMatrix4fv(this->projectionMatrixLoc, 1, GL_FALSE, &projectionMatrix[0][0]);
+	glUniformMatrix4fv(this->viewMatrixLoc, 1, GL_FALSE, &viewMatrix[0][0]);
+	glUniformMatrix4fv(this->modelMatrixLoc, 1, GL_FALSE, &modelMatrix[0][0]);
+
+	this->recursive_render(this->scene->mRootNode);
 
 	glUseProgram(0);
 }
 
-void 					Model::recursive_render(const aiNode* nd, glm::vec3 &position, glm::vec3 &scale)
+void 					Model::recursive_render(const aiNode* nd)
 {
 	if (nd->mNumMeshes == 0) {
 		for (unsigned int n=0; n < nd->mNumChildren; ++n){
-			this->recursive_render(nd->mChildren[n], position, scale);
+			this->recursive_render(nd->mChildren[n]);
 		}
 		return ;
 	}
 	// Get node transformation matrix
 	aiMatrix4x4 m = nd->mTransformation;
-	glm::mat4 transformedModelMatrix;
-	glm::mat4 transformMatrix;
-
+	glm::mat4 transformMatrix = glm::mat4(1.0f);
 	for (int y = 0; y < 4; y++) {
 		for (int x = 0; x < 4; x++) {
-			transformedModelMatrix[y][x] = m[y][x];
-			transformMatrix[y][x] += m[y][x];
+			transformMatrix[y][x] = m[y][x];
 		}
 	}
-
-	glm::mat4 modelMatrix = BombermanClient::instance->camera->modelMatrix;
-	modelMatrix = glm::scale(modelMatrix, scale);
-	modelMatrix = glm::translate(modelMatrix, -position);
-	//modelMatrix = (modelMatrix + transformedModelMatrix);
-
-	glUniformMatrix4fv(this->projectionMatrixLoc, 1, GL_FALSE, &BombermanClient::instance->camera->projectionMatrix[0][0]);
-	glUniformMatrix4fv(this->viewMatrixLoc, 1, GL_FALSE, &BombermanClient::instance->camera->viewMatrix[0][0]);
-	glUniformMatrix4fv(this->modelMatrixLoc, 1, GL_FALSE, &modelMatrix[0][0]);
 	glUniformMatrix4fv(this->transformMatrixLoc, 1, GL_FALSE, &transformMatrix[0][0]);
-
 	glUniform1i(this->texUnit,0);
-
-	// draw all meshes assigned to this node
-
 	for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
 		// bind material uniform
 		glBindBufferRange(GL_UNIFORM_BUFFER, this->materialUniLoc, this->myMeshes[nd->mMeshes[n]].uniformBlockIndex, 0, sizeof(struct MyMaterial));
@@ -413,12 +385,11 @@ void 					Model::recursive_render(const aiNode* nd, glm::vec3 &position, glm::ve
 		// draw
 		glDrawElements(GL_TRIANGLES,this->myMeshes[nd->mMeshes[n]].numFaces*3,GL_UNSIGNED_INT,0);
 		//unbind VAO
-		//glBindVertexArray(0);
+		glBindVertexArray(0);
 	}
-
 	// draw all children
 	for (unsigned int n=0; n < nd->mNumChildren; ++n){
-		this->recursive_render(nd->mChildren[n], position, scale);
+		this->recursive_render(nd->mChildren[n]);
 	}
 }
 

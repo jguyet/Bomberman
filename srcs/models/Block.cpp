@@ -2,31 +2,24 @@
 
 // STATIC ########################################################
 
-long					TimeUtils::getCurrentNanoSeconds( void )
-{
-	auto now = std::chrono::system_clock::now();
-    auto now_ms = std::chrono::time_point_cast<std::chrono::nanoseconds>(now);
-
-    auto value = now_ms.time_since_epoch();
-    return (value.count());
-}
-
 // ###############################################################
 
 // CANONICAL #####################################################
 
-TimeUtils::TimeUtils ( void )
+Block::Block ( Model *model )
 {
+	this->gameObject.AddComponent<Model>(model);
+	this->gameObject.transform.scale = glm::vec3(2,2,2);
 	return ;
 }
 
-TimeUtils::TimeUtils ( TimeUtils const & src )
+Block::Block ( Block const & src )
 {
 	*this = src;
 	return ;
 }
 
-TimeUtils &				TimeUtils::operator=( TimeUtils const & rhs )
+Block &				Block::operator=( Block const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -35,12 +28,12 @@ TimeUtils &				TimeUtils::operator=( TimeUtils const & rhs )
 	return (*this);
 }
 
-TimeUtils::~TimeUtils ( void )
+Block::~Block ( void )
 {
 	return ;
 }
 
-std::ostream &				operator<<(std::ostream & o, TimeUtils const & i)
+std::ostream &				operator<<(std::ostream & o, Block const & i)
 {
 	(void)i;
 	return (o);
@@ -49,5 +42,10 @@ std::ostream &				operator<<(std::ostream & o, TimeUtils const & i)
 // ###############################################################
 
 // PUBLIC METHOD #################################################
+
+void						Block::render(glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix)
+{
+	this->gameObject.ProcessRenderingComponents(projectionMatrix, viewMatrix);
+}
 
 // ###############################################################

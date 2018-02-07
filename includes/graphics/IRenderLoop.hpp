@@ -6,9 +6,10 @@
 class IRenderLoop
 {
 	public:
-		virtual ~IRenderLoop() {}
-		virtual void controllerLoop( void ) = 0;
-		virtual void renderLoop( void ) = 0;
+		//CONTROLLER LOOP 100FPS
+		virtual void 	controllerLoop( void ) = 0;
+		//RENDER LOOP 60FPS
+		virtual void 	renderLoop( void ) = 0;
 };
 
 #endif
