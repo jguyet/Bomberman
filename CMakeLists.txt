@@ -66,6 +66,10 @@ if (APPLE)
 		"${PROJECT_DIR}/SDL2"
 		"${PROJECT_DIR}/SDL2/lib"
 		)
+	if (EXISTS "~/.brew")
+		link_directories("~/.brew/lib")
+		include_directories("~/.brew/include")
+	endif()
 	include_directories("${PROJECT_DIR}/SDL2/include" ${SDL2_INCLUDE_DIR})
 	#GLM
 	############################################################################
