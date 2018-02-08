@@ -13,51 +13,46 @@ Map::Map ( void )
 	int i = 0;
 	for (int z = 0; z < 19; z++) {
 		for (int x = 0; x < 13; x++) {
-
-			Block *block = new Block(Model::model["grass"]);
-
-			block->gameObject.transform.position = glm::vec3(x * 2,2,z * 2);
-
-			Case *c = new Case();
-			c->obstacle = NULL;
-			c->ground = block;
-
-			this->cases[i++] = c;
+			this->cases[std::make_pair(x, z)] = new Case();
 		}
 	}
-	i = 0;
+	for (int z = 0; z < 19; z++) {
+		for (int x = 0; x < 13; x++) {
+			GameObject *block = Factory::newBlock();//grass
+
+			block->transform.position = glm::vec3(x * 2,2,z * 2);
+			this->cases[std::make_pair(x, z)]->ground = block;
+			this->cases[std::make_pair(x, z)]->walkable = true;
+		}
+	}
 	for (int z = 0; z < 19; z++) {
 		for (int x = 0; x < 13;) {
 
-			Block *block = new Block(Model::model["brick"]);
+			GameObject *block = Factory::newBlock();
 
-			block->gameObject.transform.position = glm::vec3(x * 2,0,z * 2);
-
-			this->cases[i]->obstacle = block;
-
+			block->transform.position = glm::vec3(x * 2,0,z * 2);
+			this->cases[std::make_pair(x, z)]->obstacle = block;
+			this->cases[std::make_pair(x, z)]->walkable = false;
 			if (z == 0 || z == 18 || x == 12) {
 				i++;
 				x++;
 			}
 			else {
 				x = 12;
-				i += 12;
 			}
 		}
 	}
-	i = 0;
 	for (int z = 0; z < 19; z++) {
 		for (int x = 0; x < 13;x++) {
 			if (z == 0 || z == 18 || x == 0 || x == 12 || z % 2 || x % 2) {
-				i++;
 				continue ;
 			}
-			Block *block = new Block(Model::model["brick"]);
-			block->gameObject.transform.position = glm::vec3(x * 2,0.5f,z * 2);
-			block->gameObject.transform.scale.y = 0.5f;
+			GameObject *block = Factory::newBlock();
 
-			this->cases[i]->obstacle = block;
-			i++;
+			block->transform.position = glm::vec3(x * 2,0.5f,z * 2);
+			block->transform.scale.y = 0.5f;
+			this->cases[std::make_pair(x, z)]->obstacle = block;
+			this->cases[std::make_pair(x, z)]->walkable = false;
 		}
 	}
 	return ;
@@ -95,14 +90,21 @@ std::ostream &				operator<<(std::ostream & o, Map const & i)
 
 void						Map::render(glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix)
 {
-	for (std::map<unsigned int, Case*>::iterator it = this->cases.begin(); it != this->cases.end(); ++it)
+	for (std::map<std::pair<float, float>, Case*>::iterator it = this->cases.begin(); it != this->cases.end(); ++it)
 	{
 		Case *c = it->second;
 		if (c->obstacle != NULL)
-			c->obstacle->gameObject.ProcessRenderingComponents(projectionMatrix, viewMatrix);
+			c->obstacle->ProcessRenderingComponents(projectionMatrix, viewMatrix);
 		if (c->ground != NULL)
-			c->ground->gameObject.ProcessRenderingComponents(projectionMatrix, viewMatrix);
+			c->ground->ProcessRenderingComponents(projectionMatrix, viewMatrix);
 	}
+}
+
+Case						*Map::getCase(int x, int z)
+{
+	if (this->cases.count(std::make_pair(x, z)) == 0)
+		return (NULL);
+	return (this->cases[std::make_pair(x, z)]);
 }
 
 // ###############################################################

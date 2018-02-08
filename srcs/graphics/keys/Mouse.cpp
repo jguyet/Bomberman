@@ -7,9 +7,8 @@ Mouse					*Mouse::instance = NULL;
 
 // CANONICAL #####################################################
 
-Mouse::Mouse ( GLFWwindow *window )
+Mouse::Mouse ( void )
 {
-	this->window = window;
 	this->lastPosition = glm::vec3(0,0,0);
 	this->position = glm::vec3(0,0,0);
 	for (int i = 0; i < 8; i++) {
@@ -71,11 +70,6 @@ void					Mouse::handle_mousebutton(SDL_Event *event)
 	if (event->type != SDL_MOUSEBUTTONDOWN && event->type != SDL_MOUSEBUTTONUP)
 		return ;
 	Mouse::instance->pressedButton[event->button.button] = (event->type == SDL_MOUSEBUTTONDOWN) ? true : false;
-}
-
-int							Mouse::getMouseButton(int button)
-{
-	return (glfwGetMouseButton(this->window, button));
 }
 
 void						Mouse::process(IController *controller)

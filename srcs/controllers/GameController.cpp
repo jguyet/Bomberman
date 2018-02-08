@@ -6,6 +6,16 @@
 
 // CANONICAL #####################################################
 
+void						handle_collider(GameObject *obj, GameObject *wall)
+{
+	Case *c = obj->GetComponent<GameController>()->map->getCase((int)wall->transform.position.x, (int)wall->transform.position.y);
+
+	if (c == NULL)
+		return;
+
+	//std::cout << "COLLIDE" << std::endl;
+}
+
 GameController::GameController ( void )
 {
 	this->camera = new Camera();
@@ -28,9 +38,16 @@ GameController::GameController ( void )
 
 	this->map = new Map();
 
-	this->p.position = glm::vec3(2,1.f,4);
-	this->p.scale = glm::vec3(0.125f,0.125f,0.125f);
-	this->p.rotation = glm::vec3(0,0,0);
+	//player example
+	this->p = Factory::newPlayer();
+
+	this->p->transform.position = glm::vec3(2,1.f,4);
+	this->p->transform.scale = glm::vec3(0.125f,0.125f,0.125f);
+	this->p->transform.rotation = glm::vec3(0,0,0);
+	this->p->AddComponent<GameController>(this);
+	this->p->AddComponent<BoxCollider>();
+	this->p->GetComponent<BoxCollider>()->size = glm::vec3(0.3f,1.f,0.3f);
+	this->p->GetComponent<BoxCollider>()->m = handle_collider;
 
 	this->loaded = true;
 	return ;
@@ -71,6 +88,8 @@ std::ostream &				operator<<(std::ostream & o, GameController const & i)
 void						GameController::process(void)
 {
 	KeyBoard::instance->process(this);
+
+	GameObject::ProcessPhisicsComponents();
 }
 
 void						GameController::render(void)
@@ -78,8 +97,8 @@ void						GameController::render(void)
 	if (this->loaded == false)
 		return ;
 	this->camera->setProjection(40.0f, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 0.1f, 1000.0f);
-	//this->camera->buildLookAtProjection();
-	this->camera->buildFPSProjection();
+	this->camera->buildLookAtProjection();
+	//this->camera->buildFPSProjection();
 
 	this->map->render(this->camera->projectionMatrix, this->camera->viewMatrix);
 
@@ -107,9 +126,7 @@ void						GameController::render(void)
 
 	Model::model["bomb"]->draw(transform.position, transform.rotation, transform.scale, this->camera->projectionMatrix, this->camera->viewMatrix);
 
-	//std::cout << "x:" << this->camera->transform.position.x << "y:" << this->camera->transform.position.y << "z:" << this->camera->transform.position.z << std::endl;
-
-	Model::model["bomberman"]->draw(this->p.position, this->p.rotation, this->p.scale, this->camera->projectionMatrix, this->camera->viewMatrix);
+	this->p->ProcessRenderingComponents(this->camera->projectionMatrix, this->camera->viewMatrix);
 }
 
 // ###############################################################
@@ -161,34 +178,34 @@ void 						GameController::pressSpace( void )
 
 void						GameController::R(void)
 {
-	if (this->p.rotation.y != 180.f) {
-		this->p.rotation.y = 180.f;
+	if (this->p->transform.rotation.y != 180.f) {
+		this->p->transform.rotation.y = 180.f;
 	}
-	this->p.position.z += 0.1f;
+	this->p->transform.position.z += 0.1f;
 }
 
 void						GameController::L(void)
 {
-	if (this->p.rotation.y != 0.f) {
-		this->p.rotation.y = 0.f;
+	if (this->p->transform.rotation.y != 0.f) {
+		this->p->transform.rotation.y = 0.f;
 	}
-	this->p.position.z -= 0.1f;
+	this->p->transform.position.z -= 0.1f;
 }
 
 void						GameController::H(void)
 {
-	if (this->p.rotation.y != 270.f) {
-		this->p.rotation.y = 270.f;
+	if (this->p->transform.rotation.y != 270.f) {
+		this->p->transform.rotation.y = 270.f;
 	}
-	this->p.position.x += 0.1f;
+	this->p->transform.position.x += 0.1f;
 }
 
 void						GameController::B(void)
 {
-	if (this->p.rotation.y != 90.f) {
-		this->p.rotation.y = 90.f;
+	if (this->p->transform.rotation.y != 90.f) {
+		this->p->transform.rotation.y = 90.f;
 	}
-	this->p.position.x -= 0.1f;
+	this->p->transform.position.x -= 0.1f;
 }
 
 // ###############################################################

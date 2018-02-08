@@ -25,6 +25,7 @@ class GameController : public IController
 		// #####################################################################
 		// PUBLIC ##############################################################
 		// #####################################################################
+		Map											*map;
 	private:
 		// PRIVATE #############################################################
 		void 										Escape( void );
@@ -43,8 +44,7 @@ class GameController : public IController
 		typedef void (GameController::*memberMethod)( void );
 		std::map<unsigned int, memberMethod>		keyBoard_map;
 
-		Map											*map;
-		Transform									p;
+		GameObject									*p;
 		// #####################################################################
 };
 

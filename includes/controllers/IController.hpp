@@ -3,7 +3,7 @@
 
 # include "Bomberman.hpp"
 
-class IController
+class IController : public Component
 {
 	public:
 

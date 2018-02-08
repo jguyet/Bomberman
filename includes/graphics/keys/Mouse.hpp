@@ -14,14 +14,13 @@ class Mouse
 		static void							handle_mousebutton(SDL_Event *event);
 		// #####################################################################
 		// CANONICAL ###########################################################
-										Mouse( GLFWwindow *window );
+										Mouse( void );
 										Mouse( Mouse const & src );
 		virtual							~Mouse( void );
 		Mouse &							operator=( Mouse const & rhs );
 		friend std::ostream &			operator<<(std::ostream & o, Mouse const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		int								getMouseButton(int button);
 		void							process(IController *controller);
 
 		glm::vec2						position;
@@ -29,7 +28,6 @@ class Mouse
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		GLFWwindow						*window;
 		bool							pressedButton[8];
 		// #####################################################################
 };

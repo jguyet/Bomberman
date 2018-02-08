@@ -34,7 +34,6 @@
 # endif
 
 # include <SOIL2.h>
-# include <glfw/glfw3.h>
 # include <glm/glm.hpp>
 # include <glm/vec3.hpp> // glm::vec3
 # include <glm/vec4.hpp> // glm::vec4
@@ -76,6 +75,7 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/components/Component.hpp"
 # include "graphics/components/Camera.hpp"
 # include "graphics/components/Model.hpp"
+# include "graphics/components/BoxCollider.hpp"
 # include "graphics/components/GameObject.hpp"
 
 /*
@@ -88,7 +88,6 @@ std::vector<std::string>		split(const std::string &s, char delim);
 ** Models
 */
 # include "models/IModel.hpp"
-# include "models/Block.hpp"
 # include "models/Map.hpp"
 
 /*
@@ -109,5 +108,6 @@ std::vector<std::string>		split(const std::string &s, char delim);
 ** Main_Client
 */
 # include "client/BombermanClient.hpp"
+# include "Factory.hpp"
 
 #endif

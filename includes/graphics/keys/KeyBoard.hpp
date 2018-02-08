@@ -11,7 +11,7 @@ class KeyBoard
 		static void							key_callback(SDL_Event *event);
 		// #####################################################################
 		// CANONICAL ###########################################################
-											KeyBoard( GLFWwindow *window );
+											KeyBoard( void );
 											KeyBoard( KeyBoard const & src );
 		virtual								~KeyBoard( void );
 		KeyBoard &							operator=( KeyBoard const & rhs );
@@ -23,7 +23,6 @@ class KeyBoard
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		GLFWwindow							*window;
 		bool								pressedKeys[301];
 		// #####################################################################
 };

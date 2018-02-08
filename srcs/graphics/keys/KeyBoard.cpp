@@ -15,9 +15,8 @@ void			KeyBoard::key_callback(SDL_Event *event)
 
 // CANONICAL #####################################################
 
-KeyBoard::KeyBoard ( GLFWwindow *window )
+KeyBoard::KeyBoard ( void )
 {
-	this->window = window;
 	for (int i = 0; i < 301; i++) {
 		this->pressedKeys[i] = false;
 	}

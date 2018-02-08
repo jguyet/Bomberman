@@ -21,6 +21,9 @@ class GameObject
 {
 	public:
 		// STATICS #############################################################
+		static long								uid;
+		static std::map<long, GameObject*>		objects;
+		static void								ProcessPhisicsComponents(void);
 		// #####################################################################
 		// CANONICAL ###########################################################
 												GameObject( void );
@@ -32,13 +35,17 @@ class GameObject
 		// PUBLIC ##############################################################
 		void									Translate(glm::vec3 v);
 		template <typename T> bool				AddComponent(Component *component);
+		template <typename T> bool				AddComponent(void);
 		template <typename T> T					*GetComponent(void);
 		template <typename T> bool				RemoveComponent(void);
 		void									ProcessRenderingComponents(glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix);
-		void									ProcessPhisicsComponents(void);
 
 		Transform								transform;
+		long									id;
+		std::string								tag;
 		// #####################################################################
+
+		void 									OnCollide(GameObject *with) {};
 	private:
 		// PRIVATE #############################################################
 		std::map<const std::string, Component*>	components;
@@ -50,6 +57,15 @@ template <typename T>
 bool						GameObject::AddComponent(Component *component)
 {
 	const char* name = typeid(T).name();
+	this->components[name] = component;
+	return true;
+}
+
+template <typename T>
+bool						GameObject::AddComponent( void )
+{
+	const char* name = typeid(T).name();
+	T *component = new T();
 	this->components[name] = component;
 	return true;
 }

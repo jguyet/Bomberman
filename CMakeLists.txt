@@ -36,27 +36,6 @@ if (APPLE)
 		file(MAKE_DIRECTORY "${PROJECT_DIR}")
 	endif()
 
-	#GLFW
-	############################################################################
-	if (NOT GLFW3_FOUND)
-		message("INSTALLATION GLFW------------------------------------------------")
-		execute_process(COMMAND brew install glfw
-					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install glfw
-								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		find_package(GLFW3 REQUIRED)
-		message("-----------------------------------------------------------------")
-	endif()
-	if (NOT EXISTS "${PROJECT_DIR}/GLFW")
-		execute_process(COMMAND cp -r "${GLFW3_DIR}/../../../" "GLFW"
-						WORKING_DIRECTORY "${PROJECT_DIR}/")
-	endif()
-	link_directories(
-		"${PROJECT_DIR}/GLFW"
-		"${PROJECT_DIR}/GLFW/lib"
-		)
-	include_directories("${PROJECT_DIR}/GLFW/include")
-
 	#GLM
 	############################################################################
 	if (NOT SDL2_FOUND)
@@ -146,18 +125,6 @@ if (WIN32)
 		file(MAKE_DIRECTORY "${PROJECT_DIR}")
 	endif()
 
-	#GLFW
-	############################################################################
-	if(NOT EXISTS "${PROJECT_DIR}/GLFW")
-		execute_process(COMMAND git clone "https://github.com/glfw/glfw.git" "GLFW"
-						WORKING_DIRECTORY ${PROJECT_DIR}/
-						)
-	endif()
-		set(GLFW_BUILD_EXAMPLES OFF CACHE STRING "" FORCE)
-		set(GLFW_BUILD_TESTS    OFF CACHE STRING "" FORCE)
-		add_subdirectory(${PROJECT_DIR}/GLFW)
-		include_directories(${PROJECT_DIR}/GLFW/include/GLFW)
-
 	#GLM
 	############################################################################
 	if(NOT EXISTS "${PROJECT_DIR}/GLM")
@@ -197,18 +164,6 @@ if (UNIX AND NOT APPLE)
 	if(NOT EXISTS "${PROJECT_DIR}")
 		file(MAKE_DIRECTORY "${PROJECT_DIR}")
 	endif()
-
-	#GLFW
-	############################################################################
-	if(NOT EXISTS "${PROJECT_DIR}/GLFW")
-		execute_process(COMMAND git clone "https://github.com/glfw/glfw.git" "GLFW"
-						WORKING_DIRECTORY ${PROJECT_DIR}/
-						)
-	endif()
-		set(GLFW_BUILD_EXAMPLES OFF CACHE STRING "" FORCE)
-		set(GLFW_BUILD_TESTS    OFF CACHE STRING "" FORCE)
-		add_subdirectory(${PROJECT_DIR}/GLFW)
-		include_directories(${PROJECT_DIR}/GLFW/include/GLFW)
 
 	#GLM
 	############################################################################
@@ -263,6 +218,6 @@ add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
 #target_link_libraries(${PROJECT_NAME} "sdl2-config --libs SDL2_image SDL2_mixer SDL2_ttf")
-target_link_libraries(${PROJECT_NAME} SDL2 glfw glm assimp SOIL2 ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} SDL2 glm assimp SOIL2 ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
 
 #target_link_libraries(${PROJECT_NAME} "sdl2-config --libs SDL2_image SDL2_mixer SDL2_ttf")

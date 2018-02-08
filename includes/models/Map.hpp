@@ -4,9 +4,15 @@
 # include "Bomberman.hpp"
 
 struct Case {
-	unsigned int 	id;
-	Block 			*ground;
-	Block 			*obstacle;
+	Case(void) {
+		this->ground = NULL;
+		this->obstacle = NULL;
+		this->walkable = false;
+	}
+	GameObject		*ground;
+	GameObject 		*obstacle;
+	bool			walkable;
+	glm::vec3		position;
 	//entity
 };
 
@@ -27,8 +33,9 @@ class Map : public IModel
 		// GameObject						gameObject;
 		// #####################################################################
 		// PUBLIC ##############################################################
+		Case								*getCase(int x, int z);
 		// #####################################################################
-		std::map<unsigned int, Case*>		cases;
+		std::map<std::pair<float, float>, Case*>	cases;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

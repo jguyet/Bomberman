@@ -121,8 +121,8 @@ int	SDLCALL					input_callback_interval(void *userdata, SDL_Event* event)
 
 void						BombermanClient::initialize_inputs( void )
 {
-	KeyBoard::instance = new KeyBoard(NULL);
-	Mouse::instance = new Mouse(NULL);
+	KeyBoard::instance = new KeyBoard();
+	Mouse::instance = new Mouse();
 
 	//asynchronous events
 	SDL_AddEventWatch(input_callback_interval, NULL);
@@ -171,9 +171,9 @@ void						BombermanClient::renderLoop( void )//60fps
 		if(this->event.type == SDL_QUIT)
 	    {
 	        this->stop();
+			break ;
 	    }
     }
-	std::cout << this->screen->middleWidth << std::endl;
 	//reset mouse to center of screen
 	SDL_WarpMouseInWindow(this->window, this->screen->middleWidth, this->screen->middleHeight);
 }
