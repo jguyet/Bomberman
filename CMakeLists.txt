@@ -66,7 +66,7 @@ if (APPLE)
 		"${PROJECT_DIR}/SDL2"
 		"${PROJECT_DIR}/SDL2/lib"
 		)
-	include_directories("${PROJECT_DIR}/SDL2/include")
+	include_directories("${PROJECT_DIR}/SDL2/include" ${SDL2_INCLUDE_DIR})
 	#GLM
 	############################################################################
 	if (NOT GLM_FOUND)
