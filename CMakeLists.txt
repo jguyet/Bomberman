@@ -12,7 +12,7 @@ find_package(OpenGL REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(GLM) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
 find_package(ASSIMP) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
-find_package(SDL) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
+find_package(SDL2) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
 
 ################################################################################
 # APPLE INSTALL LIBS
