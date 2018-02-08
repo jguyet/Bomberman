@@ -9,9 +9,12 @@ void 					Mouse::cursor_position_callback(GLFWwindow* window, double xpos, doubl
 	Mouse::instance->lastPosition.y = Mouse::instance->position.y;
 	Mouse::instance->position.x = xpos;
 	Mouse::instance->position.y = ypos;
+	if (Mouse::instance->lastPosition.x == 0 && Mouse::instance->lastPosition.y == 0) {
+		return ;
+	}
 	if (BombermanClient::instance->currentController->loaded == false)
 		return ;
-	BombermanClient::instance->currentController->camera->MouseMove(Mouse::instance->position.x, Mouse::instance->position.y);
+	BombermanClient::instance->currentController->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
 }
 
 void					Mouse::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -28,6 +31,8 @@ void					Mouse::mouse_button_callback(GLFWwindow* window, int button, int action
 Mouse::Mouse ( GLFWwindow *window )
 {
 	this->window = window;
+	this->lastPosition = glm::vec3(0,0,0);
+	this->position = glm::vec3(0,0,0);
 	for (int i = 0; i < 8; i++) {
 		this->pressedButton[i] = false;
 	}

@@ -7,6 +7,14 @@ struct Transform {
 	glm::vec3			position = glm::vec3(0,0,0);
 	glm::vec3			rotation = glm::vec3(0,0,0);
 	glm::vec3			scale = glm::vec3(1,1,1);
+
+	friend std::ostream &					operator<<(std::ostream & o, Transform const & i)
+	{
+		o << "position vec3(" << i.position.x << "," << i.position.y << "," << i.position.z << ")" << std::endl;
+		o << "rotation vec3(" << i.rotation.x << "," << i.rotation.y << "," << i.rotation.z << ")" << std::endl;
+		o << "scale    vec3(" << i.scale.x << "," << i.scale.y << "," << i.scale.z << ")";
+		return (o);
+	}
 };
 
 class GameObject

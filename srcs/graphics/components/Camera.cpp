@@ -16,7 +16,6 @@ Camera::Camera (glm::vec3 &position, glm::vec3 &rotation)
 {
 	this->transform.position = position;
 	this->transform.rotation = rotation;
-	this->mousePosition = glm::vec3(-1, -1, -1);
 }
 
 Camera::Camera ( Camera const & src )
@@ -86,28 +85,25 @@ void					Camera::move(glm::vec3 const &toDirection)
 	this->transform.position += (-toDirection.z * forward + toDirection.x * strafe) * speed;
 }
 
-void					Camera::MouseMove(int x, int y)
+void					Camera::MouseMove(glm::vec2 &lastMousePosition, glm::vec2 &mousePosition)
 {
-	if (this->mousePosition.x == -1 && this->mousePosition.y == -1) {
-		this->mousePosition = glm::vec2(x, y);
-		return ;
-	}
-	glm::vec2 mouse_delta = glm::vec2(x, y) - this->mousePosition;
+	glm::vec2 mouse_delta = mousePosition - lastMousePosition;
 
 	const float mouseX_Sensitivity = 0.0025f;
 	const float mouseY_Sensitivity = 0.0025f;
 
-	this->transform.rotation.y += mouseX_Sensitivity * mouse_delta.x;
-	this->transform.rotation.x += mouseY_Sensitivity * mouse_delta.y;
-
-	if (this->transform.rotation.x > 58.6f) {
-	 	this->transform.rotation.x = 58.6f;
-	} else if (this->transform.rotation.x < 55) {
-		this->transform.rotation.x = 55;
+	if (mouse_delta.x != 0) {
+		this->transform.rotation.y += (360/(M_PI * 2)) * (mouseX_Sensitivity * mouse_delta.x);
+		this->transform.rotation.y = fmod(this->transform.rotation.y, 360.f);
+		if (this->transform.rotation.y < 0)
+			this->transform.rotation.y = 360 + this->transform.rotation.y;
 	}
-
-	this->mousePosition = glm::vec2(x, y);
-	//std::cout << "x:" << this->transform.rotation.x << "y:" << this->transform.rotation.y << "z:" << this->transform.rotation.z << std::endl;
+	if (mouse_delta.y != 0) {
+		this->transform.rotation.x += (360/(M_PI * 2)) * (mouseY_Sensitivity * mouse_delta.y);
+		this->transform.rotation.x = fmod(this->transform.rotation.x, 360.f);
+		if (this->transform.rotation.x < 0)
+			this->transform.rotation.x = 360 + this->transform.rotation.x;
+	}
 }
 
 void					Camera::UpdateView()
@@ -117,9 +113,15 @@ void					Camera::UpdateView()
 	glm::mat4 matYaw   = glm::mat4(1.0f);//identity matrix
 
 	//roll, pitch and yaw are used to store our angles in our class
-	matRoll  = glm::rotate(matRoll,  this->transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	matPitch = glm::rotate(matPitch, this->transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	matYaw   = glm::rotate(matYaw,  this->transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	float x = this->transform.rotation.x;
+	float y = this->transform.rotation.y;
+	float z = this->transform.rotation.z;
+	x = x * (M_PI * 2) / 360;
+	y = y * (M_PI * 2) / 360;
+	z = z * (M_PI * 2) / 360;
+	matPitch = glm::rotate(matPitch, x, glm::vec3(1.0f, 0.0f, 0.0f));
+	matYaw   = glm::rotate(matYaw,  y, glm::vec3(0.0f, 1.0f, 0.0f));
+	matRoll  = glm::rotate(matRoll, z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	glm::mat4 rotate = matRoll * matPitch * matYaw;
 

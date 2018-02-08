@@ -26,7 +26,7 @@ class Camera : public Component
 		void								buildFPSProjection( void );
 		void								move(glm::vec3 const &toDirection);
 		void								UpdateView();
-		void								MouseMove(int x, int y);
+		void								MouseMove(glm::vec2 &lastMousePosition, glm::vec2 &mousePosition);
 
 		glm::mat4							modelviewprojectionMatrix;
 		glm::mat4							projectionMatrix;
@@ -42,7 +42,6 @@ class Camera : public Component
 		float								width;
 		float								height;
 		float								fov;//angle de vision
-		glm::vec2							mousePosition;
 		// ####################################################################
 };
 

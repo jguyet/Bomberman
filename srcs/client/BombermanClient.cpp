@@ -60,8 +60,10 @@ void						BombermanClient::initialize_resources( void )
 	Model::load("ground", ShaderUtils::instance->get("dir"), "assets/ground.obj");
 	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/brick.obj");
 	Model::load("grass", ShaderUtils::instance->get("dir"), "assets/grass.obj");
-	Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/Bomberman/Bomberman.obj");
-	Model::load("bomberman2", ShaderUtils::instance->get("dir"), "assets/WhiteBomber/WhiteBomber.obj");
+	Model::load("bomberman2", ShaderUtils::instance->get("dir"), "assets/GoldBomber/GoldBomber.obj");
+	Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/WhiteBomber/WhiteBomber.obj");
+	Model::load("bomberman3", ShaderUtils::instance->get("dir"), "assets/Bomberman/Bomberman.obj");
+	Model::load("N64", ShaderUtils::instance->get("dir"), "assets/N64 Cube/N64 Cube.obj");
 	Model::load("bomb", ShaderUtils::instance->get("dir"), "assets/MegaBomb/MegaBomb.obj");
 }
 

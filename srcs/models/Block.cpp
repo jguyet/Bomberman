@@ -9,7 +9,7 @@
 Block::Block ( Model *model )
 {
 	this->gameObject.AddComponent<Model>(model);
-	this->gameObject.transform.scale = glm::vec3(2,2,2);
+	this->gameObject.transform.scale = glm::vec3(1,1,1);
 	return ;
 }
 

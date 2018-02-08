@@ -326,25 +326,19 @@ void					Model::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale,
 
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
-	glm::vec3 p = position * glm::vec3(2,2,2);
-	glm::vec3 s = glm::vec3(scale);
-	s.x = s.x / 2;
-	s.y = s.y / 2;
-	s.z = s.z / 2;
+	glm::vec3 p = glm::vec3(position.x, position.y, position.z);
+	glm::vec3 s = glm::vec3(scale.x, scale.y, scale.z);
+	glm::vec3 r = glm::vec3(rotation.x * (M_PI * 2) / 360, rotation.y * (M_PI * 2) / 360, rotation.z * (M_PI * 2) / 360);
 
-	//SCALE
-	modelMatrix = glm::scale(modelMatrix, s);
-	//ROTATION
 	glm::mat4 matRoll  = glm::mat4(1.0f);//identity matrix;
-	glm::mat4 matPitch = glm::mat4(1.0f);//identity matrix
-	glm::mat4 matYaw   = glm::mat4(1.0f);//identity matrix
-	matRoll  = glm::rotate(matRoll,  rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	matPitch = glm::rotate(matPitch, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	matYaw   = glm::rotate(matYaw,  rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 matPitch = glm::mat4(1.0f);//identity matrix;
+	glm::mat4 matYaw   = glm::mat4(1.0f);//identity matrix;
+	matRoll  = glm::rotate(matRoll,  r.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	matPitch = glm::rotate(matPitch, r.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	matYaw   = glm::rotate(matYaw,  r.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 rotate = matRoll * matPitch * matYaw;
-	modelMatrix = rotate * modelMatrix;
 	//POSITION
-	modelMatrix = glm::translate(modelMatrix, -p);
+	modelMatrix = glm::scale(modelMatrix, s) * glm::translate(modelMatrix, -p) * rotate;
 
 	glUniformMatrix4fv(this->projectionMatrixLoc, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(this->viewMatrixLoc, 1, GL_FALSE, &viewMatrix[0][0]);
