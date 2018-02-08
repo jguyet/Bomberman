@@ -57,6 +57,7 @@ if (APPLE)
 				  HINTS
 				    ENV HOME
 				    ${SDL2_DIR}
+					${BREW_DIR}
 				  PATH_SUFFIXES SDL2
 	                # path suffixes
 	                include/SDL2 include)
@@ -69,6 +70,7 @@ if (APPLE)
 				  HINTS
 				    ENV HOME
 				    ${SDL2_DIR}
+					${BREW_DIR}
 				  PATH_SUFFIXES SDL2
 	                # path suffixes
 	                include/SDL2 include)
@@ -83,6 +85,7 @@ if (APPLE)
 				  HINTS
 				    ENV HOME
 				    ${SDL2_DIR}
+					${BREW_DIR}
 				  PATH_SUFFIXES SDL2
 	                # path suffixes
 	                include/SDL2 include)
@@ -101,6 +104,7 @@ if (APPLE)
 				  HINTS
 				    ENV HOME
 				    ${GLM_DIR}
+					${BREW_DIR}
 				  PATH_SUFFIXES glm
 	                # path suffixes
 	                include/glm include)
