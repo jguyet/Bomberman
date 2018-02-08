@@ -131,7 +131,11 @@ if (APPLE)
 		link_directories(
 		  ${PROJECT_DIR}/SOIL
 		)
-		include_directories(${PROJECT_DIR}/SOIL/incs)
+		include_directories(
+			${PROJECT_DIR}/SOIL/incs/SOIL
+			${PROJECT_DIR}/SOIL/incs
+			${PROJECT_DIR}/SOIL
+		)
 	message("-----------------------------------------------------------------")
 endif()
 
