@@ -10,9 +10,6 @@ set(CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build")
 
 find_package(OpenGL REQUIRED)
 find_package(OpenAL REQUIRED)
-find_package(GLM) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
-find_package(ASSIMP) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
-find_package(SDL2) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
 
 ################################################################################
 # APPLE INSTALL LIBS
@@ -27,8 +24,14 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lib")
 endif()
 
 if (APPLE)
-	message("MACOS -----------------------------------------------------------")
+	message("MACOS ------------------------------------------------------------o")
 	set(PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../lib/macos")
+
+	find_path(BREW_DIR brew HINTS ENV HOME)
+	message("homebrew directory : ${BREW_DIR}")
+	set(BIN_BREW "${BREW_DIR}/brew")
+	message("homebrew binary    : ${BIN_BREW}")
+
 	#create macos directory
 	############################################################################
 	if(NOT EXISTS "${PROJECT_DIR}")
@@ -37,91 +40,87 @@ if (APPLE)
 
 	#GLM
 	############################################################################
-	if (NOT SDL2_FOUND)
-		message("INSTALLATION SDL-------------------------------------------------")
-		execute_process(COMMAND brew install sdl2
-					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install sdl2
-								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND brew install sdl2_ttf
-					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install sdl2_ttf
-								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND brew install sdl2_mixer
-					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install sdl2_mixer
-								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND brew install sdl2_image
-					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install sdl2_image
-								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		find_package(SDL2 REQUIRED)
-		message("-----------------------------------------------------------------")
-	endif()
-	if (NOT EXISTS "${PROJECT_DIR}/SDL2")
-		execute_process(COMMAND cp -r "${SDL2_DIR}/../../../" "SDL2"
-						WORKING_DIRECTORY "${PROJECT_DIR}/")
-	endif()
-	link_directories(
-		"${PROJECT_DIR}/SDL2"
-		"${PROJECT_DIR}/SDL2/lib"
-		)
-	if (EXISTS "~/.brew")
-		link_directories("~/.brew/lib")
-		include_directories("~/.brew/include")
-	endif()
-	include_directories("${PROJECT_DIR}/SDL2/include" ${SDL2_INCLUDE_DIR})
+	message("INSTALLATION SDL-------------------------------------------------")
+	execute_process(COMMAND ${BIN_BREW} install sdl2
+							WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_package(SDL2 REQUIRED)
+	message("-----------------------------------------------------------------")
+	link_directories("${SDL2_DIR}/../../../lib")
+	include_directories(${SDL2_INCLUDE_DIR})
+
+
+	# sdl2_mixer sdl2_mixer sdl2_image
+	############################################################################
+	execute_process(COMMAND ${BIN_BREW} install sdl2_ttf
+				WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_path(SDL2_TTF_INCLUDE_DIR SDL2/SDL_ttf.h
+				  HINTS
+				    ENV HOME
+				    ${SDL2_DIR}
+				  PATH_SUFFIXES SDL2
+	                # path suffixes
+	                include/SDL2 include)
+	message(${SDL2_TTF_INCLUDE_DIR})
+	include_directories(${SDL2_TTF_INCLUDE_DIR})
+
+	execute_process(COMMAND ${BIN_BREW} install sdl2_mixer
+				WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_path(SDL2_MIXER_INCLUDE_DIR SDL2/SDL_mixer.h
+				  HINTS
+				    ENV HOME
+				    ${SDL2_DIR}
+				  PATH_SUFFIXES SDL2
+	                # path suffixes
+	                include/SDL2 include)
+	message(${SDL2_MIXER_INCLUDE_DIR})
+	include_directories(${SDL2_MIXER_INCLUDE_DIR})
+
+	execute_process(COMMAND ${BIN_BREW} install sdl2_image
+				WORKING_DIRECTORY "${PROJECT_DIR}/")
+	execute_process(COMMAND homebrew install sdl2_image
+							WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_path(SDL2_IMAGE_INCLUDE_DIR SDL2/SDL_image.h
+				  HINTS
+				    ENV HOME
+				    ${SDL2_DIR}
+				  PATH_SUFFIXES SDL2
+	                # path suffixes
+	                include/SDL2 include)
+	message(${SDL2_IMAGE_INCLUDE_DIR})
+	include_directories(${SDL2_IMAGE_INCLUDE_DIR})
+
 	#GLM
 	############################################################################
-	if (NOT GLM_FOUND)
-		message("INSTALLATION GLM-------------------------------------------------")
-		execute_process(COMMAND brew install glm
-					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install glm
-								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		find_package(GLM)
-		if (NOT GLM_FOUND)
-			execute_process(COMMAND git clone "https://github.com/g-truc/glm.git" "GLM"
-							WORKING_DIRECTORY ${PROJECT_DIR}/
-							)
-			add_subdirectory(${PROJECT_DIR}/GLM)
-			include_directories(${PROJECT_DIR}/GLM)
-		endif()
-		message("-----------------------------------------------------------------")
-	endif()
-	if (NOT EXISTS "${PROJECT_DIR}/GLM")
-		execute_process(COMMAND cp -r "${GLM_DIR}/../../../" "GLM"
-						WORKING_DIRECTORY "${PROJECT_DIR}/")
-	endif()
-	link_directories(
-		"${PROJECT_DIR}/GLM"
-		"${PROJECT_DIR}/GLM/lib"
-		)
-	include_directories("${PROJECT_DIR}/GLM/include")
+	message("INSTALLATION GLM-------------------------------------------------")
+	execute_process(COMMAND ${BIN_BREW} install glm
+				WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_package(GLM REQUIRED)
+	message("-----------------------------------------------------------------")
+	link_directories("${GLM_DIR}/../../../lib")
+	find_path(GLM_INCLUDE_DIR glm/glm.hpp
+				  HINTS
+				    ENV HOME
+				    ${GLM_DIR}
+				  PATH_SUFFIXES glm
+	                # path suffixes
+	                include/glm include)
+	message(${GLM_INCLUDE_DIR})
+	include_directories("${GLM_INCLUDE_DIR}")
 	#ASSIMP
 	############################################################################
-	if (NOT ASSIMP_FOUND)
-		message("INSTALLATION ASSIMP----------------------------------------------")
-		execute_process(COMMAND brew install assimp
-					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install assimp
-								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		find_package(ASSIMP REQUIRED)
-		message("-----------------------------------------------------------------")
-	endif()
-	if (NOT EXISTS "${PROJECT_DIR}/ASSIMP")
-		execute_process(COMMAND cp -r "${ASSIMP_DIR}/../../../" "ASSIMP"
-						WORKING_DIRECTORY "${PROJECT_DIR}/")
-	endif()
+	message("INSTALLATION ASSIMP----------------------------------------------")
+	execute_process(COMMAND ${BIN_BREW} install assimp
+				WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_package(ASSIMP REQUIRED)
+	message("-----------------------------------------------------------------")
 	link_directories(
-		"${PROJECT_DIR}/ASSIMP"
-		"${PROJECT_DIR}/ASSIMP/lib"
+		"${ASSIMP_DIR}/../../../lib"
 		)
-	include_directories("${PROJECT_DIR}/ASSIMP/include")
+	include_directories("${GLM_INCLUDE_DIR}")
 	#SOIL
 	############################################################################
+	message("INSTALLATION SOIL------------------------------------------------")
 	if(NOT EXISTS "${PROJECT_DIR}/SOIL")
-		message("INSTALLATION SOIL------------------------------------------------")
 		execute_process(COMMAND git clone "https://github.com/alelievr/SOIL2.git" "SOIL"
 						WORKING_DIRECTORY ${PROJECT_DIR}/
 						)
@@ -130,7 +129,8 @@ if (APPLE)
 						WORKING_DIRECTORY ${PROJECT_DIR}/SOIL
 						)
 		endif()
-		message("-----------------------------------------------------------------")
+	else()
+		message("Warning: SOIL 2 is already installed")
 	endif()
 		link_directories(
 		  ${PROJECT_DIR}/SOIL
@@ -141,6 +141,7 @@ if (APPLE)
 			${PROJECT_DIR}/SOIL
 		)
 	message("-----------------------------------------------------------------")
+	message("------------------------------------------------------------------o")
 endif()
 
 if (WIN32)
