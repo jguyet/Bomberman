@@ -10,7 +10,6 @@ set(CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build")
 
 find_package(OpenGL REQUIRED)
 find_package(OpenAL REQUIRED)
-find_package(GLFW3) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
 find_package(GLM) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
 find_package(ASSIMP) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
 find_package(SDL) # FOO_INCLUDE_DIR, FOO_LIBRARIES, FOO_DIR
@@ -40,9 +39,21 @@ if (APPLE)
 	############################################################################
 	if (NOT SDL2_FOUND)
 		message("INSTALLATION SDL-------------------------------------------------")
-		execute_process(COMMAND brew install sdl
+		execute_process(COMMAND brew install sdl2
 					WORKING_DIRECTORY "${PROJECT_DIR}/")
-		execute_process(COMMAND homebrew install sdl
+		execute_process(COMMAND homebrew install sdl2
+								WORKING_DIRECTORY "${PROJECT_DIR}/")
+		execute_process(COMMAND brew install sdl2_ttf
+					WORKING_DIRECTORY "${PROJECT_DIR}/")
+		execute_process(COMMAND homebrew install sdl2_ttf
+								WORKING_DIRECTORY "${PROJECT_DIR}/")
+		execute_process(COMMAND brew install sdl2_mixer
+					WORKING_DIRECTORY "${PROJECT_DIR}/")
+		execute_process(COMMAND homebrew install sdl2_mixer
+								WORKING_DIRECTORY "${PROJECT_DIR}/")
+		execute_process(COMMAND brew install sdl2_image
+					WORKING_DIRECTORY "${PROJECT_DIR}/")
+		execute_process(COMMAND homebrew install sdl2_image
 								WORKING_DIRECTORY "${PROJECT_DIR}/")
 		find_package(SDL2 REQUIRED)
 		message("-----------------------------------------------------------------")
@@ -64,7 +75,14 @@ if (APPLE)
 					WORKING_DIRECTORY "${PROJECT_DIR}/")
 		execute_process(COMMAND homebrew install glm
 								WORKING_DIRECTORY "${PROJECT_DIR}/")
-		find_package(GLM REQUIRED)
+		find_package(GLM)
+		if (NOT GLM_FOUND)
+			execute_process(COMMAND git clone "https://github.com/g-truc/glm.git" "GLM"
+							WORKING_DIRECTORY ${PROJECT_DIR}/
+							)
+			add_subdirectory(${PROJECT_DIR}/GLM)
+			include_directories(${PROJECT_DIR}/GLM)
+		endif()
 		message("-----------------------------------------------------------------")
 	endif()
 	if (NOT EXISTS "${PROJECT_DIR}/GLM")
