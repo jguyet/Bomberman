@@ -18,8 +18,23 @@
 #  define GLFW_INCLUDE_GLCOREARB
 # endif
 
+# ifdef linux
+#   include <GL/glew.h>
+#   include <SDL2/SDL.h>
+#   include <SDL2/SDL_image.h>
+#   include <SDL2/SDL_mixer.h>
+#   include <SDL2/SDL_ttf.h>
+# endif
+# ifdef __APPLE__
+#   include <OpenGL/gl3.h>
+#   include <SDL2/SDL.h>
+#   include <SDL2/SDL_image.h>
+#   include <SDL2/SDL_mixer.h>
+#   include <SDL2/SDL_ttf.h>
+# endif
+
 # include <SOIL2.h>
-# include <glfw3.h>
+# include <glfw/glfw3.h>
 # include <glm/glm.hpp>
 # include <glm/vec3.hpp> // glm::vec3
 # include <glm/vec4.hpp> // glm::vec4

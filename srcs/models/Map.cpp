@@ -53,7 +53,7 @@ Map::Map ( void )
 				continue ;
 			}
 			Block *block = new Block(Model::model["brick"]);
-			block->gameObject.transform.position = glm::vec3(x * 2,1.f,z * 2);
+			block->gameObject.transform.position = glm::vec3(x * 2,0.5f,z * 2);
 			block->gameObject.transform.scale.y = 0.5f;
 
 			this->cases[i]->obstacle = block;

@@ -8,7 +8,7 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd N64 Cube/Textures/Green.png
+map_Kd Textures/Green.png
 
 
 newmtl Material.039_Yellow.p_Yellow.png
@@ -19,7 +19,7 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd N64 Cube/Textures/Yellow.png
+map_Kd Textures/Yellow.png
 
 
 newmtl Material.042_Blue.png_Blue.png
@@ -30,7 +30,7 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd N64 Cube/Textures/Blue.png
+map_Kd Textures/Blue.png
 
 
 newmtl Material.041_Pink.png_Pink.png
@@ -41,4 +41,4 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd N64 Cube/Textures/Pink.png
+map_Kd Textures/Pink.png

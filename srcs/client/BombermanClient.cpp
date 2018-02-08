@@ -10,6 +10,7 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 
 BombermanClient::BombermanClient ( void )
 {
+	this->screen = new Screen(1680, 1050);
 	return ;
 }
 
@@ -21,10 +22,6 @@ BombermanClient::BombermanClient ( BombermanClient const & src )
 
 BombermanClient::~BombermanClient ( void )
 {
-	if (this->window) {
-		glfwDestroyWindow(this->window);
-	}
-	glfwTerminate();
 	return ;
 }
 
@@ -60,71 +57,77 @@ void						BombermanClient::initialize_resources( void )
 	Model::load("ground", ShaderUtils::instance->get("dir"), "assets/ground.obj");
 	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/brick.obj");
 	Model::load("grass", ShaderUtils::instance->get("dir"), "assets/grass.obj");
-	Model::load("bomberman2", ShaderUtils::instance->get("dir"), "assets/GoldBomber/GoldBomber.obj");
-	Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/WhiteBomber/WhiteBomber.obj");
-	Model::load("bomberman3", ShaderUtils::instance->get("dir"), "assets/Bomberman/Bomberman.obj");
+	Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/RedBomber/RedBomber.obj");
+	//Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/WhiteBomber/WhiteBomber.obj");
 	Model::load("N64", ShaderUtils::instance->get("dir"), "assets/N64 Cube/N64 Cube.obj");
-	Model::load("bomb", ShaderUtils::instance->get("dir"), "assets/MegaBomb/MegaBomb.obj");
+	Model::load("bomb", ShaderUtils::instance->get("dir"), "assets/bomb/bomb.obj");
+	Model::load("Gold", ShaderUtils::instance->get("dir"), "assets/GoldNumemon/chr113.dae");
 }
 
 void						BombermanClient::build_window( void )
 {
-	glfwSetErrorCallback(BombermanClient::glfw_error_callback);
-	if (!glfwInit()) {
-		exit(EXIT_FAILURE);
+	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
+    {
+        printf( "Can't init SDL:  %s\n", SDL_GetError( ) );
+        return ;
+    }
+
+	//OPENGL version 3.3
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+
+	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL );
+	if (!this->window) {
+	    fprintf(stderr, "Couldn't create window: %s\n", SDL_GetError());
+	    return;
+	}
+
+	this->context = SDL_GL_CreateContext(this->window);
+	if (!this->context) {
+	    fprintf(stderr, "Couldn't create context: %s\n", SDL_GetError());
+	    return;
 	}
 	//################################################
-	//include this BEFORE GLFW for vao fonctionnality
+	//include this BEFORE GLFW for vao fonctionnality (for macos)
 	//# if __APPLE__
 	//#  define GLFW_INCLUDE_GLCOREARB
 	//# endif
 	//################################################
-	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // On veut OpenGL 3.3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Pour rendre MacOS heureux ; ne devrait pas être nécessaire
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // On ne veut pas l'ancien OpenGL
-
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);//Resizeable
-
-	this->window = glfwCreateWindow(1680, 1050, "Bomberman", NULL, NULL);
-
-	if (!this->window) {
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
-	glfwMakeContextCurrent(this->window);
-
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-	// Enable depth test
+    //
+	// // Enable depth test
 	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
+	//Accept fragment if it closer to the camera than the former one
 	//glDepthFunc(GL_LESS);
-
+    //
 	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
-
 	glEnable(GL_MULTISAMPLE);
 
-	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSetCursorPos(this->window, 640 / 2, 480 / 2);
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_SetWindowGrab(this->window, SDL_TRUE);
+	SDL_WarpMouseInWindow(this->window, this->screen->middleWidth, this->screen->middleHeight);
+}
+
+int	SDLCALL					input_callback_interval(void *userdata, SDL_Event* event)
+{
+	Mouse::handle_mousebutton(event);
+	Mouse::handle_event_mousemotion(event);
+	KeyBoard::key_callback(event);
+	return (1);
 }
 
 void						BombermanClient::initialize_inputs( void )
 {
-	// Assure que l'on peut capturer la touche d'échappement enfoncée ci-dessous
-	glfwSetInputMode(this->window, GLFW_STICKY_KEYS, GL_TRUE);
-	glfwSetInputMode(this->window, GLFW_STICKY_MOUSE_BUTTONS, GL_TRUE);
+	KeyBoard::instance = new KeyBoard(NULL);
+	Mouse::instance = new Mouse(NULL);
 
-	KeyBoard::instance = new KeyBoard(this->window);
-	Mouse::instance = new Mouse(this->window);
-
-	glfwSetKeyCallback(this->window, KeyBoard::key_callback);
-	glfwSetCursorPosCallback(this->window, Mouse::cursor_position_callback);
-	glfwSetMouseButtonCallback(this->window, Mouse::mouse_button_callback);
+	//asynchronous events
+	SDL_AddEventWatch(input_callback_interval, NULL);
 }
+
 
 void						BombermanClient::run( void )
 {
@@ -157,15 +160,22 @@ void						BombermanClient::controllerLoop( void )//100fps
 
 void						BombermanClient::renderLoop( void )//60fps
 {
-
-	if (glfwWindowShouldClose(this->window))
-		return ;
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	this->currentController->render();
 	//Swap Buffers
-    glfwSwapBuffers(this->window);
-	glfwPollEvents();
+	SDL_GL_SwapWindow(this->window);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	this->currentController->render();
+
+	while(SDL_PollEvent(&this->event))
+    {
+		if(this->event.type == SDL_QUIT)
+	    {
+	        this->stop();
+	    }
+    }
+	std::cout << this->screen->middleWidth << std::endl;
+	//reset mouse to center of screen
+	SDL_WarpMouseInWindow(this->window, this->screen->middleWidth, this->screen->middleHeight);
 }
 
 // ###############################################################
@@ -174,7 +184,6 @@ void						BombermanClient::renderLoop( void )//60fps
 
 int main(void)
 {
-	//Model::loadTexturedModel("boule.obj");
 	BombermanClient *client = BombermanClient::instance;
 
 	client->build_window();

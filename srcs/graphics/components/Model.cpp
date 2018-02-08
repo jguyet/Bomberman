@@ -31,6 +31,15 @@ bool					Model::load(const std::string& key, unsigned int shader, const std::str
 		return false;
     }
 
+	int lastslash = pFile.find_last_of("/");
+	std::string absolutePath = std::string(pFile);
+
+	if (lastslash == -1) {
+		absolutePath = "";
+	} else {
+		absolutePath = absolutePath.substr(0, lastslash + 1);
+	}
+
 	Model *model = new Model(shader);
 
     model->scene = model->importer.ReadFile( pFile, aiProcessPreset_TargetRealtime_Quality);
@@ -46,7 +55,7 @@ bool					Model::load(const std::string& key, unsigned int shader, const std::str
     // Now we can access the file's contents.
     printf("Import of scene %s succeeded.\n",pFile.c_str());
 
-	Model::loadGLTextures(model);
+	Model::loadGLTextures(absolutePath, model);
 	Model::buildShader(model);
 	Model::genVAOsAndUniformBuffer(model);
 
@@ -54,7 +63,7 @@ bool					Model::load(const std::string& key, unsigned int shader, const std::str
 	return true;
 }
 
-void					Model::loadGLTextures(Model *model)
+void					Model::loadGLTextures(std::string &absolutePath, Model *model)
 {
 
 	/* scan scene's materials for textures */
@@ -85,7 +94,7 @@ void					Model::loadGLTextures(Model *model)
 	for (; itr != model->textureIdMap.end(); ++i, ++itr)
 	{
 		//save IL image ID
-		std::string filename = "assets/" + (*itr).first;  // get filename
+		std::string filename = absolutePath + (*itr).first;  // get filename
 
 		textureIds[i] = SOIL_load_OGL_texture
 		(
@@ -338,7 +347,7 @@ void					Model::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale,
 	matYaw   = glm::rotate(matYaw,  r.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 rotate = matRoll * matPitch * matYaw;
 	//POSITION
-	modelMatrix = glm::scale(modelMatrix, s) * glm::translate(modelMatrix, -p) * rotate;
+	modelMatrix =  glm::translate(modelMatrix, -p) * glm::scale(modelMatrix, s) * rotate;
 
 	glUniformMatrix4fv(this->projectionMatrixLoc, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(this->viewMatrixLoc, 1, GL_FALSE, &viewMatrix[0][0]);

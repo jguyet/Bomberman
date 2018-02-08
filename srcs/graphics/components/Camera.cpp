@@ -52,7 +52,7 @@ void						Camera::buildLookAtProjection( void )
 {
 	this->projectionMatrix = glm::perspective(glm::radians(this->fov), this->width / this->height, this->zNear, this->zFar);
 	this->modelMatrix = glm::mat4(1.0f);
-	this->viewMatrix = glm::lookAt(this->transform.position, glm::vec3(-6.f,1,-9.f), glm::vec3(0,1,0));
+	this->viewMatrix = glm::lookAt(this->transform.position, glm::vec3(-12.f,1,-18.f), glm::vec3(0,1,0));
 	this->modelviewprojectionMatrix = this->projectionMatrix * this->viewMatrix * this->modelMatrix;
 }
 

@@ -26,7 +26,7 @@ class Model : public Component
 	public:
 		// STATICS #############################################################
 		static bool									load(const std::string& key, unsigned int shader, const std::string& pFile);
-		static void									loadGLTextures(Model *model);
+		static void									loadGLTextures(std::string &absolutePath, Model *model);
 		static void									genVAOsAndUniformBuffer(Model *model);
 		static void									buildShader(Model *model);
 		static void									deleteModels(void);

@@ -3,27 +3,6 @@
 // STATIC ########################################################
 Mouse					*Mouse::instance = NULL;
 
-void 					Mouse::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	Mouse::instance->lastPosition.x = Mouse::instance->position.x;
-	Mouse::instance->lastPosition.y = Mouse::instance->position.y;
-	Mouse::instance->position.x = xpos;
-	Mouse::instance->position.y = ypos;
-	if (Mouse::instance->lastPosition.x == 0 && Mouse::instance->lastPosition.y == 0) {
-		return ;
-	}
-	if (BombermanClient::instance->currentController->loaded == false)
-		return ;
-	BombermanClient::instance->currentController->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
-}
-
-void					Mouse::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-    std::cout << "Mouse entry : " << button << " action : " << action << std::endl;
-	Mouse::instance->pressedButton[button] = (action == PRESS || action == REPEAT) ? true : false;
-}
-
-
 // ###############################################################
 
 // CANONICAL #####################################################
@@ -68,6 +47,31 @@ std::ostream &				operator<<(std::ostream & o, Mouse const & i)
 // ###############################################################
 
 // PUBLIC METHOD #################################################
+
+void 					Mouse::handle_event_mousemotion(SDL_Event *event)
+{
+	if (event->type != SDL_MOUSEMOTION)
+		return ;
+	float mw = BombermanClient::instance->screen->middleWidth;
+	float mh = BombermanClient::instance->screen->middleHeight;
+	Mouse::instance->lastPosition.x = Mouse::instance->position.x;
+	Mouse::instance->lastPosition.y = Mouse::instance->position.y;
+	Mouse::instance->position.x = -(event->motion.x - mw);
+	Mouse::instance->position.y = -(event->motion.y - mh);
+	if (Mouse::instance->lastPosition.x == 0 && Mouse::instance->lastPosition.y == 0) {
+		return ;
+	}
+	if (BombermanClient::instance->currentController->loaded == false)
+		return ;
+	BombermanClient::instance->currentController->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
+}
+
+void					Mouse::handle_mousebutton(SDL_Event *event)
+{
+	if (event->type != SDL_MOUSEBUTTONDOWN && event->type != SDL_MOUSEBUTTONUP)
+		return ;
+	Mouse::instance->pressedButton[event->button.button] = (event->type == SDL_MOUSEBUTTONDOWN) ? true : false;
+}
 
 int							Mouse::getMouseButton(int button)
 {

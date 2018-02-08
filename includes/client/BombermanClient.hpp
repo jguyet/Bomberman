@@ -3,6 +3,20 @@
 
 # include "Bomberman.hpp"
 
+struct Screen {
+	public:
+		Screen(unsigned int w, unsigned int h) {
+			this->width = w;
+			this->height = h;
+			this->middleWidth = w / 2;
+			this->middleHeight = h / 2;
+		}
+		unsigned int width;
+		unsigned int height;
+		unsigned int middleWidth;
+		unsigned int middleHeight;
+};
+
 class BombermanClient : public IRenderLoop
 {
 	public:
@@ -29,8 +43,14 @@ class BombermanClient : public IRenderLoop
 		void										run( void );
 		void										stop( void );
 
-		GLFWwindow									*window;
+		//sdl dependencies
+		SDL_Window									*window;
+		SDL_GLContext								context;
+		SDL_Event									event;
+
 		IController									*currentController;
+
+		Screen										*screen;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

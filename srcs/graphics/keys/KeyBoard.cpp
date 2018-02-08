@@ -3,10 +3,12 @@
 // STATIC ########################################################
 KeyBoard		*KeyBoard::instance = NULL;
 
-void			KeyBoard::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void			KeyBoard::key_callback(SDL_Event *event)
 {
-	std::cout << "Key entry : " << key << " action : " << action << std::endl;
-	KeyBoard::instance->pressedKeys[key] = (action == PRESS || action == REPEAT) ? true : false;
+	if (event->type != SDL_KEYDOWN && event->type != SDL_KEYUP)
+		return ;
+	std::cout << "Key entry : " << event->key.keysym.scancode << std::endl;
+	KeyBoard::instance->pressedKeys[event->key.keysym.scancode] = (event->type == SDL_KEYDOWN) ? true : false;
 }
 
 // ###############################################################

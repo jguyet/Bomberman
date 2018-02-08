@@ -57,8 +57,6 @@ libclean:
 	echo "\033[38;5;124mLIBCLEAN\033[00m $(PROG1)"
 	rm -rf $(EXTERNAL_LIB_DIR)
 
-cleanall: libclean fclean
-
 re:		compile
 
 compile:
@@ -70,4 +68,4 @@ compile:
 
 install: all
 
-recompilelib: cleanall recompile
+uninstall: libclean fclean install
