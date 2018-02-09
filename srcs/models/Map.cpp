@@ -18,7 +18,7 @@ Map::Map ( void )
 	}
 	for (int z = 0; z < 19; z++) {
 		for (int x = 0; x < 13; x++) {
-			GameObject *block = Factory::newBlock();//grass
+			GameObject *block = Factory::newBlock("grass");
 
 			block->transform.position = glm::vec3(x * 2,2,z * 2);
 			this->cases[std::make_pair(x, z)]->ground = block;
@@ -28,7 +28,7 @@ Map::Map ( void )
 	for (int z = 0; z < 19; z++) {
 		for (int x = 0; x < 13;) {
 
-			GameObject *block = Factory::newBlock();
+			GameObject *block = Factory::newBlock("brick");
 
 			block->transform.position = glm::vec3(x * 2,0,z * 2);
 			this->cases[std::make_pair(x, z)]->obstacle = block;
@@ -47,7 +47,7 @@ Map::Map ( void )
 			if (z == 0 || z == 18 || x == 0 || x == 12 || z % 2 || x % 2) {
 				continue ;
 			}
-			GameObject *block = Factory::newBlock();
+			GameObject *block = Factory::newBlock("brick");
 
 			block->transform.position = glm::vec3(x * 2,0.5f,z * 2);
 			block->transform.scale.y = 0.5f;

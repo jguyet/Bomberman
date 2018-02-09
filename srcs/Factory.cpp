@@ -2,13 +2,12 @@
 
 // STATIC ########################################################
 
-GameObject							*Factory::newBlock(void)
+GameObject							*Factory::newBlock(std::string model)
 {
 	GameObject	*obj = new GameObject();
 
 	obj->tag = "Block";
-	obj->AddComponent<Model>(Model::model["brick"]);
-
+	obj->AddComponent<Model>(Model::model[model]);
 	return (obj);
 }
 

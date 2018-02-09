@@ -6,7 +6,7 @@
 class Factory
 {
 	public:
-		static GameObject					*newBlock(void);
+		static GameObject					*newBlock(std::string model);
 		static GameObject					*newPlayer(void);
 
 		Factory( void );

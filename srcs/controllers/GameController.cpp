@@ -8,11 +8,10 @@
 
 void						handle_collider(GameObject *obj, GameObject *wall)
 {
-	Case *c = obj->GetComponent<GameController>()->map->getCase((int)wall->transform.position.x, (int)wall->transform.position.y);
-
-	if (c == NULL)
-		return;
-
+	//TODO ll
+	//Case *c = obj->GetComponent<GameController>()->map->getCase((int)wall->transform.position.x, (int)wall->transform.position.y);
+	//if (c == NULL)
+	//	return;
 	//std::cout << "COLLIDE" << std::endl;
 }
 
@@ -44,7 +43,6 @@ GameController::GameController ( void )
 	this->p->transform.position = glm::vec3(2,1.f,4);
 	this->p->transform.scale = glm::vec3(0.125f,0.125f,0.125f);
 	this->p->transform.rotation = glm::vec3(0,0,0);
-	this->p->AddComponent<GameController>(this);
 	this->p->AddComponent<BoxCollider>();
 	this->p->GetComponent<BoxCollider>()->size = glm::vec3(0.3f,1.f,0.3f);
 	this->p->GetComponent<BoxCollider>()->m = handle_collider;
@@ -97,8 +95,8 @@ void						GameController::render(void)
 	if (this->loaded == false)
 		return ;
 	this->camera->setProjection(40.0f, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 0.1f, 1000.0f);
-	this->camera->buildLookAtProjection();
-	//this->camera->buildFPSProjection();
+	//this->camera->buildLookAtProjection();
+	this->camera->buildFPSProjection();
 
 	this->map->render(this->camera->projectionMatrix, this->camera->viewMatrix);
 
