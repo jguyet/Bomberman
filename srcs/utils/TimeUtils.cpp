@@ -11,6 +11,11 @@ long					TimeUtils::getCurrentNanoSeconds( void )
     return (value.count());
 }
 
+long					TimeUtils::getCurrentSystemMillis( void )
+{
+    return (TimeUtils::getCurrentNanoSeconds() / 1000000L);
+}
+
 // ###############################################################
 
 // CANONICAL #####################################################

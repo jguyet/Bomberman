@@ -63,6 +63,9 @@ if (APPLE)
 	                include/SDL2 include)
 	message(${SDL2_TTF_INCLUDE_DIR})
 	include_directories(${SDL2_TTF_INCLUDE_DIR})
+	find_path(SDL2_TTF_LIB_DIR libSDL2_ttf.a HINTS ${BREW_DIR}/../lib)
+	message("${SDL2_TTF_LIB_DIR}")
+	link_directories("${SDL2_TTF_LIB_DIR}")
 
 	execute_process(COMMAND ${BIN_BREW} install sdl2_mixer
 				WORKING_DIRECTORY "${PROJECT_DIR}/")
@@ -76,6 +79,9 @@ if (APPLE)
 	                include/SDL2 include)
 	message(${SDL2_MIXER_INCLUDE_DIR})
 	include_directories(${SDL2_MIXER_INCLUDE_DIR})
+	find_path(SDL2_MIXER_LIB_DIR libSDL2_mixer.a HINTS ${BREW_DIR}/../lib)
+	message("${SDL2_MIXER_LIB_DIR}")
+	link_directories("${SDL2_MIXER_LIB_DIR}")
 
 	execute_process(COMMAND ${BIN_BREW} install sdl2_image
 				WORKING_DIRECTORY "${PROJECT_DIR}/")
@@ -91,6 +97,9 @@ if (APPLE)
 	                include/SDL2 include)
 	message(${SDL2_IMAGE_INCLUDE_DIR})
 	include_directories(${SDL2_IMAGE_INCLUDE_DIR})
+	find_path(SDL2_IMAGE_LIB_DIR libSDL2_image.a HINTS ${BREW_DIR}/../lib)
+	message("${SDL2_IMAGE_LIB_DIR}")
+	link_directories("${SDL2_IMAGE_LIB_DIR}")
 
 	#GLM
 	############################################################################
@@ -249,6 +258,6 @@ add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
 #target_link_libraries(${PROJECT_NAME} "sdl2-config --libs SDL2_image SDL2_mixer SDL2_ttf")
-target_link_libraries(${PROJECT_NAME} SDL2 glm assimp SOIL2 ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image glm assimp SOIL2 ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
 
 #target_link_libraries(${PROJECT_NAME} "sdl2-config --libs SDL2_image SDL2_mixer SDL2_ttf")

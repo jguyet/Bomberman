@@ -77,6 +77,12 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/components/Model.hpp"
 # include "graphics/components/BoxCollider.hpp"
 # include "graphics/components/GameObject.hpp"
+/*
+** Canvas :
+*/
+# include "graphics/canvas/Text.hpp"
+# include "graphics/canvas/Image.hpp"
+# include "graphics/canvas/Canvas.hpp"
 
 /*
 ** Interfaces

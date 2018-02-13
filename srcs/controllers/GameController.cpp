@@ -87,7 +87,7 @@ void						GameController::process(void)
 {
 	KeyBoard::instance->process(this);
 
-	GameObject::ProcessPhisicsComponents();
+	//GameObject::ProcessPhisicsComponents();
 }
 
 void						GameController::render(void)

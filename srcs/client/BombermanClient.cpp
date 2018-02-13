@@ -11,6 +11,7 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 BombermanClient::BombermanClient ( void )
 {
 	this->screen = new Screen(1680, 1050);
+	this->canvas = new Canvas(this->screen->width, this->screen->height);
 	return ;
 }
 
@@ -51,9 +52,16 @@ void						BombermanClient::initialize_properties( void )
 
 void						BombermanClient::initialize_resources( void )
 {
+	//SHADERS
 	ShaderUtils::instance->loadShader("simple", "./assets/shaders/Simple.vs", "./assets/shaders/Simple.fs");
 	ShaderUtils::instance->loadShader("dir", "./assets/shaders/dirlightdiffambpix.vert", "./assets/shaders/dirlightdiffambpix.frag");
+	ShaderUtils::instance->loadShader("canvas", "./assets/shaders/canvas.vert", "./assets/shaders/canvas.frag");
 
+
+	//FONTS
+	this->font = TTF_OpenFont("assets/fonts/angelina.ttf", 65);
+
+	//MODELS
 	Model::load("ground", ShaderUtils::instance->get("dir"), "assets/ground.obj");
 	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/brick.obj");
 	Model::load("grass", ShaderUtils::instance->get("dir"), "assets/grass.obj");
@@ -62,6 +70,7 @@ void						BombermanClient::initialize_resources( void )
 	Model::load("N64", ShaderUtils::instance->get("dir"), "assets/N64 Cube/N64 Cube.obj");
 	Model::load("bomb", ShaderUtils::instance->get("dir"), "assets/bomb/bomb.obj");
 	Model::load("Gold", ShaderUtils::instance->get("dir"), "assets/GoldNumemon/chr113.dae");
+	Model::load("canvas", ShaderUtils::instance->get("canvas"), "assets/canvas.obj");
 }
 
 void						BombermanClient::build_window( void )
@@ -69,25 +78,38 @@ void						BombermanClient::build_window( void )
 	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
     {
         printf( "Can't init SDL:  %s\n", SDL_GetError( ) );
-        return ;
+        exit(0);
     }
+
+	if(TTF_Init() == -1)
+	{
+	    printf("Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+	    exit(0);
+	}
+
+	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL );
+	if (!this->window) {
+	    printf("Couldn't create window: %s\n", SDL_GetError());
+	    exit(0);
+	}
+
+	// this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	// if (!this->renderer) {
+	// 	printf("Couldn't create renderer: %s\n", SDL_GetError());
+	// 	exit(0);
+	// }
 
 	//OPENGL version 3.3
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-
-	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL );
-	if (!this->window) {
-	    fprintf(stderr, "Couldn't create window: %s\n", SDL_GetError());
-	    return;
-	}
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
 
 	this->context = SDL_GL_CreateContext(this->window);
 	if (!this->context) {
-	    fprintf(stderr, "Couldn't create context: %s\n", SDL_GetError());
-	    return;
+	    printf("Couldn't create context: %s\n", SDL_GetError());
+	    exit(0);
 	}
 	//################################################
 	//include this BEFORE GLFW for vao fonctionnality (for macos)
@@ -158,11 +180,69 @@ void						BombermanClient::controllerLoop( void )//100fps
 	this->currentController->process();
 }
 
+void						writeText(const char *text)
+{
+	SDL_Surface 	*canvas = SDL_CreateRGBSurface(0, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 32, 0,0,0,0);
+	TTF_Font		*font = TTF_OpenFont("assets/fonts/arial.ttf", 60);
+	SDL_Color		color = {255, 255, 255,0};
+	SDL_Surface		*text_surface;
+	SDL_Rect		text_position;
+	SDL_Texture		*text_texture;
+
+	//SDL_Rect surface_rect = {100,600,30, 30};
+	//SDL_FillRect(canvas, &surface_rect, SDL_MapRGB(canvas->format,0,255,0));
+
+	text_position.x = 0;
+	text_position.y = 0;
+
+	text_surface = TTF_RenderText_Solid(font, text, color);
+	SDL_BlitSurface(text_surface, NULL, canvas, &text_position);
+	SDL_FreeSurface(text_surface);
+
+	//TODO draw surface
+	GLuint	textID;
+
+	//texture
+	glGenTextures(1, &textID);
+	glBindTexture(GL_TEXTURE_2D, textID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, \
+			canvas->w, canvas->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, canvas->pixels);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	Model::model["canvas"]->modelMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("canvas"), "u_modelMatrix");
+
+	glUseProgram(ShaderUtils::instance->get("canvas"));
+
+	glm::vec3 p = glm::vec3((float)((float)1 / (float)BombermanClient::instance->screen->width), (float)((float)1 / (float)BombermanClient::instance->screen->height), 0);
+
+//	p.y += 1.15f;
+	//p.x -= 0.12f;//(float)((float)1400 / (float)BombermanClient::instance->screen->height);
+	glUniform3fv(Model::model["canvas"]->modelMatrixLoc, 1, &p[0]);
+
+	glUniform1i(Model::model["canvas"]->texUnit, 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textID);
+	glBindVertexArray(Model::model["canvas"]->myMeshes[0].vao);
+	glDrawElements(GL_TRIANGLES, Model::model["canvas"]->myMeshes[0].numFaces * 3, GL_UNSIGNED_INT, 0);
+	glUseProgram(0);
+
+	glDeleteTextures(1, &textID);
+	TTF_CloseFont(font);
+	SDL_FreeSurface(canvas);
+}
+
 void						BombermanClient::renderLoop( void )//60fps
 {
-	//Swap Buffers
+	static int o = 1;
 	SDL_GL_SwapWindow(this->window);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	Image img = Image("assets/moi.jpg");
+	this->canvas->addImage(img);
+	this->updateFps();
+
+	this->canvas->draw();
 
 	this->currentController->render();
 
@@ -176,6 +256,28 @@ void						BombermanClient::renderLoop( void )//60fps
     }
 	//reset mouse to center of screen
 	SDL_WarpMouseInWindow(this->window, this->screen->middleWidth, this->screen->middleHeight);
+}
+
+void						BombermanClient::updateFps( void )
+{
+	static long lastTime = 0;
+	static int fpsCount = 0;
+	static int fps = 0;
+
+	if (lastTime == 0 || TimeUtils::getCurrentSystemMillis() > (long)(lastTime + 1000)) {
+		lastTime = TimeUtils::getCurrentSystemMillis();
+		fps = fpsCount;
+		fpsCount = 0;
+	}
+	std::ostringstream ss;
+	ss << "FPS : ";
+	ss << fps;
+	std::string s(ss.str());
+	Text t = Text(s.c_str());
+	t.transform.position.x = this->screen->width - 130;
+	this->canvas->addText(t);
+
+	fpsCount++;
 }
 
 // ###############################################################
