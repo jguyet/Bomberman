@@ -15,14 +15,18 @@ class Canvas
 		friend std::ostream &				operator<<(std::ostream & o, Canvas const & i);
 
 		void								draw(void);
-		void								addText(Text &text);
-		void								addImage(Image &img);
+		void								addText(const char *key, Text *text);
+		void								addImage(const char *key, Image *img);
 
 	private:
+		void								build(void);
 		SDL_Surface							*canvas;
 		GLuint								textureID;
 		int									width;
 		int									height;
+		bool								updated;
+		std::map<const char*, Image*>		images;
+		std::map<const char*, Text*>		texts;
 
 };
 

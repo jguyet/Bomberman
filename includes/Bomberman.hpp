@@ -83,6 +83,10 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/canvas/Text.hpp"
 # include "graphics/canvas/Image.hpp"
 # include "graphics/canvas/Canvas.hpp"
+/*
+** GUI
+*/
+# include "graphics/gui/GameInterface.hpp"
 
 /*
 ** Interfaces

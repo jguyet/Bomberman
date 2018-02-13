@@ -180,68 +180,14 @@ void						BombermanClient::controllerLoop( void )//100fps
 	this->currentController->process();
 }
 
-void						writeText(const char *text)
-{
-	SDL_Surface 	*canvas = SDL_CreateRGBSurface(0, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 32, 0,0,0,0);
-	TTF_Font		*font = TTF_OpenFont("assets/fonts/arial.ttf", 60);
-	SDL_Color		color = {255, 255, 255,0};
-	SDL_Surface		*text_surface;
-	SDL_Rect		text_position;
-	SDL_Texture		*text_texture;
-
-	//SDL_Rect surface_rect = {100,600,30, 30};
-	//SDL_FillRect(canvas, &surface_rect, SDL_MapRGB(canvas->format,0,255,0));
-
-	text_position.x = 0;
-	text_position.y = 0;
-
-	text_surface = TTF_RenderText_Solid(font, text, color);
-	SDL_BlitSurface(text_surface, NULL, canvas, &text_position);
-	SDL_FreeSurface(text_surface);
-
-	//TODO draw surface
-	GLuint	textID;
-
-	//texture
-	glGenTextures(1, &textID);
-	glBindTexture(GL_TEXTURE_2D, textID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, \
-			canvas->w, canvas->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, canvas->pixels);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	Model::model["canvas"]->modelMatrixLoc = glGetUniformLocation(ShaderUtils::instance->get("canvas"), "u_modelMatrix");
-
-	glUseProgram(ShaderUtils::instance->get("canvas"));
-
-	glm::vec3 p = glm::vec3((float)((float)1 / (float)BombermanClient::instance->screen->width), (float)((float)1 / (float)BombermanClient::instance->screen->height), 0);
-
-//	p.y += 1.15f;
-	//p.x -= 0.12f;//(float)((float)1400 / (float)BombermanClient::instance->screen->height);
-	glUniform3fv(Model::model["canvas"]->modelMatrixLoc, 1, &p[0]);
-
-	glUniform1i(Model::model["canvas"]->texUnit, 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textID);
-	glBindVertexArray(Model::model["canvas"]->myMeshes[0].vao);
-	glDrawElements(GL_TRIANGLES, Model::model["canvas"]->myMeshes[0].numFaces * 3, GL_UNSIGNED_INT, 0);
-	glUseProgram(0);
-
-	glDeleteTextures(1, &textID);
-	TTF_CloseFont(font);
-	SDL_FreeSurface(canvas);
-}
-
 void						BombermanClient::renderLoop( void )//60fps
 {
 	static int o = 1;
 	SDL_GL_SwapWindow(this->window);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	Image img = Image("assets/moi.jpg");
-	this->canvas->addImage(img);
+	//fps canvas
 	this->updateFps();
-
 	this->canvas->draw();
 
 	this->currentController->render();
@@ -273,9 +219,10 @@ void						BombermanClient::updateFps( void )
 	ss << "FPS : ";
 	ss << fps;
 	std::string s(ss.str());
-	Text t = Text(s.c_str());
-	t.transform.position.x = this->screen->width - 130;
-	this->canvas->addText(t);
+	Text *t = new Text(s.c_str());
+	t->transform.position.x = this->screen->width - 130;
+	t->transform.position.y = 50;
+	this->canvas->addText("fps", t);
 
 	fpsCount++;
 }

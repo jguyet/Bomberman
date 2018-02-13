@@ -10,7 +10,7 @@ void main()
 {
 	vec3 color = texture(u_texUnit, v_texCoord.xy).xyz;
 
-	if (color.x == 0 && color.y == 0 && color.z == 0)
+	if (color.x == 0 && color.y == 0.00392156863 && color.z == 0)
 	{
 		discard;
 	}

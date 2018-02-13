@@ -36,15 +36,19 @@ class GameController : public IController
 		void 										pressSpace( void );
 
 
-		void						R(void);
-		void						L(void);
-		void						H(void);
-		void						B(void);
+		void										R(void);
+		void										L(void);
+		void										H(void);
+		void										B(void);
 
 		typedef void (GameController::*memberMethod)( void );
 		std::map<unsigned int, memberMethod>		keyBoard_map;
 
 		GameObject									*p;
+
+		//gui
+		GameInterface								*gameInterface;
+
 		// #####################################################################
 };
 

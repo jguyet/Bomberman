@@ -17,6 +17,8 @@ void						handle_collider(GameObject *obj, GameObject *wall)
 
 GameController::GameController ( void )
 {
+	this->gameInterface = new GameInterface(2);
+
 	this->camera = new Camera();
 	this->camera->setProjection(45.0f, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 0.1f, 1000.0f);
 	this->camera->transform.position = glm::vec3(-3.4917f,36.6297f,-17.5657f);
@@ -94,6 +96,8 @@ void						GameController::render(void)
 {
 	if (this->loaded == false)
 		return ;
+	this->gameInterface->draw();
+
 	this->camera->setProjection(40.0f, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 0.1f, 1000.0f);
 	//this->camera->buildLookAtProjection();
 	this->camera->buildFPSProjection();
