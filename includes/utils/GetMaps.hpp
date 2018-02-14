@@ -9,6 +9,9 @@
 # include <sys/stat.h>
 # include <exception>
 
+# define GROUND 2
+# define WALL 0
+
 class GetMaps
 {
 	public:

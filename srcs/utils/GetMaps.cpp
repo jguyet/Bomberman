@@ -59,7 +59,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 	std::string path = "maps/";
 	static std::map<int, std::string> links =
 	{
-		std::make_pair(1, "ground"), std::make_pair(2, "brick")
+		std::make_pair(0, "grass"), std::make_pair(2, "ground"), std::make_pair(1, "brick")
 	};
 
 	path.append(name);
@@ -98,17 +98,44 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 				try {
 					std::string::size_type sz;
 					std::smatch match = *i;
+					GameObject *block;
 					int i_dec = std::stoi (match.str() ,&sz);
+					Case cube;
+					// auto search = ;
+					if (links.count(i_dec) != 0)
+						block = Factory::newBlock(links[i_dec]);
+					else
+					{
+						std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
+						map.clear();
+						filestr.close();
+						return ;
+					}
+
+					if (i_dec == 0)
+					{
+						block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
+						// block->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+						cube.ground = block;
+						cube.obstacle = NULL;
+						cube.walkable = false;
+					}
+					else
+					{
+						block->transform.position = glm::vec3(x * 2, WALL, y * 2);
+						// block->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+						cube.ground = NULL;
+						cube.obstacle = block;
+						cube.walkable = false;
+					}
+
+				map.insert(std::pair<std::pair<int, int>, Case>(std::make_pair(x, y), cube));
 				} catch (std::exception& e) {
 					std::cout << "ERROR to pars map " << path << " at line " << value << " | " << e.what() << std::endl;
 					map.clear();
 					filestr.close();
 					return ;
 				}
-				Case cube;
-				auto search = my_map.find(*tokens.begin());
-				GameObject *block = Factory::newBlock("grass");
-				map.insert(std::pair<std::pair<int, int>, Case>(std::make_pair(x, y), cube));
 				x++;
 			}
 			y++;

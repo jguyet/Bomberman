@@ -57,13 +57,16 @@ void						BombermanClient::initialize_resources( void )
 	ShaderUtils::instance->loadShader("dir", "./assets/shaders/dirlightdiffambpix.vert", "./assets/shaders/dirlightdiffambpix.frag");
 	ShaderUtils::instance->loadShader("canvas", "./assets/shaders/canvas.vert", "./assets/shaders/canvas.frag");
 
+
 	//FONTS
 	this->font = TTF_OpenFont("assets/fonts/angelina.ttf", 65);
 
 	//MODELS
-	Model::load("ground", ShaderUtils::instance->get("dir"), "assets/ground.obj");
 	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/brick.obj");
 	Model::load("grass", ShaderUtils::instance->get("dir"), "assets/grass.obj");
+
+	Model::load("ground", ShaderUtils::instance->get("dir"), "assets/ground.obj");
+
 	Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/RedBomber/RedBomber.obj");
 	//Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/WhiteBomber/WhiteBomber.obj");
 	Model::load("N64", ShaderUtils::instance->get("dir"), "assets/N64 Cube/N64 Cube.obj");
