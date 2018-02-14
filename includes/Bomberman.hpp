@@ -6,7 +6,7 @@
 /*   By: jguyet <jguyet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 09:43:10 by jguyet            #+#    #+#             */
-/*   Updated: 2018/01/31 09:43:11 by jguyet           ###   ########.fr       */
+/*   Updated: 2018/02/11 13:13:20 by amerelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/keys/Mouse.hpp"
 # include "graphics/IRenderLoop.hpp"
 # include "graphics/RenderLoop.hpp"
+
+# include "utils/GetMaps.hpp"
 
 /*
 ** Main_Client
