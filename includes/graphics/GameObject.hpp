@@ -22,8 +22,6 @@ class GameObject
 	public:
 		// STATICS #############################################################
 		static long								uid;
-		static std::map<long, GameObject*>		objects;
-		static void								ProcessPhisicsComponents(void);
 		// #####################################################################
 		// CANONICAL ###########################################################
 												GameObject( void );
@@ -38,14 +36,11 @@ class GameObject
 		template <typename T> bool				AddComponent(void);
 		template <typename T> T					*GetComponent(void);
 		template <typename T> bool				RemoveComponent(void);
-		void									ProcessRenderingComponents(glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix);
 
 		Transform								transform;
 		long									id;
 		std::string								tag;
 		// #####################################################################
-
-		void 									OnCollide(GameObject *with) {};
 	private:
 		// PRIVATE #############################################################
 		std::map<const std::string, Component*>	components;
@@ -58,6 +53,7 @@ bool						GameObject::AddComponent(Component *component)
 {
 	const char* name = typeid(T).name();
 	this->components[name] = component;
+	component->gameObject = this;
 	return true;
 }
 
@@ -67,6 +63,7 @@ bool						GameObject::AddComponent( void )
 	const char* name = typeid(T).name();
 	T *component = new T();
 	this->components[name] = component;
+	component->gameObject = this;
 	return true;
 }
 

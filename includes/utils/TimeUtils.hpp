@@ -10,6 +10,7 @@ class TimeUtils
 	public:
 		// STATICS #############################################################
 		static long							getCurrentNanoSeconds( void );
+		static long							getCurrentSystemMillis( void );
 		// #####################################################################
 		// CANONICAL ###########################################################
 											TimeUtils( void );

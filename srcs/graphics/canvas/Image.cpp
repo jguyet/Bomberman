@@ -2,49 +2,23 @@
 
 // STATIC ########################################################
 
-GameObject							*Factory::newBlock(std::string model)
-{
-	GameObject	*obj = new GameObject();
-
-	obj->tag = model;
-	obj->AddComponent<Model>(Model::model[model]);
-	return (obj);
-}
-
-GameObject							*Factory::newPlayer(void)
-{
-	GameObject	*obj = new GameObject();
-
-	obj->tag = "Player";
-	obj->AddComponent<Model>(Model::model["bomberman"]);
-	return (obj);
-}
-
-GameObject							*Factory::newBomb(void)
-{
-	GameObject	*obj = new GameObject();
-
-	obj->tag = "Bomb";
-	obj->AddComponent<Model>(Model::model["bomb"]);
-	return (obj);
-}
-
 // ###############################################################
 
 // CANONICAL #####################################################
 
-Factory::Factory ( void )
+Image::Image (const char *path)
 {
+	this->image = IMG_Load(path);
 	return ;
 }
 
-Factory::Factory ( Factory const & src )
+Image::Image ( Image const & src )
 {
 	*this = src;
 	return ;
 }
 
-Factory &				Factory::operator=( Factory const & rhs )
+Image &				Image::operator=( Image const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -53,8 +27,9 @@ Factory &				Factory::operator=( Factory const & rhs )
 	return (*this);
 }
 
-Factory::~Factory ( void )
+Image::~Image ( void )
 {
+	SDL_FreeSurface(this->image);
 	return ;
 }
 
@@ -66,7 +41,7 @@ Factory::~Factory ( void )
 
 // OVERLOAD OPERATOR #############################################
 
-std::ostream &				operator<<(std::ostream & o, Factory const & i)
+std::ostream &				operator<<(std::ostream & o, Image const & i)
 {
 	(void)i;
 	return (o);
@@ -75,6 +50,16 @@ std::ostream &				operator<<(std::ostream & o, Factory const & i)
 // ###############################################################
 
 // PUBLIC METHOD #################################################
+
+void						Image::draw(SDL_Surface *surface)
+{
+	SDL_Rect	text_position;
+
+	text_position.x = this->transform.position.x;
+	text_position.y = this->transform.position.y;
+
+	SDL_BlitSurface(this->image, NULL, surface, &text_position);
+}
 
 // ###############################################################
 

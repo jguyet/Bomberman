@@ -28,8 +28,8 @@ class RenderLoop
 
 		bool									running;
 		IRenderLoop								*renderloop;
-		long									controllerRate = (long)((double) 1000000000L) / 100;
-		long									renderRate = (long)((double) 1000000000L) / 60;
+		long									controllerRate = 1000000000L / 100L;
+		long									renderRate = 1000000000L / 60L;
 		// #####################################################################
 };
 

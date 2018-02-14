@@ -16,29 +16,27 @@ struct Case {
 	//entity
 };
 
-class Map : public IModel
+class Map
 {
 	public:
 		// STATICS #############################################################
 		// #####################################################################
 		// CANONICAL ###########################################################
-											Map( void );
-											Map( Map const & src );
-		virtual								~Map( void );
-		Map &								operator=( Map const & rhs );
-		friend std::ostream &				operator<<(std::ostream & o, Map const & i);
-		// #####################################################################
-		// @OVERRIDE IModel ####################################################
-		void								render(glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix);
-		// GameObject						gameObject;
+													Map( Scene *scene );
+													Map( Map const & src );
+		virtual										~Map( void );
+		Map &										operator=( Map const & rhs );
+		friend std::ostream &						operator<<(std::ostream & o, Map const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		Case								*getCase(int x, int z);
+		Case										*getCase(int x, int z);
+		void										build(void);
 		// #####################################################################
 		std::map<std::pair<float, float>, Case*>	cases;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
+		Scene										*scene;
 		// #####################################################################
 };
 

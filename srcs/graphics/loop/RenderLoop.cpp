@@ -49,7 +49,7 @@ void						RenderLoop::start( void )
 	std::thread threadcontroller(&RenderLoop::loopcontroller, this);
 	//main thread for rendering
 	this->looprender();
-	
+
 	threadcontroller.join();
 }
 

@@ -46,15 +46,22 @@ class BombermanClient : public IRenderLoop
 		//sdl dependencies
 		SDL_Window									*window;
 		SDL_GLContext								context;
+		SDL_Renderer								*renderer;
 		SDL_Event									event;
 
-		IController									*currentController;
+		//surface
+		TTF_Font									*font;
+		SDL_Surface									*surface;
+
+		Scene										*current_scene;
 
 		Screen										*screen;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
+		void										updateFps( void );
 		RenderLoop									*loop;
+		Canvas										*canvas;
 		// #####################################################################
 };
 

@@ -6,7 +6,8 @@
 class BoxCollider : public Component
 {
 	public:
-											BoxCollider( void );
+		static void							Check3DCollisions(std::map<long, GameObject*> &gameObjects);
+											BoxCollider( glm::vec3 center, glm::vec3 size );
 											BoxCollider( BoxCollider const & src );
 		virtual								~BoxCollider( void );
 
@@ -15,7 +16,6 @@ class BoxCollider : public Component
 
 		glm::vec3							center;
 		glm::vec3							size;
-		void								(*m)(GameObject *obj, GameObject *wall);
 	private:
 };
 

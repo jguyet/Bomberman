@@ -66,6 +66,8 @@ compile:
 	echo "\033[38;5;227mAUTHOR  :\033[0m"
 	cat -e $(AUTHOR)
 
-install: all
+recompile: fclean all
+
+install: fclean all
 
 uninstall: libclean fclean install

@@ -2,9 +2,9 @@
 # define CAMERA_HPP
 
 # include "Bomberman.hpp"
-# include "graphics/components/GameObject.hpp"
+# include "graphics/GameObject.hpp"
 
-class Camera : public Component
+class Camera
 {
 	public:
 		// STATICS ############################################################
