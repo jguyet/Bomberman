@@ -9,6 +9,7 @@ class Factory
 		static GameObject					*newBlock(std::string model);
 		static GameObject					*newPlayer(void);
 		static GameObject					*newBomb(void);
+		static GameObject					*newExplosion(float x, float z);
 
 		Factory( void );
 		Factory( Factory const & src );

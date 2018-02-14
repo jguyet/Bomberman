@@ -109,6 +109,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 					cube.ground = block;
 					cube.obstacle = NULL;
 					cube.walkable = true;
+					cube.position = glm::vec3(x * 2, 0, y * 2);
 					if (i_dec != 0)
 					{
 						if (links.count(i_dec) != 0)
@@ -126,7 +127,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 						cube.walkable = false;
 					}
 
-				map.insert(std::pair<std::pair<int, int>, Case>(std::make_pair(x, y), cube));
+				map[std::make_pair(x, y)] = cube;
 				} catch (std::exception& e) {
 					std::cout << "ERROR to pars map " << path << " at line " << value << " | " << e.what() << std::endl;
 					map.clear();

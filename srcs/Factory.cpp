@@ -32,6 +32,18 @@ GameObject							*Factory::newBomb(void)
 	return (obj);
 }
 
+GameObject							*Factory::newExplosion(float x, float z)
+{
+	GameObject	*obj = new GameObject();
+
+	obj->tag = "Explosion";
+	obj->transform.position = glm::vec3(x, 0, z);
+	obj->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+	obj->AddComponent<Model>(Model::model["N64"]);
+	obj->AddComponent<Script>(new ExplosionControllerScript());
+	return (obj);
+}
+
 // ###############################################################
 
 // CANONICAL #####################################################

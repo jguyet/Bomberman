@@ -69,14 +69,11 @@ void						Map::build(void)
 	}
 }
 
-Case						&Map::getCase(int x, int z)
+Case						*Map::getCase(int x, int z)
 {
-	if (this->maps.count(this->current_map) != 0)
-	{
-		// if (this->maps[this->current_map].count(std::make_pair(x, z)) == 0)
-		// 	return ;
-	}
-	return (this->maps[this->current_map][std::make_pair(x, z)]);
+	if (this->maps.count(this->current_map) == 0 || this->maps[this->current_map].count(std::make_pair(x, z)) == 0)
+		return NULL;
+	 return &this->maps[this->current_map][std::make_pair(x, z)];
 }
 
 // ###############################################################

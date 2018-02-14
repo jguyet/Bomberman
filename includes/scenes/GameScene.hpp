@@ -3,6 +3,7 @@
 
 # include "Bomberman.hpp"
 # include "scripts/GameScene/CharacterControllerScript.hpp"
+# include "scripts/GameScene/ExplosionControllerScript.hpp"
 # include "scripts/GameScene/BombControllerScript.hpp"
 
 class GameScene : public Scene

@@ -29,7 +29,7 @@ class Map
 		friend std::ostream &						operator<<(std::ostream & o, Map const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		Case										&getCase(int x, int z);
+		Case										*getCase(int x, int z);
 		void										build(void);
 		// #####################################################################
 		std::map<std::string, std::map<std::pair<int, int>, Case>>	maps;
