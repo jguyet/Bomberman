@@ -10,6 +10,8 @@ class Text : public GameObject
 		static void							addFont(const char *key, const char *path);
 
 		Text(const char *text);
+		Text(std::string text);
+		Text (int number);
 		Text( Text const & src );
 		virtual ~Text( void );
 
@@ -19,9 +21,11 @@ class Text : public GameObject
 		void								draw(SDL_Surface *surface);
 
 	private:
+		void								initialize(const char *text);
 		TTF_Font							*font;
 		SDL_Color							color;
 		const char							*text;
+		std::string							saveptr;
 };
 
 #endif

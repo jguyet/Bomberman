@@ -69,50 +69,47 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "utils/TimeUtils.hpp"
 # include "utils/ShaderUtils.hpp"
 
+// GRAPHICS ####################################################################
+/*
+** OBJECTS
+*/
+# include "graphics/components/Component.hpp"
+# include "graphics/Camera.hpp"
+# include "graphics/GameObject.hpp"
+# include "graphics/canvas/Canvas.hpp"
 /*
 ** Components
 */
-# include "graphics/components/Component.hpp"
-# include "graphics/components/Camera.hpp"
 # include "graphics/components/Model.hpp"
 # include "graphics/components/BoxCollider.hpp"
-# include "graphics/components/GameObject.hpp"
-/*
-** Canvas :
-*/
-# include "graphics/canvas/Text.hpp"
-# include "graphics/canvas/Image.hpp"
-# include "graphics/canvas/Canvas.hpp"
-/*
-** GUI
-*/
-# include "graphics/gui/GameInterface.hpp"
+# include "graphics/components/Script.hpp"
 
-/*
-** Interfaces
-*/
-# include "graphics/IRenderLoop.hpp"
-
+# include "graphics/Scene.hpp"
+// #############################################################################
 
 /*
 ** Models
 */
-# include "models/IModel.hpp"
 # include "models/Map.hpp"
 
 /*
-** Controllers
+** UI
 */
-# include "controllers/IController.hpp"
-# include "controllers/GameController.hpp"
+# include "ui/GameInterface.hpp"
+
+
+/*
+** Scenes
+*/
+# include "scenes/GameScene.hpp"
 
 /*
 ** Others
 */
 # include "graphics/keys/KeyBoard.hpp"
 # include "graphics/keys/Mouse.hpp"
-# include "graphics/IRenderLoop.hpp"
-# include "graphics/RenderLoop.hpp"
+# include "graphics/loop/IRenderLoop.hpp"
+# include "graphics/loop/RenderLoop.hpp"
 
 /*
 ** Main_Client

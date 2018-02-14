@@ -2,49 +2,22 @@
 
 // STATIC ########################################################
 
-GameObject							*Factory::newBlock(std::string model)
-{
-	GameObject	*obj = new GameObject();
-
-	obj->tag = model;
-	obj->AddComponent<Model>(Model::model[model]);
-	return (obj);
-}
-
-GameObject							*Factory::newPlayer(void)
-{
-	GameObject	*obj = new GameObject();
-
-	obj->tag = "Player";
-	obj->AddComponent<Model>(Model::model["bomberman"]);
-	return (obj);
-}
-
-GameObject							*Factory::newBomb(void)
-{
-	GameObject	*obj = new GameObject();
-
-	obj->tag = "Bomb";
-	obj->AddComponent<Model>(Model::model["bomb"]);
-	return (obj);
-}
-
 // ###############################################################
 
 // CANONICAL #####################################################
 
-Factory::Factory ( void )
+Script::Script ( void )
 {
 	return ;
 }
 
-Factory::Factory ( Factory const & src )
+Script::Script ( Script const & src )
 {
 	*this = src;
 	return ;
 }
 
-Factory &				Factory::operator=( Factory const & rhs )
+Script &				Script::operator=( Script const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -53,7 +26,7 @@ Factory &				Factory::operator=( Factory const & rhs )
 	return (*this);
 }
 
-Factory::~Factory ( void )
+Script::~Script ( void )
 {
 	return ;
 }
@@ -66,7 +39,7 @@ Factory::~Factory ( void )
 
 // OVERLOAD OPERATOR #############################################
 
-std::ostream &				operator<<(std::ostream & o, Factory const & i)
+std::ostream &				operator<<(std::ostream & o, Script const & i)
 {
 	(void)i;
 	return (o);

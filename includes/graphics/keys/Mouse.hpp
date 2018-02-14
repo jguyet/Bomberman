@@ -21,7 +21,7 @@ class Mouse
 		friend std::ostream &			operator<<(std::ostream & o, Mouse const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		void							process(IController *controller);
+		bool							getButton(unsigned int button);
 
 		glm::vec2						position;
 		glm::vec2						lastPosition;

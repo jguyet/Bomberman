@@ -58,13 +58,4 @@ bool						KeyBoard::getKey(unsigned int key)
 	return (this->pressedKeys[key]);
 }
 
-void						KeyBoard::process( IController *controller )
-{
-	for (int i = 0; i < 301; i++) {
-		if (this->pressedKeys[i] == true) {
-			controller->pressKeyBoard(i);
-		}
-	}
-}
-
 // ###############################################################

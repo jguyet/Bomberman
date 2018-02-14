@@ -1,6 +1,8 @@
 #ifndef CANVAS_HPP
 # define CANVAS_HPP
 
+# include "graphics/canvas/Text.hpp"
+# include "graphics/canvas/Image.hpp"
 # include "Bomberman.hpp"
 
 class Canvas

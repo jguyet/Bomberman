@@ -17,12 +17,21 @@ void							Text::addFont(const char *key, const char *path)
 
 Text::Text (const char *text) : GameObject()
 {
-	this->text = text;
-	this->color = {255, 255, 255,0};
-	if (Text::text_fonts.count("arial") == 0) {
-		Text::addFont("arial", "assets/fonts/arial.ttf");
-	}
-	this->font = Text::text_fonts["arial"];
+	this->initialize(text);
+	return ;
+}
+
+Text::Text (std::string text) : GameObject()
+{
+	this->saveptr = text;
+	this->initialize(this->saveptr.c_str());
+	return ;
+}
+
+Text::Text (int number) : GameObject()
+{
+	this->saveptr = (std::ostringstream() << number).str();
+	this->initialize(this->saveptr.c_str());
 	return ;
 }
 
@@ -77,24 +86,16 @@ void						Text::draw(SDL_Surface *surface)
 	SDL_FreeSurface(text_surface);
 }
 
-// ###############################################################
-
-// GETTER METHOD #################################################
-
-// ###############################################################
-
-// SETTER METHOD #################################################
-
-// ###############################################################
-
 // PRIVATE METHOD ################################################
 
-// ###############################################################
-
-// EXCEPTION METHOD ##############################################
-
-// ###############################################################
-
-// EXTERNAL ######################################################
+void						Text::initialize(const char *text)
+{
+	this->text = text;
+	this->color = {255, 255, 255,0};
+	if (Text::text_fonts.count("arial") == 0) {
+		Text::addFont("arial", "assets/fonts/arial.ttf");
+	}
+	this->font = Text::text_fonts["arial"];
+}
 
 // ###############################################################

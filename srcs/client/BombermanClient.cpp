@@ -177,7 +177,8 @@ void						BombermanClient::glfw_error_callback( int error, const char* descripti
 
 void						BombermanClient::controllerLoop( void )//100fps
 {
-	this->currentController->process();
+	//this->currentController->process();
+	this->current_scene->calculPhisics();
 }
 
 void						BombermanClient::renderLoop( void )//60fps
@@ -190,7 +191,8 @@ void						BombermanClient::renderLoop( void )//60fps
 	this->updateFps();
 	this->canvas->draw();
 
-	this->currentController->render();
+	//this->currentController->render();
+	this->current_scene->drawGameObjects();
 
 	while(SDL_PollEvent(&this->event))
     {
@@ -214,15 +216,12 @@ void						BombermanClient::updateFps( void )
 		lastTime = TimeUtils::getCurrentSystemMillis();
 		fps = fpsCount;
 		fpsCount = 0;
+		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str());
+		//Text *t = new Text(2, "FPS : ", 55);
+		t->transform.position.x = this->screen->width - 130;
+		t->transform.position.y = 50;
+		this->canvas->addText("fps", t);
 	}
-	std::ostringstream ss;
-	ss << "FPS : ";
-	ss << fps;
-	std::string s(ss.str());
-	Text *t = new Text(s.c_str());
-	t->transform.position.x = this->screen->width - 130;
-	t->transform.position.y = 50;
-	this->canvas->addText("fps", t);
 
 	fpsCount++;
 }
@@ -240,7 +239,8 @@ int main(void)
 	client->initialize_resources();
 	client->initialize_inputs();
 
-	client->currentController = new GameController();
+	client->current_scene = new GameScene();
+	//client->currentController = new GameController();
 
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));

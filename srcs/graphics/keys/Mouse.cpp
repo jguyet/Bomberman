@@ -60,9 +60,8 @@ void 					Mouse::handle_event_mousemotion(SDL_Event *event)
 	if (Mouse::instance->lastPosition.x == 0 && Mouse::instance->lastPosition.y == 0) {
 		return ;
 	}
-	if (BombermanClient::instance->currentController->loaded == false)
-		return ;
-	BombermanClient::instance->currentController->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
+	//warn
+	BombermanClient::instance->current_scene->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
 }
 
 void					Mouse::handle_mousebutton(SDL_Event *event)
@@ -72,13 +71,9 @@ void					Mouse::handle_mousebutton(SDL_Event *event)
 	Mouse::instance->pressedButton[event->button.button] = (event->type == SDL_MOUSEBUTTONDOWN) ? true : false;
 }
 
-void						Mouse::process(IController *controller)
+bool						Mouse::getButton(unsigned int button)
 {
-	for (int i = 0; i < 8; i++) {
-		if (this->pressedButton[i] == true) {
-			controller->pressMouseButton(i);
-		}
-	}
+	return (Mouse::instance->pressedButton[button]);
 }
 
 // ###############################################################

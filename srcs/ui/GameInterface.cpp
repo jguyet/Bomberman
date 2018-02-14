@@ -12,9 +12,9 @@ GameInterface::GameInterface ( int number_of_player )
 	this->canvas = new Canvas(BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
 
 	for (int i = 0; i < 5; i++) {
-		Image *img = new Image("assets/head_bomberman/blue_head.png");
+		Image *img = new Image("assets/head_bomberman/red_head.png");
 		img->transform.position.x = (i * 100) + 10;
-		Text *t1 = new Text("0");
+		Text *t1 = new Text(0);
 		t1->transform.position.x = (i * 100) + 63;
 		t1->transform.position.y = 8;
 

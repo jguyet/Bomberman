@@ -8,6 +8,7 @@ class Factory
 	public:
 		static GameObject					*newBlock(std::string model);
 		static GameObject					*newPlayer(void);
+		static GameObject					*newBomb(void);
 
 		Factory( void );
 		Factory( Factory const & src );

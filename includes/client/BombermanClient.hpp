@@ -53,7 +53,7 @@ class BombermanClient : public IRenderLoop
 		TTF_Font									*font;
 		SDL_Surface									*surface;
 
-		IController									*currentController;
+		Scene										*current_scene;
 
 		Screen										*screen;
 		// #####################################################################

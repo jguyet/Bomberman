@@ -6,9 +6,9 @@
 
 // CANONICAL #####################################################
 
-Map::Map ( void )
+Map::Map ( Scene *scene )
 {
-
+	this->scene = scene;
 	//Faire un chargement dans un fichier (si tes pas content !!!!)
 	int i = 0;
 	for (int z = 0; z < 19; z++) {
@@ -55,6 +55,7 @@ Map::Map ( void )
 			this->cases[std::make_pair(x, z)]->walkable = false;
 		}
 	}
+	this->build();
 	return ;
 }
 
@@ -88,15 +89,17 @@ std::ostream &				operator<<(std::ostream & o, Map const & i)
 
 // PUBLIC METHOD #################################################
 
-void						Map::render(glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix)
+void						Map::build(void)
 {
 	for (std::map<std::pair<float, float>, Case*>::iterator it = this->cases.begin(); it != this->cases.end(); ++it)
 	{
 		Case *c = it->second;
-		if (c->obstacle != NULL)
-			c->obstacle->ProcessRenderingComponents(projectionMatrix, viewMatrix);
-		if (c->ground != NULL)
-			c->ground->ProcessRenderingComponents(projectionMatrix, viewMatrix);
+		if (c->obstacle != NULL) {
+			this->scene->add(c->obstacle);
+		}
+		if (c->ground != NULL) {
+			this->scene->add(c->ground);
+		}
 	}
 }
 
