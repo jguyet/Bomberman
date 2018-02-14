@@ -17,6 +17,8 @@ GameObject							*Factory::newPlayer(void)
 
 	obj->tag = "Player";
 	obj->AddComponent<Model>(Model::model["bomberman"]);
+	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
+	obj->AddComponent<Script>(new CharacterControllerScript());
 	return (obj);
 }
 
@@ -26,6 +28,7 @@ GameObject							*Factory::newBomb(void)
 
 	obj->tag = "Bomb";
 	obj->AddComponent<Model>(Model::model["bomb"]);
+	obj->AddComponent<Script>(new BombControllerScript());
 	return (obj);
 }
 

@@ -93,12 +93,6 @@ void						BombermanClient::build_window( void )
 	    exit(0);
 	}
 
-	// this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	// if (!this->renderer) {
-	// 	printf("Couldn't create renderer: %s\n", SDL_GetError());
-	// 	exit(0);
-	// }
-
 	//OPENGL version 3.3
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -131,6 +125,9 @@ void						BombermanClient::build_window( void )
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetWindowGrab(this->window, SDL_TRUE);
 	SDL_WarpMouseInWindow(this->window, this->screen->middleWidth, this->screen->middleHeight);
+
+	//0 for immediate updates, 1 for updates synchronized with the vertical retrace, -1 for late swap tearing
+	SDL_GL_SetSwapInterval(0);
 }
 
 int	SDLCALL					input_callback_interval(void *userdata, SDL_Event* event)

@@ -69,12 +69,12 @@ void						RenderLoop::loopcontroller( void )
 	while (this->running) {
 		long passedTime = TimeUtils::getCurrentNanoSeconds() - lastTime;
 
-		if (passedTime > this->controllerRate) {
+		if (passedTime >= this->controllerRate) {
 			lastTime = TimeUtils::getCurrentNanoSeconds();
 			this->renderloop->controllerLoop();
 			frames++;
 		} else {
-			usleep(10);
+			usleep(100);
 		}
 		if (frames >= 1000000000L) {
 			frames = 0;
@@ -90,12 +90,12 @@ void						RenderLoop::looprender( void )
 	while (this->running) {
 		long passedTime = TimeUtils::getCurrentNanoSeconds() - lastTime;
 
-		if (passedTime > this->renderRate) {
+		if (passedTime >= this->renderRate) {
 			lastTime = TimeUtils::getCurrentNanoSeconds();
 			this->renderloop->renderLoop();
 			frames++;
 		} else {
-			usleep(10);
+			usleep(100);
 		}
 		if (frames >= 1000000000L) {
 			frames = 0;
