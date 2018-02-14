@@ -102,29 +102,26 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 					int i_dec = std::stoi (match.str() ,&sz);
 					Case cube;
 					// auto search = ;
-					if (links.count(i_dec) != 0)
-						block = Factory::newBlock(links[i_dec]);
-					else
-					{
-						std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
-						map.clear();
-						filestr.close();
-						return ;
-					}
 
-					if (i_dec == 0)
+					block = Factory::newBlock(links[0]);
+					block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
+					// block->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+					cube.ground = block;
+					cube.obstacle = NULL;
+					cube.walkable = true;
+					if (i_dec != 0)
 					{
-						block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
-						// block->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
-						cube.ground = block;
-						cube.obstacle = NULL;
-						cube.walkable = false;
-					}
-					else
-					{
+						if (links.count(i_dec) != 0)
+							block = Factory::newBlock(links[i_dec]);
+						else
+						{
+							std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
+							map.clear();
+							filestr.close();
+							return ;
+						}
 						block->transform.position = glm::vec3(x * 2, WALL, y * 2);
 						// block->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
-						cube.ground = NULL;
 						cube.obstacle = block;
 						cube.walkable = false;
 					}

@@ -6,23 +6,29 @@
 class Scene
 {
 	public:
-
+		// STATICS ############################################################
+		// ####################################################################
+		// CANONICAL ##########################################################
 		virtual								~Scene( void );
-		//virtual Scene &						operator=( Scene const & rhs ) = 0;
-
+		// ####################################################################
 		virtual void						calculPhisics(void) = 0;
 		virtual void						drawGameObjects(void) = 0;
-
+		// PUBLICS ############################################################
 		GameObject							*newGameObject(void);
 		void								add(GameObject *obj);
 		void								remove(GameObject *obj);
 
 		std::map<long, GameObject*>			gameObjects;
 		Camera								*camera;
-
+		// ####################################################################
 	protected:
+		// PROTECTED ##########################################################
 		void								_calculPhisics(void);
 		void								_drawGameObjects(void);
+		// ####################################################################
+	private:
+		std::vector<GameObject*>			delete_list;
+		bool								lock = false;
 };
 
 #endif

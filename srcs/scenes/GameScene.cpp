@@ -19,16 +19,7 @@ GameScene::GameScene ( void )
 	this->player->transform.position = glm::vec3(2,1,4);
 	this->player->transform.scale = glm::vec3(0.125f,0.125f,0.125f);
 	this->player->transform.rotation = glm::vec3(0,0,0);
-	this->player->AddComponent<Script>(new CharacterControllerScript());
-	this->player->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.25f,0.25f,0.25f)));
 	this->add(this->player);//add on scene
-
-	// //add bomb example
-	// GameObject *bomb = Factory::newBomb();
-	// bomb->transform.position = glm::vec3(2,0,2);
-	// bomb->transform.scale = glm::vec3(2.5f,2.5f,2.5f);
-	// bomb->transform.rotation = glm::vec3(0,0,0);
-	// this->add(bomb);//add on scene
 
 	//add LOGO WESH
 	GameObject *logo_N = new GameObject();
@@ -93,6 +84,7 @@ void								GameScene::drawGameObjects(void)
 {
 	//build Matrixs
 	this->camera->buildFPSProjection();
+	//this->camera->buildLookAtProjection(glm::vec3(-12.f,1,-18.f));
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas

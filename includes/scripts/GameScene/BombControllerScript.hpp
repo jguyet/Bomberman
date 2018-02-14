@@ -1,28 +1,31 @@
-#ifndef CHARACTERCONTROLLERSCRIPT_HPP
-# define CHARACTERCONTROLLERSCRIPT_HPP
+#ifndef BOMBCONTROLLERSCRIPT_HPP
+# define BOMBCONTROLLERSCRIPT_HPP
 
 # include "Bomberman.hpp"
 
-class CharacterControllerScript : public Script
+class BombControllerScript : public Script
 {
 	public:
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											CharacterControllerScript( void );
-											CharacterControllerScript( CharacterControllerScript const & src );
-		virtual								~CharacterControllerScript( void );
-		CharacterControllerScript &			operator=( CharacterControllerScript const & rhs );
-		friend std::ostream &				operator<<(std::ostream & o, CharacterControllerScript const & i);
+											BombControllerScript( void );
+											BombControllerScript( BombControllerScript const & src );
+		virtual								~BombControllerScript( void );
+		BombControllerScript &				operator=( BombControllerScript const & rhs );
+		friend std::ostream &				operator<<(std::ostream & o, BombControllerScript const & i);
 		// ####################################################################
 		// @OVERRIDE Script ###################################################
-		void								Start(void);
 		void								Update(void);
-		void								OnCollisionEnter(GameObject *collider);
+		//bool								collide = false;
+		//std::vector<GameObject*>			colliders;
+		// ####################################################################
 		// PUBLICS ############################################################
+		void								explode(void);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
+		long								startTime;
 		// ####################################################################
 };
 

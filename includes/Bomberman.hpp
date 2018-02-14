@@ -49,6 +49,7 @@
 # include <sstream>
 # include <fstream>
 # include <map>
+# include <algorithm>
 
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure

@@ -18,11 +18,9 @@ class Camera
 		Camera &							operator=( Camera const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Camera const & i);
 		// ####################################################################
-		// @OVERRIDE Component ################################################
-		// ####################################################################
 		// PUBLICS ############################################################
 		void								setProjection(float fov, float width, float height, float zNear, float zFar);
-		void								buildLookAtProjection( void );
+		void								buildLookAtProjection( glm::vec3 to );
 		void								buildFPSProjection( void );
 		void								move(glm::vec3 const &toDirection);
 		void								UpdateView();

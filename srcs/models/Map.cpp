@@ -15,6 +15,8 @@ Map::Map ( Scene *scene )
 
 	std::cout << "-------|---------|-----------" << std::endl;
 	gmap.get_all_maps(this->maps);
+	this->current_map = "";
+	this->current_map = "map_01";
 	std::cout << "-------|---------|-----------" << std::endl;
 
 	this->build();
@@ -53,30 +55,28 @@ std::ostream &				operator<<(std::ostream & o, Map const & i)
 
 void						Map::build(void)
 {
-	if (this->maps.count("map_01") != 0)
+	if (this->maps.count(this->current_map) != 0)
 	{
-		std::cout  << "test >>>>>>>>>>>>>>>>> " << std::endl;
-		for (auto & elem : this->maps["map_01"])
+		for (auto & elem : this->maps[this->current_map])
 		{
-			std::cout  << "-------------------- " << std::endl;
 			if (elem.second.obstacle != NULL) {
 				this->scene->add(elem.second.obstacle);
 			}
-			std::cout  << "-------------------- 1" << std::endl;
 			if (elem.second.ground != NULL) {
 				this->scene->add(elem.second.ground);
 			}
-			std::cout  << "-------------------- 2" << std::endl;
 		}
 	}
-	std::cout  << "fin" << std::endl;
 }
 
-// Case						*Map::getCase(int x, int z)
-// {
-// 	if (this->cases.count(std::make_pair(x, z)) == 0)
-// 		return (NULL);
-// 	return (this->cases[std::make_pair(x, z)]);
-// }
+Case						&Map::getCase(int x, int z)
+{
+	if (this->maps.count(this->current_map) != 0)
+	{
+		// if (this->maps[this->current_map].count(std::make_pair(x, z)) == 0)
+		// 	return ;
+	}
+	return (this->maps[this->current_map][std::make_pair(x, z)]);
+}
 
 // ###############################################################

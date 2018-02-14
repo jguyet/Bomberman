@@ -31,16 +31,13 @@ void						BoxCollider::Check3DCollisions(std::map<long, GameObject*> &gameObject
 			continue ;
 		if (script == NULL)
 			continue ;
-		script->collide = false;
-		script->colliders.clear();
 		for (std::map<long, GameObject*>::iterator it2 = gameObjects.begin(); it2 != gameObjects.end(); it2++)
 		{
 			if (it->second->id == it2->second->id)
 				continue ;
 			if (checkCollision(it->second, it2->second, boxcollider)) {
 				//TODO after collide
-				script->collide = true;
-				script->colliders.push_back(it2->second);
+				script->OnCollisionEnter(it2->second);
 			}
 		}
 	}

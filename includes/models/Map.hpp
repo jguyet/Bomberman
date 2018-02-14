@@ -12,7 +12,7 @@ struct Case {
 	GameObject		*ground;
 	GameObject		*obstacle;
 	bool			walkable;
-	// glm::vec3		position;
+	glm::vec3		position;
 	//entity
 };
 
@@ -29,10 +29,11 @@ class Map
 		friend std::ostream &						operator<<(std::ostream & o, Map const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		// Case										*getCase(int x, int z);
+		Case										&getCase(int x, int z);
 		void										build(void);
 		// #####################################################################
-		std::map<std::string, std::map<std::pair<int, int>, Case>> maps;
+		std::map<std::string, std::map<std::pair<int, int>, Case>>	maps;
+		std::string													current_map;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
