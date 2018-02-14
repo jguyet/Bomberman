@@ -6,7 +6,7 @@
 /*   By: jguyet <jguyet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 09:43:10 by jguyet            #+#    #+#             */
-/*   Updated: 2018/02/11 13:13:20 by amerelo          ###   ########.fr       */
+/*   Updated: 2018/02/14 10:06:20 by amerelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ std::vector<std::string>		split(const std::string &s, char delim);
 ** UI
 */
 # include "ui/GameInterface.hpp"
-
 
 /*
 ** Scenes

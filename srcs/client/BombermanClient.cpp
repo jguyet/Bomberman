@@ -57,7 +57,6 @@ void						BombermanClient::initialize_resources( void )
 	ShaderUtils::instance->loadShader("dir", "./assets/shaders/dirlightdiffambpix.vert", "./assets/shaders/dirlightdiffambpix.frag");
 	ShaderUtils::instance->loadShader("canvas", "./assets/shaders/canvas.vert", "./assets/shaders/canvas.frag");
 
-
 	//FONTS
 	this->font = TTF_OpenFont("assets/fonts/angelina.ttf", 65);
 

@@ -3,19 +3,19 @@
 
 # include "Bomberman.hpp"
 
-# include <iostream>
-# include <fstream>
 # include <regex>
 # include <dirent.h>
 # include <sys/types.h>
 # include <sys/stat.h>
-// # include <filesystem>
+# include <exception>
 
 class GetMaps
 {
 	public:
 		// STATICS #############################################################
+
 		// #####################################################################
+
 		// CANONICAL ###########################################################
 											GetMaps( void );
 											GetMaps( GetMaps const & src );
@@ -24,15 +24,14 @@ class GetMaps
 		friend std::ostream &				operator<<(std::ostream & o, GetMaps const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		void				get_all_maps(void);
-		void				load_map(std::string path);
+		void				get_all_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps);
+		void				load_map(std::string path, std::map<std::pair<int, int>, Case> &map);
 
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		int					get_dir_maps(void);
-
-		std::vector<std::string> maps_names;
+		int					get_dir_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps);
+		// std::map<std::string, std::map<std::pair<int, int>, Case>> maps;
 		// #####################################################################
 };
 

@@ -4,15 +4,15 @@
 # include "Bomberman.hpp"
 
 struct Case {
-	Case(void) {
-		this->ground = NULL;
-		this->obstacle = NULL;
-		this->walkable = false;
-	}
+	// Case(void) {
+	// 	this->ground = NULL;
+	// 	this->obstacle = NULL;
+	// 	this->walkable = false;
+	// }
 	GameObject		*ground;
-	GameObject 		*obstacle;
+	GameObject		*obstacle;
 	bool			walkable;
-	glm::vec3		position;
+	// glm::vec3		position;
 	//entity
 };
 
@@ -29,10 +29,10 @@ class Map
 		friend std::ostream &						operator<<(std::ostream & o, Map const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		Case										*getCase(int x, int z);
+		// Case										*getCase(int x, int z);
 		void										build(void);
 		// #####################################################################
-		std::map<std::pair<float, float>, Case*>	cases;
+		std::map<std::string, std::map<std::pair<int, int>, Case>> maps;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

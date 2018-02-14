@@ -40,24 +40,16 @@ std::ostream &				operator<<(std::ostream & o, GetMaps const & i)
 
 // PUBLIC METHOD #################################################
 
-void	GetMaps::get_all_maps(void)
+void	GetMaps::get_all_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps)
 {
-	if (this->get_dir_maps() == -1)
+	if (this->get_dir_maps(maps) == -1)
 		return ;
-	// int n_count = std::distance(words_begin2, words_end2);
-
-	std::cout << "-------|start|-----------" << std::endl;
-
-	// std::string st = "            43          people,          2     confronted 45 a problem, think ";
-	for (auto & element : this->maps_names)
-		this->load_map(element);
-
-	std::cout << "-------|start2|-----------" << std::endl;
-
+	for (auto & elem : maps)
+		this->load_map(elem.first, elem.second);
 	return ;
 }
 
-void	GetMaps::load_map(std::string name)
+void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &map)
 {
 	std::fstream filestr;
 	std::string segment;
@@ -65,11 +57,16 @@ void	GetMaps::load_map(std::string name)
 	std::regex any_regex("(\\S+)");
 	std::regex number_regex("(\\d+)");
 	std::string path = "maps/";
-
+	static std::map<int, std::string> links =
+	{
+		std::make_pair(1, "ground"), std::make_pair(2, "brick")
+	};
 
 	path.append(name);
 	filestr.open(path);
+
 	std::cout << "loading : " <<  path << std::endl;
+
 	auto ss = std::ostringstream{};
 	ss << filestr.rdbuf();
 	std::stringstream s(ss.str());
@@ -77,13 +74,45 @@ void	GetMaps::load_map(std::string name)
 	while (std::getline(s, segment, '\n'))
 		segvec.push_back(segment);
 
+	int y = 0;
 	for (auto const& value: segvec)
 	{
-		std::cout << "|" << value << "|" << std::endl;
-		std::cout << "Found " << std::distance(std::sregex_iterator(value.begin(), value.end(), any_regex), std::sregex_iterator()) << " words\n";
-		// int c_count = std::distance(words_begin, words_end);
-		std::cout << "Found " << std::distance(std::sregex_iterator(value.begin(), value.end(), number_regex),std::sregex_iterator()) << " words\n";
-		// int n_count = std::distance(words_begin, words_end);
+		// std::cout << "|" << value << "|" << std::endl;
+		// std::cout << "Found " << std::distance(std::sregex_iterator(value.begin(), value.end(), any_regex), std::sregex_iterator()) << " words\n";
+		// std::cout << "Found " << std::distance(std::sregex_iterator(value.begin(), value.end(), number_regex),std::sregex_iterator()) << " words\n";
+		if (std::distance(std::sregex_iterator(value.begin(), value.end(), any_regex), std::sregex_iterator())
+		!= std::distance(std::sregex_iterator(value.begin(), value.end(), number_regex),std::sregex_iterator()))
+		{
+			std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
+			map.clear();
+			filestr.close();
+			return ;
+		}
+		else {
+			auto words_begin = std::sregex_iterator(value.begin(), value.end(), number_regex);
+			auto words_end = std::sregex_iterator();
+			int x = 0;
+
+			for (std::sregex_iterator i = words_begin; i != words_end; ++i)
+			{
+				try {
+					std::string::size_type sz;
+					std::smatch match = *i;
+					int i_dec = std::stoi (match.str() ,&sz);
+				} catch (std::exception& e) {
+					std::cout << "ERROR to pars map " << path << " at line " << value << " | " << e.what() << std::endl;
+					map.clear();
+					filestr.close();
+					return ;
+				}
+				Case cube;
+				auto search = my_map.find(*tokens.begin());
+				GameObject *block = Factory::newBlock("grass");
+				map.insert(std::pair<std::pair<int, int>, Case>(std::make_pair(x, y), cube));
+				x++;
+			}
+			y++;
+		}
 	}
 	filestr.close();
 }
@@ -92,11 +121,10 @@ void	GetMaps::load_map(std::string name)
 
 // PRIVATE METHOD #################################################
 
-int		GetMaps::get_dir_maps(void)
+int		GetMaps::get_dir_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps)
 {
 	DIR *dir;
 	struct dirent *ent;
-
 	struct stat info;
 
 	if (stat("maps/", &info ) != 0)
@@ -104,15 +132,15 @@ int		GetMaps::get_dir_maps(void)
 		std::cout << "cannot access maps/" << std::endl;
 		return (-1);
 	}
-	else if ( info.st_mode & S_IFDIR )  // S_ISDIR() doesn't exist on my windows
+	else if ( info.st_mode & S_IFDIR )
 	{
 		if ((dir = opendir("maps/")) != NULL) {
 			while ((ent = readdir(dir)) != NULL) {
 				if (strcmp(ent->d_name, "..") != 0 && strcmp(ent->d_name, ".") != 0)
 				{
 					// std::cout << ent->d_name << std::endl;
-					this->maps_names.push_back(ent->d_name);
-					std::cout << this->maps_names.front() << std::endl;
+					std::map<std::pair<int, int>, Case> map;
+					maps.insert(std::pair<std::string, std::map<std::pair<int, int>, Case>>(ent->d_name, map));
 				}
 			}
 			closedir(dir);
