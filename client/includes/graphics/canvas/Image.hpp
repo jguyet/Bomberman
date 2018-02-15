@@ -8,6 +8,7 @@ class Image : public GameObject
 	public:
 
 		Image( const char *path );
+		Image (const char *path, int base_width, int base_height, int width, int height);
 		Image( Image const & src );
 		virtual ~Image( void );
 
@@ -17,6 +18,8 @@ class Image : public GameObject
 		void							draw(SDL_Surface *surface);
 	private:
 		SDL_Surface						*image;
+		int								width = -1;
+		int								height = -1;
 };
 
 #endif

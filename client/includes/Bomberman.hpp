@@ -94,14 +94,10 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "models/Map.hpp"
 
 /*
-** UI
-*/
-# include "ui/GameInterface.hpp"
-
-/*
 ** Scenes
 */
 # include "scenes/GameScene.hpp"
+# include "scenes/MainMenuScene.hpp"
 
 /*
 ** Others

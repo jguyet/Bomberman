@@ -31,7 +31,7 @@ void main()
 	vec3 lightDir = normalize(vec3(0,0,1.0));
 
 	float ndotl = dot(v_norm, lightDir);
-	vec3 vdiffuse = vec3(diffusem.xyz) * clamp(ndotl, 0, 1.0);
+	vec3 vdiffuse = vec3(diffusem.xyz) * clamp(ndotl, 0.8, 1.0);
 
 	o_color = vec4(vdiffuse.xyz, 1);
 }

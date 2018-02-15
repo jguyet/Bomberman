@@ -1,22 +1,20 @@
-#ifndef GAMESCENE_HPP
-# define GAMESCENE_HPP
+#ifndef MAINMENUSCENE_HPP
+# define MAINMENUSCENE_HPP
 
 # include "Bomberman.hpp"
-# include "ui/GameInterface.hpp"
-# include "scripts/GameScene/CharacterControllerScript.hpp"
-# include "scripts/GameScene/ExplosionControllerScript.hpp"
-# include "scripts/GameScene/BombControllerScript.hpp"
+# include "ui/MainMenuInterface.hpp"
 
-class GameScene : public Scene
+class MainMenuScene : public Scene
 {
 	public:
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											GameScene( void );
-		virtual								~GameScene( void );
-		GameScene &							operator=( GameScene const & rhs );
-		friend std::ostream &				operator<<(std::ostream & o, GameScene const & i);
+											MainMenuScene( void );
+											MainMenuScene( MainMenuScene const & src );
+		virtual								~MainMenuScene( void );
+		MainMenuScene &							operator=( MainMenuScene const & rhs );
+		friend std::ostream &				operator<<(std::ostream & o, MainMenuScene const & i);
 		// ####################################################################
 		// @OVERRIDE Scene ###################################################
 		void								calculPhisics(void);
@@ -31,10 +29,9 @@ class GameScene : public Scene
 		//Camera							*camera;
 		// ####################################################################
 		// PUBLICS ############################################################
-		GameObject							*player;
-		GameInterface						*interface;
-		Map									*map;
+		MainMenuInterface					*interface;
 		// ####################################################################
+
 };
 
 #endif
