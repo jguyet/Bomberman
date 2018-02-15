@@ -1,19 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   all.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frmarinh <frmarinh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/15 00:09:41 by frmarinh          #+#    #+#             */
-/*   Updated: 2018/02/15 00:09:48 by frmarinh         ###   ########.fr       */
+/*   Created: 2018/02/15 00:11:17 by frmarinh          #+#    #+#             */
+/*   Updated: 2018/02/15 00:11:38 by frmarinh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "all.h"
+#ifndef ALL_H
+#define ALL_H
 
-int		main(int argc, char **argv)
-{
-	std::cout << "Hello world !" << std::endl;
-	return (0);
-}
+#define SOCK int
+#include <iostream>
+#include <vector>
+#include <thread>
+#include <mutex>
+
+#endif

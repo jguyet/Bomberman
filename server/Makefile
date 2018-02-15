@@ -28,7 +28,9 @@ OBJDIR_BOMBER_SERVER		=	objs/
 INCDIR				=	includes/
 
 SRCBASE_BOMBER_SERVER	=	\
-					main.cpp								\
+					Main.cpp								\
+					Server.cpp								\
+					Client.cpp								\
 
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
