@@ -49,10 +49,6 @@ class BombermanClient : public IRenderLoop
 		SDL_Renderer								*renderer;
 		SDL_Event									event;
 
-		//surface
-		TTF_Font									*font;
-		SDL_Surface									*surface;
-
 		Scene										*current_scene;
 
 		Screen										*screen;

@@ -53,26 +53,36 @@ void						BombermanClient::initialize_properties( void )
 void						BombermanClient::initialize_resources( void )
 {
 	//SHADERS
-	ShaderUtils::instance->loadShader("simple", "./assets/shaders/Simple.vs", "./assets/shaders/Simple.fs");
-	ShaderUtils::instance->loadShader("dir", "./assets/shaders/dirlightdiffambpix.vert", "./assets/shaders/dirlightdiffambpix.frag");
+	ShaderUtils::instance->loadShader("dir", "./assets/shaders/global.vert", "./assets/shaders/global.frag");
 	ShaderUtils::instance->loadShader("canvas", "./assets/shaders/canvas.vert", "./assets/shaders/canvas.frag");
-
-
-	//FONTS
-	this->font = TTF_OpenFont("assets/fonts/angelina.ttf", 65);
+	ShaderUtils::instance->loadShader("bomb", "./assets/shaders/bomb.vert", "./assets/shaders/bomb.frag");
+	ShaderUtils::instance->loadShader("player", "./assets/shaders/player.vert", "./assets/shaders/player.frag");
 
 	//MODELS
 	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/brick.obj");
 	Model::load("grass", ShaderUtils::instance->get("dir"), "assets/grass.obj");
 
-	Model::load("ground", ShaderUtils::instance->get("dir"), "assets/ground.obj");
+	//Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/RedBomber/RedBomber.obj");
 
-	Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/RedBomber/RedBomber.obj");
-	//Model::load("bomberman", ShaderUtils::instance->get("dir"), "assets/WhiteBomber/WhiteBomber.obj");
 	Model::load("N64", ShaderUtils::instance->get("dir"), "assets/N64 Cube/N64 Cube.obj");
-	Model::load("bomb", ShaderUtils::instance->get("dir"), "assets/bomb/bomb.obj");
+	Model::load("bomb", ShaderUtils::instance->get("bomb"), "assets/bomb/bomb.obj");
 	Model::load("Gold", ShaderUtils::instance->get("dir"), "assets/GoldNumemon/chr113.dae");
 	Model::load("canvas", ShaderUtils::instance->get("canvas"), "assets/canvas.obj");
+	Model::load("ice_block", ShaderUtils::instance->get("dir"), "assets/blocks/mur1.obj");
+	Model::load("flamme_block", ShaderUtils::instance->get("dir"), "assets/blocks/Flamme.obj");
+	Model::load("ground1", ShaderUtils::instance->get("dir"), "assets/blocks/sol1.obj");
+
+
+	Model::load("launch_bomb_anim_0", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/1.obj");
+	Model::load("launch_bomb_anim_1", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/2.obj");
+	Model::load("launch_bomb_anim_2", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/3.obj");
+
+	Model::load("bomberman", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
+
+	Model::load("walk_0", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/3.obj");
+	Model::load("walk_1", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/2.obj");
+	Model::load("walk_2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/1.obj");
+	Model::load("walk_3", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/0.obj");
 }
 
 void						BombermanClient::build_window( void )

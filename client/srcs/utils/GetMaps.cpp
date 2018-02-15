@@ -59,7 +59,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 	std::string path = "maps/";
 	static std::map<int, std::string> links =
 	{
-		std::make_pair(0, "grass"), std::make_pair(2, "ground"), std::make_pair(1, "brick")
+		std::make_pair(0, "ground1"), std::make_pair(2, "ground1"), std::make_pair(1, "ice_block")
 	};
 
 	path.append(name);
@@ -105,7 +105,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 
 					block = Factory::newBlock(links[0]);
 					block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
-					// block->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+					block->transform.scale = glm::vec3(3.7f, 3.5f, 3.7f);
 					cube.ground = block;
 					cube.obstacle = NULL;
 					cube.walkable = true;
@@ -122,7 +122,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 							return ;
 						}
 						block->transform.position = glm::vec3(x * 2, WALL, y * 2);
-						// block->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+						block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
 						cube.obstacle = block;
 						cube.walkable = false;
 					}

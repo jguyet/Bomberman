@@ -17,7 +17,7 @@ GameScene::GameScene ( void )
 	//add player
 	this->player = Factory::newPlayer();
 	this->player->transform.position = glm::vec3(2,1,4);
-	this->player->transform.scale = glm::vec3(0.125f,0.125f,0.125f);
+	this->player->transform.scale = glm::vec3(3,3,3);
 	this->player->transform.rotation = glm::vec3(0,0,0);
 	this->add(this->player);//add on scene
 

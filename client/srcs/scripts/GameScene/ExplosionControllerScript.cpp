@@ -48,7 +48,7 @@ void						ExplosionControllerScript::Start(void)
 
 void						ExplosionControllerScript::Update(void)
 {
-	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + 1000L)) {
+	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + 500L)) {
 		BombermanClient::instance->current_scene->remove(this->gameObject);
 		delete this->gameObject;
 		delete this;

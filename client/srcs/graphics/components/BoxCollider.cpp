@@ -4,13 +4,13 @@
 bool	checkCollision(GameObject *a1, GameObject *b, BoxCollider *a)
 {
    //check the X axis
-   if(abs((a1->transform.position.x + a->center.x) - b->transform.position.x) < a->size.x + b->transform.scale.x)
+   if(abs((a1->transform.position.x + a->center.x) - b->transform.position.x) < a->size.x + 1.f)//b->transform.scale.x)
    {
       //check the Y axis
-      if(abs((a1->transform.position.y + a->center.y) - b->transform.position.y) < a->size.y + b->transform.scale.y)
+      if(abs((a1->transform.position.y + a->center.y) - b->transform.position.y) < a->size.y + 1.f)//b->transform.scale.y)
       {
           //check the Z axis
-          if(abs((a1->transform.position.z + a->center.z) - b->transform.position.z) < a->size.z + b->transform.scale.z)
+          if(abs((a1->transform.position.z + a->center.z) - b->transform.position.z) < a->size.z + 1.f)//b->transform.scale.z)
           {
              return true;
           }

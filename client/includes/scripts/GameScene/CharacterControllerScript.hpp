@@ -18,11 +18,18 @@ class CharacterControllerScript : public Script
 		// @OVERRIDE Script ###################################################
 		void								Start(void);
 		void								Update(void);
+		void								OnPreRender(void);
+		void								OnEndRender(void);
 		void								OnCollisionEnter(GameObject *collider);
 		// PUBLICS ############################################################
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
+		long								walk_anim_time;
+		int									walk_anim_frame = 0;
+		bool								walk_anim = false;
+
+		bool								has_moved = false;
 		// ####################################################################
 };
 

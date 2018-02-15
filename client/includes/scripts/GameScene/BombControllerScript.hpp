@@ -17,6 +17,8 @@ class BombControllerScript : public Script
 		// ####################################################################
 		// @OVERRIDE Script ###################################################
 		void								Update(void);
+		void								OnPreRender(void);
+		void								OnEndRender(void);
 		//bool								collide = false;
 		//std::vector<GameObject*>			colliders;
 		// ####################################################################
@@ -26,6 +28,10 @@ class BombControllerScript : public Script
 	private:
 		// PRIVATES ###########################################################
 		long								startTime;
+		bool								sens;
+		float								max_scale;
+		float								min_scale;
+		long								anim_time;
 		// ####################################################################
 };
 

@@ -38,8 +38,8 @@ GameObject							*Factory::newExplosion(float x, float z)
 
 	obj->tag = "Explosion";
 	obj->transform.position = glm::vec3(x, 0, z);
-	obj->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
-	obj->AddComponent<Model>(Model::model["N64"]);
+	obj->transform.scale = glm::vec3(4.f, 4.f, 4.f);
+	obj->AddComponent<Model>(Model::model["flamme_block"]);
 	obj->AddComponent<Script>(new ExplosionControllerScript());
 	return (obj);
 }
