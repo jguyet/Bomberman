@@ -12,7 +12,7 @@ GameInterface::GameInterface ( int number_of_player )
 	this->canvas = new Canvas(BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
 
 	for (int i = 0; i < 5; i++) {
-		Image *img = new Image("assets/head_bomberman/red_head.png");
+		Image *img = new Image("assets/ui/gameinterface/head_bomberman/red_head.png");
 		img->transform.position.x = (i * 100) + 10;
 		Text *t1 = new Text(0);
 		t1->transform.position.x = (i * 100) + 63;
@@ -41,7 +41,7 @@ GameInterface::GameInterface ( int number_of_player )
 	// 	this->canvas->addText(t1);
 	// 	this->canvas->addImage(img);
 	// }
-	Image *img = new Image("assets/clock_over.png");
+	Image *img = new Image("assets/ui/gameinterface/clock_over.png");
 	img->transform.position.x = (BombermanClient::instance->screen->width / 2) - 70;
 	img->transform.position.y = 5;
 	this->canvas->addImage("clock_ground", img);
