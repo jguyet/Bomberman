@@ -31,7 +31,9 @@ SRCBASE_BOMBER_SERVER	=	\
 					Main.cpp								\
 					Server.cpp								\
 					Client.cpp								\
-
+					Packet.cpp								\
+					Message.cpp								\
+					
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
 SRCS_BOMBER_SERVER			=	$(addprefix $(SRCDIR_BOMBER_SERVER), $(SRCBASE_BOMBER_SERVER))

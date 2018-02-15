@@ -16,6 +16,7 @@ void Server::removeClient(Client *client)
 	for (int i = 0; i < this->clients.size(); i++)
 	{
 		if (this->clients[i] == client) {
+			delete client;
 			this->clients.erase(this->clients.begin() + i);
 			break;
 		}

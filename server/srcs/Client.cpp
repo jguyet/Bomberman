@@ -1,10 +1,10 @@
 #include "Client.hpp"
 #include "Server.hpp"
+#include "Packet.hpp"
 
 Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), in(in), address(inet_ntoa(in.sin_addr)), server(server)
 {
-	std::cout << "Hello, i'm from " << this->address << std::endl;
-
+	Packet *packet = new Packet(new Message());
 	std::thread thread(Client::clientThread, this);
 	thread.detach();
 }
@@ -26,7 +26,6 @@ void Client::clientThread(Client *client)
 		memset((char*)&buff, 0, (BUFF_SIZE - 1));
 	}
 	client->server->removeClient(client);
-	std::cout << "Qui sont ces mega putes ?" << std::endl;
 }
 
 Client &				Client::operator=( Client const & rhs )
