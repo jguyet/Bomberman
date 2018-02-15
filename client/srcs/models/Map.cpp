@@ -8,16 +8,18 @@
 
 Map::Map ( Scene *scene )
 {
-	this->scene = scene;
-	//Faire un chargement dans un fichier (si tes pas content !!!!)
 	int i = 0;
 	static GetMaps gmap;
 
-	std::cout << "-------|---------|-----------" << std::endl;
-	gmap.get_all_maps(this->maps);
+	//Faire un chargement dans un fichier (si tes pas content !!!!)
+	this->scene = scene;
 	this->current_map = "";
-	this->current_map = "map_01";
-	std::cout << "-------|---------|-----------" << std::endl;
+
+	gmap.get_all_maps(this->maps);
+
+	std::cout << "|" << this->current_map << "|" << std::endl;
+	this->select_map();
+	std::cout << "|" << this->current_map << "|" << std::endl;
 
 	this->build();
 	return ;
@@ -52,6 +54,14 @@ std::ostream &				operator<<(std::ostream & o, Map const & i)
 // ###############################################################
 
 // PUBLIC METHOD #################################################
+
+void						Map::select_map(void)
+{
+	for (auto & elem : this->maps)
+		std::cout << "map-> " << elem.first << std::endl;
+	// TODO : display_map_list_&&_select_map
+	this->current_map = "map_01"; //example
+}
 
 void						Map::build(void)
 {
