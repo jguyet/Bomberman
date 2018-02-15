@@ -3,7 +3,6 @@
 
 #include "All.hpp"
 #include "IMessage.hpp"
-#include "Message.hpp"
 #define t_byte char
 
 class Packet
@@ -13,12 +12,15 @@ class Packet
 		Packet(IMessage *message);
 		Packet( Packet const & src );
 		virtual ~Packet();
+		t_byte		*getMessageRaw();
+		IMessage	*getBaseMessage();	
 
 		Packet &							operator=( Packet const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Packet const & i);
 
 	private:
-		t_byte *bytes;
+		IMessage	*message;
+		t_byte		*bytes;
 };
 
 #endif

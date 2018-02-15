@@ -19,21 +19,19 @@ MAX_COLS	=	$$(echo "$$(tput cols)-24-$(LENGTHNAME)"|bc)
 
 CC			=	g++ -std=c++1z
 FLAGS 		=
-#FLAGS		=	-Wall -Wextra -Werror
+LIBS		= ../network/network.a
 FLAGS_O		=
 
 SRCDIR_BOMBER_SERVER		=	srcs/
 OBJDIR_BOMBER_SERVER		=	objs/
 
-INCDIR				=	includes/
+INCDIR				=	includes/ -I ../network/includes/
 
 SRCBASE_BOMBER_SERVER	=	\
 					Main.cpp								\
 					Server.cpp								\
 					Client.cpp								\
-					Packet.cpp								\
-					Message.cpp								\
-					
+
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
 SRCS_BOMBER_SERVER			=	$(addprefix $(SRCDIR_BOMBER_SERVER), $(SRCBASE_BOMBER_SERVER))
@@ -43,7 +41,7 @@ OBJS_BOMBER_SERVER			=	$(addprefix $(OBJDIR_BOMBER_SERVER), $(SRCBASE_BOMBER_SER
 
 all:		ACTIONS
 
-ACTIONS:
+ACTIONS: BUILD_NETWORK
 	if test -f $(NAME_BOMBER_SERVER) ; then											\
 		echo "make: Nothing to be done for \`all\`.";				        		\
 	else																			\
@@ -58,11 +56,18 @@ $(OBJDIR_BOMBER_SERVER):
 	mkdir -p $(dir $(OBJS_BOMBER_SERVER))
 
 $(OBJDIR_BOMBER_SERVER)%.o : $(SRCDIR_BOMBER_SERVER)%.cpp | $(OBJDIR_BOMBER_SERVER)
-	$(CC) $(FLAGS) -MMD -c $< -o $@											\
+	$(CC) $(FLAGS) -MMD -c $< -o $@									\
 		-I $(INCDIR)														\
-		-I $(INCDIR)
 
 fcleanlib:	fclean
+
+BUILD_NETWORK:
+	make re -C ../network;
+	# if test -f ../network/network.a ; then											\
+	# 	echo "Network library already compiled.";					        		\
+	# else																			\
+	# 	make -C ../network;															\
+	# fi
 
 re:			fclean all
 
@@ -71,7 +76,7 @@ relib:		fclean fcleanlib all
 .PHONY:		fclean fcleanlib clean re relib
 
 BUILD: $(OBJDIR_BOMBER_SERVER) $(OBJS_BOMBER_SERVER)
-	$(CC) $(FLAGS) $(FLAGS_O) -o $(NAME_BOMBER_SERVER) $(OBJS_BOMBER_SERVER)
+	$(CC) $(FLAGS) $(LIBS) $(FLAGS_O) -o $(NAME_BOMBER_SERVER) $(OBJS_BOMBER_SERVER)
 	echo "\r\033[38;5;22m📗  MAKE $(NAME_BOMBER_SERVER)"
 
 clean:

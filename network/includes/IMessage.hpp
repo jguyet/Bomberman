@@ -7,6 +7,7 @@
 class IMessage
 {
 	public:
+		IMessage(int id, int len) { this->packet_id = id, this->packet_len = len; };
 		IMessage() { };
 		IMessage( IMessage const & src );
 		virtual ~IMessage() { };
