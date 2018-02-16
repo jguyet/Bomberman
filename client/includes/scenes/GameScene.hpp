@@ -7,6 +7,7 @@
 # include "scripts/GameScene/ExplosionControllerScript.hpp"
 # include "scripts/GameScene/BombControllerScript.hpp"
 
+#include "models/Map.hpp"
 class GameScene : public Scene
 {
 	public:

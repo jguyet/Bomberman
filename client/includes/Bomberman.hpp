@@ -91,9 +91,9 @@ std::vector<std::string>		split(const std::string &s, char delim);
 // #############################################################################
 
 /*
-** Models
+**	Managers
 */
-# include "models/Map.hpp"
+# include "managers/MapManager.hpp"
 
 /*
 ** Scenes
@@ -109,7 +109,6 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/loop/IRenderLoop.hpp"
 # include "graphics/loop/RenderLoop.hpp"
 
-# include "utils/GetMaps.hpp"
 
 /*
 ** Main_Client

@@ -2,19 +2,7 @@
 # define MAP_HPP
 
 # include "Bomberman.hpp"
-
-struct Case {
-	// Case(void) {
-	// 	this->ground = NULL;
-	// 	this->obstacle = NULL;
-	// 	this->walkable = false;
-	// }
-	GameObject		*ground;
-	GameObject		*obstacle;
-	bool			walkable;
-	glm::vec3		position;
-	//entity
-};
+# include "models/Case.hpp"
 
 class Map
 {
@@ -22,7 +10,7 @@ class Map
 		// STATICS #############################################################
 		// #####################################################################
 		// CANONICAL ###########################################################
-													Map( Scene *scene );
+													Map(std::string name);
 													Map( Map const & src );
 		virtual										~Map( void );
 		Map &										operator=( Map const & rhs );
@@ -30,11 +18,11 @@ class Map
 		// #####################################################################
 		// PUBLIC ##############################################################
 		Case										*getCase(int x, int z);
-		void										build(void);
-		void										select_map(void);
+		std::string									getName();
+		std::map<std::pair<int, int>, Case>			getContent();
 		// #####################################################################
-		std::map<std::string, std::map<std::pair<int, int>, Case>>	maps;
-		std::string													current_map;
+		std::map<std::pair<int, int>, Case>							content;
+		std::string	name;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

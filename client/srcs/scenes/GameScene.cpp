@@ -11,8 +11,12 @@ GameScene::GameScene ( void )
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
 
+	MapManager mapManager(this);
+	this->map = mapManager.getMap("map_01");
+	mapManager.buildObjects(this->map);
+
 	//build map
-	this->map = new Map(this);
+	// this->map = new Map(this);
 
 	//add player
 	this->player = Factory::newPlayer();

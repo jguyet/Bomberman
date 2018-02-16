@@ -1,59 +1,64 @@
-#include "Bomberman.hpp"
+#include "managers/MapManager.hpp"
 
-// STATIC ########################################################
-// ###############################################################
-
-// CANONICAL #####################################################
-
-GetMaps::GetMaps ( void )
+MapManager::MapManager (Scene *scene) : scene(scene)
 {
-	return ;
+	this->loadMaps();
 }
 
-GetMaps::GetMaps ( GetMaps const & src )
+MapManager::MapManager ( MapManager const & src )
 {
 	*this = src;
-	return ;
 }
 
-GetMaps &				GetMaps::operator=( GetMaps const & rhs )
+MapManager &				MapManager::operator=( MapManager const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 
-GetMaps::~GetMaps ( void )
+void	MapManager::loadMaps()
 {
-	return ;
-}
-
-std::ostream &				operator<<(std::ostream & o, GetMaps const & i)
-{
-	(void)i;
-	return (o);
-}
-
-// ###############################################################
-
-// PUBLIC METHOD #################################################
-
-void	GetMaps::get_all_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps)
-{
-	if (this->get_dir_maps(maps) == -1)
-		return ;
-	for (auto & elem : maps)
+	this->readMaps();
+	for (auto &elem : this->maps)
 	{
-		std::cout << "-------|---------|-----------" << std::endl;
-		this->load_map(elem.first, elem.second);
-		std::cout << "-------|---------|-----------" << std::endl;
+		Map *current = elem.second;
+		this->parseMaps(current->getName(), current->content);
 	}
-	return ;
 }
 
-void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &map)
+Map		*MapManager::getMap(std::string name)
+{
+	return this->maps[name];
+}
+
+void	MapManager::readMaps()
+{
+	DIR *dir;
+	struct dirent *ent;
+	struct stat info;
+
+	if (stat("maps/", &info ) != 0) {
+		std::cout << "Cannot access maps" << std::endl;
+		return ;
+	}
+	else if (info.st_mode & S_IFDIR)
+	{
+		if ((dir = opendir("maps/")) != NULL) {
+			while ((ent = readdir(dir)) != NULL) {
+				if (strcmp(ent->d_name, "..") != 0 && strcmp(ent->d_name, ".") != 0) {
+					this->maps.insert(std::pair<std::string, Map*>(ent->d_name, new Map(ent->d_name)));
+				}
+			}
+			closedir(dir);
+			return ;
+		}
+	}
+}
+
+/*
+**	Please lord understand that this is not my code
+*/
+
+void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case> &map)
 {
 	std::fstream filestr;
 	std::string segment;
@@ -65,8 +70,6 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 	path.append(name);
 	filestr.open(path);
 
-	std::cout << "loading : " <<  path << std::endl;
-
 	auto ss = std::ostringstream{};
 	ss << filestr.rdbuf();
 	std::stringstream s(ss.str());
@@ -77,9 +80,6 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 	int y = 0;
 	for (auto const& value: segvec)
 	{
-		// std::cout << "|" << value << "|" << std::endl;
-		// std::cout << "Found " << std::distance(std::sregex_iterator(value.begin(), value.end(), any_regex), std::sregex_iterator()) << " words\n";
-		// std::cout << "Found " << std::distance(std::sregex_iterator(value.begin(), value.end(), number_regex),std::sregex_iterator()) << " words\n";
 		if (std::distance(std::sregex_iterator(value.begin(), value.end(), any_regex), std::sregex_iterator())
 		!= std::distance(std::sregex_iterator(value.begin(), value.end(), number_regex),std::sregex_iterator()))
 		{
@@ -100,7 +100,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 					std::smatch match = *i;
 					int i_dec = std::stoi (match.str() ,&sz);
 
-					if (this->set_block(map, x, y, i_dec))
+					if (this->setBlock(map, x, y, i_dec))
 					{
 						std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
 						map.clear();
@@ -121,11 +121,17 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 	filestr.close();
 }
 
-// ###############################################################
+/*
+**	This is not on me.
+*/
 
+<<<<<<< HEAD:client/srcs/utils/GetMaps.cpp
 // PRIVATE METHOD #################################################
 
 int		GetMaps::set_block(std::map<std::pair<int, int>, Case> &map, int y, int x, int value)
+=======
+int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value)
+>>>>>>> b10dccf259cd10532bb2141995577db512f31633:client/srcs/managers/MapManager.cpp
 {
 	Case cube;
 	GameObject *block;
@@ -145,7 +151,6 @@ int		GetMaps::set_block(std::map<std::pair<int, int>, Case> &map, int y, int x, 
 
 	if (value != 0)
 	{
-		// check if exist
 		if (links.count(value) != 0)
 			block = Factory::newBlock(links[value]);
 		else
@@ -160,42 +165,29 @@ int		GetMaps::set_block(std::map<std::pair<int, int>, Case> &map, int y, int x, 
 	return (0);
 }
 
-int			GetMaps::get_dir_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps)
+void						MapManager::buildObjects(Map *selected)
 {
-	DIR *dir;
-	struct dirent *ent;
-	struct stat info;
-
-	if (stat("maps/", &info ) != 0)
+	for (auto & elem : selected->content)
 	{
-		std::cout << "cannot access maps/" << std::endl;
-		return (-1);
-	}
-	else if ( info.st_mode & S_IFDIR )
-	{
-		if ((dir = opendir("maps/")) != NULL) {
-			while ((ent = readdir(dir)) != NULL) {
-				if (strcmp(ent->d_name, "..") != 0 && strcmp(ent->d_name, ".") != 0)
-				{
-					// std::cout << ent->d_name << std::endl;
-					std::map<std::pair<int, int>, Case> map;
-					maps.insert(std::pair<std::string, std::map<std::pair<int, int>, Case>>(ent->d_name, map));
-				}
-			}
-			closedir(dir);
-			return (0);
+		if (elem.second.obstacle != NULL) {
+			this->scene->add(elem.second.obstacle);
 		}
-		else
-		{
-			std::cout << "open faile of dir maps" << std::endl;
-			return (-1);
+		if (elem.second.ground != NULL) {
+			this->scene->add(elem.second.ground);
 		}
-	}
-	else
-	{
-		std::cout << "maps is not a directory" << std::endl;
-		return (-1);
 	}
 }
 
-// ###############################################################
+MapManager::~MapManager ()
+{
+	// for (auto &elem : this->maps)
+	// {
+	// 	delete elem.second;
+	// }
+}
+
+std::ostream &				operator<<(std::ostream & o, MapManager const & i)
+{
+
+	return (o);
+}
