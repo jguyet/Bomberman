@@ -210,13 +210,13 @@ void						BombermanClient::renderLoop( void )//60fps
 	this->current_scene->drawGameObjects();
 
 	while(SDL_PollEvent(&this->event))
-    {
+	{
 		if(this->event.type == SDL_QUIT)
-	    {
-	        this->stop();
+		{
+			this->stop();
 			break ;
-	    }
-    }
+		}
+	}
 }
 
 void						BombermanClient::updateFps( void )

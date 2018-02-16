@@ -125,7 +125,7 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 
 // PRIVATE METHOD #################################################
 
-int		GetMaps::set_block(std::map<std::pair<int, int>, Case> &map, int x, int y, int value)
+int		GetMaps::set_block(std::map<std::pair<int, int>, Case> &map, int y, int x, int value)
 {
 	Case cube;
 	GameObject *block;

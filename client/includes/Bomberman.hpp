@@ -6,7 +6,7 @@
 /*   By: jguyet <jguyet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 09:43:10 by jguyet            #+#    #+#             */
-/*   Updated: 2018/02/14 11:03:28 by amerelo          ###   ########.fr       */
+/*   Updated: 2018/02/16 21:36:25 by amerelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,11 @@ std::vector<std::string>		split(const std::string &s, char delim);
 */
 # include "client/BombermanClient.hpp"
 # include "Factory.hpp"
+
+/*
+** AI
+*/
+# include "AI/A_star.hpp"
+
 
 #endif
