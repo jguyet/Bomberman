@@ -53,7 +53,7 @@ bool					Model::load(const std::string& key, unsigned int shader, const std::str
     }
 
     // Now we can access the file's contents.
-    printf("Import of scene %s succeeded.\n",pFile.c_str());
+    //printf("Import of scene %s succeeded.\n",pFile.c_str());
 
 	Model::loadGLTextures(absolutePath, model);
 	Model::buildShader(model);
@@ -107,7 +107,7 @@ void					Model::loadGLTextures(std::string &absolutePath, Model *model)
 		if (textureIds[i] == 0) {
 			printf("Couldn't load Image: %s\n", filename.c_str());
 		} else {
-			printf("Image: %s Loaded\n", filename.c_str());
+			//printf("Image: %s Loaded\n", filename.c_str());
 
 			(*itr).second = textureIds[i];	  // save texture id for filename in map
 		}
@@ -168,7 +168,7 @@ void						Model::genVAOsAndUniformBuffer(Model *model)
     GLuint buffer;
 
     // For each mesh
-	std::cout << "Number of meshs : " << model->scene->mNumMeshes << std::endl;
+	//std::cout << "Number of meshs : " << model->scene->mNumMeshes << std::endl;
     for (unsigned int n = 0; n < model->scene->mNumMeshes; ++n)
     {
         const aiMesh* mesh = model->scene->mMeshes[n];
@@ -274,7 +274,7 @@ void						Model::genVAOsAndUniformBuffer(Model *model)
         glBindBuffer(GL_UNIFORM_BUFFER,aMesh.uniformBlockIndex);
         glBufferData(GL_UNIFORM_BUFFER, sizeof(aMat), (void *)(&aMat), GL_STATIC_DRAW);
 
-		std::cout << "Number of Faces : " << aMesh.numFaces << std::endl;
+		//std::cout << "Number of Faces : " << aMesh.numFaces << std::endl;
 
         model->myMeshes.push_back(aMesh);
     }

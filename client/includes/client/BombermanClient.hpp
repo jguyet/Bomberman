@@ -52,6 +52,9 @@ class BombermanClient : public IRenderLoop
 		Scene										*current_scene;
 
 		Screen										*screen;
+
+		Socket 										*sock;
+
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
