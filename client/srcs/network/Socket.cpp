@@ -1,4 +1,6 @@
 # include "Bomberman.hpp"
+# include "messages/ServerListMessage.hpp"
+# include "enums/ServerType.hpp"
 
 Socket::Socket (char *host, int port)
 {
@@ -69,9 +71,8 @@ void 						Socket::do_select(void)
 	struct timeval tv;
 	tv.tv_sec = 0;
 	tv.tv_usec = 10;
+	std::string types[] = { "1v1", "2v2","4v4","ffa" };
 
-
-	//std::cout << "LOL" << std::endl;
 	if (this->state != true)
 	{
 		std::cout << "Not connect bitch" << std::endl;
@@ -92,25 +93,6 @@ void 						Socket::do_select(void)
          exit(errno);
       }
 
-      /* something from standard input : i.e keyboard */
-    /*  if(FD_ISSET(STDIN_FILENO, &this->rdfs))
-      {
-         fgets(buffer, BUF_SIZE - 1, stdin);
-         {
-            char *p = NULL;
-            p = strstr(buffer, "\n");
-            if(p != NULL)
-            {
-               *p = 0;
-            }
-            else
-            {
-               buffer[BUF_SIZE - 1] = 0;
-            }
-         }
-         write_server(sock, buffer);
-	 }
-      else */
 	  if(FD_ISSET(this->sock, &this->rdfs))
       {
 		  int n = 0;
@@ -122,6 +104,25 @@ void 						Socket::do_select(void)
 	      }
 
 	      buffer[n] = 0;
-		  std::cout << "Buffer IN :" << buffer << std::endl;
+		  ServerListMessage *message = (ServerListMessage*)&buffer;
+		  std::cout << "Packet id received: " << std::to_string(message->packet_id) << std::endl;
+		  std::cout << "Servers :" << std::endl;
+		  for (int i = 0; i < SERVERS_LEN; i++)
+		  {
+			  std::cout << "Server id: " << std::to_string(message->servers[i].id);
+			  if (message->servers[i].type == ServerType::TYPE_1V1) {
+				  std::cout << ", type: 1v1";
+			  }
+			  if (message->servers[i].type == ServerType::TYPE_2V2) {
+				  std::cout << ", type: 2v2";
+			  }
+			  if (message->servers[i].type == ServerType::TYPE_4V4) {
+				  std::cout << ", type: 4v4";
+			  }
+			  if (message->servers[i].type == ServerType::TYPE_FFA) {
+				  std::cout << ", type: ffa";
+			  }
+			  std::cout << ", available: " << std::to_string(message->servers[i].available) << std::endl;
+		  }
       }
 }
