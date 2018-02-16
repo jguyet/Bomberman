@@ -16,6 +16,9 @@ MainMenuScene::MainMenuScene ( void )
 	this->camera->buildFPSProjection();
 
 	this->interface = new MainMenuInterface();
+
+	//TODO CO TOI LA POUR LE MOMENT est test de send des message dans calculPhisics en bas !
+
 	return ;
 }
 
