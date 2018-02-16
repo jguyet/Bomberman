@@ -35,6 +35,9 @@ GameScene::GameScene ( void )
 	this->add(logo_N);//add on scene
 
 	this->interface = new GameInterface(1);
+
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_SetWindowGrab(BombermanClient::instance->window, SDL_TRUE);
 	return ;
 }
 
@@ -94,4 +97,6 @@ void								GameScene::drawGameObjects(void)
 	this->_drawGameObjects();
 	//draw canvas
 	this->interface->draw();
+	//reset mouse to center of screen
+	SDL_WarpMouseInWindow(BombermanClient::instance->window, BombermanClient::instance->screen->middleWidth, BombermanClient::instance->screen->middleHeight);
 }

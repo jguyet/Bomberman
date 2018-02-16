@@ -58,6 +58,9 @@ void						Canvas::build(void)
 	for (std::map<const char*, Image*>::iterator it = this->images.begin(); it != this->images.end(); it++) {
 		(*it).second->draw(this->canvas);
 	}
+	for (std::map<const char*, Square*>::iterator it = this->squares.begin(); it != this->squares.end(); it++) {
+		(*it).second->draw(this->canvas);
+	}
 	for (std::map<const char*, Text*>::iterator it = this->texts.begin(); it != this->texts.end(); it++) {
 		(*it).second->draw(this->canvas);
 	}
@@ -103,6 +106,17 @@ void						Canvas::addImage(const char *key, Image *img)
 		delete tmp;
 	}
 	this->images[key] = img;
+	this->updated = false;
+}
+
+void						Canvas::addSquare(const char *key, Square *square)
+{
+	if (this->squares.count(key) != 0) {
+		Square *tmp = this->squares[key];
+		this->squares.erase(key);
+		delete tmp;
+	}
+	this->squares[key] = square;
 	this->updated = false;
 }
 

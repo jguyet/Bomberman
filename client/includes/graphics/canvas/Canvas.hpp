@@ -3,6 +3,7 @@
 
 # include "graphics/canvas/Text.hpp"
 # include "graphics/canvas/Image.hpp"
+# include "graphics/canvas/Square.hpp"
 # include "Bomberman.hpp"
 
 class Canvas
@@ -19,6 +20,7 @@ class Canvas
 		void								draw(void);
 		void								addText(const char *key, Text *text);
 		void								addImage(const char *key, Image *img);
+		void								addSquare(const char *key, Square *square);
 
 	private:
 		void								build(void);
@@ -29,6 +31,7 @@ class Canvas
 		bool								updated;
 		std::map<const char*, Image*>		images;
 		std::map<const char*, Text*>		texts;
+		std::map<const char*, Square*>		squares;
 
 };
 

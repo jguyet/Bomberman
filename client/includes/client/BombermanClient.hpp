@@ -43,6 +43,8 @@ class BombermanClient : public IRenderLoop
 		void										run( void );
 		void										stop( void );
 
+		void										setWindowSize(int width, int height);
+
 		//sdl dependencies
 		SDL_Window									*window;
 		SDL_GLContext								context;

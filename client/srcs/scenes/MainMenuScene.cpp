@@ -55,9 +55,13 @@ std::ostream &				operator<<(std::ostream & o, MainMenuScene const & i)
 void								MainMenuScene::calculPhisics(void)
 {
 
-	BombermanClient::instance->sock->do_select();
+	//BombermanClient::instance->sock->do_select();
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE)) {//ESC
 		BombermanClient::instance->stop();
+	}
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_ENTER) || KeyBoard::instance->getKey(SDL_SCANCODE_RETURN)) {//ESC
+		BombermanClient::instance->current_scene = new GameScene();
+		return ;
 	}
 	//call parent method
 	this->_calculPhisics();

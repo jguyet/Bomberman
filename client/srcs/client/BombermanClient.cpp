@@ -14,8 +14,8 @@ BombermanClient::BombermanClient ( void )
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
 
-	char host[] = "localhost";
-	this->sock = new Socket(host, 8964);
+	//char host[] = "localhost";
+	//this->sock = new Socket(host, 8964);
 	return ;
 }
 
@@ -137,12 +137,15 @@ void						BombermanClient::build_window( void )
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
 
-	SDL_ShowCursor(SDL_DISABLE);
-	SDL_SetWindowGrab(this->window, SDL_TRUE);
-	SDL_WarpMouseInWindow(this->window, this->screen->middleWidth, this->screen->middleHeight);
-
 	//0 for immediate updates, 1 for updates synchronized with the vertical retrace, -1 for late swap tearing
 	SDL_GL_SetSwapInterval(0);
+}
+
+void						BombermanClient::setWindowSize(int width, int height)
+{
+	SDL_SetWindowSize(this->window, width, height);
+	delete this->screen;
+	this->screen = new Screen(width, height);
 }
 
 int	SDLCALL					input_callback_interval(void *userdata, SDL_Event* event)
@@ -214,8 +217,6 @@ void						BombermanClient::renderLoop( void )//60fps
 			break ;
 	    }
     }
-	//reset mouse to center of screen
-	SDL_WarpMouseInWindow(this->window, this->screen->middleWidth, this->screen->middleHeight);
 }
 
 void						BombermanClient::updateFps( void )

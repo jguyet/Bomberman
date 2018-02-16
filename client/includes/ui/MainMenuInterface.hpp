@@ -15,6 +15,8 @@ class MainMenuInterface
 		friend std::ostream &				operator<<(std::ostream & o, MainMenuInterface const & i);
 
 		void								draw(void);
+
+		Text								*input_lbl;
 	private:
 		int									current_position;
 		Canvas								*canvas;
