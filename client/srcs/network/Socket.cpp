@@ -1,4 +1,4 @@
-#include "Socket.hpp"
+# include "Bomberman.hpp"
 
 Socket::Socket ()
 {
@@ -22,6 +22,6 @@ Socket::~Socket ()
 
 std::ostream &				operator<<(std::ostream & o, Socket const & i)
 {
-	
+
 	return (o);
 }

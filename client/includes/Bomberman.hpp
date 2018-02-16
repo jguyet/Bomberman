@@ -64,6 +64,8 @@
 */
 std::vector<std::string>		split(const std::string &s, char delim);
 
+# include "network/Socket.hpp"
+
 /*
 ** Static Classes
 */

@@ -154,6 +154,22 @@ if (APPLE)
 			${PROJECT_DIR}/SOIL
 		)
 	message("-----------------------------------------------------------------")
+
+	message("INSTALLATION NETWORK --------------------------------------------")
+	if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../network/network.a")
+		execute_process(COMMAND make
+					WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../network/
+					)
+	else()
+		message("Warning: SOIL 2 is already installed")
+	endif()
+		link_directories(
+		  ${CMAKE_CURRENT_SOURCE_DIR}/../../network/
+		)
+		include_directories(
+			${CMAKE_CURRENT_SOURCE_DIR}/../../network/includes/
+		)
+	message("-----------------------------------------------------------------")
 	message("------------------------------------------------------------------o")
 endif()
 
@@ -258,6 +274,6 @@ add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
 #target_link_libraries(${PROJECT_NAME} "sdl2-config --libs SDL2_image SDL2_mixer SDL2_ttf")
-target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image glm assimp SOIL2 ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image glm assimp SOIL2 network ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
 
 #target_link_libraries(${PROJECT_NAME} "sdl2-config --libs SDL2_image SDL2_mixer SDL2_ttf")
