@@ -31,6 +31,7 @@ class Map
 		// PUBLIC ##############################################################
 		Case										*getCase(int x, int z);
 		void										build(void);
+		void										select_map(void);
 		// #####################################################################
 		std::map<std::string, std::map<std::pair<int, int>, Case>>	maps;
 		std::string													current_map;
