@@ -247,8 +247,8 @@ int main(void)
 	client->initialize_resources();
 	client->initialize_inputs();
 
-	client->current_scene = new GameScene();
-	//client->current_scene = new MainMenuScene();
+	//client->current_scene = new GameScene();
+	client->current_scene = new MainMenuScene();
 
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));

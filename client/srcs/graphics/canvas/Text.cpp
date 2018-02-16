@@ -73,6 +73,35 @@ std::ostream &				operator<<(std::ostream & o, Text const & i)
 
 // PUBLIC METHOD #################################################
 
+void								Text::setColor(int r, int g, int b)
+{
+	this->color = {static_cast<Uint8>(r), static_cast<Uint8>(g), static_cast<Uint8>(b),0};
+}
+
+void								Text::setFont(const char *font)
+{
+	if (Text::text_fonts.count(font) == 0) {
+		Text::addFont(font, (std::ostringstream() << "assets/fonts/" << font).str().c_str());
+	}
+	this->font = Text::text_fonts[font];
+}
+
+void								Text::setFont(std::string font)
+{
+	this->setFont(font.c_str());
+}
+
+void								Text::setText(const char *text)
+{
+	this->text = text;
+}
+
+void								Text::setText(std::string text)
+{
+	this->saveptr = text;
+	this->text = this->saveptr.c_str();
+}
+
 void						Text::draw(SDL_Surface *surface)
 {
 	SDL_Rect	text_position;

@@ -15,6 +15,12 @@ MainMenuInterface::MainMenuInterface ( void )
 	img->transform.position.x = 0;
 	img->transform.position.y = 0;
 	this->canvas->addImage("background", img);
+
+	Text *play = new Text("[PLAY]");
+	play->transform.position.x = (BombermanClient::instance->screen->width / 2) - 25;
+	play->transform.position.y = 100;
+	play->setColor(0, 0, 0);
+	this->canvas->addText("btn_play", play);
 	return ;
 }
 

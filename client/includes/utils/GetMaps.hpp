@@ -20,20 +20,21 @@ class GetMaps
 		// #####################################################################
 
 		// CANONICAL ###########################################################
-											GetMaps( void );
-											GetMaps( GetMaps const & src );
-		virtual								~GetMaps( void );
-		GetMaps &							operator=( GetMaps const & rhs );
-		friend std::ostream &				operator<<(std::ostream & o, GetMaps const & i);
+								GetMaps( void );
+								GetMaps( GetMaps const & src );
+		virtual					~GetMaps( void );
+		GetMaps &				operator=( GetMaps const & rhs );
+		friend std::ostream &	operator<<(std::ostream & o, GetMaps const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		void				get_all_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps);
-		void				load_map(std::string path, std::map<std::pair<int, int>, Case> &map);
+		void					get_all_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps);
+		void					load_map(std::string path, std::map<std::pair<int, int>, Case> &map);
 
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		int					get_dir_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps);
+		int						get_dir_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps);
+		int						set_block(std::map<std::pair<int, int>, Case> &map, int x, int y, int value);
 		// std::map<std::string, std::map<std::pair<int, int>, Case>> maps;
 		// #####################################################################
 };

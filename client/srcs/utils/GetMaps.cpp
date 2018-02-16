@@ -45,7 +45,11 @@ void	GetMaps::get_all_maps(std::map<std::string, std::map<std::pair<int, int>, C
 	if (this->get_dir_maps(maps) == -1)
 		return ;
 	for (auto & elem : maps)
+	{
+		std::cout << "-------|---------|-----------" << std::endl;
 		this->load_map(elem.first, elem.second);
+		std::cout << "-------|---------|-----------" << std::endl;
+	}
 	return ;
 }
 
@@ -57,10 +61,6 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 	std::regex any_regex("(\\S+)");
 	std::regex number_regex("(\\d+)");
 	std::string path = "maps/";
-	static std::map<int, std::string> links =
-	{
-		std::make_pair(0, "ground1"), std::make_pair(2, "ground1"), std::make_pair(1, "ice_block")
-	};
 
 	path.append(name);
 	filestr.open(path);
@@ -98,36 +98,15 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 				try {
 					std::string::size_type sz;
 					std::smatch match = *i;
-					GameObject *block;
 					int i_dec = std::stoi (match.str() ,&sz);
-					Case cube;
-					// auto search = ;
 
-					block = Factory::newBlock(links[0]);
-					block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
-					block->transform.scale = glm::vec3(3.7f, 3.5f, 3.7f);
-					cube.ground = block;
-					cube.obstacle = NULL;
-					cube.walkable = true;
-					cube.position = glm::vec3(x * 2, 0, y * 2);
-					if (i_dec != 0)
+					if (this->set_block(map, x, y, i_dec))
 					{
-						if (links.count(i_dec) != 0)
-							block = Factory::newBlock(links[i_dec]);
-						else
-						{
-							std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
-							map.clear();
-							filestr.close();
-							return ;
-						}
-						block->transform.position = glm::vec3(x * 2, WALL, y * 2);
-						block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
-						cube.obstacle = block;
-						cube.walkable = false;
+						std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
+						map.clear();
+						filestr.close();
+						return ;
 					}
-
-				map[std::make_pair(x, y)] = cube;
 				} catch (std::exception& e) {
 					std::cout << "ERROR to pars map " << path << " at line " << value << " | " << e.what() << std::endl;
 					map.clear();
@@ -146,7 +125,42 @@ void	GetMaps::load_map(std::string name, std::map<std::pair<int, int>, Case> &ma
 
 // PRIVATE METHOD #################################################
 
-int		GetMaps::get_dir_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps)
+int		GetMaps::set_block(std::map<std::pair<int, int>, Case> &map, int x, int y, int value)
+{
+	Case cube;
+	GameObject *block;
+	static std::map<int, std::string> links =
+	{
+		std::make_pair(0, "ground1"), std::make_pair(1, "ice_block"), std::make_pair(2, "ground1")
+	};
+
+	block = Factory::newBlock(links[0]);
+	block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
+	block->transform.scale = glm::vec3(3.7f, 3.5f, 3.7f);
+	cube.ground = block;
+	cube.obstacle = NULL;
+	cube.walkable = true;
+
+	cube.position = glm::vec3(x * 2, 0, y * 2);
+
+	if (value != 0)
+	{
+		// check if exist
+		if (links.count(value) != 0)
+			block = Factory::newBlock(links[value]);
+		else
+			return (1);
+
+		block->transform.position = glm::vec3(x * 2, WALL, y * 2);
+		block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
+		cube.obstacle = block;
+		cube.walkable = false;
+	}
+	map[std::make_pair(x, y)] = cube;
+	return (0);
+}
+
+int			GetMaps::get_dir_maps(std::map<std::string, std::map<std::pair<int, int>, Case>> &maps)
 {
 	DIR *dir;
 	struct dirent *ent;

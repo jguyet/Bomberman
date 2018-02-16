@@ -20,6 +20,12 @@ class Text : public GameObject
 
 		void								draw(SDL_Surface *surface);
 
+		void								setColor(int r, int g, int b);
+		void								setFont(const char *font);
+		void								setFont(std::string font);
+		void								setText(const char *text);
+		void								setText(std::string text);
+
 	private:
 		void								initialize(const char *text);
 		TTF_Font							*font;
