@@ -51,19 +51,13 @@ void						ExplosionControllerScript::Start(void)
 
 void						ExplosionControllerScript::Update(void)
 {
-
 	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 100L))) {
-
-	//	std::cout << "Time to explode " << std::endl;
 		if (this->timerExplode < TimeUtils::getCurrentSystemMillis()) {
-			std::cout << "Bigger explosion" << std::endl;
 			this->gameObject->transform.scale+=0.1f;
 			this->timerExplode = TimeUtils::getCurrentSystemMillis() + 1L;
 		}
-
 	}
 	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 100L) + 500L)) {
-		std::cout << "Delete" << std::endl;
 		BombermanClient::instance->current_scene->remove(this->gameObject);
 		delete this->gameObject;
 		delete this;
