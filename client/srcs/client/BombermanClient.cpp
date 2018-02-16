@@ -67,6 +67,7 @@ void						BombermanClient::initialize_resources( void )
 	Model::load("launch_bomb_anim_2", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/3.obj");
 
 	Model::load("bomberman", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
+	Model::load("bomberman2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
 
 	Model::load("walk_0", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/3.obj");
 	Model::load("walk_1", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/2.obj");
@@ -246,8 +247,8 @@ int main(void)
 	client->initialize_resources();
 	client->initialize_inputs();
 
-	//client->current_scene = new GameScene();
-	client->current_scene = new MainMenuScene();
+	client->current_scene = new GameScene();
+	//client->current_scene = new MainMenuScene();
 
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));

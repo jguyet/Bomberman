@@ -9,7 +9,7 @@ class CharacterControllerScript : public Script
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											CharacterControllerScript( void );
+											CharacterControllerScript( int n );
 											CharacterControllerScript( CharacterControllerScript const & src );
 		virtual								~CharacterControllerScript( void );
 		CharacterControllerScript &			operator=( CharacterControllerScript const & rhs );
@@ -30,6 +30,7 @@ class CharacterControllerScript : public Script
 		bool								walk_anim = false;
 
 		bool								has_moved = false;
+		int 								player = 1;
 		// ####################################################################
 };
 

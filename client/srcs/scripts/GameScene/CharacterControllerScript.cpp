@@ -6,8 +6,9 @@
 
 // CANONICAL #####################################################
 
-CharacterControllerScript::CharacterControllerScript ( void )
+CharacterControllerScript::CharacterControllerScript ( int n )
 {
+	this->player = n;
 	return ;
 }
 
@@ -48,52 +49,103 @@ void						CharacterControllerScript::Start(void)
 
 void						CharacterControllerScript::Update(void)
 {
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_Q)) {//Q
+	if (this->player == 1) {
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q)) {//Q
 
-		Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+			Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
-		if (c != NULL && c->walkable == true && c->obstacle == NULL) {
-			GameObject *bomb = Factory::newBomb();
-			bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
-			bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
-			bomb->transform.rotation = glm::vec3(0,0,0);
-			BombermanClient::instance->current_scene->add(bomb);
-			c->obstacle = bomb;
+			if (c != NULL && c->walkable == true && c->obstacle == NULL) {
+				GameObject *bomb = Factory::newBomb();
+				bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
+				bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
+				bomb->transform.rotation = glm::vec3(0,0,0);
+				BombermanClient::instance->current_scene->add(bomb);
+				c->obstacle = bomb;
+			}
 		}
-	}
-	this->has_moved = false;
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) {//RIGHT
-		if (this->gameObject->transform.rotation.y != 180.f) {
-			this->gameObject->transform.rotation.y = 180.f;
+		this->has_moved = false;
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) {//RIGHT
+			if (this->gameObject->transform.rotation.y != 180.f) {
+				this->gameObject->transform.rotation.y = 180.f;
+			}
+			this->gameObject->transform.position.z += 0.1f;
+			this->has_moved = true;
 		}
-		this->gameObject->transform.position.z += 0.1f;
-		this->has_moved = true;
-	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT)) {//LEFT
-		if (this->gameObject->transform.rotation.y != 0.f) {
-			this->gameObject->transform.rotation.y = 0.f;
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT)) {//LEFT
+			if (this->gameObject->transform.rotation.y != 0.f) {
+				this->gameObject->transform.rotation.y = 0.f;
+			}
+			this->gameObject->transform.position.z -= 0.1f;
+			this->has_moved = true;
 		}
-		this->gameObject->transform.position.z -= 0.1f;
-		this->has_moved = true;
-	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_UP)) {//UP
-		if (this->gameObject->transform.rotation.y != 270.f) {
-			this->gameObject->transform.rotation.y = 270.f;
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_UP)) {//UP
+			if (this->gameObject->transform.rotation.y != 270.f) {
+				this->gameObject->transform.rotation.y = 270.f;
+			}
+			this->gameObject->transform.position.x += 0.1f;
+			this->has_moved = true;
 		}
-		this->gameObject->transform.position.x += 0.1f;
-		this->has_moved = true;
-	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_DOWN)) {//DOWN
-		if (this->gameObject->transform.rotation.y != 90.f) {
-			this->gameObject->transform.rotation.y = 90.f;
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_DOWN)) {//DOWN
+			if (this->gameObject->transform.rotation.y != 90.f) {
+				this->gameObject->transform.rotation.y = 90.f;
+			}
+			this->gameObject->transform.position.x -= 0.1f;
+			this->has_moved = true;
 		}
-		this->gameObject->transform.position.x -= 0.1f;
-		this->has_moved = true;
-	}
-	if (this->has_moved) {
-		this->walk_anim = true;
-	} else {
-		this->walk_anim = false;
+		if (this->has_moved) {
+			this->walk_anim = true;
+		} else {
+			this->walk_anim = false;
+		}
+	} else if (this->player == 2)
+	{
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_0)) {//Q
+
+			Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+
+			if (c != NULL && c->walkable == true && c->obstacle == NULL) {
+				GameObject *bomb = Factory::newBomb();
+				bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
+				bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
+				bomb->transform.rotation = glm::vec3(0,0,0);
+				BombermanClient::instance->current_scene->add(bomb);
+				c->obstacle = bomb;
+			}
+		}
+		this->has_moved = false;
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)) {//RIGHT
+			if (this->gameObject->transform.rotation.y != 180.f) {
+				this->gameObject->transform.rotation.y = 180.f;
+			}
+			this->gameObject->transform.position.z += 0.1f;
+			this->has_moved = true;
+		}
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_4)) {//LEFT
+			if (this->gameObject->transform.rotation.y != 0.f) {
+				this->gameObject->transform.rotation.y = 0.f;
+			}
+			this->gameObject->transform.position.z -= 0.1f;
+			this->has_moved = true;
+		}
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)) {//UP
+			if (this->gameObject->transform.rotation.y != 270.f) {
+				this->gameObject->transform.rotation.y = 270.f;
+			}
+			this->gameObject->transform.position.x += 0.1f;
+			this->has_moved = true;
+		}
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_2)) {//DOWN
+			if (this->gameObject->transform.rotation.y != 90.f) {
+				this->gameObject->transform.rotation.y = 90.f;
+			}
+			this->gameObject->transform.position.x -= 0.1f;
+			this->has_moved = true;
+		}
+		if (this->has_moved) {
+			this->walk_anim = true;
+		} else {
+			this->walk_anim = false;
+		}
 	}
 }
 
