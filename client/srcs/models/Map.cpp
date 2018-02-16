@@ -6,23 +6,9 @@
 
 // CANONICAL #####################################################
 
-Map::Map ( Scene *scene )
+Map::Map(std::string name)
 {
-	int i = 0;
-	static GetMaps gmap;
-
-	//Faire un chargement dans un fichier (si tes pas content !!!!)
-	this->scene = scene;
-	this->current_map = "";
-
-	gmap.get_all_maps(this->maps);
-
-	std::cout << "|" << this->current_map << "|" << std::endl;
-	this->select_map();
-	std::cout << "|" << this->current_map << "|" << std::endl;
-
-	this->build();
-	return ;
+	this->name = name;
 }
 
 Map::Map ( Map const & src )
@@ -33,10 +19,6 @@ Map::Map ( Map const & src )
 
 Map &				Map::operator=( Map const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 
@@ -55,35 +37,19 @@ std::ostream &				operator<<(std::ostream & o, Map const & i)
 
 // PUBLIC METHOD #################################################
 
-void						Map::select_map(void)
+std::string									Map::getName()
 {
-	for (auto & elem : this->maps)
-		std::cout << "map-> " << elem.first << std::endl;
-	// TODO : display_map_list_&&_select_map
-	this->current_map = "map_01"; //example
+	return this->name;
 }
 
-void						Map::build(void)
+std::map<std::pair<int, int>, Case>			Map::getContent()
 {
-	if (this->maps.count(this->current_map) != 0)
-	{
-		for (auto & elem : this->maps[this->current_map])
-		{
-			if (elem.second.obstacle != NULL) {
-				this->scene->add(elem.second.obstacle);
-			}
-			if (elem.second.ground != NULL) {
-				this->scene->add(elem.second.ground);
-			}
-		}
-	}
+	return this->content;
 }
 
 Case						*Map::getCase(int x, int z)
 {
-	if (this->maps.count(this->current_map) == 0 || this->maps[this->current_map].count(std::make_pair(x, z)) == 0)
-		return NULL;
-	 return &this->maps[this->current_map][std::make_pair(x, z)];
+	 return &this->content[std::make_pair(x, z)];
 }
 
 // ###############################################################
