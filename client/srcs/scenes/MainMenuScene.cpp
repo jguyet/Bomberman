@@ -1,4 +1,5 @@
 #include "Bomberman.hpp"
+#include "network/Socket.hpp"
 
 // STATIC ########################################################
 
