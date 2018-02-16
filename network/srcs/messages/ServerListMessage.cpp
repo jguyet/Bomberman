@@ -1,11 +1,11 @@
 #include "messages/ServerListMessage.hpp"
 
-ServerListMessage::ServerListMessage() : IMessage(1, sizeof(IMessage) + sizeof(ServerListMessage))
+ServerListMessage::ServerListMessage(ServerObject servers[SERVERS_LEN]) : IMessage(1, sizeof(IMessage) + sizeof(ServerListMessage))
 {
-	this->servers.push_back("1v1");
-	this->servers.push_back("2v2");
-	this->servers.push_back("4v4");
-	this->servers.push_back("5v5");
+	for (int i = 0; i < SERVERS_LEN; i++)
+	{
+		this->servers[i] = servers[i];
+	}
 }
 
 ServerListMessage::ServerListMessage ( ServerListMessage const & src )

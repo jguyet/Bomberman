@@ -17,6 +17,7 @@ OBJDIR = objs/
 INCDIR = includes/
 
 SRCS_BASE			=	Packet.cpp							\
+						objs/ServerObject.cpp				\
 						messages/ServerListMessage.cpp		\
 
 SRCS	=	$(addprefix $(SRCDIR), $(SRCS_BASE))
@@ -28,7 +29,6 @@ FLAGS =
 all: $(NAME)
 
 $(NAME):
-	@echo "Builiding the network library..."
 	@make BUILD
 
 BUILD: $(OBJDIR) $(OBJS)

@@ -3,7 +3,8 @@
 
 #include "All.hpp"
 #include "IMessage.hpp"
-#define t_byte char
+#define t_byte	char
+#define SOCK	int
 
 class Packet
 {
@@ -12,8 +13,9 @@ class Packet
 		Packet(IMessage *message);
 		Packet( Packet const & src );
 		virtual ~Packet();
+		int			sendPacket(SOCK);
 		t_byte		*getMessageRaw();
-		IMessage	*getBaseMessage();	
+		IMessage	*getBaseMessage();
 
 		Packet &							operator=( Packet const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Packet const & i);

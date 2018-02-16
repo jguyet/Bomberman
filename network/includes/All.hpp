@@ -18,5 +18,6 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <sys/socket.h>
 
 #endif

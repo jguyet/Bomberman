@@ -19,6 +19,11 @@ t_byte *Packet::getMessageRaw()
 	return (bytes);
 }
 
+int Packet::sendPacket(SOCK socket)
+{
+	return (send(socket, (void*)this->getMessageRaw(), message->packet_len, 0));
+}
+
 IMessage *Packet::getBaseMessage()
 {
 	return this->message;
