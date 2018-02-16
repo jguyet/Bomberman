@@ -9,7 +9,7 @@ class ExplosionControllerScript : public Script
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											ExplosionControllerScript( void );
+											ExplosionControllerScript( long timer );
 											ExplosionControllerScript( ExplosionControllerScript const & src );
 		virtual								~ExplosionControllerScript( void );
 		ExplosionControllerScript &			operator=( ExplosionControllerScript const & rhs );
@@ -24,6 +24,10 @@ class ExplosionControllerScript : public Script
 		// PRIVATES ###########################################################
 		long								startTime;
 		// ####################################################################
+		long								start;
+		long 								timer;
+		long 								timerExplode;
+
 };
 
 #endif

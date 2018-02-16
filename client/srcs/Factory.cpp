@@ -18,7 +18,17 @@ GameObject							*Factory::newPlayer(void)
 	obj->tag = "Player";
 	obj->AddComponent<Model>(Model::model["bomberman"]);
 	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
-	obj->AddComponent<Script>(new CharacterControllerScript());
+	obj->AddComponent<Script>(new CharacterControllerScript(1));
+	return (obj);
+}
+GameObject							*Factory::newPlayer2(void)
+{
+	GameObject	*obj = new GameObject();
+
+	obj->tag = "Player2";
+	obj->AddComponent<Model>(Model::model["bomberman2"]);
+	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
+	obj->AddComponent<Script>(new CharacterControllerScript(2));
 	return (obj);
 }
 
@@ -32,7 +42,7 @@ GameObject							*Factory::newBomb(void)
 	return (obj);
 }
 
-GameObject							*Factory::newExplosion(float x, float z)
+GameObject							*Factory::newExplosion(float x, float z, long timer)
 {
 	GameObject	*obj = new GameObject();
 
@@ -40,7 +50,7 @@ GameObject							*Factory::newExplosion(float x, float z)
 	obj->transform.position = glm::vec3(x, 0, z);
 	obj->transform.scale = glm::vec3(4.f, 4.f, 4.f);
 	obj->AddComponent<Model>(Model::model["flamme_block"]);
-	obj->AddComponent<Script>(new ExplosionControllerScript());
+	obj->AddComponent<Script>(new ExplosionControllerScript(timer));
 	return (obj);
 }
 
