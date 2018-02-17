@@ -125,6 +125,8 @@ void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case>
 **	This is not on me.
 */
 
+// PRIVATE METHOD #################################################
+
 int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value)
 {
 	Case cube;
@@ -185,3 +187,5 @@ std::ostream &				operator<<(std::ostream & o, MapManager const & i)
 
 	return (o);
 }
+
+std::map<std::string, Map*> MapManager::maps;

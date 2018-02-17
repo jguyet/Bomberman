@@ -30,7 +30,7 @@ class MapManager
 		Map				*getMap(std::string name);
 		void			buildObjects(Map *selected);
 	private:
-		std::map<std::string, Map*> maps;
+		static	std::map<std::string, Map*> maps;
 		Scene *scene;
 };
 

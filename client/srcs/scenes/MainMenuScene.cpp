@@ -19,8 +19,6 @@ MainMenuScene::MainMenuScene ( void )
 	this->interface = new MainMenuInterface();
 
 	//TODO CO TOI LA POUR LE MOMENT est test de send des message dans calculPhisics en bas !
-
-
 	return ;
 }
 
@@ -54,7 +52,6 @@ std::ostream &				operator<<(std::ostream & o, MainMenuScene const & i)
 
 void								MainMenuScene::calculPhisics(void)
 {
-
 	//BombermanClient::instance->sock->do_select();
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE)) {//ESC
 		BombermanClient::instance->stop();

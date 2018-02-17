@@ -1,32 +1,36 @@
-#ifndef MAP_HPP
-# define MAP_HPP
+#ifndef A_STAR_HPP
+# define A_STAR_HPP
 
 # include "Bomberman.hpp"
-# include "models/Case.hpp"
 
-class Map
+struct Manhattan_h {
+	int		heuristic;
+	int		pos_x;
+	int		pos_y;
+};
+
+class A_star
 {
 	public:
 		// STATICS #############################################################
 		// #####################################################################
 		// CANONICAL ###########################################################
-													Map(std::string name);
-													Map( Map const & src );
-		virtual										~Map( void );
-		Map &										operator=( Map const & rhs );
-		friend std::ostream &						operator<<(std::ostream & o, Map const & i);
+													A_star( void );
+													A_star( A_star const & src );
+		virtual										~A_star( void );
+		A_star &									operator=( A_star const & rhs );
+		friend std::ostream &						operator<<(std::ostream & o, A_star const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		Case										*getCase(int x, int z);
-		std::string									getName();
-		std::map<std::pair<int, int>, Case>			getContent();
+		void										get_heuristic(void);
+		void										path_finding(void);
 		// #####################################################################
-		std::map<std::pair<int, int>, Case>			content;
-		std::string									name;
+
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		Scene										*scene;
+		// open list  priority_queue
+		// close list std::map
 		// #####################################################################
 };
 
