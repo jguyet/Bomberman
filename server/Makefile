@@ -19,7 +19,7 @@ MAX_COLS	=	$$(echo "$$(tput cols)-24-$(LENGTHNAME)"|bc)
 
 CC			=	g++ -std=c++1z
 FLAGS 		=
-LIBS		= ../network/network.a
+LIBS		= ../network/libnetwork.a
 FLAGS_O		=
 
 SRCDIR_BOMBER_SERVER		=	srcs/
