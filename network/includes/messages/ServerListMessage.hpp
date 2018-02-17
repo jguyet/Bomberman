@@ -10,6 +10,7 @@
 class ServerListMessage : public IMessage
 {
 	public:
+		static constexpr int ID = 1;
 
 		ServerListMessage(ServerObject servers[SERVERS_LEN]);
 		ServerListMessage( ServerListMessage const & src );
@@ -20,5 +21,6 @@ class ServerListMessage : public IMessage
 
 		ServerObject servers[SERVERS_LEN];
 };
+
 
 #endif

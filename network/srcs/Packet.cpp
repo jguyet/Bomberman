@@ -36,7 +36,7 @@ Packet &				Packet::operator=( Packet const & rhs )
 
 Packet::~Packet ()
 {
-	return ;
+	delete this->message;
 }
 
 std::ostream &				operator<<(std::ostream & o, Packet const & i)

@@ -14,8 +14,9 @@ BombermanClient::BombermanClient ( void )
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
 
-	//char host[] = "localhost";
-	//this->sock = new Socket(host, 8964);
+	char host[] = "localhost";
+	this->sock = new Socket(host, 8964);
+
 	return ;
 }
 
@@ -32,10 +33,6 @@ BombermanClient::~BombermanClient ( void )
 
 BombermanClient &			BombermanClient::operator=( BombermanClient const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 

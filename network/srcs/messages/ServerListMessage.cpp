@@ -1,6 +1,6 @@
 #include "messages/ServerListMessage.hpp"
 
-ServerListMessage::ServerListMessage(ServerObject servers[SERVERS_LEN]) : IMessage(1, sizeof(IMessage) + sizeof(ServerListMessage))
+ServerListMessage::ServerListMessage(ServerObject servers[SERVERS_LEN]) : IMessage(ServerListMessage::ID, sizeof(IMessage) + sizeof(ServerListMessage))
 {
 	for (int i = 0; i < SERVERS_LEN; i++)
 	{

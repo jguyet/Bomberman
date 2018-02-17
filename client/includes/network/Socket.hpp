@@ -12,6 +12,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include "Handler.hpp"
+# include "messages/ServerListMessage.hpp"
+# include "messages/MapSelectMessage.hpp"
+# include "enums/ServerType.hpp"
+# include "network/MessageHandler.hpp"
+# include <thread>
 
 #define BUF_SIZE 4096
 
@@ -28,13 +34,16 @@ class Socket
 		Socket &							operator=( Socket const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Socket const & i);
 
+		static void							Thread(Socket *socket);
 		void 								do_select();
+		int									*getId(int id);
 
 	private:
+		int		tmp;
 		int 	sock = 0;
 		bool	state = false;
-
 		fd_set	rdfs;
+		Handler	*handler;
 };
 
 #endif

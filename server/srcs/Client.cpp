@@ -3,8 +3,10 @@
 
 #include "Packet.hpp"
 #include "messages/ServerListMessage.hpp"
+#include "messages/MapSelectMessage.hpp"
 #include "enums/ServerType.hpp"
 #include "objs/ServerObject.hpp"
+#include <unistd.h>
 
 Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), in(in), address(inet_ntoa(in.sin_addr)), server(server)
 {
@@ -17,6 +19,11 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 
 	Packet *packet = new Packet(new ServerListMessage(servers));
 	packet->sendPacket(sock);
+
+	usleep(1000 * 1000);
+	Packet *packet_2 = new Packet(new MapSelectMessage("map_01"));
+	packet_2->sendPacket(sock);
+	// printf("Result: %d", packet->sendPacket(sock));
 	// t_byte *raw = packet->getMessageRaw();
     //
 	// std::cout << "Packet length: " << std::to_string(packet->getBaseMessage()->packet_len) << std::endl;
