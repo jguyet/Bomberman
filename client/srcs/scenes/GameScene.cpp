@@ -2,7 +2,7 @@
 
 // CANONICAL #####################################################
 
-GameScene::GameScene ( void )
+GameScene::GameScene (std::string selected_map)
 {
 	//CAMERA
 	this->camera = new Camera();
@@ -12,7 +12,7 @@ GameScene::GameScene ( void )
 	this->camera->buildFPSProjection();
 
 	MapManager mapManager(this);
-	this->map = mapManager.getMap("map_01");
+	this->map = mapManager.getMap(selected_map);
 	mapManager.buildObjects(this->map);
 
 	//build map

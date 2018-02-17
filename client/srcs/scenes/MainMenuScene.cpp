@@ -17,8 +17,6 @@ MainMenuScene::MainMenuScene ( void )
 	this->camera->buildFPSProjection();
 
 	this->interface = new MainMenuInterface();
-
-	//TODO CO TOI LA POUR LE MOMENT est test de send des message dans calculPhisics en bas !
 	return ;
 }
 
@@ -57,7 +55,7 @@ void								MainMenuScene::calculPhisics(void)
 		BombermanClient::instance->stop();
 	}
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_ENTER) || KeyBoard::instance->getKey(SDL_SCANCODE_RETURN)) {//ESC
-		BombermanClient::instance->current_scene = new GameScene();
+		BombermanClient::instance->current_scene = new GameScene("map_01");
 		return ;
 	}
 	//call parent method
