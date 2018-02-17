@@ -21,7 +21,6 @@ class A_star
 		A_star &									operator=( A_star const & rhs );
 		friend std::ostream &						operator<<(std::ostream & o, A_star const & i);
 		// #####################################################################
-
 		// PUBLIC ##############################################################
 		void										get_heuristic(void);
 		void										path_finding(void);

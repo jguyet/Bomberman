@@ -49,7 +49,7 @@ std::map<std::pair<int, int>, Case>			Map::getContent()
 
 Case						*Map::getCase(int x, int z)
 {
-	 return &this->content[std::make_pair(x, z)];
+	return &this->content[std::make_pair(x, z)];
 }
 
 // ###############################################################

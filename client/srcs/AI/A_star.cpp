@@ -46,7 +46,7 @@ void						A_star::get_heuristic(void)
 
 	// int dif_x = (e.x_base - finalboard[e.value as usize - 1].x_base).abs();
 	// int dif_y = (e.y_base - finalboard[e.value as usize - 1].y_base).abs();
-	elem.heuristic = dif_x + dif_y;
+	// elem.heuristic = dif_x + dif_y;
 }
 
 void						A_star::path_finding(void)

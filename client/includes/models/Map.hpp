@@ -21,8 +21,8 @@ class Map
 		std::string									getName();
 		std::map<std::pair<int, int>, Case>			getContent();
 		// #####################################################################
-		std::map<std::pair<int, int>, Case>							content;
-		std::string	name;
+		std::map<std::pair<int, int>, Case>			content;
+		std::string									name;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

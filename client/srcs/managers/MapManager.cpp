@@ -125,13 +125,9 @@ void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case>
 **	This is not on me.
 */
 
-<<<<<<< HEAD:client/srcs/utils/GetMaps.cpp
 // PRIVATE METHOD #################################################
 
-int		GetMaps::set_block(std::map<std::pair<int, int>, Case> &map, int y, int x, int value)
-=======
 int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value)
->>>>>>> b10dccf259cd10532bb2141995577db512f31633:client/srcs/managers/MapManager.cpp
 {
 	Case cube;
 	GameObject *block;
@@ -191,3 +187,5 @@ std::ostream &				operator<<(std::ostream & o, MapManager const & i)
 
 	return (o);
 }
+
+std::map<std::string, Map*> MapManager::maps;
