@@ -10,15 +10,17 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = network.a
+NAME = libnetwork.a
 
 SRCDIR = srcs/
 OBJDIR = objs/
 INCDIR = includes/
 
 SRCS_BASE			=	Packet.cpp							\
+						Handler.cpp							\
 						objs/ServerObject.cpp				\
 						messages/ServerListMessage.cpp		\
+						messages/MapSelectMessage.cpp		\
 
 SRCS	=	$(addprefix $(SRCDIR), $(SRCS_BASE))
 OBJS	=	$(addprefix $(OBJDIR), $(SRCS_BASE:.cpp=.o))
