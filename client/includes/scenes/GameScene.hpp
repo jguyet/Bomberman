@@ -35,6 +35,7 @@ class GameScene : public Scene
 		GameObject							*player;
 		GameObject							*player2;
 		GameInterface						*interface;
+		std::vector<GameObject*>			players;
 		Map									*map;
 		// ####################################################################
 };

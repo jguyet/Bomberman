@@ -15,16 +15,19 @@ GameScene::GameScene ( void )
 	this->map = mapManager.getMap("map_01");
 	mapManager.buildObjects(this->map);
 
-	//build map
-	// this->map = new Map(this);
+	// BombermanClient::instance::current_scene;
 
 	//add player
 	this->player = Factory::newPlayer();
 	this->player2 = Factory::newPlayer2();
+
+	this->players.push_back(this->player);
+	this->players.push_back(this->player2);
+
 	this->player->transform.position = glm::vec3(2,1,4);
 	this->player->transform.scale = glm::vec3(3,3,3);
 	this->player->transform.rotation = glm::vec3(0,0,0);
-	this->player2->transform.position = glm::vec3(15,1,31);
+	this->player2->transform.position = glm::vec3(10,1,1);
 	this->player2->transform.scale = glm::vec3(3,3,3);
 	this->player2->transform.rotation = glm::vec3(0,0,0);
 	this->add(this->player);//add on scene
