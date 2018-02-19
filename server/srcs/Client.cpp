@@ -20,22 +20,10 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 	Packet *packet = new Packet(new ServerListMessage(servers));
 	packet->sendPacket(sock);
 
-	usleep(1000 * 1000);
+	usleep(3000 * 1000);
 	Packet *packet_2 = new Packet(new MapSelectMessage("map_01"));
 	packet_2->sendPacket(sock);
-	// printf("Result: %d", packet->sendPacket(sock));
-	// t_byte *raw = packet->getMessageRaw();
-    //
-	// std::cout << "Packet length: " << std::to_string(packet->getBaseMessage()->packet_len) << std::endl;
-    //
-	// for (int i = 0;i < packet->getBaseMessage()->packet_len;i++)
-	// {
-	// 	printf("%x", raw[i]);
-	// }
-	// printf("\n");
-	// ServerListMessage *converted = (ServerListMessage*)raw;
-	// printf("%d\n", converted->servers[3].id);
-
+	
 	std::thread thread(Client::clientThread, this);
 	thread.detach();
 }

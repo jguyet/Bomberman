@@ -6,7 +6,7 @@
 /*   By: jguyet <jguyet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 09:43:10 by jguyet            #+#    #+#             */
-/*   Updated: 2018/02/16 21:36:25 by amerelo          ###   ########.fr       */
+/*   Updated: 2018/02/19 06:09:26 by amerelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,8 @@ std::vector<std::string>		split(const std::string &s, char delim);
 /*
 ** AI
 */
+# include "AI/Module_h.hpp"
 # include "AI/A_star.hpp"
-
+# include "AI/AI.hpp"
 
 #endif

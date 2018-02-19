@@ -12,7 +12,7 @@ Packet::Packet ( Packet const & src )
 
 t_byte *Packet::getMessageRaw()
 {
-	if (!(bytes = (t_byte*)malloc(sizeof(char) * message->packet_len))) {
+	if (!(bytes = (t_byte*)malloc(sizeof(t_byte) * message->packet_len))) {
 		return NULL;
 	}
 	memcpy((void*)bytes, (void*)message, message->packet_len);

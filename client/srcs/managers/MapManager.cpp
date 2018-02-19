@@ -5,6 +5,11 @@ MapManager::MapManager (Scene *scene) : scene(scene)
 	this->loadMaps();
 }
 
+MapManager::MapManager (void)
+{
+	return;
+}
+
 MapManager::MapManager ( MapManager const & src )
 {
 	*this = src;
@@ -165,12 +170,10 @@ void						MapManager::buildObjects(Map *selected)
 {
 	for (auto & elem : selected->content)
 	{
-		if (elem.second.obstacle != NULL) {
+		if (elem.second.obstacle != NULL)
 			this->scene->add(elem.second.obstacle);
-		}
-		if (elem.second.ground != NULL) {
-			this->scene->add(elem.second.ground);
-		}
+		// if (elem.second.ground != NULL)
+			// this->scene->add(elem.second.ground);
 	}
 }
 

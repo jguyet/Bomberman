@@ -17,6 +17,7 @@ class MapManager
 {
 	public:
 		MapManager(Scene *scene);
+		MapManager(void);
 		MapManager( MapManager const & src );
 		virtual ~MapManager();
 
@@ -31,7 +32,7 @@ class MapManager
 		void			buildObjects(Map *selected);
 	private:
 		static	std::map<std::string, Map*> maps;
-		Scene *scene;
+		Scene								*scene;
 };
 
 #endif

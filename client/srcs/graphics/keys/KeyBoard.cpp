@@ -9,6 +9,7 @@ void			KeyBoard::key_callback(SDL_Event *event)
 		return ;
 	//std::cout << "Key entry : " << event->key.keysym.scancode << std::endl;
 	KeyBoard::instance->pressedKeys[event->key.keysym.scancode] = (event->type == SDL_KEYDOWN) ? true : false;
+
 }
 
 // ###############################################################

@@ -5,6 +5,7 @@
 #include "Handler.hpp"
 #include "messages/ServerListMessage.hpp"
 #include "messages/MapSelectMessage.hpp"
+#include "managers/ActionQueueManager.hpp"
 
 class MessageHandler
 {

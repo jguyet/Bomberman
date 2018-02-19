@@ -22,6 +22,11 @@ class CharacterControllerScript : public Script
 		void								OnEndRender(void);
 		void								OnCollisionEnter(GameObject *collider);
 		// PUBLICS ############################################################
+		void								Attack(void);
+		void								MUp(void);
+		void								MDown(void);
+		void								MLeft(void);
+		void								MRight(void);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
@@ -33,5 +38,7 @@ class CharacterControllerScript : public Script
 		int 								player = 1;
 		// ####################################################################
 };
+
+typedef void (CharacterControllerScript::*P)(void);
 
 #endif

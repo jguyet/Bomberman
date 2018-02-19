@@ -1,4 +1,5 @@
 #include "Bomberman.hpp"
+#include "managers/ActionQueueManager.hpp"
 
 // CANONICAL #####################################################
 
@@ -91,6 +92,7 @@ void						RenderLoop::looprender( void )
 		long passedTime = TimeUtils::getCurrentNanoSeconds() - lastTime;
 
 		if (passedTime >= this->renderRate) {
+			ActionQueueManager::instance->consume();
 			lastTime = TimeUtils::getCurrentNanoSeconds();
 			this->renderloop->renderLoop();
 			frames++;

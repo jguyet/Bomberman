@@ -1,4 +1,5 @@
 #include "network/MessageHandler.hpp"
+#include "models/ActionQueue.hpp"
 
 MessageHandler::MessageHandler ()
 {
@@ -50,5 +51,6 @@ void MessageHandler::ServerListMessageHandler(SOCK socket, ServerListMessage *me
 void MessageHandler::MapSelectMessageHandler(SOCK socket, MapSelectMessage *message)
 {
 	printf("Please select the map %s\n", message->name.c_str());
+	ActionQueueManager::instance->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 	// BombermanClient::instance->current_scene = new GameScene();
 }

@@ -94,7 +94,7 @@ void								BombControllerScript::explode(void)
 	if (c == NULL)
 		return ;
 	c->obstacle = NULL;
-	int puissance = 4;
+	int puissance = 1;
 	//z+
 	for (int i = 1; i < (puissance + 1); i++) {
 		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z + i);

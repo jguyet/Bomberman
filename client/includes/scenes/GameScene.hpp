@@ -14,7 +14,7 @@ class GameScene : public Scene
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											GameScene( void );
+											GameScene(std::string selected_map);
 		virtual								~GameScene( void );
 		GameScene &							operator=( GameScene const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, GameScene const & i);
