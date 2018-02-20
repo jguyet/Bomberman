@@ -65,7 +65,8 @@ void				AI::get_target(int x, int y, std::vector<GameObject*> players)
 // std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 int					AI::brain(int x, int y)
 {
-	static std::vector<Module_h> moves;
+	// static std::vector<Module_h> moves;
+	// std::vector<Module_h> tmp;
 
 	// moves.clear();
 	if (this->target.pos_x == 0 && this->target.pos_y == 0)
@@ -78,31 +79,35 @@ int					AI::brain(int x, int y)
 
 	if (moves.size() > 0)
 	{
-		if (x == moves[1].pos_x && y == moves[1].pos_y)
+		std::cout << "Position x >" << x << "< y >" << y << "< " << std::endl;
+		std::cout << "Objective x >" << moves[0].pos_x << "< y >" << moves[0].pos_y << "< " << std::endl;
+
+		if (x == moves[0].pos_x && y == moves[0].pos_y)
+		{
+			std::cout << "Objective Next objective" << std::endl;
 			moves.pop_back();
+		}
+		else
+			std::cout << "nope" << std::endl;
 	}
 	else if (this->a_star.path_finding(x, y, this->target, moves))
 	{
+		moves.pop_back();
+		// int tmp_x, tmp_y;
 		for (auto elem : moves)
 		{
 			std::cout << "-x " << elem.pos_x << " -y " << elem.pos_y <<  std::endl;
 		}
 	}
-	if (x + 1 == moves[1].pos_x && y == moves[1].pos_y)
+
+	if (x + 1 == moves[0].pos_x && y == moves[0].pos_y)
 		return(SDL_SCANCODE_UP);
-	if (x - 1 == moves[1].pos_x && y == moves[1].pos_y)
+	if (x - 1 == moves[0].pos_x && y == moves[0].pos_y)
 		return(SDL_SCANCODE_DOWN);
-	if (x == moves[1].pos_x && y + 1 == moves[1].pos_y)
+	if (x == moves[0].pos_x && y + 1 == moves[0].pos_y)
 		return(SDL_SCANCODE_RIGHT);
-	if (x == moves[1].pos_x && y - 1 == moves[1].pos_y)
+	if (x == moves[0].pos_x && y - 1 == moves[0].pos_y)
 		return(SDL_SCANCODE_LEFT);
-	// std::cout << "size " << moves.size() <<   std::endl;
-	// if (moves.size() > 1)
-	// {
-	// }
-	// std::cout << "size "  << moves.size()  << std::endl;
-
-
 	return (0);
 }
 

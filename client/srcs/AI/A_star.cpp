@@ -53,6 +53,8 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::vector<Modul
 		return (false);
 
 	this->FormatMoves(moves, target.pos_x, target.pos_y, 0, x, y);
+	moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
+
 	this->close_list.clear();
 	while (!this->open_list.empty())
 		this->open_list.pop();
@@ -71,10 +73,7 @@ void						A_star::set_map(Map* map)
 int 						A_star::FormatMoves(std::vector<Module_h> &moves, int x, int y, int p, int s_x, int s_y)
 {
 	if (x == s_x && y == s_y)
-	{
-		// std::reverse(moves.begin(), moves.end());
 		return (1);
-	}
 
 	// std::cout << "------------------------ size[0] "  << moves.size() << "||| x " << x << " y "  << y << " h " << h << std::endl;
 	if (this->Find_next(moves, x + 1, y,  p, s_x, s_y))
@@ -138,7 +137,8 @@ void						A_star::find_path(Module_h &target)
 		p = c_case.p;
 		this->close_list.insert(std::pair<std::pair<int, int>, Module_h>(std::make_pair(std::make_pair(c_case.pos_x, c_case.pos_y), c_case)));
 		this->open_list.pop();
-		std::cout <<  " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
+
+		std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
 
 		// UP
 		get_adjacent(c_case, target, c_case.pos_x, c_case.pos_y + 1, p);
@@ -151,6 +151,8 @@ void						A_star::find_path(Module_h &target)
 
 		c_case = this->open_list.top();
 	}
+	this->close_list.insert(std::pair<std::pair<int, int>, Module_h>(std::make_pair(std::make_pair(c_case.pos_x, c_case.pos_y), c_case)));
+	std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
 }
 
 void						A_star::get_adjacent(Module_h c_case, Module_h &target, int x, int y, int p)

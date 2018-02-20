@@ -24,6 +24,7 @@ class AI
 		// #####################################################################
 		Module_h 									target;
 		GameObject*									tplayer;
+		std::vector<Module_h> 						moves;
 		A_star										a_star;
 		// #####################################################################
 	private:
