@@ -17,7 +17,7 @@ class A_star
 		friend std::ostream &						operator<<(std::ostream & o, A_star const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		bool										path_finding(int y, int x, Module_h &target, std::vector<Module_h> &moves);
+		bool										path_finding(int y, int x, Module_h &target, std::list<Module_h> &moves);
 		void										set_map(Map* map);
 		// #####################################################################
 		Map* 										map;
@@ -25,8 +25,8 @@ class A_star
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		int											Find_next(std::vector<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
-		int											FormatMoves(std::vector<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
+		int											Find_next(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
+		int											FormatMoves(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
 		void										get_heuristic(int y, int x, Module_h &target, int p);
 		void										find_path(Module_h &target);
 		void										get_adjacent(Module_h c_case, Module_h &target, int x, int y, int p);

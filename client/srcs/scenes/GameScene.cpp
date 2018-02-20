@@ -6,7 +6,7 @@ GameScene::GameScene (std::string selected_map)
 {
 	//CAMERA
 	this->camera = new Camera();
-	this->camera->setProjection(45.0f, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 0.1f, 1000.0f);
+	this->camera->setProjection(45.0f, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height, 0.1f, 1000000.0f);
 	this->camera->transform.position = glm::vec3(-3.4917f,36.6297f,-17.5657f);
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
@@ -27,7 +27,7 @@ GameScene::GameScene (std::string selected_map)
 	this->player->transform.position = glm::vec3(2,1,4);
 	this->player->transform.scale = glm::vec3(3,3,3);
 	this->player->transform.rotation = glm::vec3(0,0,0);
-	this->player2->transform.position = glm::vec3(10,1,1);
+	this->player2->transform.position = glm::vec3(2,1,35);
 	this->player2->transform.scale = glm::vec3(3,3,3);
 	this->player2->transform.rotation = glm::vec3(0,0,0);
 	this->add(this->player);//add on scene

@@ -11,6 +11,8 @@ class Factory
 		static GameObject					*newPlayer2(void);
 		static GameObject					*newBomb(void);
 		static GameObject					*newExplosion(float x, float z, long timer);
+		static GameObject					*newBackground(void);
+		static GameObject					*newSkybox(void);
 
 		Factory( void );
 		Factory( Factory const & src );

@@ -13,10 +13,10 @@ BombermanClient::BombermanClient ( void )
 	this->screen = new Screen(1680, 1050);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
-
+/*
 	char host[] = "localhost";
 	this->sock = new Socket(host, 8964);
-
+*/
 	return ;
 }
 
@@ -83,6 +83,9 @@ void						BombermanClient::initialize_resources( void )
 	Model::load("N64", ShaderUtils::instance->get("dir"), "assets/textures/N64 Cube/N64 Cube.obj");
 	Model::load("ice_block", ShaderUtils::instance->get("dir"), "assets/textures/blocks/mur1.obj");
 	Model::load("ground1", ShaderUtils::instance->get("dir"), "assets/textures/blocks/sol1.obj");
+
+	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/textures/grass.obj");
+	Model::load("skybox", ShaderUtils::instance->get("dir"), "assets/skybox/skybox.obj");
 }
 
 void						BombermanClient::build_window( void )
@@ -106,8 +109,8 @@ void						BombermanClient::build_window( void )
 	}
 
 	//OPENGL version 3.3
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
@@ -129,7 +132,7 @@ void						BombermanClient::build_window( void )
 	//Accept fragment if it closer to the camera than the former one
 	//glDepthFunc(GL_LESS);
 	// Cull triangles which normal is not towards the camera
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
 
 	//0 for immediate updates, 1 for updates synchronized with the vertical retrace, -1 for late swap tearing

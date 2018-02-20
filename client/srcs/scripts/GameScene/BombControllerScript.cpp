@@ -94,62 +94,46 @@ void								BombControllerScript::explode(void)
 	if (c == NULL)
 		return ;
 	c->obstacle = NULL;
-	int puissance = 1;
+	int puissance = 9;
 	//z+
 	for (int i = 1; i < (puissance + 1); i++) {
 		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z + i);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion(x*2, (z + i)*2, i-1));
-		if (b->obstacle != NULL && b->obstacle->tag != "Bomb") {
-			BombermanClient::instance->current_scene->remove(b->obstacle);
-			delete b->obstacle;
-			b->obstacle = NULL;
-			b->walkable = true;
-			break ;
-		}
+		BombermanClient::instance->current_scene->add(Factory::newExplosion(x, (z + i), i));
+		if (b->obstacle != NULL)
+			if (b->obstacle->tag == "ground1")
+				break;
 	}
 	//z-
 	for (int i = 1; i < (puissance + 1); i++) {
 		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z - i);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion(x*2, (z - i)*2, i-1));
-		if (b->obstacle != NULL && b->obstacle->tag != "Bomb") {
-			BombermanClient::instance->current_scene->remove(b->obstacle);
-			delete b->obstacle;
-			b->obstacle = NULL;
-			b->walkable = true;
-			break ;
-		}
+		BombermanClient::instance->current_scene->add(Factory::newExplosion(x, (z - i), i));
+		if (b->obstacle != NULL)
+			if (b->obstacle->tag == "ground1")
+				break ;
 	}
 	//x+
 	for (int i = 1; i < (puissance + 1); i++) {
 		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x + i, z);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion((x + i)*2, z*2, i-1));
-		if (b->obstacle != NULL && b->obstacle->tag != "Bomb") {
-			BombermanClient::instance->current_scene->remove(b->obstacle);
-			delete b->obstacle;
-			b->obstacle = NULL;
-			b->walkable = true;
-			break ;
-		}
+		BombermanClient::instance->current_scene->add(Factory::newExplosion((x + i), z, i));
+		if (b->obstacle != NULL)
+			if (b->obstacle->tag == "ground1")
+				break;
 	}
 	//x-
 	for (int i = 1; i < (puissance + 1); i++) {
 		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x - i, z);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion((x - i)*2, z*2, i-1));
-		if (b->obstacle != NULL && b->obstacle->tag != "Bomb") {
-			BombermanClient::instance->current_scene->remove(b->obstacle);
-			delete b->obstacle;
-			b->obstacle = NULL;
-			b->walkable = true;
-			break ;
-		}
+		BombermanClient::instance->current_scene->add(Factory::newExplosion((x - i), z, i));
+		if (b->obstacle != NULL)
+			if (b->obstacle->tag == "ground1")
+				break;
 	}
 	BombermanClient::instance->current_scene->remove(this->gameObject);
 	delete this->gameObject;

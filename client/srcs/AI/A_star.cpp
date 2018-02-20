@@ -40,7 +40,7 @@ std::ostream &				operator<<(std::ostream & o, A_star const & i)
 
 // PUBLIC METHOD #################################################
 
-bool						A_star::path_finding(int x, int y, Module_h &target, std::vector<Module_h> &moves)
+bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_h> &moves)
 {
 	moves.clear();
 	this->get_heuristic(y, x, target, 0);
@@ -70,7 +70,7 @@ void						A_star::set_map(Map* map)
 
 // PRIVATE METHOD ################################################
 
-int 						A_star::FormatMoves(std::vector<Module_h> &moves, int x, int y, int p, int s_x, int s_y)
+int 						A_star::FormatMoves(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y)
 {
 	if (x == s_x && y == s_y)
 		return (1);
@@ -99,7 +99,7 @@ int 						A_star::FormatMoves(std::vector<Module_h> &moves, int x, int y, int p,
 	return (0);
 }
 
-int							A_star::Find_next(std::vector<Module_h> &moves, int x, int y, int p, int s_x, int s_y)
+int							A_star::Find_next(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y)
 {
 	if (this->close_list.count(std::make_pair(x, y)) != 0 && this->close_list[std::make_pair(x, y)].heuristic == p + 1)
 	{
@@ -128,17 +128,31 @@ void						A_star::get_heuristic(int y, int x, Module_h &target, int p)
 
 void						A_star::find_path(Module_h &target)
 {
+	int i = 0;
+	int max_i = 100;
+
 	Module_h c_case = this->open_list.top();
 	int p;
 	while (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x)
 	{
+		// TODO: find ERROR
+		if (i == max_i)
+		{
+			// std::cout <<  "Error " << std::endl;
+			this->close_list.clear();
+			while (!this->open_list.empty())
+				this->open_list.pop();
+			return ;
+		}
+
 		if (this->open_list.empty())
 			return ;
 		p = c_case.p;
 		this->close_list.insert(std::pair<std::pair<int, int>, Module_h>(std::make_pair(std::make_pair(c_case.pos_x, c_case.pos_y), c_case)));
 		this->open_list.pop();
 
-		std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
+
+		std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << " |p| "  << p << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
 
 		// UP
 		get_adjacent(c_case, target, c_case.pos_x, c_case.pos_y + 1, p);
@@ -150,10 +164,12 @@ void						A_star::find_path(Module_h &target)
 		get_adjacent(c_case, target, c_case.pos_x - 1, c_case.pos_y, p);
 
 		c_case = this->open_list.top();
+		i++;
 	}
 	this->close_list.insert(std::pair<std::pair<int, int>, Module_h>(std::make_pair(std::make_pair(c_case.pos_x, c_case.pos_y), c_case)));
-	std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
+			std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << " |p| "  << c_case.p << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
 }
+
 
 void						A_star::get_adjacent(Module_h c_case, Module_h &target, int x, int y, int p)
 {
