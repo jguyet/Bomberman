@@ -52,8 +52,12 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 	else
 		return (false);
 
-	this->FormatMoves(moves, target.pos_x, target.pos_y, 0, x, y);
-	moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
+	std::cout << "X " << target.pos_x << " Y " << target.pos_y <<  " p end " << this->close_list[std::make_pair(target.pos_x, target.pos_y)].p << std::endl;
+	if (this->FormatMoves(moves, target.pos_x, target.pos_y, this->close_list[std::make_pair(target.pos_x, target.pos_y)].p, x, y))
+		moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
+
+	// if ((target.pos_x % 2) == 0 && (target.pos_y % 2) != 0)
+		// moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
 
 	this->close_list.clear();
 	while (!this->open_list.empty())
@@ -74,26 +78,31 @@ int 						A_star::FormatMoves(std::list<Module_h> &moves, int x, int y, int p, i
 {
 	if (x == s_x && y == s_y)
 		return (1);
+	else
+		std::cout << "||| x " << x << " y "  << y << std::endl;
 
-	// std::cout << "------------------------ size[0] "  << moves.size() << "||| x " << x << " y "  << y << " h " << h << std::endl;
 	if (this->Find_next(moves, x + 1, y,  p, s_x, s_y))
 	{
-		moves.push_back(this->close_list[std::make_pair(x + 1, y)]);
+		// if (((x + 1) % 2) == 0 && (y % 2) != 0)
+			moves.push_back(this->close_list[std::make_pair(x + 1, y)]);
 		return (1);
 	}
 	if (this->Find_next(moves, x - 1, y,  p, s_x, s_y))
 	{
-		moves.push_back(this->close_list[std::make_pair(x - 1, y)]);
+		// if (((x - 1) % 2) == 0 && (y % 2) != 0)
+			moves.push_back(this->close_list[std::make_pair(x - 1, y)]);
 		return (1);
 	}
 	if (this->Find_next(moves, x, y + 1,  p, s_x, s_y))
 	{
-		moves.push_back(this->close_list[std::make_pair(x, y + 1)]);
+		// if (((x % 2) == 0) && ((y + 1) % 2) != 0)
+			moves.push_back(this->close_list[std::make_pair(x, y + 1)]);
 		return (1);
 	}
 	if (this->Find_next(moves, x, y - 1,  p, s_x, s_y))
 	{
-		moves.push_back(this->close_list[std::make_pair(x, y - 1)]);
+		// if (((x % 2) == 0) && ((y - 1) % 2) != 0)
+			moves.push_back(this->close_list[std::make_pair(x, y - 1)]);
 		return (1);
 	}
 	return (0);
@@ -101,9 +110,11 @@ int 						A_star::FormatMoves(std::list<Module_h> &moves, int x, int y, int p, i
 
 int							A_star::Find_next(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y)
 {
-	if (this->close_list.count(std::make_pair(x, y)) != 0 && this->close_list[std::make_pair(x, y)].heuristic == p + 1)
+	if (this->close_list.count(std::make_pair(x, y)) != 0)
+		std::cout << ">>>>>>>>>>>>> X " << x << " Y " << y <<  " p end " << this->close_list[std::make_pair(x, y)].p << std::endl;
+	if (this->close_list.count(std::make_pair(x, y)) != 0 && this->close_list[std::make_pair(x, y)].p == p - 1)
 	{
-		if (this->FormatMoves(moves, x, y, p + 1, s_x, s_y))
+		if (this->FormatMoves(moves, x, y, p - 1, s_x, s_y))
 			return (1);
 	}
 	return (0);
@@ -114,7 +125,7 @@ void						A_star::get_heuristic(int y, int x, Module_h &target, int p)
 	Module_h elem;
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(fmax(0.5f + x / 2.f, 0), fmax(0.5f + y / 2.f, 0));
 
-	if (c->walkable == true)
+	if (c->walkable == true && this->close_list.count(std::make_pair(x, y)) == 0)
 	{
 		int dif_x = std::abs(x - target.pos_x);
 		int dif_y = std::abs(y - target.pos_y);
@@ -123,20 +134,21 @@ void						A_star::get_heuristic(int y, int x, Module_h &target, int p)
 		elem.pos_y = y;
 		elem.p = p + 1;
 		this->open_list.push(elem);
+		this->close_list.insert(std::pair<std::pair<int, int>, Module_h>(std::make_pair(std::make_pair(x, y), elem)));
 	}
 }
 
 void						A_star::find_path(Module_h &target)
 {
 	int i = 0;
-	int max_i = 100;
+	int max_i = 500;
 
 	Module_h c_case = this->open_list.top();
 	int p;
 	while (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x)
 	{
 		// TODO: find ERROR
-		if (i == max_i)
+		if (i == max_i || this->open_list.empty())
 		{
 			// std::cout <<  "Error " << std::endl;
 			this->close_list.clear();
@@ -144,16 +156,10 @@ void						A_star::find_path(Module_h &target)
 				this->open_list.pop();
 			return ;
 		}
-
-		if (this->open_list.empty())
-			return ;
 		p = c_case.p;
-		this->close_list.insert(std::pair<std::pair<int, int>, Module_h>(std::make_pair(std::make_pair(c_case.pos_x, c_case.pos_y), c_case)));
-		this->open_list.pop();
-
+		// c_case.p = c_case.p + 1;
 
 		std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << " |p| "  << p << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
-
 		// UP
 		get_adjacent(c_case, target, c_case.pos_x, c_case.pos_y + 1, p);
 		// Down
@@ -164,10 +170,12 @@ void						A_star::find_path(Module_h &target)
 		get_adjacent(c_case, target, c_case.pos_x - 1, c_case.pos_y, p);
 
 		c_case = this->open_list.top();
+		this->open_list.pop();
 		i++;
 	}
+	c_case.p++;
 	this->close_list.insert(std::pair<std::pair<int, int>, Module_h>(std::make_pair(std::make_pair(c_case.pos_x, c_case.pos_y), c_case)));
-			std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << " |p| "  << c_case.p << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
+	std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << " |p| "  << c_case.p << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
 }
 
 

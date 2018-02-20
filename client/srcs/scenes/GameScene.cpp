@@ -27,7 +27,7 @@ GameScene::GameScene (std::string selected_map)
 	this->player->transform.position = glm::vec3(2,1,4);
 	this->player->transform.scale = glm::vec3(3,3,3);
 	this->player->transform.rotation = glm::vec3(0,0,0);
-	this->player2->transform.position = glm::vec3(2,1,35);
+	this->player2->transform.position = glm::vec3(2,1,36);
 	this->player2->transform.scale = glm::vec3(3,3,3);
 	this->player2->transform.rotation = glm::vec3(0,0,0);
 	this->add(this->player);//add on scene
