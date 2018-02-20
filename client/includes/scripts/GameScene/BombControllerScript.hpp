@@ -9,7 +9,7 @@ class BombControllerScript : public Script
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											BombControllerScript( void );
+											BombControllerScript( CharacterControllerScript *playerController);
 											BombControllerScript( BombControllerScript const & src );
 		virtual								~BombControllerScript( void );
 		BombControllerScript &				operator=( BombControllerScript const & rhs );
@@ -32,6 +32,9 @@ class BombControllerScript : public Script
 		float								max_scale;
 		float								min_scale;
 		long								anim_time;
+
+		int 								power;
+		CharacterControllerScript 			*playerController;
 		// ####################################################################
 };
 

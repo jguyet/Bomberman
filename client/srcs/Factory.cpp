@@ -32,13 +32,13 @@ GameObject							*Factory::newPlayer2(void)
 	return (obj);
 }
 
-GameObject							*Factory::newBomb(void)
+GameObject							*Factory::newBomb(CharacterControllerScript *playerController)
 {
 	GameObject	*obj = new GameObject();
 
 	obj->tag = "Bomb";
 	obj->AddComponent<Model>(Model::model["bomb"]);
-	obj->AddComponent<Script>(new BombControllerScript());
+	obj->AddComponent<Script>(new BombControllerScript(playerController));
 	return (obj);
 }
 
@@ -73,6 +73,36 @@ GameObject 							*Factory::newSkybox(void)
 	obj->transform.position = glm::vec3(0, 1000, 0);
 	obj->transform.scale = glm::vec3(10000.f, -10000.f, 10000.f);
 	obj->AddComponent<Model>(Model::model["skybox"]);
+	return (obj);
+}
+
+GameObject							*Factory::newPowerUp(float x, float z)
+{
+	GameObject	*obj = new GameObject();
+	obj->transform.position = glm::vec3(x*2, 0, z*2);
+	obj->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+
+	int nb = rand() % 5 + 1;
+	switch(nb){
+		case 1:
+			obj->tag = "bonus-power-up";
+			obj->AddComponent<Model>(Model::model["bonus-power-up"]);
+		break;
+		case 2:
+			obj->tag = "bonus-speed-up";
+			obj->AddComponent<Model>(Model::model["bonus-speed-up"]);
+		break;
+		case 3:
+			obj->tag = "bonus-bomb-up";
+			obj->AddComponent<Model>(Model::model["bonus-bomb-up"]);
+		break;
+		default:
+
+		break;
+	}
+
+
+
 	return (obj);
 }
 

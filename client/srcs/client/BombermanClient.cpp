@@ -86,6 +86,11 @@ void						BombermanClient::initialize_resources( void )
 
 	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/textures/grass.obj");
 	Model::load("skybox", ShaderUtils::instance->get("dir"), "assets/skybox/skybox.obj");
+
+
+	Model::load("bonus-bomb-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/bomb-up.obj");
+	Model::load("bonus-power-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/power-up.obj");
+	Model::load("bonus-speed-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/speed-up.obj");
 }
 
 void						BombermanClient::build_window( void )

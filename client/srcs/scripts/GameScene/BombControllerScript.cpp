@@ -6,13 +6,17 @@
 
 // CANONICAL #####################################################
 
-BombControllerScript::BombControllerScript ( void )
+BombControllerScript::BombControllerScript ( CharacterControllerScript *playerController )
 {
 	this->startTime = TimeUtils::getCurrentSystemMillis();
 	this->anim_time = TimeUtils::getCurrentSystemMillis();
 	this->sens = false;
 	this->max_scale = 2.f;
 	this->min_scale = 1.f;
+
+
+	this->power = playerController->getPower();
+	this->playerController = playerController;
 	return ;
 }
 
@@ -90,11 +94,13 @@ void								BombControllerScript::explode(void)
 {
 	int x = this->gameObject->transform.position.x / 2;
 	int z = this->gameObject->transform.position.z / 2;
+	this->playerController->BombExplode();
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z);
 	if (c == NULL)
 		return ;
 	c->obstacle = NULL;
-	int puissance = 9;
+	c->walkable = true;
+	int puissance = this->power;
 	//z+
 	for (int i = 1; i < (puissance + 1); i++) {
 		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z + i);

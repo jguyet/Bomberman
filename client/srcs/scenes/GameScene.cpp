@@ -34,12 +34,12 @@ GameScene::GameScene (std::string selected_map)
 	this->add(this->player2);//add on scene
 
 	//add LOGO WESH
-	GameObject *logo_N = new GameObject();
+	/*GameObject *logo_N = new GameObject();
 	logo_N->AddComponent<Model>(Model::model["N64"]);
 	logo_N->transform.position = glm::vec3(30,-5,0);
 	logo_N->transform.scale = glm::vec3(1,1,1);
 	logo_N->transform.rotation = glm::vec3(0,0,0);
-	this->add(logo_N);//add on scene
+	this->add(logo_N);//add on scene*/
 
 	this->interface = new GameInterface(1);
 

@@ -27,6 +27,9 @@ class CharacterControllerScript : public Script
 		void								MDown(void);
 		void								MLeft(void);
 		void								MRight(void);
+
+		void 								BombExplode();
+		int 								getPower();
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
@@ -36,6 +39,11 @@ class CharacterControllerScript : public Script
 
 		bool								has_moved = false;
 		int 								player = 1;
+
+		float								speed = 0.05f;
+		int 								bomb = 5;
+		int 								power = 5;
+		int 								life = 5;
 		// ####################################################################
 };
 
