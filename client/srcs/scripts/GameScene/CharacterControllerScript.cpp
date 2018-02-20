@@ -49,10 +49,14 @@ void						CharacterControllerScript::Start(void)
 
 void								CharacterControllerScript::Attack(void)
 {
+	if (this->bomb <= 0)
+		return ;
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 	if (c->obstacle != NULL)
 		return ;
-	GameObject *bomb = Factory::newBomb();
+	c->walkable = false;
+	this->bomb--;
+	GameObject *bomb = Factory::newBomb(this);
 
 	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
 	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
@@ -61,12 +65,17 @@ void								CharacterControllerScript::Attack(void)
 	c->obstacle = bomb;
 }
 
+void 								CharacterControllerScript::BombExplode()
+{
+	this->bomb++;
+}
+
 void								CharacterControllerScript::MUp(void)
 {
 	if (this->gameObject->transform.rotation.y != 270.f) {
 		this->gameObject->transform.rotation.y = 270.f;
 	}
-	this->gameObject->transform.position.x += 0.1f;
+	this->gameObject->transform.position.x += this->speed;
 	this->has_moved = true;
 }
 
@@ -75,7 +84,7 @@ void								CharacterControllerScript::MDown(void)
 	if (this->gameObject->transform.rotation.y != 90.f) {
 		this->gameObject->transform.rotation.y = 90.f;
 	}
-	this->gameObject->transform.position.x -= 0.1f;
+	this->gameObject->transform.position.x -= this->speed;
 	this->has_moved = true;
 }
 
@@ -84,7 +93,7 @@ void								CharacterControllerScript::MLeft(void)
 	if (this->gameObject->transform.rotation.y != 0.f) {
 		this->gameObject->transform.rotation.y = 0.f;
 	}
-	this->gameObject->transform.position.z -= 0.1f;
+	this->gameObject->transform.position.z -= this->speed;
 	this->has_moved = true;
 }
 
@@ -93,7 +102,7 @@ void								CharacterControllerScript::MRight(void)
 	if (this->gameObject->transform.rotation.y != 180.f) {
 		this->gameObject->transform.rotation.y = 180.f;
 	}
-	this->gameObject->transform.position.z += 0.1f;
+	this->gameObject->transform.position.z += this->speed;
 	this->has_moved = true;
 }
 
@@ -110,6 +119,8 @@ void						CharacterControllerScript::Update(void)
 		if (this->player == 1) {
 			if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 				this->Attack();
+			if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
+				BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
 
 			this->has_moved = false;
 			if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
@@ -211,6 +222,31 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	else if (collider->tag == "Explosion")
 	{
 		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
+		this->gameObject->toDelete = true;
+	}
+	else if (collider->tag == "bonus-bomb-up")
+	{
+		std::cout << " bomb-up  " << this->gameObject->tag << " New Bomb add " << std::endl;
+		//BombermanClient::instance->current_scene->remove(collider);
+		this->bomb++;
+		//delete collider;
+		collider->toDelete = true;
+	}
+	else if (collider->tag == "bonus-power-up")
+	{
+		std::cout << " power-up  " << this->gameObject->tag << " New power add " << std::endl;
+		//BombermanClient::instance->current_scene->remove(collider);
+		this->power++;
+		//delete collider;
+		collider->toDelete = true;
+	}
+	else if (collider->tag == "bonus-speed-up")
+	{
+		std::cout << " speed-up  " << this->gameObject->tag << " New speed add " << std::endl;
+		//BombermanClient::instance->current_scene->remove(collider);
+		this->speed+= 0.003;
+		//delete collider;
+		collider->toDelete = true;
 	}
 	else
 	{
@@ -237,4 +273,8 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 }
 
+int 										CharacterControllerScript::getPower()
+{
+	return this->power;
+}
 // ###############################################################

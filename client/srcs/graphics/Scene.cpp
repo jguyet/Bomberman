@@ -20,7 +20,8 @@ GameObject							*Scene::newGameObject(void)
 
 void								Scene::add(GameObject *obj)
 {
-	this->gameObjects[obj->id] = obj;
+	if (obj != NULL)
+		this->gameObjects[obj->id] = obj;
 }
 
 void								Scene::remove(GameObject *obj)
@@ -35,13 +36,21 @@ void								Scene::remove(GameObject *obj)
 void								Scene::_calculPhisics(void)
 {
 	//TODO by static Components
-	BoxCollider::Check3DCollisions(this->gameObjects);
+
 
 	std::map<long, GameObject*> cpy = std::map<long, GameObject*>(this->gameObjects);
-
+	BoxCollider::Check3DCollisions(cpy);
 	for (std::map<long, GameObject*>::iterator it = cpy.begin(); it != cpy.end(); it++) {
 		GameObject *currentGameObject = it->second;
 		//script calling
+
+		if (currentGameObject->toDelete)
+		{
+			this->remove(currentGameObject);
+			delete currentGameObject;
+			continue;
+		}
+
 		Script *script = currentGameObject->GetComponent<Script>();
 		if (script != NULL && script->frame != 0L) {
 			script->Update();
