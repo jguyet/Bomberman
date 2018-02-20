@@ -28,6 +28,7 @@ class AI
 		bool										select_t;
 		std::list<Module_h> 						moves;
 		A_star										a_star;
+		int											last_move;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
