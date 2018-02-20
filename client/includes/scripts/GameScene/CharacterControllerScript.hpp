@@ -41,8 +41,8 @@ class CharacterControllerScript : public Script
 		int 								player = 1;
 
 		float								speed = 0.05f;
-		int 								bomb = 5;
-		int 								power = 5;
+		int 								bomb = 1;
+		int 								power = 1;
 		int 								life = 5;
 		// ####################################################################
 };

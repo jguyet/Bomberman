@@ -222,6 +222,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	else if (collider->tag == "Explosion")
 	{
 		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
+		this->gameObject->toDelete = true;
 	}
 	else if (collider->tag == "bonus-bomb-up")
 	{
@@ -229,6 +230,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		//BombermanClient::instance->current_scene->remove(collider);
 		this->bomb++;
 		//delete collider;
+		collider->toDelete = true;
 	}
 	else if (collider->tag == "bonus-power-up")
 	{
@@ -236,13 +238,15 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		//BombermanClient::instance->current_scene->remove(collider);
 		this->power++;
 		//delete collider;
+		collider->toDelete = true;
 	}
 	else if (collider->tag == "bonus-speed-up")
 	{
 		std::cout << " speed-up  " << this->gameObject->tag << " New speed add " << std::endl;
 		//BombermanClient::instance->current_scene->remove(collider);
-		//this->speed+= 0.003;
+		this->speed+= 0.003;
 		//delete collider;
+		collider->toDelete = true;
 	}
 	else
 	{

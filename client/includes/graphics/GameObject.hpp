@@ -40,6 +40,7 @@ class GameObject
 		Transform								transform;
 		long									id;
 		std::string								tag;
+		bool 									toDelete = false;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

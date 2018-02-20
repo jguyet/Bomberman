@@ -82,26 +82,23 @@ GameObject							*Factory::newPowerUp(float x, float z)
 	obj->transform.position = glm::vec3(x*2, 0, z*2);
 	obj->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
 
-	int nb = rand() % 5 + 1;
-	switch(nb){
-		case 1:
+	int nb = rand() % 100 + 1;
+
+	if (nb < 10) {
 			obj->tag = "bonus-power-up";
 			obj->AddComponent<Model>(Model::model["bonus-power-up"]);
-		break;
-		case 2:
+	} else if (nb < 20) {
 			obj->tag = "bonus-speed-up";
 			obj->AddComponent<Model>(Model::model["bonus-speed-up"]);
-		break;
-		case 3:
+	}
+	else if (nb < 30){
 			obj->tag = "bonus-bomb-up";
 			obj->AddComponent<Model>(Model::model["bonus-bomb-up"]);
-		break;
-		default:
-
-		break;
 	}
-
-
+	else {
+			delete obj;
+			obj = NULL;
+	}
 
 	return (obj);
 }
