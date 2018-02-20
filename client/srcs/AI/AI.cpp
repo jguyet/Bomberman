@@ -81,23 +81,27 @@ int					AI::brain(int x, int y)
 	if (this->select_t == false)
 		return (0);
 
+	// std::cout << moves.size() << std::endl;
 	if (moves.size() > 0)
 	{
 		// std::cout << "Objective x >" << moves[0].pos_x << "< y >" << moves[0].pos_y << "< ------" << "Position x >" << x << "< y >" << y << "< " << "size " << moves.size() << std::endl;
 		if (x == moves.front().pos_x && y == moves.front().pos_y)
 		{
 			std::cout << "Objective Next objective" << std::endl;
-			moves.pop_front();
+			// do {
+				moves.pop_front();
+			// }
+			// while (((moves.front().pos_x % 2) != 0 || (moves.front().pos_y % 2) != 0) && moves.size() > 0);
 		}
 		// else
-		// 	std::cout << "nope" << std::endl;
 	}
 	else if (this->a_star.path_finding(x, y, this->target, moves))
 	{
-		// moves.pop_back();
-		// int tmp_x, tmp_y;
-		std::cout << ">>>>>>x " << moves.front().pos_x << " >>>>>>y " << moves.front().pos_y << std::endl;
-		// std::cout << ">>>>>>x " << moves.back().pos_x << " >>>>>>y " << moves.back().pos_y << std::endl << std::endl;
+		if (moves.size() > 0)
+		{
+			std::cout << ">>>>>>x " << moves.front().pos_x << " >>>>>>y " << moves.front().pos_y << std::endl;
+			moves.pop_front();
+		}
 		for (auto elem : moves)
 		{
 			std::cout << "-x " << elem.pos_x << " -y " << elem.pos_y <<  std::endl;
@@ -116,14 +120,17 @@ int					AI::brain(int x, int y)
 	// }
 	// std::cout <<  std::endl;
 
-	if (x + 1 == moves.front().pos_x && y == moves.front().pos_y)
+	if (x < moves.front().pos_x && y == moves.front().pos_y)
 		return(SDL_SCANCODE_UP);
-	else if (x - 1 == moves.front().pos_x && y == moves.front().pos_y)
+	else if (x > moves.front().pos_x && y == moves.front().pos_y)
 		return(SDL_SCANCODE_DOWN);
-	else if (x == moves.front().pos_x && y + 1 == moves.front().pos_y)
+	else if (x == moves.front().pos_x && y < moves.front().pos_y)
 		return(SDL_SCANCODE_RIGHT);
-	else if (x == moves.front().pos_x && y - 1 == moves.front().pos_y)
+	else if (x == moves.front().pos_x && y > moves.front().pos_y)
 		return(SDL_SCANCODE_LEFT);
+	else if (moves.size() > 0)
+			moves.pop_front();
+
 	return (0);
 }
 
