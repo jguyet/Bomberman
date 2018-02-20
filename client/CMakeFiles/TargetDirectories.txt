@@ -1,0 +1,3 @@
+/Users/dmoureu-/bombvgit/client/CMakeFiles/rebuild_cache.dir
+/Users/dmoureu-/bombvgit/client/CMakeFiles/edit_cache.dir
+/Users/dmoureu-/bombvgit/client/CMakeFiles/Bomberman.dir

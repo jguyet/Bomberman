@@ -146,7 +146,7 @@ void						CharacterControllerScript::Update(void)
 		}
 	}
 	else if (this->player == 2)
-	{/*
+	{
 		int i = 0;
 		i = robot.brain(this->gameObject->transform.position.x, this->gameObject->transform.position.z);
 
@@ -159,7 +159,6 @@ void						CharacterControllerScript::Update(void)
 		} else {
 			this->walk_anim = false;
 		}
-		*/
 		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)

@@ -24,6 +24,9 @@ class AI
 		// #####################################################################
 		Module_h 									target;
 		GameObject*									tplayer;
+
+		bool										select_t;
+		std::list<Module_h> 						moves;
 		A_star										a_star;
 		// #####################################################################
 	private:

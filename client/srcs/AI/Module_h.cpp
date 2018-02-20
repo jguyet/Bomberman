@@ -20,9 +20,10 @@ Module_h &				Module_h::operator=( Module_h const & rhs )
 {
 	if (this != &rhs)
 	{
-		this->heuristic = rhs.heuristic;
 		this->pos_x = rhs.pos_x;
 		this->pos_y = rhs.pos_y;
+		this->heuristic = rhs.heuristic;
+		this->p = rhs.p;
 	}
 	return (*this);
 }
