@@ -20,13 +20,13 @@ out vec4 o_color;
 void main()
 {
 
-	vec3 lightDir = normalize(vec3(0,0,1.0));
+	//vec3 lightDir = normalize(vec3(0,0,1.0));
 
-	float ndotl = dot(v_norm, lightDir);
-	vec3 vdiffuse = vec3(diffuse.xyz) * clamp(ndotl, 1.0, 1.0);
+	//float ndotl = dot(v_norm, lightDir);
+	vec3 vdiffuse = vec3(diffuse.xyz);// * clamp(ndotl, 1.0, 1.0);
 
 	if (v_pos.y < 0.01) {
-		vdiffuse = vec3(diffuse.xyz) * clamp(ndotl, 0.5, 1.0);
+		vdiffuse = vec3(diffuse.xyz);// * clamp(ndotl, 0.5, 1.0);
 	}
 	vec4 color;
 	vec3 amb;

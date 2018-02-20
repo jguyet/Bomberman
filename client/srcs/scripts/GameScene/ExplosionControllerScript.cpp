@@ -51,13 +51,25 @@ void						ExplosionControllerScript::Start(void)
 
 void						ExplosionControllerScript::Update(void)
 {
-	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 100L))) {
+	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 30L))) {
 		if (this->timerExplode < TimeUtils::getCurrentSystemMillis()) {
-			this->gameObject->transform.scale+=0.1f;
+			this->gameObject->transform.scale+=0.2f;
 			this->timerExplode = TimeUtils::getCurrentSystemMillis() + 1L;
 		}
 	}
-	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 100L) + 500L)) {
+	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 50L) + 200L)) {
+
+		int x = this->gameObject->transform.position.x / 2;
+		int z = this->gameObject->transform.position.z / 2;
+		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z);
+
+		if (b->obstacle != NULL && b->obstacle->tag != "Bomb" && b->obstacle->tag != "ground1") {
+			BombermanClient::instance->current_scene->remove(b->obstacle);
+			delete b->obstacle;
+			b->obstacle = NULL;
+			b->walkable = true;
+		}
+
 		BombermanClient::instance->current_scene->remove(this->gameObject);
 		delete this->gameObject;
 		delete this;

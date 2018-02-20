@@ -50,6 +50,8 @@ void						CharacterControllerScript::Start(void)
 void								CharacterControllerScript::Attack(void)
 {
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+	if (c->obstacle != NULL)
+		return ;
 	GameObject *bomb = Factory::newBomb();
 
 	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
@@ -133,7 +135,7 @@ void						CharacterControllerScript::Update(void)
 		}
 	}
 	else if (this->player == 2)
-	{
+	{/*
 		int i = 0;
 		i = robot.brain(this->gameObject->transform.position.x, this->gameObject->transform.position.z);
 
@@ -146,6 +148,7 @@ void						CharacterControllerScript::Update(void)
 		} else {
 			this->walk_anim = false;
 		}
+		*/
 		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
@@ -181,6 +184,8 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
+	//std::cout << "OnCollisionEnter on " << collider->tag << std::endl;
+
 	if (c == NULL)
 		return ;
 
@@ -203,6 +208,10 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 			this->gameObject->transform.position.y += contact_point.y;
 			this->gameObject->transform.position.z += contact_point.z;
 		}
+	}
+	else if (collider->tag == "Explosion")
+	{
+		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
 	}
 	else
 	{
