@@ -3,3 +3,7 @@
 build
 lib
 Bomberman
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+libnetwork.a

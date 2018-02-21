@@ -1,3 +1,0 @@
-/tmp/Bomberman/client/CMakeFiles/rebuild_cache.dir
-/tmp/Bomberman/client/CMakeFiles/edit_cache.dir
-/tmp/Bomberman/client/CMakeFiles/Bomberman.dir
