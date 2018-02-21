@@ -114,9 +114,20 @@ void						CharacterControllerScript::Update(void)
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
 	static AI robot;
+	int currentPlayerId = -1;
+	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
 
-	if (this->player == 1) {
-		if (this->player == 1) {
+	if (scene->current_player != NULL)
+	{
+		CharacterControllerScript *controllerScript = ((CharacterControllerScript*)scene->current_player->GetComponent<Script>());
+		if (controllerScript) {
+			currentPlayerId = controllerScript->getPlayerId();
+			printf("Current player id: %d\n", currentPlayerId);
+		}
+	}
+
+	if (this->player == currentPlayerId) {
+		if (this->player == currentPlayerId) {
 			if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 				this->Attack();
 			if (KeyBoard::instance->getKey(SDL_SCANCODE_P))

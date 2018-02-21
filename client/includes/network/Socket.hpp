@@ -20,6 +20,7 @@
 # include "enums/ServerType.hpp"
 # include "network/MessageHandler.hpp"
 # include "messages/PlayerPositionMessage.hpp"
+# include "messages/NewPlayerMessage.hpp"
 # include "Packet.hpp"
 #define BUF_SIZE 4096
 
@@ -39,6 +40,7 @@ class Socket
 		void 								do_select();
 		int									*getId(int id);
 		void								updateMovement(Script*);
+		void								newPlayer(float x, float y, float z);
 
 	private:
 		int		tmp;

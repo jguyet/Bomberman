@@ -32,8 +32,7 @@ class GameScene : public Scene
 		//Camera							*camera;
 		// ####################################################################
 		// PUBLICS ############################################################
-		GameObject							*player;
-		GameObject							*player2;
+		GameObject							*current_player;
 		GameInterface						*interface;
 		std::vector<GameObject*>			players;
 		Map									*map;

@@ -55,9 +55,10 @@ class Server
 				return "The server cant select on clients fd";
 			}
 		};
+		Client						*getClientBySock(SOCK);
+		std::vector<Client*>		clients;
 
 	private:
-		std::vector<Client*>		clients;
 
 		std::mutex					mutex;
 		int							listenPort;

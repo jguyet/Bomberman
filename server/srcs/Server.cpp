@@ -2,7 +2,7 @@
 
 Server::Server (int listenPort) : listenPort(listenPort)
 {
-
+	DataManager::Instance()->server = this;
 }
 
 Server::Server ( Server const & src )
@@ -13,6 +13,9 @@ Server::Server ( Server const & src )
 void Server::removeClient(Client *client)
 {
 	this->mutex.lock();
+	if (client->player) {
+		DataManager::Instance()->removePlayer(client->player);
+	}
 	for (int i = 0; i < this->clients.size(); i++)
 	{
 		if (this->clients[i] == client) {
@@ -57,6 +60,17 @@ void Server::start()
 
 	std::cout << "Bomber server listening on port " << std::to_string(this->listenPort) << std::endl;
 	this->waitClients();
+}
+
+Client						*Server::getClientBySock(SOCK socket)
+{
+	for (int i = 0; i < this->clients.size(); i++)
+	{
+		if (this->clients[i]->getSocket() == socket) {
+			return this->clients[i];
+		}
+	}
+	return NULL;
 }
 
 Server &				Server::operator=( Server const & rhs )

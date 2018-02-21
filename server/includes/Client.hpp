@@ -21,7 +21,8 @@ class Client
 		static void							clientThread(Client *client);
 		Client &							operator=( Client const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Client const & i);
-
+		SOCK								getSocket();
+		Player					*player;
 	private:
 		Server					*server;
 		Handler					*messageHandler;

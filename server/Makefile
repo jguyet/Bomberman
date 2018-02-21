@@ -32,6 +32,8 @@ SRCBASE_BOMBER_SERVER	=	\
 					Server.cpp								\
 					Client.cpp								\
 					Processor.cpp							\
+					Models/Player.cpp 						\
+					Managers/DataManager.cpp				\
 
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 

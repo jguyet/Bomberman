@@ -53,3 +53,9 @@ void MessageHandler::MapSelectMessageHandler(SOCK socket, MapSelectMessage *mess
 	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }
+
+void MessageHandler::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *message)
+{
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
+	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
+}

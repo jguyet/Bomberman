@@ -7,8 +7,7 @@ class Factory
 {
 	public:
 		static GameObject					*newBlock(std::string model);
-		static GameObject					*newPlayer(void);
-		static GameObject					*newPlayer2(void);
+		static GameObject					*newPlayer(int Id);
 		static GameObject					*newBomb(CharacterControllerScript *playerController);
 		static GameObject					*newExplosion(float x, float z, long timer);
 		static GameObject					*newBackground(void);

@@ -5,6 +5,7 @@
 #include "messages/ServerListMessage.hpp"
 #include "messages/MapSelectMessage.hpp"
 #include "messages/PlayerPositionMessage.hpp"
+#include "messages/NewPlayerMessage.hpp"
 #include "enums/ServerType.hpp"
 #include "objs/ServerObject.hpp"
 #include <unistd.h>
@@ -20,9 +21,10 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
     //
 	// Packet *packet = new Packet(new ServerListMessage(servers));
 	// packet->sendPacket(sock);
-
+	this->player = NULL;
 	this->messageHandler = new Handler(sock,
 		Processor::getMessageId(PlayerPositionMessage::ID), &Processor::PlayerPositionMessageHandler,
+		Processor::getMessageId(NewPlayerMessage::ID), &Processor::NewPlayerMessageHandler,
 		END_OF_HANDLER);
 
 	Packet mapPacket = Packet(new MapSelectMessage("map_01"));
@@ -51,6 +53,11 @@ void Client::clientThread(Client *client)
 	client->server->removeClient(client);
 }
 
+SOCK Client::getSocket()
+{
+	return this->fd;
+}
+
 Client &				Client::operator=( Client const & rhs )
 {
 	return (*this);
@@ -63,6 +70,5 @@ Client::~Client ()
 
 std::ostream &				operator<<(std::ostream & o, Client const & i)
 {
-
 	return (o);
 }

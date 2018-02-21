@@ -1,7 +1,7 @@
 #include "managers/ActionQueueManager.hpp"
 #include "models/ActionQueue.hpp"
 #include "messages/MapSelectMessage.hpp"
-
+#include "messages/NewPlayerMessage.hpp"
 
 std::atomic<ActionQueueManager*> ActionQueueManager::pInstance { nullptr };
 std::mutex ActionQueueManager::mutex;
@@ -65,9 +65,27 @@ void ActionQueueManager::doAction(ActionQueue *action)
 {
 	switch (action->messageId)
 	{
-		case MapSelectMessage::ID:
+		case MapSelectMessage::ID: {
 			MapSelectMessage	*mapMessage = (MapSelectMessage*)action->message;
 			BombermanClient::instance->current_scene = new GameScene(mapMessage->name);
+			BombermanClient::instance->sock->newPlayer(2, 1, 4); // set a position random by available cases
+		}
+		break;
+
+		case NewPlayerMessage::ID: {
+			NewPlayerMessage	*message = (NewPlayerMessage*)action->message;
+			GameObject *playerObject = Factory::newPlayer(message->position.playerId);
+			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			playerObject->transform.scale = glm::vec3(3,3,3);
+			playerObject->transform.rotation = glm::vec3(0,0,0);
+			playerObject->transform.position = glm::vec3(message->position.x, message->position.y, message->position.z);
+			if (message->owner) {
+				scene->current_player = playerObject;
+			} else {
+				scene->players.push_back(playerObject);
+			}
+			BombermanClient::instance->current_scene->add(playerObject);
+		}
 		break;
 	}
 }

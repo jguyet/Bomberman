@@ -11,24 +11,14 @@ GameObject							*Factory::newBlock(std::string model)
 	return (obj);
 }
 
-GameObject							*Factory::newPlayer(void)
+GameObject							*Factory::newPlayer(int id)
 {
 	GameObject	*obj = new GameObject();
 
-	obj->tag = "Player";
+	obj->tag = "Donkey Kong";
 	obj->AddComponent<Model>(Model::model["bomberman"]);
 	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
-	obj->AddComponent<Script>(new CharacterControllerScript(1));
-	return (obj);
-}
-GameObject							*Factory::newPlayer2(void)
-{
-	GameObject	*obj = new GameObject();
-
-	obj->tag = "Player2";
-	obj->AddComponent<Model>(Model::model["bomberman2"]);
-	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.17f,0.25f,0.17f)));
-	obj->AddComponent<Script>(new CharacterControllerScript(2));
+	obj->AddComponent<Script>(new CharacterControllerScript(id));
 	return (obj);
 }
 

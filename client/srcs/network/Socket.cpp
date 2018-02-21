@@ -36,7 +36,9 @@ Socket::Socket (char *host, int port)
 
 	this->handler = new Handler(this->sock,
    	 this->getId(ServerListMessage::ID), &MessageHandler::ServerListMessageHandler,
-	 this->getId(MapSelectMessage::ID), &MessageHandler::MapSelectMessageHandler, END_OF_HANDLER);
+	 this->getId(MapSelectMessage::ID), &MessageHandler::MapSelectMessageHandler,
+	 this->getId(NewPlayerMessage::ID), &MessageHandler::NewPlayerMessageHandler,
+	 	END_OF_HANDLER);
 
 	std::thread thread(Socket::Thread, this);
 	thread.detach();
@@ -92,4 +94,12 @@ void					Socket::updateMovement(Script *script)
 
 	Packet movementPacket = Packet(new PlayerPositionMessage(positionObject));
 	movementPacket.sendPacket(this->sock);
+}
+
+void					Socket::newPlayer(float x, float y, float z)
+{
+	PlayerPositionObject positionObject(-1, x, y, z);
+
+	Packet playerPacket = Packet(new NewPlayerMessage(positionObject, true));
+	playerPacket.sendPacket(this->sock);
 }
