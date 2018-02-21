@@ -27,7 +27,7 @@ class A_star
 		// PRIVATE #############################################################
 		int											Find_next(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
 		int											FormatMoves(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
-		void										get_heuristic(int y, int x, Module_h &target, int p);
+		int											get_heuristic(int y, int x, Module_h &target, int p);
 		void										find_path(Module_h &target);
 		void										get_adjacent(Module_h c_case, Module_h &target, int x, int y, int p);
 		// #####################################################################

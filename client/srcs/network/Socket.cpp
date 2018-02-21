@@ -101,6 +101,7 @@ void					Socket::newPlayer(float x, float y, float z)
 {
 	PlayerPositionObject positionObject(-1, x, y, z);
 
+	// dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->players.push_back(playerObject);
 	Packet playerPacket = Packet(new NewPlayerMessage(positionObject, true));
 	playerPacket.sendPacket(this->sock);
 }

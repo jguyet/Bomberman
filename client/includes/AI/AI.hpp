@@ -11,6 +11,7 @@ class AI
 		// #####################################################################
 		// CANONICAL ###########################################################
 													AI( void );
+													AI(GameObject* my_player);
 													AI( AI const & src );
 		virtual										~AI( void );
 		AI &										operator=( AI const & rhs );
@@ -20,15 +21,15 @@ class AI
 		// #####################################################################
 		// PUBLIC ##############################################################
 		void										get_target(int x, int y, std::vector<GameObject*> players);
-		int											brain(int x, int y);
+		int											brain();
 		// #####################################################################
 		Module_h 									target;
 		GameObject*									tplayer;
+		GameObject*									my_player;
 
 		bool										select_t;
 		std::list<Module_h> 						moves;
 		A_star										a_star;
-		int											last_move;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

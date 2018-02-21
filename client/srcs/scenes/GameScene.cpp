@@ -18,21 +18,12 @@ GameScene::GameScene (std::string selected_map)
 	this->current_player = NULL;
 	// BombermanClient::instance::current_scene;
 
-	//add player
-	// this->player = Factory::newPlayer();
-	// this->player2 = Factory::newPlayer2();
-    //
-	// this->players.push_back(this->player);
-	// this->players.push_back(this->player2);
-    //
-	// this->player->transform.position = glm::vec3(2,1,4);
-	// this->player->transform.scale = glm::vec3(3,3,3);
-	// this->player->transform.rotation = glm::vec3(0,0,0);
-	// this->player2->transform.position = glm::vec3(2,1,36);
-	// this->player2->transform.scale = glm::vec3(3,3,3);
-	// this->player2->transform.rotation = glm::vec3(0,0,0);
-	// this->add(this->player);//add on scene
-	// this->add(this->player2);//add on scene
+	GameObject *player = Factory::newPlayer(2);
+	this->all_player.push_back(player);
+	player->transform.position = glm::vec3(2,1,36);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
 
 	//add LOGO WESH
 	/*GameObject *logo_N = new GameObject();
@@ -117,6 +108,8 @@ void								GameScene::calculPhisics(void)
 	}
 	//call parent method
 	this->_calculPhisics();
+
+	// std::cout << this->camera->transform
 }
 
 void								GameScene::drawGameObjects(void)

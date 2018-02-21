@@ -113,7 +113,7 @@ void						CharacterControllerScript::Update(void)
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
-	static AI robot;
+	static AI robot = AI(this->gameObject);
 	int currentPlayerId = -1;
 	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
 
@@ -126,32 +126,24 @@ void						CharacterControllerScript::Update(void)
 	}
 
 	if (this->player == currentPlayerId) {
-		if (this->player == currentPlayerId) {
-			if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
-				this->Attack();
-			if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
-				BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
+			this->Attack();
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
+			BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
 
-			this->has_moved = false;
-			if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
-				this->MRight();
-			else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT
-				this->MLeft();
-			else if (KeyBoard::instance->getKey(SDL_SCANCODE_UP))//UP
-				this->MUp();
-			else if (KeyBoard::instance->getKey(SDL_SCANCODE_DOWN))//DOWN
-				this->MDown();
-
-			if (this->has_moved) {
-
-				BombermanClient::instance->sock->updateMovement(this);
-				this->walk_anim = true;
-			} else {
-				this->walk_anim = false;
-			}
-		}
+		this->has_moved = false;
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
+			this->MRight();
+		else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT
+			this->MLeft();
+		else if (KeyBoard::instance->getKey(SDL_SCANCODE_UP))//UP
+			this->MUp();
+		else if (KeyBoard::instance->getKey(SDL_SCANCODE_DOWN))//DOWN
+			this->MDown();
 
 		if (this->has_moved) {
+
+			BombermanClient::instance->sock->updateMovement(this);
 			this->walk_anim = true;
 		} else {
 			this->walk_anim = false;
@@ -160,7 +152,8 @@ void						CharacterControllerScript::Update(void)
 	else if (this->player == 2)
 	{
 		int i = 0;
-		i = robot.brain(this->gameObject->transform.position.x, this->gameObject->transform.position.z);
+		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
+		i = robot.brain();
 
 		this->has_moved = false;
 		if (i != 0)

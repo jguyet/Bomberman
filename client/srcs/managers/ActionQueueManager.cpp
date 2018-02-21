@@ -85,6 +85,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			} else {
 				scene->players.push_back(playerObject);
 			}
+			scene->all_player.push_back(playerObject);
 			BombermanClient::instance->current_scene->add(playerObject);
 		}
 		break;

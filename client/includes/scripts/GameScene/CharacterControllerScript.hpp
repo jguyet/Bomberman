@@ -42,7 +42,7 @@ class CharacterControllerScript : public Script
 		bool								has_moved = false;
 		int 								player = 1;
 
-		float								speed = 0.05f;
+		float								speed = .5f;
 		int 								bomb = 1;
 		int 								power = 1;
 		int 								life = 5;
