@@ -122,7 +122,6 @@ void						CharacterControllerScript::Update(void)
 		CharacterControllerScript *controllerScript = ((CharacterControllerScript*)scene->current_player->GetComponent<Script>());
 		if (controllerScript) {
 			currentPlayerId = controllerScript->getPlayerId();
-			printf("Current player id: %d\n", currentPlayerId);
 		}
 	}
 

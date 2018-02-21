@@ -1,4 +1,5 @@
 #include "Processor.hpp"
+#include "Server.hpp"
 
 Processor::Processor ()
 {
@@ -40,6 +41,15 @@ std::ostream &				operator<<(std::ostream & o, Processor const & i)
 void Processor::PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage *message)
 {
 	PlayerPositionObject position = message->playerPosition;
+	DataManager	*manager = DataManager::Instance();
+
+	Packet packet(new PlayerPositionMessage(position));
+	for (int i = 0; i < manager->server->clients.size(); i++)
+	{
+		if (manager->server->clients[i]->player) {
+				packet.sendPacket(manager->server->clients[i]->getSocket());
+			}
+	}
 	printf("Player id %d (%f, %f, %f)\n", position.playerId, position.x, position.y, position.z);
 }
 

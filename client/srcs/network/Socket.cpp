@@ -38,6 +38,7 @@ Socket::Socket (char *host, int port)
    	 this->getId(ServerListMessage::ID), &MessageHandler::ServerListMessageHandler,
 	 this->getId(MapSelectMessage::ID), &MessageHandler::MapSelectMessageHandler,
 	 this->getId(NewPlayerMessage::ID), &MessageHandler::NewPlayerMessageHandler,
+	 this->getId(PlayerPositionMessage::ID), &MessageHandler::PlayerPositionMessageHandler,
 	 	END_OF_HANDLER);
 
 	std::thread thread(Socket::Thread, this);
