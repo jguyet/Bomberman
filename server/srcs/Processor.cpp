@@ -43,6 +43,7 @@ void Processor::PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage 
 	PlayerPositionObject position = message->playerPosition;
 	DataManager	*manager = DataManager::Instance();
 
+	manager->updatePos(position);
 	Packet packet(new PlayerPositionMessage(position));
 	for (int i = 0; i < manager->server->clients.size(); i++)
 	{
@@ -50,7 +51,7 @@ void Processor::PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage 
 				packet.sendPacket(manager->server->clients[i]->getSocket());
 			}
 	}
-	printf("Player id %d (%f, %f, %f)\n", position.playerId, position.x, position.y, position.z);
+	// printf("Player id %d (%f, %f, %f)\n", position.playerId, position.x, position.y, position.z);
 }
 
 void Processor::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *message)

@@ -49,6 +49,29 @@ GameScene::GameScene (std::string selected_map)
 	return ;
 }
 
+GameObject				*GameScene::findPlayer(GameObject *player)
+{
+	for (int i = 0; i < this->players.size(); i++)
+	{
+		if (this->players[i] == player) {
+			return this->players[i];
+		}
+	}
+	return NULL;
+}
+
+GameObject				*GameScene::findPlayerById(int playerId)
+{
+	for (int i = 0; i < this->players.size(); i++)
+	{
+		CharacterControllerScript *script = ((CharacterControllerScript*)this->players[i]->GetComponent<Script>());
+		if (script != NULL && script->getPlayerId() == playerId) {
+			return this->players[i];
+		}
+	}
+	return NULL;
+}
+
 GameScene &				GameScene::operator=( GameScene const & rhs )
 {
 	if (this != &rhs)

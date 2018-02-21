@@ -62,5 +62,6 @@ void MessageHandler::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *mess
 
 void MessageHandler::PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage *message)
 {
-	printf("Received the position of the player id %d (%f, %f, %f)\n", message->playerPosition.playerId, message->playerPosition.x, message->playerPosition.y, message->playerPosition.z);
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
+	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }

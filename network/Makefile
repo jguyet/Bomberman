@@ -23,6 +23,7 @@ SRCS_BASE			=	Packet.cpp								\
 						messages/ServerListMessage.cpp			\
 						messages/MapSelectMessage.cpp			\
 						messages/PlayerPositionMessage.cpp		\
+						messages/NewPlayerMessage.cpp			\
 
 SRCS	=	$(addprefix $(SRCDIR), $(SRCS_BASE))
 OBJS	=	$(addprefix $(OBJDIR), $(SRCS_BASE:.cpp=.o))

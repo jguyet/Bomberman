@@ -9,6 +9,7 @@
 #include "objs/PlayerPositionObject.hpp"
 #include "Packet.hpp"
 
+class Client;
 class Server;
 class DataManager
 {
@@ -27,6 +28,8 @@ class DataManager
 		void									addNewPlayer(SOCK socket, PlayerPositionObject&);
 		void									removePlayer(Player*);
 		int										getNextPlayerId();
+		void									updatePos(PlayerPositionObject&);
+		void 									sendPlayers(Client *client);
 
 		std::vector<Player*>						players;
 		Server										*server;

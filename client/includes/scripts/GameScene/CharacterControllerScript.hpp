@@ -31,12 +31,13 @@ class CharacterControllerScript : public Script
 		void 								BombExplode();
 		int 								getPower();
 		int									getPlayerId();
+		bool								walk_anim = false;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
 		long								walk_anim_time;
 		int									walk_anim_frame = 0;
-		bool								walk_anim = false;
+
 
 		bool								has_moved = false;
 		int 								player = 1;

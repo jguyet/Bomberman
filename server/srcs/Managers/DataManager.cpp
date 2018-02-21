@@ -1,5 +1,6 @@
 #include "Managers/DataManager.hpp"
 #include "Server.hpp"
+#include <unistd.h>
 
 std::atomic<DataManager*> DataManager::pInstance { nullptr };
 std::mutex DataManager::mutex;
@@ -41,6 +42,20 @@ void DataManager::removePlayer(Player *player)
 	mutex.unlock();
 }
 
+void DataManager::sendPlayers(Client *client)
+{
+	for (int i = 0; i < client->server->clients.size(); i++)
+	{
+		Player *player = client->server->clients[i]->player;
+		if (player != NULL && player != client->player) {
+			PlayerPositionObject obj(player->id, player->x, player->y, player->z);
+			Packet packet(new NewPlayerMessage(obj, false));
+			packet.sendPacket(client->getSocket());
+		}
+		i++;
+	}
+}
+
 void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 {
 	mutex.lock();
@@ -66,8 +81,22 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 					playerMessage.sendPacket(this->server->clients[i]->getSocket());
 				}
 		}
+		usleep(1000);
+		this->sendPlayers(client);
 	}
+
 	mutex.unlock();
+}
+
+void DataManager::updatePos(PlayerPositionObject &pos)
+{
+	for (int i = 0; i < this->server->clients.size(); i++)
+	{
+		Player *player = this->server->clients[i]->player;
+		if (player != NULL && player->id == pos.playerId) {
+			player->setPosition(pos.x, pos.y, pos.z);
+		}
+	}
 }
 
 DataManager::DataManager ()

@@ -45,7 +45,7 @@ std::ostream &		operator<<(std::ostream & o, AI const & i)
 void				AI::get_target(int x, int y, std::vector<GameObject*> players)
 {
 	// TODO : get nearest target
-	std::cout << "pos x " << x << " y " << y << " Nbr players " << players.size() << std::endl;
+	// std::cout << "pos x " << x << " y " << y << " Nbr players " << players.size() << std::endl;
 	for (auto *player : players)
 	{
 		// std::cout << "pos player x " << player->transform.position.x << " y " << player->transform.position.z << std::endl;

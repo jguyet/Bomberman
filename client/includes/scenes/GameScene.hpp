@@ -22,6 +22,8 @@ class GameScene : public Scene
 		// @OVERRIDE Scene ###################################################
 		void								calculPhisics(void);
 		void								drawGameObjects(void);
+		GameObject							*findPlayer(GameObject*);
+		GameObject							*findPlayerById(int playerId);
 		// Scene functions and vars ->
 		//void								_calculPhisics(void);
 		//void								_drawGameObjects(void);

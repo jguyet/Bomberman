@@ -2,6 +2,7 @@
 #include "models/ActionQueue.hpp"
 #include "messages/MapSelectMessage.hpp"
 #include "messages/NewPlayerMessage.hpp"
+#include "messages/PlayerPositionMessage.hpp"
 
 std::atomic<ActionQueueManager*> ActionQueueManager::pInstance { nullptr };
 std::mutex ActionQueueManager::mutex;
@@ -85,6 +86,21 @@ void ActionQueueManager::doAction(ActionQueue *action)
 				scene->players.push_back(playerObject);
 			}
 			BombermanClient::instance->current_scene->add(playerObject);
+		}
+		break;
+
+		case PlayerPositionMessage::ID: {
+			PlayerPositionMessage	*message = (PlayerPositionMessage*)action->message;
+			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameObject *player = scene->findPlayerById(message->playerPosition.playerId);
+			if (player != NULL && player->GetComponent<Script>() != NULL) {
+				CharacterControllerScript *script = ((CharacterControllerScript*)player->GetComponent<Script>());
+				script->walk_anim = true;
+				player->transform.position.x = message->playerPosition.x;
+				player->transform.position.y = message->playerPosition.y;
+				player->transform.position.z = message->playerPosition.z;
+				script->walk_anim = false;
+			}
 		}
 		break;
 	}

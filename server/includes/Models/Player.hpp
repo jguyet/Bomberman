@@ -14,8 +14,11 @@ class Player
 		Player &							operator=( Player const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Player const & i);
 		int 		getId();
-	private:
+		void		setPosition(float x, float y, float z);
 		int 		id;
+		float		x;
+		float		y;
+		float		z;
 };
 
 #endif
