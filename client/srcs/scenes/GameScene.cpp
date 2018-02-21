@@ -44,8 +44,8 @@ GameScene::GameScene (std::string selected_map)
 
 	this->interface = new GameInterface(1);
 
-	SDL_ShowCursor(SDL_DISABLE);
-	SDL_SetWindowGrab(BombermanClient::instance->window, SDL_TRUE);
+	//SDL_ShowCursor(SDL_DISABLE);
+	//SDL_SetWindowGrab(BombermanClient::instance->window, SDL_TRUE);
 	return ;
 }
 
@@ -129,5 +129,5 @@ void								GameScene::drawGameObjects(void)
 	//draw canvas
 	this->interface->draw();
 	//reset mouse to center of screen
-	SDL_WarpMouseInWindow(BombermanClient::instance->window, BombermanClient::instance->screen->middleWidth, BombermanClient::instance->screen->middleHeight);
+	//SDL_WarpMouseInWindow(BombermanClient::instance->window, BombermanClient::instance->screen->middleWidth, BombermanClient::instance->screen->middleHeight);
 }
