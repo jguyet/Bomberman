@@ -4,6 +4,8 @@
 #include "All.hpp"
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include "Handler.hpp"
+#include "Processor.hpp"
 
 #define BUFF_SIZE 1024
 class Server;
@@ -22,6 +24,7 @@ class Client
 
 	private:
 		Server					*server;
+		Handler					*messageHandler;
 		int 					fd;
 		std::string				address;
 		struct sockaddr_in		in;

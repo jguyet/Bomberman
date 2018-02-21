@@ -2,7 +2,21 @@
 #include "models/ActionQueue.hpp"
 #include "messages/MapSelectMessage.hpp"
 
-ActionQueueManager*			ActionQueueManager::instance = new ActionQueueManager();
+
+std::atomic<ActionQueueManager*> ActionQueueManager::pInstance { nullptr };
+std::mutex ActionQueueManager::mutex;
+
+ActionQueueManager* ActionQueueManager::Instance()
+{
+  if(pInstance == nullptr)
+  {
+  	std::lock_guard<std::mutex> lock(mutex);
+  	if(pInstance == nullptr) {
+  		pInstance = new ActionQueueManager();
+  	}
+  }
+  return pInstance;
+}
 
 ActionQueueManager::ActionQueueManager ()
 {
@@ -30,7 +44,9 @@ std::ostream &				operator<<(std::ostream & o, ActionQueueManager const & i)
 
 void ActionQueueManager::addAction(ActionQueue *action)
 {
+	ActionQueueManager::mutex.lock();
 	this->actions.push_back(action);
+	mutex.unlock();
 }
 
 void	ActionQueueManager::removeAction(ActionQueue *action)
@@ -59,9 +75,9 @@ void ActionQueueManager::doAction(ActionQueue *action)
 void ActionQueueManager::consume()
 {
 	if (this->actions.size() > 0) {
-		mutex.lock();
+		ActionQueueManager::mutex.lock();
 		this->doAction(this->actions[0]);
 		this->removeAction(this->actions[0]);
-		mutex.unlock();
+		ActionQueueManager::mutex.unlock();
 	}
 }

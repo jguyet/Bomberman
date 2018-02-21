@@ -50,7 +50,6 @@ void MessageHandler::ServerListMessageHandler(SOCK socket, ServerListMessage *me
 
 void MessageHandler::MapSelectMessageHandler(SOCK socket, MapSelectMessage *message)
 {
-	printf("Please select the map %s\n", message->name.c_str());
-	ActionQueueManager::instance->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
-	// BombermanClient::instance->current_scene = new GameScene();
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
+	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }

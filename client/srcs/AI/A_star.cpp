@@ -42,25 +42,25 @@ std::ostream &				operator<<(std::ostream & o, A_star const & i)
 
 bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_h> &moves)
 {
-	moves.clear();
-	this->get_heuristic(y, x, target, 0);
-	target.heuristic = this->open_list.top().heuristic;
-	int tmp_h = target.heuristic;
-
-	if (!this->open_list.empty())
-		this->find_path(target);
-	else
-		return (false);
-
-	if (this->FormatMoves(moves, target.pos_x, target.pos_y, this->close_list[std::make_pair(target.pos_x, target.pos_y)].p, x, y))
-		moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
-
-	// if ((target.pos_x % 2) == 0 && (target.pos_y % 2) != 0)
-		// moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
-
-	this->close_list.clear();
-	while (!this->open_list.empty())
-		this->open_list.pop();
+	// moves.clear();
+	// this->get_heuristic(y, x, target, 0);
+	// target.heuristic = this->open_list.top().heuristic;
+	// int tmp_h = target.heuristic;
+    //
+	// if (!this->open_list.empty())
+	// 	this->find_path(target);
+	// else
+	// 	return (false);
+    //
+	// if (this->FormatMoves(moves, target.pos_x, target.pos_y, this->close_list[std::make_pair(target.pos_x, target.pos_y)].p, x, y))
+	// 	moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
+    //
+	// // if ((target.pos_x % 2) == 0 && (target.pos_y % 2) != 0)
+	// 	// moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
+    //
+	// this->close_list.clear();
+	// while (!this->open_list.empty())
+	// 	this->open_list.pop();
 	return (true);
 }
 

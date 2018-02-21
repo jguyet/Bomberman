@@ -28,18 +28,3 @@ std::ostream &				operator<<(std::ostream & o, ServerListMessage const & i)
 
 	return (o);
 }
-
-//
-//
-// opensock();
-// processor = new Processor(&handlerListMessage, ServerListMessage::id,
-// 			  &handlerUpdateMap, UpdateMapMessage::id, END);
-//
-// onconnected()
-// {
-// 	read()
-// 	{
-// 		packet = new packet((IMessage)*raw);
-// 		processor->handle(packet->getMessage()->packet_id);
-// 	}
-// }

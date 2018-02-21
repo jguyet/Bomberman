@@ -6,6 +6,8 @@
 # include <stdarg.h>
 # include <map>
 
+#define END_OF_HANDLER NULL
+
 class Handler
 {
 	public:

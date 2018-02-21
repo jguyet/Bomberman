@@ -31,7 +31,7 @@ void Server::waitClients()
 	SOCK					max_fd	= 0;
 	struct sockaddr_in		in;
 
-	while (true)
+	while (42)
 	{
 		if ((fd = accept(this->sock, (struct sockaddr*)&in, &length)) == -1)
 			throw ServerCantAcceptSocket();

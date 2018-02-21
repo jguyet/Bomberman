@@ -30,6 +30,7 @@ class CharacterControllerScript : public Script
 
 		void 								BombExplode();
 		int 								getPower();
+		int									getPlayerId();
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

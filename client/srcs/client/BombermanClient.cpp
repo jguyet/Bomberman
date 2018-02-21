@@ -13,10 +13,10 @@ BombermanClient::BombermanClient ( void )
 	this->screen = new Screen(1680, 1050);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
-/*
+
 	char host[] = "localhost";
 	this->sock = new Socket(host, 8964);
-*/
+
 	return ;
 }
 

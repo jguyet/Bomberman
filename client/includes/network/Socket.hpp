@@ -3,26 +3,27 @@
 
 # include "Bomberman.hpp"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <netdb.h>
+# include <thread>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include "Handler.hpp"
+# include "Handler.hpp"
 # include "messages/ServerListMessage.hpp"
 # include "messages/MapSelectMessage.hpp"
+# include "messages/ServerListMessage.hpp"
 # include "enums/ServerType.hpp"
 # include "network/MessageHandler.hpp"
-# include <thread>
-
+# include "messages/PlayerPositionMessage.hpp"
+# include "Packet.hpp"
 #define BUF_SIZE 4096
 
-# include <messages/ServerListMessage.hpp>
-
+class Script;
 class Socket
 {
 	public:
@@ -37,6 +38,7 @@ class Socket
 		static void							Thread(Socket *socket);
 		void 								do_select();
 		int									*getId(int id);
+		void								updateMovement(Script*);
 
 	private:
 		int		tmp;

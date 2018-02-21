@@ -36,13 +36,10 @@ Socket::Socket (char *host, int port)
 
 	this->handler = new Handler(this->sock,
    	 this->getId(ServerListMessage::ID), &MessageHandler::ServerListMessageHandler,
-	 this->getId(MapSelectMessage::ID), &MessageHandler::MapSelectMessageHandler, NULL);
+	 this->getId(MapSelectMessage::ID), &MessageHandler::MapSelectMessageHandler, END_OF_HANDLER);
 
 	std::thread thread(Socket::Thread, this);
 	thread.detach();
-
-	// fcntl(this->sock, F_SETFL, 0 | O_NONBLOCK);
-	// this->do_select();
 }
 
 Socket::Socket ( Socket const & src )
@@ -86,40 +83,13 @@ void						Socket::Thread(Socket *socket)
 	}
 }
 
-// void 						Socket::do_select(void)
-// {
-//
-// 	struct timeval tv;
-// 	tv.tv_sec = 0;
-// 	tv.tv_usec = 10;
-// 	std::string types[] = { "1v1", "2v2","4v4","ffa" };
-//
-// 	if (this->state != true)
-// 	{
-// 		std::cout << "Not connected" << std::endl;
-// 		return;
-// 	}
-//
-// 	FD_ZERO(&this->rdfs);
-//
-// 	FD_SET(this->sock, &this->rdfs);
-//
-// 	if(select(this->sock + 1, &this->rdfs, NULL, NULL, &tv) == -1)
-// 	{
-// 		perror("select()");
-// 		exit(errno);
-// 	}
-//
-// 	if(FD_ISSET(this->sock, &this->rdfs))
-// 	{
-// 		int n = 0;
-// 		char buffer[BUF_SIZE];
-// 		if((n = recv(this->sock, buffer, BUF_SIZE - 1, 0)) < 0)
-// 		{
-// 		perror("recv()");
-// 		exit(errno);
-// 		}
-// 		buffer[n] = 0;
-// 		this->handler->handleMessage((IMessage*)&buffer);
-// 	}
-// }
+
+void					Socket::updateMovement(Script *script)
+{
+	glm::vec3	position = script->gameObject->transform.position;
+	int			playerId = ((CharacterControllerScript*)script)->getPlayerId();
+	PlayerPositionObject positionObject(playerId, position.x, position.y, position.z);
+
+	Packet movementPacket = Packet(new PlayerPositionMessage(positionObject));
+	movementPacket.sendPacket(this->sock);
+}

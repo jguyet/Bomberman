@@ -31,6 +31,7 @@ SRCBASE_BOMBER_SERVER	=	\
 					Main.cpp								\
 					Server.cpp								\
 					Client.cpp								\
+					Processor.cpp							\
 
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
@@ -63,11 +64,6 @@ fcleanlib:	fclean
 
 BUILD_NETWORK:
 	make re -C ../network;
-	# if test -f ../network/network.a ; then											\
-	# 	echo "Network library already compiled.";					        		\
-	# else																			\
-	# 	make -C ../network;															\
-	# fi
 
 re:			fclean all
 

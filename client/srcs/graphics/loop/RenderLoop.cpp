@@ -87,12 +87,13 @@ void						RenderLoop::looprender( void )
 {
 	long frames = 0;
 	long lastTime = TimeUtils::getCurrentNanoSeconds();
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 
 	while (this->running) {
 		long passedTime = TimeUtils::getCurrentNanoSeconds() - lastTime;
 
 		if (passedTime >= this->renderRate) {
-			ActionQueueManager::instance->consume();
+			queueManager->consume();
 			lastTime = TimeUtils::getCurrentNanoSeconds();
 			this->renderloop->renderLoop();
 			frames++;

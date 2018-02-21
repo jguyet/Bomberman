@@ -133,6 +133,8 @@ void						CharacterControllerScript::Update(void)
 				this->MDown();
 
 			if (this->has_moved) {
+
+				BombermanClient::instance->sock->updateMovement(this);
 				this->walk_anim = true;
 			} else {
 				this->walk_anim = false;
@@ -271,6 +273,11 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		this->gameObject->transform.position.y += contact_point.y;
 		this->gameObject->transform.position.z += contact_point.z;
 	}
+}
+
+int 										CharacterControllerScript::getPlayerId()
+{
+	return this->player;
 }
 
 int 										CharacterControllerScript::getPower()
