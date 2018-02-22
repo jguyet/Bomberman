@@ -20,7 +20,7 @@ class AI
 		friend std::ostream &						operator<<(std::ostream & o, AI const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		void										get_target(int x, int y, std::vector<GameObject*> players);
+		void										get_target(float x, float y, std::vector<GameObject*> players);
 		int											brain();
 		// #####################################################################
 		Module_h 									target;

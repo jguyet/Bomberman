@@ -140,10 +140,17 @@ void						CharacterControllerScript::Update(void)
 			this->MUp();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_DOWN))//DOWN
 			this->MDown();
+		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
+			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
+
+		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
+		{
+			//std::cout << "Network send :" << TimeUtils::getCurrentSystemMillis() << std::endl;
+			BombermanClient::instance->sock->updateMovement(this);
+			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+		}
 
 		if (this->has_moved) {
-
-			BombermanClient::instance->sock->updateMovement(this);
 			this->walk_anim = true;
 		} else {
 			this->walk_anim = false;
@@ -151,6 +158,7 @@ void						CharacterControllerScript::Update(void)
 	}
 	else if (this->player == 2)
 	{
+
 		int i = 0;
 		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
@@ -164,6 +172,7 @@ void						CharacterControllerScript::Update(void)
 		} else {
 			this->walk_anim = false;
 		}
+
 		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
@@ -226,31 +235,26 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "Explosion")
 	{
+		BombermanClient::instance->sock->updateMovement(this);
 		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
 		this->gameObject->toDelete = true;
 	}
 	else if (collider->tag == "bonus-bomb-up")
 	{
-		std::cout << " bomb-up  " << this->gameObject->tag << " New Bomb add " << std::endl;
-		//BombermanClient::instance->current_scene->remove(collider);
+		//std::cout << " bomb-up  " << this->gameObject->tag << " New Bomb add " << std::endl;
 		this->bomb++;
-		//delete collider;
 		collider->toDelete = true;
 	}
 	else if (collider->tag == "bonus-power-up")
 	{
-		std::cout << " power-up  " << this->gameObject->tag << " New power add " << std::endl;
-		//BombermanClient::instance->current_scene->remove(collider);
+		//std::cout << " power-up  " << this->gameObject->tag << " New power add " << std::endl;
 		this->power++;
-		//delete collider;
 		collider->toDelete = true;
 	}
 	else if (collider->tag == "bonus-speed-up")
 	{
-		std::cout << " speed-up  " << this->gameObject->tag << " New speed add " << std::endl;
-		//BombermanClient::instance->current_scene->remove(collider);
+		//std::cout << " speed-up  " << this->gameObject->tag << " New speed add " << std::endl;
 		this->speed+= 0.003;
-		//delete collider;
 		collider->toDelete = true;
 	}
 	else

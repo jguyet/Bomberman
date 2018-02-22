@@ -47,7 +47,7 @@ std::ostream &		operator<<(std::ostream & o, AI const & i)
 
 // PUBLIC METHOD #################################################
 
-void				AI::get_target(int x, int y, std::vector<GameObject*> players)
+void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 {
 	// TODO : get nearest target
 
@@ -73,8 +73,8 @@ int					AI::brain()
 	// std::vector<Module_h> tmp;
 
 	// moves.clear();
-	int x = this->my_player->transform.position.x;
-	int y = this->my_player->transform.position.z;
+	float x = this->my_player->transform.position.x;
+	float y = this->my_player->transform.position.z;
 
 	if (this->select_t == false)
 		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->all_player);
@@ -94,7 +94,12 @@ int					AI::brain()
 		// this->my_player->transform.position.z < moves.front().pos_y + 0.02f &&
 		// this->my_player->transform.position.z > moves.front().pos_y - 0.02f)
 
-		if (this->my_player->transform.position.x == moves.front().pos_x + 0.0f && this->my_player->transform.position.z == moves.front().pos_y + 0.0f)
+		if (
+			x >= moves.front().pos_x - 0.5f &&
+			x <= moves.front().pos_x + 0.5f &&
+			y >= moves.front().pos_y - 0.5f &&
+			y <= moves.front().pos_y + 0.5f
+			)
 		{
 			moves.pop_front();
 		}
@@ -111,9 +116,9 @@ int					AI::brain()
 
 	// std::cout << "size  " << moves.size() << std::endl;
 
-	std::cout << "|||||pos objective -x  " << moves.front().pos_x << " -y  " << moves.front().pos_y <<  std::endl;
-	std::cout << "pos float -x " << (this->my_player->transform.position.x) << " -y " << (this->my_player->transform.position.z)  <<  std::endl;
-	std::cout << "pos -x " << (int)(fmax(this->my_player->transform.position.x, 1) ) << " -y " << (int)(this->my_player->transform.position.z)  <<  std::endl;
+	//std::cout << "|||||pos objective -x  " << moves.front().pos_x << " -y  " << moves.front().pos_y <<  std::endl;
+	//std::cout << "pos float -x " << (this->my_player->transform.position.x) << " -y " << (this->my_player->transform.position.z)  <<  std::endl;
+	//std::cout << "pos -x " << (int)(fmax(this->my_player->transform.position.x, 1) ) << " -y " << (int)(this->my_player->transform.position.z)  <<  std::endl;
 
 	// std::cout << "|||||pos objective -x  " << moves.front().pos_x * 100 << " -y  " << moves.front().pos_y * 100 <<  std::endl;
 
@@ -127,13 +132,18 @@ int					AI::brain()
 	// else if ((int)(fmax(this->my_player->transform.position.x, 0) * 100) == moves.front().pos_x * 100 && this->my_player->transform.position.z < moves.front().pos_y + 0.0f)
 	// 	return (SDL_SCANCODE_RIGHT);
 
-	if (this->my_player->transform.position.x < moves.front().pos_x + 0.0f && y == moves.front().pos_y)
+	std::cout << "Want X:" << moves.front().pos_x << " Y: " << moves.front().pos_y << "From X:" << x << " Y: " << y << std::endl;
+
+	int nx = moves.front().pos_x;
+	int ny = moves.front().pos_y;
+
+	if (x <= nx && (abs(x-nx) > SPEED) )
 		return(SDL_SCANCODE_UP);
-	else if (this->my_player->transform.position.x > moves.front().pos_x + 0.0f && y == moves.front().pos_y)
+	if (x > nx && (abs(x-nx) > SPEED))
 		return(SDL_SCANCODE_DOWN);
-	else if (x == moves.front().pos_x && this->my_player->transform.position.z > moves.front().pos_y + 0.0f)
+	if (y > ny && (abs(y-ny) > SPEED))
 		return(SDL_SCANCODE_LEFT);
-	else if (x == moves.front().pos_x && this->my_player->transform.position.z < moves.front().pos_y + 0.0f)
+	if (y < ny && (abs(y-ny) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
 
 	return (0);
