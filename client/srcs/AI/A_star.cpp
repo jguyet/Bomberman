@@ -180,7 +180,7 @@ void						A_star::find_path(Module_h &target)
 		p = c_case.p;
 		// c_case.p = c_case.p + 1;
 
-		std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << " |p| "  << p << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
+		//std::cout << " [x] > "  << c_case.pos_x <<  " [y] > "  << c_case.pos_y << " ||||||||| {x} - " << target.pos_x << " {y} - "<< target.pos_y <<  " heuristic |:> " << c_case.heuristic  << " |p| "  << p << "  size open  : " << this->open_list.size() << "  size close  : " << this->close_list.size() << std::endl;
 		// UP
 		get_adjacent(c_case, target, c_case.pos_x, c_case.pos_y + 2, p);
 		// Down

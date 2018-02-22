@@ -67,11 +67,57 @@ void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 }
 
 
+int 				AI::getInfos(void)
+{
+	Scene *scene;
+	scene = BombermanClient::instance->current_scene;
+	for (std::map<long, GameObject*>::iterator it = scene->gameObjects.begin(); it != scene->gameObjects.end(); it++) {
+		GameObject *current = it->second;
+		if (current->tag == "ice_block")
+		{
+			//std::cout << current->tag << " " <<current->transform.position.x << " " << current->transform.position.z << std::endl;
+			this->Objects.push_back(current);
+		}
+	}
+	return (0);
+}
 
+GameObject 			*AI::getNearestBlock()
+{
+	float x = this->my_player->transform.position.x;
+	float y = this->my_player->transform.position.z;
+
+	float distance = 999;
+	float dist;
+	GameObject *near = NULL;
+
+	for (GameObject *object : this->Objects)
+	{
+		dist = glm::distance(this->my_player->transform.position, object->transform.position);
+
+		if (dist < distance) {
+			distance = dist;
+			near = object;
+		}
+	}
+	return (near);
+}
 
 // int x, int y
 int					AI::brain()
 {
+	static int info = 0;
+
+
+/*
+
+	for (GameObject *object : this->Objects)
+	{
+		//std::cout << " " << object->tag << object->transform.position.x << " " <<  object->transform.position.z << "" << std::endl;
+	}
+*/
+
+
 	// moves.clear();
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
@@ -80,7 +126,22 @@ int					AI::brain()
 	int ny = moves.front().pos_y;
 
 	if (this->select_t == false)
-		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->all_player);
+	{
+		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->all_player);
+
+		if (info == 0)
+			this->getInfos();
+
+		GameObject *near;
+		near = this->getNearestBlock();
+
+		std::cout << glm::distance(this->my_player->transform.position, near->transform.position) << std::endl;
+
+		this->target.pos_x = near->transform.position.x;
+		this->target.pos_y = near->transform.position.z + 2;
+		this->tplayer = near;
+		this->select_t = true;
+	}
 	else
 	{
 		this->target.pos_x = this->tplayer->transform.position.x;
@@ -108,8 +169,8 @@ int					AI::brain()
 		return(SDL_SCANCODE_LEFT);
 	if (y < ny && (abs(y-ny) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
-	return (SDL_SCANCODE_Q);
 
+	return (SDL_SCANCODE_Q);
 	return (0);
 }
 

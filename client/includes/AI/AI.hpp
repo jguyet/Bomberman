@@ -22,6 +22,9 @@ class AI
 		// PUBLIC ##############################################################
 		void										get_target(float x, float y, std::vector<GameObject*> players);
 		int											brain();
+
+		int 										getInfos(void);
+		GameObject 									*getNearestBlock();
 		// #####################################################################
 		Module_h 									target;
 		GameObject*									tplayer;
@@ -30,6 +33,8 @@ class AI
 		bool										select_t;
 		std::list<Module_h> 						moves;
 		A_star										a_star;
+
+		std::vector<GameObject*> 					Objects;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
