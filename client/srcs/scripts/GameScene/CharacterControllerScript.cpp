@@ -143,15 +143,12 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
 
-<<<<<<< HEAD
 		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
 		{
 			BombermanClient::instance->sock->updateMovement(this);
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
 
-=======
->>>>>>> aa7362d884b9d7d73e6fe1ca578ed924a4f939ba
 		if (this->has_moved) {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
 			BombermanClient::instance->sock->updateMovement(this);
@@ -159,7 +156,7 @@ void						CharacterControllerScript::Update(void)
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
 	}
-	else if (this->player == 100)
+	else if (this->playerId == 100)
 	{
 		int i = 0;
 		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
