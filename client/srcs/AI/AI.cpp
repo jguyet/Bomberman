@@ -66,6 +66,9 @@ void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 	// std::cout << ">>>>>>>>>>>> pos target x " << this->target.pos_x << " y " << this->target.pos_y << std::endl;
 }
 
+
+
+
 // int x, int y
 int					AI::brain()
 {
@@ -93,8 +96,8 @@ int					AI::brain()
 		//If current target close delete them
 		if (x >= nx - t && x <= nx + t && y >= ny - t && y <= ny + t)
 			moves.pop_front();
-	} else {
-		this->a_star.path_finding(x, y, this->target, moves);
+	} else if (this->a_star.path_finding(x, y, this->target, moves) == false){
+		return (0);
 	}
 
 	if (x <= nx && (abs(x-nx) > SPEED) )
@@ -105,6 +108,7 @@ int					AI::brain()
 		return(SDL_SCANCODE_LEFT);
 	if (y < ny && (abs(y-ny) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
+	return (SDL_SCANCODE_Q);
 
 	return (0);
 }

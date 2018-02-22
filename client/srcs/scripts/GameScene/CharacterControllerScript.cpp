@@ -128,8 +128,8 @@ void						CharacterControllerScript::Update(void)
 	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
-		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
-			BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
+			//BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
 
 		this->has_moved = false;
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
@@ -164,10 +164,13 @@ void						CharacterControllerScript::Update(void)
 		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();
+
+
 		if (this->has_moved) {
-			this->walk_anim = true;
+			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
+			BombermanClient::instance->sock->updateMovement(this);
 		} else {
-			this->walk_anim = false;
+			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
 		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
@@ -219,7 +222,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	{
 		//BombermanClient::instance->sock->updateMovement(this);
 		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
-		this->gameObject->toDelete = true;
+		//this->gameObject->toDelete = true;
 	}
 	else if (collider->tag == "bonus-bomb-up")
 	{

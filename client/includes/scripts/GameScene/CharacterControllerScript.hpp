@@ -44,11 +44,6 @@ class CharacterControllerScript : public Script
 		int 								life = 5;
 
 		long 								lastNetwork = 0;
-
-		bool								walk_anim = false;
-		long								walk_anim_time;
-		int									walk_anim_frame = 0;
-		int 								player = 1;
 		// ####################################################################
 };
 
