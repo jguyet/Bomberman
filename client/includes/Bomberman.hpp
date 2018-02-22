@@ -86,6 +86,7 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/components/Model.hpp"
 # include "graphics/components/BoxCollider.hpp"
 # include "graphics/components/Script.hpp"
+# include "graphics/components/Animator.hpp"
 
 # include "graphics/Scene.hpp"
 // #############################################################################

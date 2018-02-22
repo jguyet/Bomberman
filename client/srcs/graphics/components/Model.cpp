@@ -1,8 +1,8 @@
 #include "Bomberman.hpp"
 
 // STATIC ########################################################
-
-std::map<const std::string, Model*>		Model::model = std::map<const std::string, Model*>();
+//
+std::map<const std::string, Model*>	Model::model = std::map<const std::string, Model*>();
 
 inline void 			set_float4(float f[4], float a, float b, float c, float d)
 {

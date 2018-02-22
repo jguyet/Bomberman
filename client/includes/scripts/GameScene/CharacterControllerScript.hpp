@@ -9,7 +9,7 @@ class CharacterControllerScript : public Script
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											CharacterControllerScript( int n );
+											CharacterControllerScript( int playerId );
 											CharacterControllerScript( CharacterControllerScript const & src );
 		virtual								~CharacterControllerScript( void );
 		CharacterControllerScript &			operator=( CharacterControllerScript const & rhs );
@@ -31,16 +31,12 @@ class CharacterControllerScript : public Script
 		void 								BombExplode();
 		int 								getPower();
 		int									getPlayerId();
-		bool								walk_anim = false;
+
+		int 								playerId = 1;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
-		long								walk_anim_time;
-		int									walk_anim_frame = 0;
-
-
 		bool								has_moved = false;
-		int 								player = 1;
 
 		float								speed = SPEED;
 		int 								bomb = 1;

@@ -16,7 +16,13 @@ GameObject							*Factory::newPlayer(int id)
 	GameObject	*obj = new GameObject();
 
 	obj->tag = "Donkey Kong";
-	obj->AddComponent<Model>(Model::model["bomberman"]);
+
+	//ANIMATOR
+	Animator *animator = new Animator();
+	animator->newAnimation("idle", 1000L, 2, Model::model["bomberman"]);
+	animator->newAnimation("walk", 100L, 4, Model::model["walk_0"], Model::model["walk_1"], Model::model["walk_2"], Model::model["walk_3"]);
+	animator->handleAnimation("idle");
+	obj->AddComponent<Animator>(animator);
 	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
 	obj->AddComponent<Script>(new CharacterControllerScript(id));
 	return (obj);
@@ -27,6 +33,7 @@ GameObject							*Factory::newBomb(CharacterControllerScript *playerController)
 	GameObject	*obj = new GameObject();
 
 	obj->tag = "Bomb";
+
 	obj->AddComponent<Model>(Model::model["bomb"]);
 	obj->AddComponent<Script>(new BombControllerScript(playerController));
 	return (obj);
