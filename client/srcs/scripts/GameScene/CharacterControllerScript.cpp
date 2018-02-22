@@ -6,9 +6,9 @@
 
 // CANONICAL #####################################################
 
-CharacterControllerScript::CharacterControllerScript ( int n )
+CharacterControllerScript::CharacterControllerScript ( int playerId )
 {
-	this->player = n;
+	this->playerId = playerId;
 	return ;
 }
 
@@ -125,7 +125,7 @@ void						CharacterControllerScript::Update(void)
 		}
 	}
 
-	if (this->player == currentPlayerId) {
+	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
@@ -143,36 +143,21 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
 
-		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
-		{
-			//std::cout << "Network send :" << TimeUtils::getCurrentSystemMillis() << std::endl;
-			BombermanClient::instance->sock->updateMovement(this);
-			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
-		}
-
 		if (this->has_moved) {
-			this->walk_anim = true;
+			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
+			BombermanClient::instance->sock->updateMovement(this);
 		} else {
-			this->walk_anim = false;
+			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
 	}
-	else if (this->player == 2)
+	else if (this->playerId == 2)
 	{
 
 		int i = 0;
 		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
-
-		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();
-
-		if (this->has_moved) {
-			this->walk_anim = true;
-		} else {
-			this->walk_anim = false;
-		}
-
 		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
@@ -182,21 +167,7 @@ void						CharacterControllerScript::Update(void)
 
 void								CharacterControllerScript::OnPreRender(void)
 {
-	if (this->walk_anim && (this->walk_anim_time == 0L  || TimeUtils::getCurrentSystemMillis() > this->walk_anim_time + 100L))
-	{
-		if (this->walk_anim_frame >= 4)
-		{
-			this->walk_anim_frame = 0;
-		}
-		std::ostringstream s;
-		s << "walk_" << this->walk_anim_frame;
-		std::string str = s.str();
-		this->gameObject->AddComponent<Model>(Model::model[str.c_str()]);
-		this->walk_anim_frame++;
-		this->walk_anim_time = TimeUtils::getCurrentSystemMillis();
-	} else if (this->walk_anim == false) {
-		this->gameObject->AddComponent<Model>(Model::model["bomberman"]);
-	}
+
 }
 
 void								CharacterControllerScript::OnEndRender(void)
@@ -284,7 +255,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 
 int 										CharacterControllerScript::getPlayerId()
 {
-	return this->player;
+	return this->playerId;
 }
 
 int 										CharacterControllerScript::getPower()
