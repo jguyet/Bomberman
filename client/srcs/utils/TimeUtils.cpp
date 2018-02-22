@@ -31,10 +31,8 @@ TimeUtils::TimeUtils ( TimeUtils const & src )
 	return ;
 }
 
-TimeUtils &				TimeUtils::operator=( TimeUtils const & rhs )
-{
-	if (this != &rhs)
-	{
+TimeUtils &				TimeUtils::operator=( TimeUtils const & rhs ) {
+	if (this != &rhs) {
 		// make stuff
 	}
 	return (*this);

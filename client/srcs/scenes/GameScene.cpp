@@ -20,7 +20,7 @@ GameScene::GameScene (std::string selected_map)
 
 
 
-	GameObject *player = Factory::newPlayer(2);
+	GameObject *player = Factory::newPlayer(100);
 	this->all_player.push_back(player);
 	player->transform.position = glm::vec3(2,1,36);
 	player->transform.scale = glm::vec3(3,3,3);

@@ -145,7 +145,6 @@ void						CharacterControllerScript::Update(void)
 
 		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
 		{
-			//std::cout << "Network send :" << TimeUtils::getCurrentSystemMillis() << std::endl;
 			BombermanClient::instance->sock->updateMovement(this);
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
@@ -156,23 +155,19 @@ void						CharacterControllerScript::Update(void)
 			this->walk_anim = false;
 		}
 	}
-	else if (this->player == 2)
+	else if (this->player == 100)
 	{
-
 		int i = 0;
 		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
-
 		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();
-
 		if (this->has_moved) {
 			this->walk_anim = true;
 		} else {
 			this->walk_anim = false;
 		}
-
 		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
@@ -235,7 +230,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "Explosion")
 	{
-		BombermanClient::instance->sock->updateMovement(this);
+		//BombermanClient::instance->sock->updateMovement(this);
 		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
 		this->gameObject->toDelete = true;
 	}
