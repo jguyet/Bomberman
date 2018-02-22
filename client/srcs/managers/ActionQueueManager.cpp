@@ -96,11 +96,10 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			GameObject *player = scene->findPlayerById(message->playerPosition.playerId);
 			if (player != NULL && player->GetComponent<Script>() != NULL) {
 				CharacterControllerScript *script = ((CharacterControllerScript*)player->GetComponent<Script>());
-				script->walk_anim = true;
+				//TODO walking
 				player->transform.position.x = message->playerPosition.x;
 				player->transform.position.y = message->playerPosition.y;
 				player->transform.position.z = message->playerPosition.z;
-				script->walk_anim = false;
 			}
 		}
 		break;

@@ -6,9 +6,9 @@
 
 // CANONICAL #####################################################
 
-CharacterControllerScript::CharacterControllerScript ( int n )
+CharacterControllerScript::CharacterControllerScript ( int playerId )
 {
-	this->player = n;
+	this->playerId = playerId;
 	return ;
 }
 
@@ -125,7 +125,7 @@ void						CharacterControllerScript::Update(void)
 		}
 	}
 
-	if (this->player == currentPlayerId) {
+	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
@@ -143,16 +143,20 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
 
+<<<<<<< HEAD
 		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
 		{
 			BombermanClient::instance->sock->updateMovement(this);
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
 
+=======
+>>>>>>> aa7362d884b9d7d73e6fe1ca578ed924a4f939ba
 		if (this->has_moved) {
-			this->walk_anim = true;
+			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
+			BombermanClient::instance->sock->updateMovement(this);
 		} else {
-			this->walk_anim = false;
+			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
 	}
 	else if (this->player == 100)
@@ -177,21 +181,7 @@ void						CharacterControllerScript::Update(void)
 
 void								CharacterControllerScript::OnPreRender(void)
 {
-	if (this->walk_anim && (this->walk_anim_time == 0L  || TimeUtils::getCurrentSystemMillis() > this->walk_anim_time + 100L))
-	{
-		if (this->walk_anim_frame >= 4)
-		{
-			this->walk_anim_frame = 0;
-		}
-		std::ostringstream s;
-		s << "walk_" << this->walk_anim_frame;
-		std::string str = s.str();
-		this->gameObject->AddComponent<Model>(Model::model[str.c_str()]);
-		this->walk_anim_frame++;
-		this->walk_anim_time = TimeUtils::getCurrentSystemMillis();
-	} else if (this->walk_anim == false) {
-		this->gameObject->AddComponent<Model>(Model::model["bomberman"]);
-	}
+
 }
 
 void								CharacterControllerScript::OnEndRender(void)
@@ -279,7 +269,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 
 int 										CharacterControllerScript::getPlayerId()
 {
-	return this->player;
+	return this->playerId;
 }
 
 int 										CharacterControllerScript::getPower()

@@ -16,7 +16,6 @@ class BoxCollider : public Component
 		BoxCollider &						operator=( BoxCollider const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, BoxCollider const & i);
 		// PUBLICS ############################################################
-		// ####################################################################
 		glm::vec3							center;
 		glm::vec3							size;
 		// ####################################################################

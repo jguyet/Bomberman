@@ -67,6 +67,8 @@ void								Scene::_drawGameObjects(void)
 		GameObject *currentGameObject = it->second;
 
 		Script *script = currentGameObject->GetComponent<Script>();
+		Animator *animator = currentGameObject->GetComponent<Animator>();
+		Model *model = currentGameObject->GetComponent<Model>();
 
 		if (script != NULL) {
 			if (script->frame == 0L) {
@@ -79,8 +81,9 @@ void								Scene::_drawGameObjects(void)
 			script->OnPreRender();
 		}
 		//model rendering
-		Model *model = currentGameObject->GetComponent<Model>();
-		if (model != NULL) {
+		if (animator != NULL) {
+			animator->draw(currentGameObject->transform.position, currentGameObject->transform.rotation, currentGameObject->transform.scale, this->camera->projectionMatrix, this->camera->viewMatrix);
+		} else if (model != NULL) {
 			model->draw(currentGameObject->transform.position, currentGameObject->transform.rotation, currentGameObject->transform.scale, this->camera->projectionMatrix, this->camera->viewMatrix);
 		}
 		//after rendering
