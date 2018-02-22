@@ -21,6 +21,7 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
     //
 	// Packet *packet = new Packet(new ServerListMessage(servers));
 	// packet->sendPacket(sock);
+
 	this->player = NULL;
 	this->messageHandler = new Handler(sock,
 		Processor::getMessageId(PlayerPositionMessage::ID), &Processor::PlayerPositionMessageHandler,
@@ -29,6 +30,8 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 
 	Packet mapPacket = Packet(new MapSelectMessage("map_01"));
 	mapPacket.sendPacket(sock);
+
+	fcntl(this->fd, F_SETFL, 0 | O_NONBLOCK);
 
 	std::thread thread(Client::clientThread, this);
 	thread.detach();
@@ -41,16 +44,37 @@ Client::Client ( Client const & src )
 
 void Client::clientThread(Client *client)
 {
-	int		res;
-	char	buff[BUFF_SIZE];
+	int				res;
+	char			buff[BUFF_SIZE];
+	struct timeval	tv;
+	DataManager		*manager = DataManager::Instance();
 
+	tv.tv_sec = 0;
+	tv.tv_usec = 10;
 	memset((char*)&buff, 0, (BUFF_SIZE - 1));
-	while ((res = recv(client->fd, buff, (BUFF_SIZE - 1), 0)) > 0)
+	while (42)
 	{
-		client->messageHandler->handleMessage((IMessage*)&buff);
-		memset((char*)&buff, 0, (BUFF_SIZE - 1));
+		FD_ZERO(&client->rdfs);
+		FD_SET(client->fd, &client->rdfs);
+		if (select(client->fd + 1, &client->rdfs, NULL, NULL, &tv) == -1) {
+			std::cerr << "An error occured " << strerror(errno) << std::endl;
+		  	exit(errno);
+		}
+		if (FD_ISSET(client->fd, &client->rdfs)) {
+			if ((res = recv(client->fd, buff, (BUFF_SIZE - 1), 0)) > 0) {
+				client->messageHandler->handleMessage((IMessage*)&buff);
+				memset((char*)&buff, 0, (BUFF_SIZE - 1));
+			} else {
+				client->server->removeClient(client);
+				break;
+			}
+		} else {
+			if (client->player != NULL) {
+				manager->sendPlayersPositions(client);
+				usleep(150 * 1000);
+			}
+		}
 	}
-	client->server->removeClient(client);
 }
 
 SOCK Client::getSocket()

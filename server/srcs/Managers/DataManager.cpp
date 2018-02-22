@@ -56,6 +56,22 @@ void DataManager::sendPlayers(Client *client)
 	}
 }
 
+void DataManager::sendPlayersPositions(Client *client)
+{
+	DataManager				*manager = DataManager::Instance();
+
+	for (int i = 0; i < manager->server->clients.size(); i++)
+	{
+		Player *player = manager->server->clients[i]->player;
+		if (player != NULL && manager->server->clients[i] != client) {
+			PlayerPositionObject position(player->getId(), player->x, player->y, player->z);
+			Packet packet(new PlayerPositionMessage(position));
+			packet.sendPacket(client->fd);
+			printf("Position of player %d (%f, %f, %f), sent to player %d\n", player->getId(), player->x, player->y, player->z, client->player->getId());
+		}
+	}
+}
+
 void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 {
 	mutex.lock();
@@ -101,7 +117,7 @@ void DataManager::updatePos(PlayerPositionObject &pos)
 
 DataManager::DataManager ()
 {
-	return ;
+	return;
 }
 
 DataManager::DataManager ( DataManager const & src )

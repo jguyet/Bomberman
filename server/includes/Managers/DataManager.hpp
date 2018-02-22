@@ -30,6 +30,7 @@ class DataManager
 		int										getNextPlayerId();
 		void									updatePos(PlayerPositionObject&);
 		void 									sendPlayers(Client *client);
+		void								 	sendPlayersPositions(Client *client);
 
 		std::vector<Player*>						players;
 		Server										*server;

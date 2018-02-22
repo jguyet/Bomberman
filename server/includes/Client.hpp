@@ -7,6 +7,10 @@
 #include "Handler.hpp"
 #include "Processor.hpp"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #define BUFF_SIZE 1024
 class Server;
 class Client
@@ -22,13 +26,14 @@ class Client
 		Client &							operator=( Client const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Client const & i);
 		SOCK								getSocket();
-		
+
 		Player					*player;
 		Server					*server;
 		Handler					*messageHandler;
 		int 					fd;
 		std::string				address;
 		struct sockaddr_in		in;
+		fd_set					rdfs;
 };
 
 #endif

@@ -20,12 +20,12 @@ GameScene::GameScene (std::string selected_map)
 
 
 
-	GameObject *player = Factory::newPlayer(2);
-	this->all_player.push_back(player);
-	player->transform.position = glm::vec3(2,1,36);
-	player->transform.scale = glm::vec3(3,3,3);
-	player->transform.rotation = glm::vec3(0,0,0);
-	this->add(player);//add on scene
+	// GameObject *player = Factory::newPlayer(100);
+	// this->all_player.push_back(player);
+	// player->transform.position = glm::vec3(2,1,36);
+	// player->transform.scale = glm::vec3(3,3,3);
+	// player->transform.rotation = glm::vec3(0,0,0);
+	// this->add(player);//add on scene
 
 
 

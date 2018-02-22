@@ -143,7 +143,7 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
 
-		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
+		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 150L )
 		{
 			//std::cout << "Network send :" << TimeUtils::getCurrentSystemMillis() << std::endl;
 			BombermanClient::instance->sock->updateMovement(this);
