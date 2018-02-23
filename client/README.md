@@ -37,7 +37,7 @@ Trello -> [https://trello.com/b/GyST89x2/bomberman](https://trello.com/b/GyST89x
 [http://www.lonesock.net/soil.html](http://www.lonesock.net/soil.html)  
 
 ##### Contributors :
-Frmarinh   
-Dmoureu-  
+Frmarinh    
+Dmoureu-  
 Amerelo   
 Jguyet   
