@@ -40,6 +40,7 @@ Socket::Socket (char *host, int port)
 	 this->getId(NewPlayerMessage::ID), &MessageHandler::NewPlayerMessageHandler,
 	 this->getId(PlayerPositionMessage::ID), &MessageHandler::PlayerPositionMessageHandler,
 	 this->getId(PlayersPositionMessage::ID), &MessageHandler::PlayersPositionMessageHandler,
+	 this->getId(ActionMessage::ID), &MessageHandler::ActionMessageHandler,
 	 	END_OF_HANDLER);
 
 	std::thread thread(Socket::Thread, this);
@@ -105,4 +106,9 @@ void					Socket::newPlayer(float x, float y, float z)
 	// dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->players.push_back(playerObject);
 	Packet playerPacket = Packet(new NewPlayerMessage(positionObject, true));
 	playerPacket.sendPacket(this->sock);
+}
+
+int 					Socket::getSocket()
+{
+	return this->sock;
 }

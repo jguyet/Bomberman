@@ -61,15 +61,24 @@ void DataManager::updatePlayers(DataManager *instance)
 
 void DataManager::sendPlayers(Client *client)
 {
-	for (int i = 0; i < client->server->clients.size(); i++)
-	{
-		Player *player = client->server->clients[i]->player;
-		if (player != NULL && player != client->player) {
+	// for (int i = 0; i < client->server->clients.size(); i++)
+	// {
+	// 	Player *player = client->server->clients[i]->player;
+	// 	if (player != NULL && player != client->player) {
+	// 		PlayerPositionObject obj(player->id, player->x, player->y, player->z);
+	// 		Packet packet(new NewPlayerMessage(obj, false));
+	// 		packet.sendPacket(client->getSocket());
+	// 	}
+	// 	i++;
+	// }
+	for (int i = 0; i < this->players.size(); i++) {
+		Player *player = this->players[i];
+		if (player != client->player) {
 			PlayerPositionObject obj(player->id, player->x, player->y, player->z);
 			Packet packet(new NewPlayerMessage(obj, false));
 			packet.sendPacket(client->getSocket());
+			printf("Player %d sent !\n", player->id);
 		}
-		i++;
 	}
 }
 
@@ -98,7 +107,6 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 					playerMessage.sendPacket(this->server->clients[i]->getSocket());
 				}
 		}
-		usleep(1000);
 		this->sendPlayers(client);
 	}
 

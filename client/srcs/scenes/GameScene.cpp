@@ -53,6 +53,12 @@ GameObject				*GameScene::findPlayer(GameObject *player)
 
 GameObject				*GameScene::findPlayerById(int playerId)
 {
+	if (this->current_player != NULL) {
+		CharacterControllerScript *script = ((CharacterControllerScript*)this->current_player->GetComponent<Script>());
+		if (script != NULL && script->getPlayerId() == playerId) {
+			return this->current_player;
+		}
+	}
 	for (int i = 0; i < this->players.size(); i++)
 	{
 		CharacterControllerScript *script = ((CharacterControllerScript*)this->players[i]->GetComponent<Script>());

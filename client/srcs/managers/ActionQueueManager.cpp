@@ -4,6 +4,7 @@
 #include "messages/NewPlayerMessage.hpp"
 #include "messages/PlayerPositionMessage.hpp"
 #include "messages/PlayersPositionMessage.hpp"
+#include "messages/ActionMessage.hpp"
 
 std::atomic<ActionQueueManager*> ActionQueueManager::pInstance { nullptr };
 std::mutex ActionQueueManager::mutex;
@@ -102,6 +103,27 @@ void ActionQueueManager::doAction(ActionQueue *action)
 					player->transform.position.x = object.x;
 					player->transform.position.y = object.y;
 					player->transform.position.z = object.z;
+				}
+			}
+		}
+		break;
+
+		case ActionMessage::ID: {
+			ActionObject	object = ((ActionMessage*)action->message)->action;
+			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			if (object.type == ActionType::TYPE_BOMB) {
+				Case *c = scene->map->getCase(object.x, object.z);
+				if (c != NULL) {
+					GameObject *player = scene->findPlayerById(((ActionMessage*)action->message)->byPlayer);
+					if (player != NULL) {
+						CharacterControllerScript *script = ((CharacterControllerScript*)player->GetComponent<Script>());
+						GameObject *bomb = Factory::newBomb(script);
+						bomb->transform.position = glm::vec3(c->position.x,c->position.y,c->position.z);
+						bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
+						bomb->transform.rotation = glm::vec3(0,0,0);
+						BombermanClient::instance->current_scene->add(bomb);
+						c->obstacle = bomb;
+					}
 				}
 			}
 		}

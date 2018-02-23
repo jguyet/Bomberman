@@ -22,6 +22,7 @@
 # include "messages/PlayerPositionMessage.hpp"
 # include "messages/PlayersPositionMessage.hpp"
 # include "messages/NewPlayerMessage.hpp"
+# include "messages/ActionMessage.hpp"
 # include "Packet.hpp"
 #define BUF_SIZE 16000
 
@@ -42,6 +43,7 @@ class Socket
 		int									*getId(int id);
 		void								updateMovement(Script*);
 		void								newPlayer(float x, float y, float z);
+		int									getSocket();
 
 	private:
 		int		tmp;

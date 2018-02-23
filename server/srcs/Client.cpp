@@ -6,6 +6,7 @@
 #include "messages/MapSelectMessage.hpp"
 #include "messages/PlayerPositionMessage.hpp"
 #include "messages/NewPlayerMessage.hpp"
+#include "messages/ActionMessage.hpp"
 #include "enums/ServerType.hpp"
 #include "objs/ServerObject.hpp"
 #include <unistd.h>
@@ -26,6 +27,7 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 	this->messageHandler = new Handler(sock,
 		Processor::getMessageId(PlayerPositionMessage::ID), &Processor::PlayerPositionMessageHandler,
 		Processor::getMessageId(NewPlayerMessage::ID), &Processor::NewPlayerMessageHandler,
+		Processor::getMessageId(ActionMessage::ID), &Processor::ActionMessageHandler,
 		END_OF_HANDLER);
 
 	Packet mapPacket = Packet(new MapSelectMessage("map_01"));

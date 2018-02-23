@@ -62,11 +62,27 @@ void MessageHandler::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *mess
 
 void MessageHandler::PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage *message)
 {
+	GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+	PlayerPositionObject object = message->playerPosition;
+	GameObject *player = scene->findPlayerById(object.playerId); // check if its not too much for the thread
+
+	if (player != NULL) {
+		ActionQueueManager *queueManager = ActionQueueManager::Instance();
+		queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
+	} else {
+		NewPlayerMessage *msg = new NewPlayerMessage(object, false);
+		MessageHandler::NewPlayerMessageHandler(socket, msg);
+		delete msg;
+	}
+}
+
+void MessageHandler::PlayersPositionMessageHandler(SOCK socket, PlayersPositionMessage *message)
+{
 	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }
 
-void MessageHandler::PlayersPositionMessageHandler(SOCK socket, PlayersPositionMessage *message)
+void MessageHandler::ActionMessageHandler(SOCK socket, ActionMessage *message)
 {
 	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
