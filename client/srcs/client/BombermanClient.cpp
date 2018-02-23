@@ -10,12 +10,8 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 
 BombermanClient::BombermanClient ( void )
 {
-	this->screen = new Screen(500, 500);
+	this->screen = new Screen(1000, 1000);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
-
-
-	char host[] = "localhost";
-	this->sock = new Socket(host, 8964);
 
 	return ;
 }
@@ -63,13 +59,9 @@ void						BombermanClient::initialize_resources( void )
 	ShaderUtils::instance->loadShader("player", "./assets/shaders/player.vert", "./assets/shaders/player.frag");
 
 	//Player
-	Model::load("launch_bomb_anim_0", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/1.obj");
-	Model::load("launch_bomb_anim_1", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/2.obj");
-	Model::load("launch_bomb_anim_2", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/3.obj");
-
 	Model::load("bomberman", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
 	Model::load("bomberman2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
-
+	
 	Model::load("walk_0", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/3.obj");
 	Model::load("walk_1", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/2.obj");
 	Model::load("walk_2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/1.obj");

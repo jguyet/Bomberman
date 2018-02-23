@@ -12,7 +12,6 @@ layout (std140) uniform u_material {
 uniform	sampler2D u_texUnit;
 
 in vec3 v_norm;
-in vec3 v_texCoord;
 
 out vec4 o_color;
 

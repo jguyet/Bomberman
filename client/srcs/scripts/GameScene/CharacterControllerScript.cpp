@@ -151,9 +151,11 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
 
-		if (this->has_moved && this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
-			BombermanClient::instance->sock->updateMovement(this);
-			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+		if (this->has_moved) {
+			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
+				BombermanClient::instance->sock->updateMovement(this);
+				this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+			}
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
 		} else {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
