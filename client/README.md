@@ -8,10 +8,10 @@ MacOS (build OK)
 
 ##### require :
 cmake minimum VERSION 3.2  
-make minimum VERSION 3.8
-git minimum VERSION 2.1
-opengl framework minimum VERSION 3.3.0
-openal framework minimum VERSION 1.0
+make minimum VERSION 3.8  
+git minimum VERSION 2.1  
+opengl framework minimum VERSION 3.3.0  
+openal framework minimum VERSION 1.0  
 
 ##### use :
 Compilation command :  
