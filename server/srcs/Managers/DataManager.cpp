@@ -20,8 +20,7 @@ DataManager* DataManager::Instance()
 int	DataManager::getNextPlayerId()
 {
 	int id = 0;
-	for (int i = 0; i < this->players.size(); i++)
-	{
+	for (int i = 0; i < this->players.size(); i++) {
 		id = this->players[i]->getId();
 	}
 	return id + 1;
@@ -54,8 +53,8 @@ void DataManager::updatePlayers(DataManager *instance)
 			}
 			instance->playersPos.clear();
 		}
-		mutex.unlock();
 		usleep(50 * 1000);
+		mutex.unlock();
 	}
 }
 
@@ -67,7 +66,6 @@ void DataManager::sendPlayers(Client *client)
 			PlayerPositionObject obj(player->id, player->x, player->y, player->z);
 			Packet packet(new NewPlayerMessage(obj, false));
 			packet.sendPacket(client->getSocket());
-			printf("Player %d sent !\n", player->id);
 		}
 	}
 }

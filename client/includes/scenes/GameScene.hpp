@@ -24,6 +24,7 @@ class GameScene : public Scene
 		void								drawGameObjects(void);
 		GameObject							*findPlayer(GameObject*);
 		GameObject							*findPlayerById(int playerId);
+		void								removePlayer(GameObject*);
 		// Scene functions and vars ->
 		//void								_calculPhisics(void);
 		//void								_drawGameObjects(void);

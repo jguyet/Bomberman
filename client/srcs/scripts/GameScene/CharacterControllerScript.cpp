@@ -194,6 +194,9 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
+
+	if (dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player == NULL)
+		return ;
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
 	//std::cout << "OnCollisionEnter on " << collider->tag << std::endl;
@@ -223,8 +226,16 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "Explosion")
 	{
-		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
-		//this->gameObject->toDelete = true;
+		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player) {
+			// BombermanClient::instance->current_scene = new MainMenuScene();
+			// dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player = NULL;
+			// Something bad happens when we delete the current player, so why we need to delete?
+			exit(-1);
+		} else {
+			printf("Player id %d is dead !\n", this->getPlayerId());
+			dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->removePlayer(this->gameObject);
+			this->gameObject->toDelete = true;
+		}
 	}
 	else if (collider->tag == "bonus-bomb-up")
 	{

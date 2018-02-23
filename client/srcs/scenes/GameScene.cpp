@@ -40,6 +40,17 @@ GameScene::GameScene (std::string selected_map)
 	return ;
 }
 
+void					GameScene::removePlayer(GameObject *player)
+{
+	for (int i = 0; i < this->players.size(); i++)
+	{
+		if (this->players[i] == player) {
+			this->players.erase(this->players.begin() + i);
+			break;
+		}
+	}
+}
+
 GameObject				*GameScene::findPlayer(GameObject *player)
 {
 	for (int i = 0; i < this->players.size(); i++)
