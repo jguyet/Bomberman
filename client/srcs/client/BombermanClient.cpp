@@ -10,7 +10,7 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 
 BombermanClient::BombermanClient ( void )
 {
-	this->screen = new Screen(2000, 1200);
+	this->screen = new Screen(500, 500);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
 

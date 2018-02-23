@@ -65,3 +65,9 @@ void MessageHandler::PlayerPositionMessageHandler(SOCK socket, PlayerPositionMes
 	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }
+
+void MessageHandler::PlayersPositionMessageHandler(SOCK socket, PlayersPositionMessage *message)
+{
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
+	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
+}

@@ -20,9 +20,10 @@
 # include "enums/ServerType.hpp"
 # include "network/MessageHandler.hpp"
 # include "messages/PlayerPositionMessage.hpp"
+# include "messages/PlayersPositionMessage.hpp"
 # include "messages/NewPlayerMessage.hpp"
 # include "Packet.hpp"
-#define BUF_SIZE 4096
+#define BUF_SIZE 16000
 
 class Script;
 class Socket

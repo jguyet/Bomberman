@@ -68,11 +68,6 @@ void Client::clientThread(Client *client)
 				client->server->removeClient(client);
 				break;
 			}
-		} else {
-			if (client->player != NULL) {
-				manager->sendPlayersPositions(client);
-				usleep(150 * 1000);
-			}
 		}
 	}
 }

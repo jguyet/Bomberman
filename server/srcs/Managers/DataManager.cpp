@@ -42,6 +42,23 @@ void DataManager::removePlayer(Player *player)
 	mutex.unlock();
 }
 
+void DataManager::updatePlayers(DataManager *instance)
+{
+	while (42)
+	{
+		mutex.lock();
+		if (instance->playersPos.size() > 0) {
+		 	Packet packet(new PlayersPositionMessage(instance->playersPos));
+			for (int i = 0; i < instance->server->clients.size(); i++) {
+				packet.sendPacket(instance->server->clients[i]->fd);
+			}
+			instance->playersPos.clear();
+		}
+		mutex.unlock();
+		usleep(50 * 1000);
+	}
+}
+
 void DataManager::sendPlayers(Client *client)
 {
 	for (int i = 0; i < client->server->clients.size(); i++)
@@ -53,22 +70,6 @@ void DataManager::sendPlayers(Client *client)
 			packet.sendPacket(client->getSocket());
 		}
 		i++;
-	}
-}
-
-void DataManager::sendPlayersPositions(Client *client)
-{
-	DataManager				*manager = DataManager::Instance();
-
-	for (int i = 0; i < manager->server->clients.size(); i++)
-	{
-		Player *player = manager->server->clients[i]->player;
-		if (player != NULL && manager->server->clients[i] != client) {
-			PlayerPositionObject position(player->getId(), player->x, player->y, player->z);
-			Packet packet(new PlayerPositionMessage(position));
-			packet.sendPacket(client->fd);
-			printf("Position of player %d (%f, %f, %f), sent to player %d\n", player->getId(), player->x, player->y, player->z, client->player->getId());
-		}
 	}
 }
 
@@ -106,18 +107,21 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 
 void DataManager::updatePos(PlayerPositionObject &pos)
 {
+	std::lock_guard<std::mutex> lock(mutex);
+
 	for (int i = 0; i < this->server->clients.size(); i++)
 	{
 		Player *player = this->server->clients[i]->player;
 		if (player != NULL && player->id == pos.playerId) {
-			player->setPosition(pos.x, pos.y, pos.z);
+			this->playersPos.push_back(PlayerPositionObject(player->id, pos.x, pos.y, pos.z));
 		}
 	}
 }
 
 DataManager::DataManager ()
 {
-	return;
+	std::thread thread(DataManager::updatePlayers, this);
+	thread.detach();
 }
 
 DataManager::DataManager ( DataManager const & src )
