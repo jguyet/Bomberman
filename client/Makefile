@@ -339,6 +339,33 @@ srcs/graphics/Scene.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/Scene.cpp.s
 .PHONY : srcs/graphics/Scene.cpp.s
 
+srcs/graphics/canvas/Button.o: srcs/graphics/canvas/Button.cpp.o
+
+.PHONY : srcs/graphics/canvas/Button.o
+
+# target to build an object file
+srcs/graphics/canvas/Button.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Button.cpp.o
+.PHONY : srcs/graphics/canvas/Button.cpp.o
+
+srcs/graphics/canvas/Button.i: srcs/graphics/canvas/Button.cpp.i
+
+.PHONY : srcs/graphics/canvas/Button.i
+
+# target to preprocess a source file
+srcs/graphics/canvas/Button.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Button.cpp.i
+.PHONY : srcs/graphics/canvas/Button.cpp.i
+
+srcs/graphics/canvas/Button.s: srcs/graphics/canvas/Button.cpp.s
+
+.PHONY : srcs/graphics/canvas/Button.s
+
+# target to generate assembly for a file
+srcs/graphics/canvas/Button.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Button.cpp.s
+.PHONY : srcs/graphics/canvas/Button.cpp.s
+
 srcs/graphics/canvas/Canvas.o: srcs/graphics/canvas/Canvas.cpp.o
 
 .PHONY : srcs/graphics/canvas/Canvas.o
@@ -393,6 +420,33 @@ srcs/graphics/canvas/Image.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Image.cpp.s
 .PHONY : srcs/graphics/canvas/Image.cpp.s
 
+srcs/graphics/canvas/Input.o: srcs/graphics/canvas/Input.cpp.o
+
+.PHONY : srcs/graphics/canvas/Input.o
+
+# target to build an object file
+srcs/graphics/canvas/Input.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Input.cpp.o
+.PHONY : srcs/graphics/canvas/Input.cpp.o
+
+srcs/graphics/canvas/Input.i: srcs/graphics/canvas/Input.cpp.i
+
+.PHONY : srcs/graphics/canvas/Input.i
+
+# target to preprocess a source file
+srcs/graphics/canvas/Input.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Input.cpp.i
+.PHONY : srcs/graphics/canvas/Input.cpp.i
+
+srcs/graphics/canvas/Input.s: srcs/graphics/canvas/Input.cpp.s
+
+.PHONY : srcs/graphics/canvas/Input.s
+
+# target to generate assembly for a file
+srcs/graphics/canvas/Input.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Input.cpp.s
+.PHONY : srcs/graphics/canvas/Input.cpp.s
+
 srcs/graphics/canvas/Square.o: srcs/graphics/canvas/Square.cpp.o
 
 .PHONY : srcs/graphics/canvas/Square.o
@@ -446,6 +500,33 @@ srcs/graphics/canvas/Text.s: srcs/graphics/canvas/Text.cpp.s
 srcs/graphics/canvas/Text.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Text.cpp.s
 .PHONY : srcs/graphics/canvas/Text.cpp.s
+
+srcs/graphics/components/Animator.o: srcs/graphics/components/Animator.cpp.o
+
+.PHONY : srcs/graphics/components/Animator.o
+
+# target to build an object file
+srcs/graphics/components/Animator.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/components/Animator.cpp.o
+.PHONY : srcs/graphics/components/Animator.cpp.o
+
+srcs/graphics/components/Animator.i: srcs/graphics/components/Animator.cpp.i
+
+.PHONY : srcs/graphics/components/Animator.i
+
+# target to preprocess a source file
+srcs/graphics/components/Animator.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/components/Animator.cpp.i
+.PHONY : srcs/graphics/components/Animator.cpp.i
+
+srcs/graphics/components/Animator.s: srcs/graphics/components/Animator.cpp.s
+
+.PHONY : srcs/graphics/components/Animator.s
+
+# target to generate assembly for a file
+srcs/graphics/components/Animator.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/components/Animator.cpp.s
+.PHONY : srcs/graphics/components/Animator.cpp.s
 
 srcs/graphics/components/BoxCollider.o: srcs/graphics/components/BoxCollider.cpp.o
 
@@ -1074,18 +1155,27 @@ help:
 	@echo "... srcs/graphics/Scene.o"
 	@echo "... srcs/graphics/Scene.i"
 	@echo "... srcs/graphics/Scene.s"
+	@echo "... srcs/graphics/canvas/Button.o"
+	@echo "... srcs/graphics/canvas/Button.i"
+	@echo "... srcs/graphics/canvas/Button.s"
 	@echo "... srcs/graphics/canvas/Canvas.o"
 	@echo "... srcs/graphics/canvas/Canvas.i"
 	@echo "... srcs/graphics/canvas/Canvas.s"
 	@echo "... srcs/graphics/canvas/Image.o"
 	@echo "... srcs/graphics/canvas/Image.i"
 	@echo "... srcs/graphics/canvas/Image.s"
+	@echo "... srcs/graphics/canvas/Input.o"
+	@echo "... srcs/graphics/canvas/Input.i"
+	@echo "... srcs/graphics/canvas/Input.s"
 	@echo "... srcs/graphics/canvas/Square.o"
 	@echo "... srcs/graphics/canvas/Square.i"
 	@echo "... srcs/graphics/canvas/Square.s"
 	@echo "... srcs/graphics/canvas/Text.o"
 	@echo "... srcs/graphics/canvas/Text.i"
 	@echo "... srcs/graphics/canvas/Text.s"
+	@echo "... srcs/graphics/components/Animator.o"
+	@echo "... srcs/graphics/components/Animator.i"
+	@echo "... srcs/graphics/components/Animator.s"
 	@echo "... srcs/graphics/components/BoxCollider.o"
 	@echo "... srcs/graphics/components/BoxCollider.i"
 	@echo "... srcs/graphics/components/BoxCollider.s"

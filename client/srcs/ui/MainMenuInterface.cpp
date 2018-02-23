@@ -39,6 +39,8 @@ MainMenuInterface::MainMenuInterface ( void )
 	this->input_lbl->transform.position.x = square->transform.position.x + (square->transform.scale.x / 2) - 150;
 	this->input_lbl->transform.position.y = 401;
 	this->canvas->addText("lbl_ip", this->input_lbl);
+
+	this->input = new Input();
 	return ;
 }
 

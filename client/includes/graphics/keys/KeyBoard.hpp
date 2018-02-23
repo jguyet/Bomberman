@@ -3,6 +3,13 @@
 
 # include "Bomberman.hpp"
 
+struct KeyBoardEventHandler {
+
+	virtual	void							handleUP(unsigned int key) {};
+	virtual	void							handleDOWN(unsigned int key) {};
+	virtual	void							handleRELEASE(unsigned int key) {};
+};
+
 class KeyBoard
 {
 	public:
@@ -19,11 +26,14 @@ class KeyBoard
 		// #####################################################################
 		// PUBLIC ##############################################################
 		bool								getKey(unsigned int key);
+		void								addHandler(const char *key, KeyBoardEventHandler *handler);
+		void								removeHandler(const char *key);
 		// #####################################################################
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		bool								pressedKeys[301];
+		std::map<const char*, KeyBoardEventHandler*>	handlers;
+		bool											pressedKeys[301];
 		// #####################################################################
 };
 

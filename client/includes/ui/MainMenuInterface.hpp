@@ -17,6 +17,7 @@ class MainMenuInterface
 		void								draw(void);
 
 		Text								*input_lbl;
+		Input								*input;
 	private:
 		int									current_position;
 		Canvas								*canvas;

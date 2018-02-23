@@ -1,29 +1,29 @@
-#ifndef IMAGE_HPP
-# define IMAGE_HPP
+#ifndef INPUT_HPP
+# define INPUT_HPP
 
+# include "graphics/keys/KeyBoard.hpp"
 # include "Bomberman.hpp"
 
-class Image : public GameObject
+class Input : public GameObject, public KeyBoardEventHandler
 {
 	public:
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-										Image( const char *path );
-										Image (const char *path, int base_width, int base_height, int width, int height);
-										Image( Image const & src );
-		virtual							~Image( void );
-		Image &							operator=( Image const & rhs );
-		friend std::ostream &			operator<<(std::ostream & o, Image const & i);
+										Input( void );
+										Input( Input const & src );
+		virtual							~Input( void );
+		Input &							operator=( Input const & rhs );
+		friend std::ostream &			operator<<(std::ostream & o, Input const & i);
 		// ####################################################################
 		// PUBLICS ############################################################
-		void							draw(SDL_Surface *surface);
+		void							handleUP(unsigned int key);
+		void							handleDOWN(unsigned int key);
+		void							handleRELEASE(unsigned int key);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
-		SDL_Surface						*image;
-		int								width = -1;
-		int								height = -1;
+		Button							*button;
 		// ####################################################################
 };
 
