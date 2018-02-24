@@ -40,7 +40,7 @@ class CharacterControllerScript : public Script
 
 		float								speed = SPEED;
 		int 								bomb = 1;
-		int 								power = 1;
+		int 								power = 5;
 		int 								life = 5;
 
 		long 								lastNetwork = 0;
