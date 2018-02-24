@@ -39,6 +39,7 @@ void Socket::listenUdp(int playerId)
 		perror("Can't bind UDP socket");
 		exit(errno);
 	}
+
 	printf("UDP Listening on port %d\n", this->basePort + playerId);
 }
 

@@ -57,7 +57,7 @@
 # define PRESS GLFW_PRESS
 # define REPEAT GLFW_REPEAT
 
-# define SPEED 0.2f
+# define SPEED 0.1f
 
 /*
 ** Utils Methodes

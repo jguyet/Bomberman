@@ -99,7 +99,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			for (int i = 0; i < message->positions_length; i++) {
 				PlayerPositionObject &object = message->positions[i];
 				GameObject *player = scene->findPlayerById(object.playerId);
-				if (player != NULL && player->GetComponent<Script>() != NULL) {
+				if (player != NULL && player->GetComponent<Script>() != NULL && player != scene->current_player) {
 					CharacterControllerScript *script = ((CharacterControllerScript*)player->GetComponent<Script>());
 
 					script->Update();
