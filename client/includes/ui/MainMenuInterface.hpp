@@ -3,7 +3,7 @@
 
 # include "Bomberman.hpp"
 
-class MainMenuInterface
+class MainMenuInterface : public UIInterface
 {
 	public:
 

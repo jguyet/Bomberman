@@ -6,7 +6,7 @@
 
 // CANONICAL #####################################################
 
-GameInterface::GameInterface ( int number_of_player )
+GameInterface::GameInterface ( int number_of_player ) : UIInterface("unknow")
 {
 	this->number_of_player = number_of_player;
 	this->canvas = new Canvas(BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
@@ -54,7 +54,7 @@ GameInterface::GameInterface ( int number_of_player )
 	return ;
 }
 
-GameInterface::GameInterface ( GameInterface const & src )
+GameInterface::GameInterface ( GameInterface const & src ) : UIInterface("")
 {
 	*this = src;
 	return ;

@@ -6,7 +6,7 @@
 
 // CANONICAL #####################################################
 
-MainMenuInterface::MainMenuInterface ( void )
+MainMenuInterface::MainMenuInterface ( void ) : UIInterface("unknow")
 {
 	this->current_position = 0;
 	this->canvas = new Canvas(BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
@@ -46,7 +46,7 @@ MainMenuInterface::MainMenuInterface ( void )
 	return ;
 }
 
-MainMenuInterface::MainMenuInterface ( MainMenuInterface const & src )
+MainMenuInterface::MainMenuInterface ( MainMenuInterface const & src ) : UIInterface("")
 {
 	*this = src;
 	return ;

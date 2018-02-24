@@ -85,6 +85,10 @@ void							file_get_contents(std::string &content, const char *file_path);
 # include "graphics/GameObject.hpp"
 # include "graphics/canvas/Canvas.hpp"
 /*
+** UI Module
+*/
+# include "graphics/UIInterface.hpp"
+/*
 ** Components
 */
 # include "graphics/components/Model.hpp"
