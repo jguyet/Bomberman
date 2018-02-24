@@ -100,6 +100,8 @@ void ActionQueueManager::doAction(ActionQueue *action)
 				GameObject *player = scene->findPlayerById(object.playerId);
 				if (player != NULL && player->GetComponent<Script>() != NULL) {
 					CharacterControllerScript *script = ((CharacterControllerScript*)player->GetComponent<Script>());
+
+					script->Update();
 					player->transform.position.x = object.x;
 					player->transform.position.y = object.y;
 					player->transform.position.z = object.z;

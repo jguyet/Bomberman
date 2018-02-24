@@ -59,6 +59,18 @@ void								Square::draw(SDL_Surface *surface)
 	SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, this->color.r, this->color.g, this->color.b));
 }
 
+void								Square::draw(SDL_Surface *surface, glm::vec3 &parent_position)
+{
+	SDL_Rect rect;
+
+	rect.x = this->transform.position.x + parent_position.x;
+	rect.y = this->transform.position.y + parent_position.y;
+	rect.w = this->transform.scale.x;
+	rect.h = this->transform.scale.y;
+
+	SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, this->color.r, this->color.g, this->color.b));
+}
+
 void								Square::initialize( int x, int y, int width, int height )
 {
 	this->color = {255,255,255,0};

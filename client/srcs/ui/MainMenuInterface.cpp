@@ -40,7 +40,9 @@ MainMenuInterface::MainMenuInterface ( void )
 	this->input_lbl->transform.position.y = 401;
 	this->canvas->addText("lbl_ip", this->input_lbl);
 
-	this->input = new Input();
+	this->button = new Button(new Text("SELECT SERVER"), 150, 150, 100, 100);
+	this->button->css("color:#ff0000;background-color:#ffffff");
+	this->canvas->addButton("Local", this->button);
 	return ;
 }
 

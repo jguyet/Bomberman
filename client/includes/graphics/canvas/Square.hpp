@@ -19,6 +19,7 @@ class Square : public GameObject
 		void								setColor(int r, int g, int b);
 
 		void								draw(SDL_Surface *surface);
+		void								draw(SDL_Surface *surface, glm::vec3 &parent_position);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

@@ -44,6 +44,7 @@ class CharacterControllerScript : public Script
 		int 								life = 5;
 
 		long 								lastNetwork = 0;
+		glm::vec3							lastPosition;
 		// ####################################################################
 };
 

@@ -64,6 +64,9 @@ void						Canvas::build(void)
 	for (std::map<const char*, Text*>::iterator it = this->texts.begin(); it != this->texts.end(); it++) {
 		(*it).second->draw(this->canvas);
 	}
+	for (std::map<const char*, Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++) {
+		(*it).second->draw(this->canvas);
+	}
 	glGenTextures(1, &this->textureID);
 	glBindTexture(GL_TEXTURE_2D, this->textureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, \
@@ -117,6 +120,17 @@ void						Canvas::addSquare(const char *key, Square *square)
 		delete tmp;
 	}
 	this->squares[key] = square;
+	this->updated = false;
+}
+
+void						Canvas::addButton(const char *key, Button *button)
+{
+	if (this->buttons.count(key) != 0) {
+		Button *tmp = this->buttons[key];
+		this->buttons.erase(key);
+		delete tmp;
+	}
+	this->buttons[key] = button;
 	this->updated = false;
 }
 

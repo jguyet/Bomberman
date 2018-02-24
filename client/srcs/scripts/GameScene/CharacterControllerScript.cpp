@@ -132,14 +132,12 @@ void						CharacterControllerScript::Update(void)
 			currentPlayerId = controllerScript->getPlayerId();
 		}
 	}
-
+	this->has_moved = false;
 	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
 		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
 			//BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
-
-		this->has_moved = false;
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
 			this->MRight();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT
@@ -166,7 +164,6 @@ void						CharacterControllerScript::Update(void)
 		int i = 0;
 		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
-		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();
 
@@ -181,6 +178,30 @@ void						CharacterControllerScript::Update(void)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
 		// DOWN KeyBoard::instance->getKey(SDL_SCANCODE_KP_2)
+	} else {//other players
+		if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 100L)) {
+			if (this->gameObject->transform.position != this->lastPosition)
+				this->has_moved = true;
+			if (this->has_moved) {
+				if ((this->gameObject->transform.position.z - this->lastPosition.z) > 0) {
+					this->gameObject->transform.rotation.y = 180.f;
+				}
+				if ((this->gameObject->transform.position.z - this->lastPosition.z) < 0) {
+					this->gameObject->transform.rotation.y = 0.f;
+				}
+				if ((this->gameObject->transform.position.x - this->lastPosition.x) > 0) {
+					this->gameObject->transform.rotation.y = 270.f;
+				}
+				if ((this->gameObject->transform.position.x - this->lastPosition.x) < 0) {
+					this->gameObject->transform.rotation.y = 90.f;
+				}
+				this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
+			} else {
+				this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
+			}
+			this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
+			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+		}
 	}
 }
 

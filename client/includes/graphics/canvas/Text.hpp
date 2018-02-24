@@ -8,8 +8,6 @@ class Text : public GameObject
 	public:
 		// STATICS ############################################################
 		// ####################################################################
-		static std::map<const char *, TTF_Font *>	text_fonts;
-		static void									addFont(const char *key, const char *path);
 		// CANONICAL ##########################################################
 													Text(const char *text);
 													Text(std::string text);
@@ -21,16 +19,18 @@ class Text : public GameObject
 		// ####################################################################
 		// PUBLICS ############################################################
 		void										draw(SDL_Surface *surface);
+		void										draw(SDL_Surface *surface, glm::vec3 &parent_position);
 
 		void										setColor(int r, int g, int b);
-		void										setFont(const char *font);
-		void										setFont(std::string font);
+		void										setFont(const char *font, int size);
+		void										setFont(std::string font, int size);
 		void										setText(const char *text);
 		void										setText(std::string text);
+		void										css(const char *style);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
-		void										initialize(const char *text);
+		void										initialize(const char *text, const char *font);
 		TTF_Font									*font;
 		SDL_Color									color;
 		const char									*text;

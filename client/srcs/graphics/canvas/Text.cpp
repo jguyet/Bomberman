@@ -1,39 +1,49 @@
 #include "Bomberman.hpp"
 
 // STATIC ########################################################
-
-std::map<const char *, TTF_Font *> Text::text_fonts = std::map<const char *, TTF_Font *>();
-
-void							Text::addFont(const char *key, const char *path)
-{
-	if (Text::text_fonts.count(key) == 0) {
-		Text::text_fonts[key] = TTF_OpenFont(path, 30);
-	}
-}
-
 // ###############################################################
 
 // CANONICAL #####################################################
 
 Text::Text (const char *text) : GameObject()
 {
-	this->initialize(text);
+	this->initialize(text, "");
 	return ;
 }
 
 Text::Text (std::string text) : GameObject()
 {
 	this->saveptr = text;
-	this->initialize(this->saveptr.c_str());
+	this->initialize(this->saveptr.c_str(), "");
 	return ;
 }
 
 Text::Text (int number) : GameObject()
 {
 	this->saveptr = (std::ostringstream() << number).str();
-	this->initialize(this->saveptr.c_str());
+	this->initialize(this->saveptr.c_str(), "");
 	return ;
 }
+
+// Text::Text (const char *text, const char *style) : GameObject()
+// {
+// 	this->initialize(text, style);
+// 	return ;
+// }
+//
+// Text::Text (std::string text, const char *style) : GameObject()
+// {
+// 	this->saveptr = text;
+// 	this->initialize(this->saveptr.c_str(), style);
+// 	return ;
+// }
+//
+// Text::Text (int number, const char *style) : GameObject()
+// {
+// 	this->saveptr = (std::ostringstream() << number).str();
+// 	this->initialize(this->saveptr.c_str(), style);
+// 	return ;
+// }
 
 Text::Text ( Text const & src )
 {
@@ -78,17 +88,18 @@ void								Text::setColor(int r, int g, int b)
 	this->color = {static_cast<Uint8>(r), static_cast<Uint8>(g), static_cast<Uint8>(b),0};
 }
 
-void								Text::setFont(const char *font)
+void								Text::setFont(const char *font, int size)
 {
-	if (Text::text_fonts.count(font) == 0) {
-		Text::addFont(font, (std::ostringstream() << "assets/fonts/" << font).str().c_str());
+	if (this->font != NULL) {
+		TTF_CloseFont(this->font);
 	}
-	this->font = Text::text_fonts[font];
+	std::string sfont = (std::ostringstream() << "assets/fonts/" << font << ".ttf").str();
+	this->font = TTF_OpenFont(sfont.c_str(), size);
 }
 
-void								Text::setFont(std::string font)
+void								Text::setFont(std::string font, int size)
 {
-	this->setFont(font.c_str());
+	this->setFont(font.c_str(), size);
 }
 
 void								Text::setText(const char *text)
@@ -104,27 +115,38 @@ void								Text::setText(std::string text)
 
 void						Text::draw(SDL_Surface *surface)
 {
+	glm::vec3 parent;
+
+	this->draw(surface, parent);
+}
+
+void						Text::draw(SDL_Surface *surface, glm::vec3 &parent_position)
+{
 	SDL_Rect	text_position;
 	SDL_Surface	*text_surface;
 
-	text_position.x = this->transform.position.x;
-	text_position.y = this->transform.position.y;
+	text_position.x = this->transform.position.x + parent_position.x;
+	text_position.y = this->transform.position.y + parent_position.y;
 
 	text_surface = TTF_RenderText_Solid(this->font, this->text, this->color);
 	SDL_BlitSurface(text_surface, NULL, surface, &text_position);
 	SDL_FreeSurface(text_surface);
 }
 
+void						Text::css(const char *style)
+{
+
+}
+
 // PRIVATE METHOD ################################################
 
-void						Text::initialize(const char *text)
+void						Text::initialize(const char *text, const char *style)
 {
 	this->text = text;
 	this->color = {255, 255, 255,0};
-	if (Text::text_fonts.count("arial") == 0) {
-		Text::addFont("arial", "assets/fonts/arial.ttf");
-	}
-	this->font = Text::text_fonts["arial"];
+	this->font = NULL;
+	this->setFont("arial", 30);
+	this->css(style);
 }
 
 // ###############################################################

@@ -93,6 +93,16 @@ void						Image::draw(SDL_Surface *surface)
 	SDL_BlitSurface(this->image, NULL, surface, &text_position);
 }
 
+void						Image::draw(SDL_Surface *surface, glm::vec3 &parent_position)
+{
+	SDL_Rect	text_position;
+
+	text_position.x = this->transform.position.x + parent_position.x;
+	text_position.y = this->transform.position.y + parent_position.y;
+
+	SDL_BlitSurface(this->image, NULL, surface, &text_position);
+}
+
 // ###############################################################
 
 // GETTER METHOD #################################################
