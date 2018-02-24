@@ -56,6 +56,9 @@ void MessageHandler::MapSelectMessageHandler(SOCK socket, MapSelectMessage *mess
 
 void MessageHandler::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *message)
 {
+	if (message->owner) {
+		BombermanClient::instance->sock->listenUdp(message->position.playerId);
+	}
 	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }

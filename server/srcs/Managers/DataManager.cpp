@@ -49,7 +49,10 @@ void DataManager::updatePlayers(DataManager *instance)
 		if (instance->playersPos.size() > 0) {
 		 	Packet packet(new PlayersPositionMessage(instance->playersPos));
 			for (int i = 0; i < instance->server->clients.size(); i++) {
-				packet.sendPacket(instance->server->clients[i]->fd);
+				Player *player = instance->server->clients[i]->player;
+				if (player != NULL) {
+					packet.sendUdpPacket(instance->server->getUdpSocket(), player->getAddr());
+				}
 			}
 			instance->playersPos.clear();
 		}
@@ -77,7 +80,7 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 	Client	*client	= this->server->getClientBySock(socket);
 
 	if (client) {
-		Player *player = new Player(playerId);
+		Player *player = new Player(playerId, socket, (client->server->listenPort + playerId));
 		client->player = player;
 
 		pos.playerId = playerId;

@@ -104,7 +104,7 @@ void						Button::css(const char *css)
 			colorConverter(color, value);
 			this->text->setColor(color.x, color.y, color.z);
 		} else if (cmd == "font-size") {
-			int size = atoi(value);
+			
 
 		}
 	}

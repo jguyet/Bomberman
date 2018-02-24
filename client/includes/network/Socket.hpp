@@ -12,6 +12,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <sys/select.h>
 
 # include "Handler.hpp"
 # include "messages/ServerListMessage.hpp"
@@ -39,15 +40,19 @@ class Socket
 		friend std::ostream &				operator<<(std::ostream & o, Socket const & i);
 
 		static void							Thread(Socket *socket);
-		void 								do_select();
+		void								listenTcp(struct sockaddr_in &sin);
+		void								listenUdp(int playerId);
 		int									*getId(int id);
 		void								updateMovement(Script*);
 		void								newPlayer(float x, float y, float z);
 		int									getSocket();
+		std::string							baseHost;
+		int									basePort;
 
 	private:
 		int		tmp;
 		int 	sock = 0;
+		int		sockUdp = 0;
 		bool	state = false;
 		fd_set	rdfs;
 		Handler	*handler;

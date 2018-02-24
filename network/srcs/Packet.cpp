@@ -24,6 +24,11 @@ int Packet::sendPacket(SOCK socket)
 	return (send(socket, (void*)this->getMessageRaw(), message->packet_len, 0));
 }
 
+int Packet::sendUdpPacket(SOCK socket, struct sockaddr_in addr)
+{
+	return (sendto(socket, (void*)this->getMessageRaw(), message->packet_len, 0, (struct sockaddr*)&addr, sizeof(addr)));
+}
+
 IMessage *Packet::getBaseMessage()
 {
 	return this->message;

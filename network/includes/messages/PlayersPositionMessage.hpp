@@ -5,7 +5,7 @@
 #include "IMessage.hpp"
 #include "objs/PlayerPositionObject.hpp"
 
-#define MAX_POS 512
+#define MAX_POS 150
 
 class PlayersPositionMessage : public IMessage
 {

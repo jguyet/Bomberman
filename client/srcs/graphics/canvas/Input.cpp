@@ -53,17 +53,17 @@ std::ostream &				operator<<(std::ostream & o, Input const & i)
 
 void						Input::handleUP(unsigned int key)
 {
-	std::cout << "Up      Key(" << key << ")" << std::endl;
+	// std::cout << "Up      Key(" << key << ")" << std::endl;
 }
 
 void						Input::handleDOWN(unsigned int key)
 {
-	std::cout << "Down    Key(" << key << ")" << std::endl;
+	// std::cout << "Down    Key(" << key << ")" << std::endl;
 }
 
 void						Input::handleRELEASE(unsigned int key)
 {
-	std::cout << "Release Key(" << key << ")" << std::endl;
+	// std::cout << "Release Key(" << key << ")" << std::endl;
 }
 
 // ###############################################################
