@@ -26,14 +26,8 @@ void Socket::listenTcp(struct sockaddr_in &sin)
 void Socket::listenUdp(int playerId)
 {
 	struct sockaddr_in sin = { 0 };
-	struct hostent *hostinfo = NULL;
 
-	if ((hostinfo = gethostbyname("localhost")) == NULL) {
-		fprintf (stderr, "Unknown host %s.\n", this->baseHost.c_str());
-		exit(EXIT_FAILURE);
-	}
-
-	sin.sin_addr = *(struct in_addr *) hostinfo->h_addr;
+	sin.sin_addr.s_addr = htonl(INADDR_ANY);
 	sin.sin_port = htons(this->basePort + playerId);
 	sin.sin_family = AF_INET;
 
