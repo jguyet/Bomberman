@@ -58,6 +58,8 @@ void MessageHandler::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *mess
 {
 	if (message->owner) {
 		BombermanClient::instance->sock->listenUdp(message->position.playerId);
+	} else {
+		printf("RECEIVED PLAYER %d WHERE THE FUCK ARE YOU BASTARD\n", message->position.playerId);
 	}
 	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));

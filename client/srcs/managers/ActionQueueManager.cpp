@@ -82,6 +82,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			playerObject->transform.scale = glm::vec3(3,3,3);
 			playerObject->transform.rotation = glm::vec3(0,0,0);
 			playerObject->transform.position = glm::vec3(message->position.x, message->position.y, message->position.z);
+			printf("%d, %f %f %f\n", message->position.playerId, message->position.x, message->position.y, message->position.z);
 			if (message->owner) {
 				scene->current_player = playerObject;
 			} else {
