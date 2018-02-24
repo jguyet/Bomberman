@@ -3,10 +3,11 @@
 
 # include "Bomberman.hpp"
 
-enum e_float_position {
-	TAG_POSTION_LEFT,
+enum e_tag_position {
+	TAG_POSITION_LEFT,
 	TAG_POSITION_RIGHT,
-	TAG_POSTION_CENTER
+	TAG_POSITION_CENTER,
+	TAG_POSITION_NULL
 };
 
 class Tag : public GameObject
@@ -26,12 +27,12 @@ class Tag : public GameObject
 		void								setWidth(int width);
 		void								setHeight(int height);
 
-		virtual void						setFloat(e_float_position position);
+		virtual void						setFloat(e_tag_position position);
 		//font
 		virtual void						setColor(glm::vec3 &color);
 		virtual void						setFontFamily(const char *fontname);
 		virtual void						setFontSize(int font_size);
-		virtual void						setTextAlign(e_float_position position);
+		virtual void						setTextAlign(e_tag_position position);
 
 		//others
 		virtual void						setBackgroundColor(glm::vec3 &color);

@@ -4,12 +4,6 @@
 # include "graphics/keys/KeyBoard.hpp"
 # include "Bomberman.hpp"
 
-enum e_text_position {
-	TEXT_LEFT,
-	TEXT_CENTER,
-	TEXT_RIGHT
-};
-
 class Button : public Tag
 {
 	public:
@@ -24,11 +18,11 @@ class Button : public Tag
 		friend std::ostream &				operator<<(std::ostream & o, Button const & i);
 		// ####################################################################
 		// TAG Override #######################################################
-		void								setFloat(e_float_position position);
+		void								setFloat(e_tag_position position);
 		void								setFontFamily(const char *fontname);
 		void								setFontSize(int font_size);
 		void								setColor(glm::vec3 &color);
-		void								setTextAlign(e_float_position position);
+		void								setTextAlign(e_tag_position position);
 		void								setBackgroundColor(glm::vec3 &color);
 		void								setBackgroundImage(const char *path);
 		void								setDisplay(bool visible);
@@ -44,7 +38,7 @@ class Button : public Tag
 		Image								*image;
 		Square								*background;
 		Text								*text;
-		e_text_position						text_position = TEXT_CENTER;
+		e_tag_position						text_position;
 		// ####################################################################
 };
 

@@ -16,11 +16,11 @@ class Square : public Tag
 		friend std::ostream &				operator<<(std::ostream & o, Square const & i);
 		// ####################################################################
 		// PUBLICS ############################################################
-		void								setFloat(e_float_position position);
+		void								setFloat(e_tag_position position);
 		void								setFontFamily(const char *fontname);
 		void								setFontSize(int font_size);
 		void								setColor(glm::vec3 &color);
-		void								setTextAlign(e_float_position position);
+		void								setTextAlign(e_tag_position position);
 		void								setBackgroundColor(glm::vec3 &color);
 		void								setBackgroundImage(const char *path);
 		void								setDisplay(bool visible);

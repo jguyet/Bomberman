@@ -45,6 +45,9 @@ std::ostream &				operator<<(std::ostream & o, BombermanClient const & i)
 void						BombermanClient::initialize_properties( void )
 {
 	//TODO properties reader;
+	Properties *test = new Properties("test.properties");
+	//std::cout << test->get("salut") << std::endl;
+	delete test;
 }
 
 void						BombermanClient::initialize_resources( void )
@@ -224,11 +227,11 @@ void						BombermanClient::updateFps( void )
 		lastTime = TimeUtils::getCurrentSystemMillis();
 		fps = fpsCount;
 		fpsCount = 0;
-		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str());
+		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str(), "color:#ffffff;font-size:25px;font-family:arial;float:right;");
 		//Text *t = new Text(2, "FPS : ", 55);
-		t->transform.position.x = this->screen->width - 130;
-		t->transform.position.y = 50;
-		//this->canvas->addText("fps", t);
+		t->transform.position.x = -110;
+		t->transform.position.y = 0;
+		this->canvas->addText("fps", t);
 	}
 
 	fpsCount++;

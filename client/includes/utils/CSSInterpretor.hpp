@@ -10,7 +10,7 @@ class CSSInterpretor
 {
 	public:
 		// STATICS #############################################################
-		static void							interpretCSS( Tag *tag );
+		static void							interpretCSS( Tag *tag, const char *style );
 		// #####################################################################
 		// CANONICAL ###########################################################
 											CSSInterpretor( void );

@@ -57,7 +57,7 @@ void						Tag::setHeight(int height)
 	this->transform.scale.y = height;
 };
 
-void						Tag::setFloat(e_float_position position)
+void						Tag::setFloat(e_tag_position position)
 {
 
 }
@@ -77,7 +77,7 @@ void						Tag::setColor(glm::vec3 &color)
 
 }
 
-void						Tag::setTextAlign(e_float_position position)
+void						Tag::setTextAlign(e_tag_position position)
 {
 
 }

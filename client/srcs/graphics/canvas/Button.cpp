@@ -49,26 +49,14 @@ std::ostream &				operator<<(std::ostream & o, Button const & i)
 
 // PUBLIC METHOD #################################################
 
-void						colorConverter(glm::vec3 &color, std::string hexcolor)
-{
-	int r, g, b;
-
-	if (hexcolor.substr(0, 1) == "#")
-		hexcolor.erase(0,1);
-	sscanf(hexcolor.c_str(), "%02x%02x%02x", &r, &g, &b);
-	color.x = r;
-	color.y = g;
-	color.z = b;
-}
-
-void						Button::setFloat(e_float_position position)
+void						Button::setFloat(e_tag_position position)
 {
 
 }
 
 void						Button::setFontFamily(const char *fontname)
 {
-
+	this->text->setFontFamily(fontname);
 }
 
 void						Button::setFontSize(int font_size)
@@ -78,10 +66,10 @@ void						Button::setFontSize(int font_size)
 
 void						Button::setColor(glm::vec3 &color)
 {
-
+	this->text->setColor(color);
 }
 
-void						Button::setTextAlign(e_float_position position)
+void						Button::setTextAlign(e_tag_position position)
 {
 
 }
@@ -103,36 +91,7 @@ void						Button::setDisplay(bool visible)
 
 void						Button::setStyle(const char *style)
 {
-	// std::string css_pattern = (std::ostringstream() << css).str();
-	// std::vector<std::string> splt = split(css_pattern, ';');
-    //
-	// for (int command_n = 0; command_n < splt.size(); command_n++)
-	// {
-	// 	std::string cmd_line = splt.at(command_n);
-	// 	std::string cmd = split(cmd_line, ':').at(0);
-	// 	std::string value = split(cmd_line, ':').at(1);
-    //
-	// 	if (cmd == "float") {
-	// 		if (value == "left")
-	// 			this->text_position = TEXT_LEFT;
-	// 		if (value == "right")
-	// 			this->text_position = TEXT_RIGHT;
-	// 		if (value == "center")
-	// 			this->text_position = TEXT_CENTER;
-	// 	} else if (cmd == "onfocus") {
-	// 		//TODO text add prompt animation
-	// 	} else if (cmd == "background-color") {//1,1,1 rgb
-	// 		glm::vec3 color;
-	// 		colorConverter(color, value);
-	// 		this->background->setColor(color.x, color.y, color.z);
-	// 	} else if (cmd == "color") {//1,1,1 rgb text color
-	// 		glm::vec3 color;
-	// 		colorConverter(color, value);
-	// 		this->text->setColor(color.x, color.y, color.z);
-	// 	} else if (cmd == "font-size") {
-	// 		//int size = atoi(value);
-	// 	}
-	// }
+	CSSInterpretor::interpretCSS(this, style);
 }
 
 void						Button::draw(SDL_Surface *surface)
@@ -148,7 +107,7 @@ void						Button::draw(SDL_Surface *surface, glm::vec3 &parent_position)
 	if (this->image != NULL) {
 		this->image->draw(surface, this->transform.position);
 	}
-	this->text->draw(surface, this->transform.position);
+	this->text->draw(surface, this->transform.position, this->transform.scale);
 }
 
 // ###############################################################

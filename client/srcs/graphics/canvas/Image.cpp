@@ -83,7 +83,7 @@ std::ostream &				operator<<(std::ostream & o, Image const & i)
 
 // PUBLIC METHOD #################################################
 
-void						Image::setFloat(e_float_position position)
+void						Image::setFloat(e_tag_position position)
 {
 
 }
@@ -103,7 +103,7 @@ void						Image::setColor(glm::vec3 &color)
 
 }
 
-void						Image::setTextAlign(e_float_position position)
+void						Image::setTextAlign(e_tag_position position)
 {
 
 }
@@ -125,7 +125,7 @@ void						Image::setDisplay(bool visible)
 
 void						Image::setStyle(const char *style)
 {
-
+	CSSInterpretor::interpretCSS(this, style);
 }
 
 void						Image::draw(SDL_Surface *surface)

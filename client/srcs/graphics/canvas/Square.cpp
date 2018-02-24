@@ -42,7 +42,7 @@ std::ostream &				operator<<(std::ostream & o, Square const & i)
 
 // PUBLIC METHOD #################################################
 
-void						Square::setFloat(e_float_position position)
+void						Square::setFloat(e_tag_position position)
 {
 
 }
@@ -62,7 +62,7 @@ void						Square::setColor(glm::vec3 &color)
 
 }
 
-void						Square::setTextAlign(e_float_position position)
+void						Square::setTextAlign(e_tag_position position)
 {
 
 }
@@ -84,7 +84,7 @@ void						Square::setDisplay(bool visible)
 
 void						Square::setStyle(const char *style)
 {
-
+	CSSInterpretor::interpretCSS(this, style);
 }
 
 void						Square::draw(SDL_Surface *surface)
