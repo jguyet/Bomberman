@@ -42,24 +42,59 @@ std::ostream &				operator<<(std::ostream & o, Square const & i)
 
 // PUBLIC METHOD #################################################
 
-void								Square::setColor(int r, int g, int b)
+void						Square::setFloat(e_float_position position)
 {
-	this->color = {static_cast<Uint8>(r), static_cast<Uint8>(g), static_cast<Uint8>(b),0};
+
 }
 
-void								Square::draw(SDL_Surface *surface)
+void						Square::setFontFamily(const char *fontname)
 {
-	SDL_Rect rect;
 
-	rect.x = this->transform.position.x;
-	rect.y = this->transform.position.y;
-	rect.w = this->transform.scale.x;
-	rect.h = this->transform.scale.y;
-
-	SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, this->color.r, this->color.g, this->color.b));
 }
 
-void								Square::draw(SDL_Surface *surface, glm::vec3 &parent_position)
+void						Square::setFontSize(int font_size)
+{
+
+}
+
+void						Square::setColor(glm::vec3 &color)
+{
+
+}
+
+void						Square::setTextAlign(e_float_position position)
+{
+
+}
+
+void						Square::setBackgroundColor(glm::vec3 &color)
+{
+
+}
+
+void						Square::setBackgroundImage(const char *path)
+{
+
+}
+
+void						Square::setDisplay(bool visible)
+{
+
+}
+
+void						Square::setStyle(const char *style)
+{
+
+}
+
+void						Square::draw(SDL_Surface *surface)
+{
+	glm::vec3 parent_position = glm::vec3(0,0,0);
+
+	this->draw(surface, parent_position);
+}
+
+void						Square::draw(SDL_Surface *surface, glm::vec3 &parent_position)
 {
 	SDL_Rect rect;
 
@@ -71,7 +106,7 @@ void								Square::draw(SDL_Surface *surface, glm::vec3 &parent_position)
 	SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, this->color.r, this->color.g, this->color.b));
 }
 
-void								Square::initialize( int x, int y, int width, int height )
+void						Square::initialize( int x, int y, int width, int height )
 {
 	this->color = {255,255,255,0};
 	this->transform.position.x = x;

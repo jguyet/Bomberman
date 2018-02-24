@@ -420,33 +420,6 @@ srcs/graphics/canvas/Image.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Image.cpp.s
 .PHONY : srcs/graphics/canvas/Image.cpp.s
 
-srcs/graphics/canvas/Input.o: srcs/graphics/canvas/Input.cpp.o
-
-.PHONY : srcs/graphics/canvas/Input.o
-
-# target to build an object file
-srcs/graphics/canvas/Input.cpp.o:
-	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Input.cpp.o
-.PHONY : srcs/graphics/canvas/Input.cpp.o
-
-srcs/graphics/canvas/Input.i: srcs/graphics/canvas/Input.cpp.i
-
-.PHONY : srcs/graphics/canvas/Input.i
-
-# target to preprocess a source file
-srcs/graphics/canvas/Input.cpp.i:
-	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Input.cpp.i
-.PHONY : srcs/graphics/canvas/Input.cpp.i
-
-srcs/graphics/canvas/Input.s: srcs/graphics/canvas/Input.cpp.s
-
-.PHONY : srcs/graphics/canvas/Input.s
-
-# target to generate assembly for a file
-srcs/graphics/canvas/Input.cpp.s:
-	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Input.cpp.s
-.PHONY : srcs/graphics/canvas/Input.cpp.s
-
 srcs/graphics/canvas/Square.o: srcs/graphics/canvas/Square.cpp.o
 
 .PHONY : srcs/graphics/canvas/Square.o
@@ -473,6 +446,33 @@ srcs/graphics/canvas/Square.s: srcs/graphics/canvas/Square.cpp.s
 srcs/graphics/canvas/Square.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Square.cpp.s
 .PHONY : srcs/graphics/canvas/Square.cpp.s
+
+srcs/graphics/canvas/Tag.o: srcs/graphics/canvas/Tag.cpp.o
+
+.PHONY : srcs/graphics/canvas/Tag.o
+
+# target to build an object file
+srcs/graphics/canvas/Tag.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Tag.cpp.o
+.PHONY : srcs/graphics/canvas/Tag.cpp.o
+
+srcs/graphics/canvas/Tag.i: srcs/graphics/canvas/Tag.cpp.i
+
+.PHONY : srcs/graphics/canvas/Tag.i
+
+# target to preprocess a source file
+srcs/graphics/canvas/Tag.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Tag.cpp.i
+.PHONY : srcs/graphics/canvas/Tag.cpp.i
+
+srcs/graphics/canvas/Tag.s: srcs/graphics/canvas/Tag.cpp.s
+
+.PHONY : srcs/graphics/canvas/Tag.s
+
+# target to generate assembly for a file
+srcs/graphics/canvas/Tag.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Tag.cpp.s
+.PHONY : srcs/graphics/canvas/Tag.cpp.s
 
 srcs/graphics/canvas/Text.o: srcs/graphics/canvas/Text.cpp.o
 
@@ -1041,6 +1041,60 @@ srcs/ui/MainMenuInterface.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/MainMenuInterface.cpp.s
 .PHONY : srcs/ui/MainMenuInterface.cpp.s
 
+srcs/utils/CSSInterpretor.o: srcs/utils/CSSInterpretor.cpp.o
+
+.PHONY : srcs/utils/CSSInterpretor.o
+
+# target to build an object file
+srcs/utils/CSSInterpretor.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/CSSInterpretor.cpp.o
+.PHONY : srcs/utils/CSSInterpretor.cpp.o
+
+srcs/utils/CSSInterpretor.i: srcs/utils/CSSInterpretor.cpp.i
+
+.PHONY : srcs/utils/CSSInterpretor.i
+
+# target to preprocess a source file
+srcs/utils/CSSInterpretor.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/CSSInterpretor.cpp.i
+.PHONY : srcs/utils/CSSInterpretor.cpp.i
+
+srcs/utils/CSSInterpretor.s: srcs/utils/CSSInterpretor.cpp.s
+
+.PHONY : srcs/utils/CSSInterpretor.s
+
+# target to generate assembly for a file
+srcs/utils/CSSInterpretor.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/CSSInterpretor.cpp.s
+.PHONY : srcs/utils/CSSInterpretor.cpp.s
+
+srcs/utils/ColorUtils.o: srcs/utils/ColorUtils.cpp.o
+
+.PHONY : srcs/utils/ColorUtils.o
+
+# target to build an object file
+srcs/utils/ColorUtils.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/ColorUtils.cpp.o
+.PHONY : srcs/utils/ColorUtils.cpp.o
+
+srcs/utils/ColorUtils.i: srcs/utils/ColorUtils.cpp.i
+
+.PHONY : srcs/utils/ColorUtils.i
+
+# target to preprocess a source file
+srcs/utils/ColorUtils.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/ColorUtils.cpp.i
+.PHONY : srcs/utils/ColorUtils.cpp.i
+
+srcs/utils/ColorUtils.s: srcs/utils/ColorUtils.cpp.s
+
+.PHONY : srcs/utils/ColorUtils.s
+
+# target to generate assembly for a file
+srcs/utils/ColorUtils.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/ColorUtils.cpp.s
+.PHONY : srcs/utils/ColorUtils.cpp.s
+
 srcs/utils/ShaderUtils.o: srcs/utils/ShaderUtils.cpp.o
 
 .PHONY : srcs/utils/ShaderUtils.o
@@ -1164,12 +1218,12 @@ help:
 	@echo "... srcs/graphics/canvas/Image.o"
 	@echo "... srcs/graphics/canvas/Image.i"
 	@echo "... srcs/graphics/canvas/Image.s"
-	@echo "... srcs/graphics/canvas/Input.o"
-	@echo "... srcs/graphics/canvas/Input.i"
-	@echo "... srcs/graphics/canvas/Input.s"
 	@echo "... srcs/graphics/canvas/Square.o"
 	@echo "... srcs/graphics/canvas/Square.i"
 	@echo "... srcs/graphics/canvas/Square.s"
+	@echo "... srcs/graphics/canvas/Tag.o"
+	@echo "... srcs/graphics/canvas/Tag.i"
+	@echo "... srcs/graphics/canvas/Tag.s"
 	@echo "... srcs/graphics/canvas/Text.o"
 	@echo "... srcs/graphics/canvas/Text.i"
 	@echo "... srcs/graphics/canvas/Text.s"
@@ -1233,6 +1287,12 @@ help:
 	@echo "... srcs/ui/MainMenuInterface.o"
 	@echo "... srcs/ui/MainMenuInterface.i"
 	@echo "... srcs/ui/MainMenuInterface.s"
+	@echo "... srcs/utils/CSSInterpretor.o"
+	@echo "... srcs/utils/CSSInterpretor.i"
+	@echo "... srcs/utils/CSSInterpretor.s"
+	@echo "... srcs/utils/ColorUtils.o"
+	@echo "... srcs/utils/ColorUtils.i"
+	@echo "... srcs/utils/ColorUtils.s"
 	@echo "... srcs/utils/ShaderUtils.o"
 	@echo "... srcs/utils/ShaderUtils.i"
 	@echo "... srcs/utils/ShaderUtils.s"

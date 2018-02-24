@@ -1,11 +1,11 @@
 #ifndef CANVAS_HPP
 # define CANVAS_HPP
 
+# include "graphics/canvas/Tag.hpp"
 # include "graphics/canvas/Text.hpp"
 # include "graphics/canvas/Image.hpp"
 # include "graphics/canvas/Square.hpp"
 # include "graphics/canvas/Button.hpp"
-# include "graphics/canvas/Input.hpp"
 # include "Bomberman.hpp"
 
 class Canvas

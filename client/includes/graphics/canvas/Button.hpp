@@ -10,30 +10,37 @@ enum e_text_position {
 	TEXT_RIGHT
 };
 
-class Button : public GameObject, public KeyBoardEventHandler
+class Button : public Tag
 {
 	public:
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											Button ( Text *text, int x, int y, int width, int height);
-											Button ( Text *text, e_text_position position, int x, int y, int width, int height );
+											Button ( const char *text, const char *style );
+											Button ( std::string text, const char *style );
 											Button( Button const & src );
 		virtual								~Button( void );
 		Button &							operator=( Button const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, Button const & i);
 		// ####################################################################
-		void								handleUP(unsigned int key);
-		void								handleDOWN(unsigned int key);
-		void								handleRELEASE(unsigned int key);
-		// PUBLICS ############################################################
-		void								addTexture(Image *image);
+		// TAG Override #######################################################
+		void								setFloat(e_float_position position);
+		void								setFontFamily(const char *fontname);
+		void								setFontSize(int font_size);
+		void								setColor(glm::vec3 &color);
+		void								setTextAlign(e_float_position position);
+		void								setBackgroundColor(glm::vec3 &color);
+		void								setBackgroundImage(const char *path);
+		void								setDisplay(bool visible);
+		void								setStyle(const char *style);
 		void								draw(SDL_Surface *surface);
-		void								css(const char *css);
+		void								draw(SDL_Surface *surface, glm::vec3 &parent_position);
+		// ####################################################################
+		// PUBLICS ############################################################
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
-		void								initialize(Image *image, Text *text, e_text_position position, int x, int y, int width, int height);
+		void								initialize(Text *text);
 		Image								*image;
 		Square								*background;
 		Text								*text;

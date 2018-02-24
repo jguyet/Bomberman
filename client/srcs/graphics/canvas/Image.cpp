@@ -83,14 +83,56 @@ std::ostream &				operator<<(std::ostream & o, Image const & i)
 
 // PUBLIC METHOD #################################################
 
+void						Image::setFloat(e_float_position position)
+{
+
+}
+
+void						Image::setFontFamily(const char *fontname)
+{
+
+}
+
+void						Image::setFontSize(int font_size)
+{
+
+}
+
+void						Image::setColor(glm::vec3 &color)
+{
+
+}
+
+void						Image::setTextAlign(e_float_position position)
+{
+
+}
+
+void						Image::setBackgroundColor(glm::vec3 &color)
+{
+
+}
+
+void						Image::setBackgroundImage(const char *path)
+{
+
+}
+
+void						Image::setDisplay(bool visible)
+{
+
+}
+
+void						Image::setStyle(const char *style)
+{
+
+}
+
 void						Image::draw(SDL_Surface *surface)
 {
-	SDL_Rect	text_position;
+	glm::vec3 parent_position = glm::vec3(0,0,0);
 
-	text_position.x = this->transform.position.x;
-	text_position.y = this->transform.position.y;
-
-	SDL_BlitSurface(this->image, NULL, surface, &text_position);
+	this->draw(surface, parent_position);
 }
 
 void						Image::draw(SDL_Surface *surface, glm::vec3 &parent_position)

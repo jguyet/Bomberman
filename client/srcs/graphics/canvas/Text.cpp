@@ -5,20 +5,20 @@
 
 // CANONICAL #####################################################
 
-Text::Text (const char *text) : GameObject()
+Text::Text (const char *text)
 {
 	this->initialize(text, "");
 	return ;
 }
 
-Text::Text (std::string text) : GameObject()
+Text::Text (std::string text)
 {
 	this->saveptr = text;
 	this->initialize(this->saveptr.c_str(), "");
 	return ;
 }
 
-Text::Text (int number) : GameObject()
+Text::Text (int number)
 {
 	this->saveptr = (std::ostringstream() << number).str();
 	this->initialize(this->saveptr.c_str(), "");
@@ -83,39 +83,54 @@ std::ostream &				operator<<(std::ostream & o, Text const & i)
 
 // PUBLIC METHOD #################################################
 
-void								Text::setColor(int r, int g, int b)
+void						Text::setFloat(e_float_position position)
 {
-	this->color = {static_cast<Uint8>(r), static_cast<Uint8>(g), static_cast<Uint8>(b),0};
+
 }
 
-void								Text::setFont(const char *font, int size)
+void						Text::setFontFamily(const char *fontname)
 {
-	if (this->font != NULL) {
-		TTF_CloseFont(this->font);
-	}
-	std::string sfont = (std::ostringstream() << "assets/fonts/" << font << ".ttf").str();
-	this->font = TTF_OpenFont(sfont.c_str(), size);
+
 }
 
-void								Text::setFont(std::string font, int size)
+void						Text::setFontSize(int font_size)
 {
-	this->setFont(font.c_str(), size);
+
 }
 
-void								Text::setText(const char *text)
+void						Text::setColor(glm::vec3 &color)
 {
-	this->text = text;
+
 }
 
-void								Text::setText(std::string text)
+void						Text::setTextAlign(e_float_position position)
 {
-	this->saveptr = text;
-	this->text = this->saveptr.c_str();
+
+}
+
+void						Text::setBackgroundColor(glm::vec3 &color)
+{
+
+}
+
+void						Text::setBackgroundImage(const char *path)
+{
+
+}
+
+void						Text::setDisplay(bool visible)
+{
+
+}
+
+void						Text::setStyle(const char *style)
+{
+
 }
 
 void						Text::draw(SDL_Surface *surface)
 {
-	glm::vec3 parent;
+	glm::vec3 parent = glm::vec3(0,0,0);
 
 	this->draw(surface, parent);
 }
@@ -133,11 +148,6 @@ void						Text::draw(SDL_Surface *surface, glm::vec3 &parent_position)
 	SDL_FreeSurface(text_surface);
 }
 
-void						Text::css(const char *style)
-{
-
-}
-
 // PRIVATE METHOD ################################################
 
 void						Text::initialize(const char *text, const char *style)
@@ -145,8 +155,8 @@ void						Text::initialize(const char *text, const char *style)
 	this->text = text;
 	this->color = {255, 255, 255,0};
 	this->font = NULL;
-	this->setFont("arial", 30);
-	this->css(style);
+	//this->setFont("arial", 30);
+	//this->css(style);
 }
 
 // ###############################################################

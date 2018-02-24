@@ -3,7 +3,7 @@
 
 # include "Bomberman.hpp"
 
-class Image : public GameObject
+class Image : public Tag
 {
 	public:
 		// STATICS ############################################################
@@ -17,8 +17,17 @@ class Image : public GameObject
 		friend std::ostream &			operator<<(std::ostream & o, Image const & i);
 		// ####################################################################
 		// PUBLICS ############################################################
-		void							draw(SDL_Surface *surface);
-		void							draw(SDL_Surface *surface, glm::vec3 &parent_position);
+		void								setFloat(e_float_position position);
+		void								setFontFamily(const char *fontname);
+		void								setFontSize(int font_size);
+		void								setColor(glm::vec3 &color);
+		void								setTextAlign(e_float_position position);
+		void								setBackgroundColor(glm::vec3 &color);
+		void								setBackgroundImage(const char *path);
+		void								setDisplay(bool visible);
+		void								setStyle(const char *style);
+		void								draw(SDL_Surface *surface);
+		void								draw(SDL_Surface *surface, glm::vec3 &parent_position);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

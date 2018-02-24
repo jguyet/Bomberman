@@ -71,6 +71,8 @@ std::vector<std::string>		split(const std::string &s, char delim);
 */
 # include "utils/TimeUtils.hpp"
 # include "utils/ShaderUtils.hpp"
+# include "utils/ColorUtils.hpp"
+# include "utils/CSSInterpretor.hpp"
 
 // GRAPHICS ####################################################################
 /*

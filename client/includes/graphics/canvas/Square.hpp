@@ -3,7 +3,7 @@
 
 # include "Bomberman.hpp"
 
-class Square : public GameObject
+class Square : public Tag
 {
 	public:
 		// STATICS ############################################################
@@ -16,8 +16,15 @@ class Square : public GameObject
 		friend std::ostream &				operator<<(std::ostream & o, Square const & i);
 		// ####################################################################
 		// PUBLICS ############################################################
-		void								setColor(int r, int g, int b);
-
+		void								setFloat(e_float_position position);
+		void								setFontFamily(const char *fontname);
+		void								setFontSize(int font_size);
+		void								setColor(glm::vec3 &color);
+		void								setTextAlign(e_float_position position);
+		void								setBackgroundColor(glm::vec3 &color);
+		void								setBackgroundImage(const char *path);
+		void								setDisplay(bool visible);
+		void								setStyle(const char *style);
 		void								draw(SDL_Surface *surface);
 		void								draw(SDL_Surface *surface, glm::vec3 &parent_position);
 		// ####################################################################

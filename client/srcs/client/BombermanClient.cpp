@@ -61,7 +61,7 @@ void						BombermanClient::initialize_resources( void )
 	//Player
 	Model::load("bomberman", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
 	Model::load("bomberman2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
-	
+
 	Model::load("walk_0", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/3.obj");
 	Model::load("walk_1", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/2.obj");
 	Model::load("walk_2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/1.obj");
@@ -228,7 +228,7 @@ void						BombermanClient::updateFps( void )
 		//Text *t = new Text(2, "FPS : ", 55);
 		t->transform.position.x = this->screen->width - 130;
 		t->transform.position.y = 50;
-		this->canvas->addText("fps", t);
+		//this->canvas->addText("fps", t);
 	}
 
 	fpsCount++;
