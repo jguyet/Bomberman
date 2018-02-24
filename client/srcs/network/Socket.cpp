@@ -28,7 +28,7 @@ void Socket::listenUdp(int playerId)
 	struct sockaddr_in sin = { 0 };
 	struct hostent *hostinfo = NULL;
 
-	if ((hostinfo = gethostbyname(this->baseHost.c_str())) == NULL) {
+	if ((hostinfo = gethostbyname("localhost")) == NULL) {
 		fprintf (stderr, "Unknown host %s.\n", this->baseHost.c_str());
 		exit(EXIT_FAILURE);
 	}
