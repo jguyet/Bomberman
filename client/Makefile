@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/cmake
+CMAKE_COMMAND = /Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/cmake
 
 # The command to remove a file.
-RM = /Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/cmake -E remove -f
+RM = /Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/Bomberman/client
+CMAKE_SOURCE_DIR = /Users/amerelo/42/Bomberman/client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/Bomberman/client
+CMAKE_BINARY_DIR = /Users/amerelo/42/Bomberman/client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /tmp/Bomberman/client
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/Bomberman/client/CMakeFiles /tmp/Bomberman/client/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/amerelo/42/Bomberman/client/CMakeFiles /Users/amerelo/42/Bomberman/client/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/Bomberman/client/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/amerelo/42/Bomberman/client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -446,6 +446,33 @@ srcs/graphics/canvas/Text.s: srcs/graphics/canvas/Text.cpp.s
 srcs/graphics/canvas/Text.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Text.cpp.s
 .PHONY : srcs/graphics/canvas/Text.cpp.s
+
+srcs/graphics/components/Animator.o: srcs/graphics/components/Animator.cpp.o
+
+.PHONY : srcs/graphics/components/Animator.o
+
+# target to build an object file
+srcs/graphics/components/Animator.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/components/Animator.cpp.o
+.PHONY : srcs/graphics/components/Animator.cpp.o
+
+srcs/graphics/components/Animator.i: srcs/graphics/components/Animator.cpp.i
+
+.PHONY : srcs/graphics/components/Animator.i
+
+# target to preprocess a source file
+srcs/graphics/components/Animator.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/components/Animator.cpp.i
+.PHONY : srcs/graphics/components/Animator.cpp.i
+
+srcs/graphics/components/Animator.s: srcs/graphics/components/Animator.cpp.s
+
+.PHONY : srcs/graphics/components/Animator.s
+
+# target to generate assembly for a file
+srcs/graphics/components/Animator.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/components/Animator.cpp.s
+.PHONY : srcs/graphics/components/Animator.cpp.s
 
 srcs/graphics/components/BoxCollider.o: srcs/graphics/components/BoxCollider.cpp.o
 
@@ -1086,6 +1113,9 @@ help:
 	@echo "... srcs/graphics/canvas/Text.o"
 	@echo "... srcs/graphics/canvas/Text.i"
 	@echo "... srcs/graphics/canvas/Text.s"
+	@echo "... srcs/graphics/components/Animator.o"
+	@echo "... srcs/graphics/components/Animator.i"
+	@echo "... srcs/graphics/components/Animator.s"
 	@echo "... srcs/graphics/components/BoxCollider.o"
 	@echo "... srcs/graphics/components/BoxCollider.i"
 	@echo "... srcs/graphics/components/BoxCollider.s"

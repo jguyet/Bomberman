@@ -108,7 +108,6 @@ int					AI::brain()
 {
 	static int info = 0;
 
-
 /*
 
 	for (GameObject *object : this->Objects)
@@ -116,8 +115,6 @@ int					AI::brain()
 		//std::cout << " " << object->tag << object->transform.position.x << " " <<  object->transform.position.z << "" << std::endl;
 	}
 */
-
-
 	// moves.clear();
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
@@ -146,6 +143,13 @@ int					AI::brain()
 	{
 		this->target.pos_x = this->tplayer->transform.position.x;
 		this->target.pos_y = this->tplayer->transform.position.z;
+	}
+
+	if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
+	{
+		info = 0;
+		this->select_t = false;
+		std::cout << " NO ice_block :)" << std::endl;
 	}
 
 	if (this->select_t == false)
