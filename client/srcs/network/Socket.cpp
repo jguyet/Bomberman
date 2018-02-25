@@ -68,6 +68,7 @@ Socket::Socket (char *host, int port) : basePort(port), baseHost(host)
 	 this->getId(PlayerPositionMessage::ID), &MessageHandler::PlayerPositionMessageHandler,
 	 this->getId(PlayersPositionMessage::ID), &MessageHandler::PlayersPositionMessageHandler,
 	 this->getId(ActionMessage::ID), &MessageHandler::ActionMessageHandler,
+	 this->getId(PlayerDeadMessage::ID), &MessageHandler::PlayerDeadMessageHandler,
 	 	END_OF_HANDLER);
 
 	std::thread thread(Socket::Thread, this);
@@ -149,8 +150,13 @@ void					Socket::newPlayer(float x, float y, float z)
 {
 	PlayerPositionObject positionObject(-1, x, y, z);
 
-	// dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->players.push_back(playerObject);
 	Packet playerPacket = Packet(new NewPlayerMessage(positionObject, true));
+	playerPacket.sendPacket(this->sock);
+}
+
+void					Socket::playerDead(int playerId)
+{
+	Packet playerPacket = Packet(new PlayerDeadMessage(playerId));
 	playerPacket.sendPacket(this->sock);
 }
 

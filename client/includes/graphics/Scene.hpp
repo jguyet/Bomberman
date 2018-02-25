@@ -2,6 +2,7 @@
 # define SCENE_HPP
 
 # include "Bomberman.hpp"
+# include <mutex>
 
 class Scene
 {
@@ -28,7 +29,7 @@ class Scene
 		// ####################################################################
 	private:
 		std::vector<GameObject*>			delete_list;
-		bool								lock = false;
+		std::mutex							mutex;
 };
 
 #endif

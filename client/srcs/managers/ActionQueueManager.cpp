@@ -5,6 +5,7 @@
 #include "messages/PlayerPositionMessage.hpp"
 #include "messages/PlayersPositionMessage.hpp"
 #include "messages/ActionMessage.hpp"
+#include "messages/PlayerDeadMessage.hpp"
 
 std::atomic<ActionQueueManager*> ActionQueueManager::pInstance { nullptr };
 std::mutex ActionQueueManager::mutex;
@@ -135,6 +136,18 @@ void ActionQueueManager::doAction(ActionQueue *action)
 						c->obstacle = bomb;
 					}
 				}
+			}
+		}
+		break;
+
+		case PlayerDeadMessage::ID: {
+			PlayerDeadMessage	*message = (PlayerDeadMessage*)action->message;
+			GameScene			*scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameObject			*player = scene->findPlayerById(message->playerId);
+
+			if (player != NULL)
+			{
+				scene->removePlayer(player);
 			}
 		}
 		break;

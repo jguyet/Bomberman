@@ -36,6 +36,7 @@ class GameScene : public Scene
 		//Camera							*camera;
 		// ####################################################################
 		// PUBLICS ############################################################
+		glm::vec3							topoint;
 		GameObject							*current_player;
 		GameInterface						*interface;
 		std::vector<GameObject*>			players;

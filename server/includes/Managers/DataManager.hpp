@@ -27,6 +27,7 @@ class DataManager
 		void									addNewPlayer(SOCK socket, PlayerPositionObject&);
 		void									removePlayer(Player*);
 		int										getNextPlayerId();
+		Player									*findPlayerById(int playerId);
 		void									updatePos(PlayerPositionObject&);
 		void									sendPlayers(Client *client);
 		static void								updatePlayers(DataManager *manager);

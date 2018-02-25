@@ -90,3 +90,9 @@ void MessageHandler::ActionMessageHandler(SOCK socket, ActionMessage *message)
 	ActionQueueManager *queueManager = ActionQueueManager::Instance();
 	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }
+
+void MessageHandler::PlayerDeadMessageHandler(SOCK socket, PlayerDeadMessage *message)
+{
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
+	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
+}

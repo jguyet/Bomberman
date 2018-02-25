@@ -9,6 +9,7 @@
 #include "messages/PlayerPositionMessage.hpp"
 #include "messages/PlayersPositionMessage.hpp"
 #include "messages/ActionMessage.hpp"
+#include "messages/PlayerDeadMessage.hpp"
 #include "managers/ActionQueueManager.hpp"
 
 class MessageHandler
@@ -25,6 +26,7 @@ class MessageHandler
 		static void PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage *message);
 		static void PlayersPositionMessageHandler(SOCK socket, PlayersPositionMessage *message);
 		static void ActionMessageHandler(SOCK socket, ActionMessage *message);
+		static void PlayerDeadMessageHandler(SOCK socket, PlayerDeadMessage *message);
 
 		MessageHandler &							operator=( MessageHandler const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, MessageHandler const & i);

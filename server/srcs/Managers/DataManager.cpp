@@ -26,13 +26,24 @@ int	DataManager::getNextPlayerId()
 	return id + 1;
 }
 
+Player *DataManager::findPlayerById(int playerId)
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	for (int i = 0; i < this->players.size(); i++) {
+		if (this->players[i]->getId() == playerId) {
+			return this->players[i];
+		}
+	}
+	return NULL;
+}
+
 void DataManager::removePlayer(Player *player)
 {
 	mutex.lock();
 	for (int i = 0; i < this->players.size(); i++)
 	{
 		if (this->players[i] == player) {
-			printf("Player id %d disconnected\n", player->getId());
+			printf("Player id %d dead/disconnected\n", player->getId());
 			this->players.erase(this->players.begin() + i);
 			delete player;
 			break;

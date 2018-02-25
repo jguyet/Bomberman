@@ -40,6 +40,18 @@ GameScene::GameScene (std::string selected_map)
 	return ;
 }
 
+void					GameScene::removePlayer(GameObject *player)
+{
+	for (int i = 0; i < this->players.size(); i++)
+	{
+		if (this->players[i] == player) {
+			this->remove(player);
+			this->players.erase(this->players.begin() + i);
+			break;
+		}
+	}
+}
+
 GameObject				*GameScene::findPlayer(GameObject *player)
 {
 	for (int i = 0; i < this->players.size(); i++)
@@ -115,8 +127,20 @@ void								GameScene::calculPhisics(void)
 void								GameScene::drawGameObjects(void)
 {
 	//build Matrixs
+	//this->camera->buildFPSProjection();
+	if (this->current_player != NULL) {
+		topoint.x = -this->current_player->transform.position.x;
+		topoint.y = 0;//this->current_player->transform.position.y;
+		topoint.z = -this->current_player->transform.position.z;
+		this->camera->transform.position.x = topoint.x;
+		this->camera->transform.position.z = topoint.z;
+		//Eloignement sur x
+		this->camera->transform.position.x += 30;
+		//Eloignement sur y
+		this->camera->transform.position.y = 35;
+	}
 	this->camera->buildFPSProjection();
-	// this->camera->buildLookAtProjection(glm::vec3(-12.f,1,-18.f));
+	// this->camera->buildLookAtProjection(topoint);
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas
