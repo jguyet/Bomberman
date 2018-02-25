@@ -85,9 +85,10 @@ void ActionQueueManager::doAction(ActionQueue *action)
 		break;
 
 		case NewPlayerMessage::ID: {
-			NewPlayerMessage	*message = (NewPlayerMessage*)action->message;
-			GameObject *playerObject = Factory::newPlayer(message->position.playerId);
-			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			NewPlayerMessage		*message = (NewPlayerMessage*)action->message;
+			GameObject 				*playerObject = Factory::newPlayer(message->position.playerId);
+			GameScene				*scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+
 			playerObject->transform.scale = glm::vec3(3,3,3);
 			playerObject->transform.rotation = glm::vec3(0,0,0);
 			playerObject->transform.position = glm::vec3(message->position.x, message->position.y, message->position.z);

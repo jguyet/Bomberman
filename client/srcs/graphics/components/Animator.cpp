@@ -73,7 +73,7 @@ void						Animator::handleAnimation(const char *key)
 	this->next_animation = key;
 }
 
-void						Animator::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale, glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix)
+Model						*Animator::build(void)
 {
 	Model *current_animated_model;
 
@@ -82,7 +82,7 @@ void						Animator::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &sc
 		this->next_animation = NULL;
 	}
 	if (this->current_animation == NULL) {
-		return ;
+		return NULL;
 	}
 	if (TimeUtils::getCurrentSystemMillis() > this->last_handled_animation_time + this->current_animation_frame_time) {
 		this->current_animation_id++;
@@ -91,7 +91,8 @@ void						Animator::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &sc
 			this->current_animation_id = 0;
 	}
 	current_animated_model = this->animations[this->current_animation][this->current_animation_id];
-	current_animated_model->draw(position, rotation, scale, projectionMatrix, viewMatrix);
+	this->gameObject->AddComponent<Model>(current_animated_model);
+	return (current_animated_model);
 }
 
 void						Animator::removeAnimation(const char *key)

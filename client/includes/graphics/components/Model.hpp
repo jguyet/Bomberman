@@ -43,6 +43,7 @@ class Model : public Component
 		// @OVERRIDE Component ################################################
 		// ####################################################################
 		// PUBLIC ##############################################################
+		void										bindShaderProgram(void);
 		void										draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale, glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix);
 
 		Assimp::Importer 							importer;
@@ -59,7 +60,11 @@ class Model : public Component
 		std::map<std::string, GLuint>				textureIdMap;
 		std::vector<struct MyMesh>					myMeshes;
 		std::vector<unsigned int> 					indices;
+
+		GLuint 										color;
+
 		unsigned int								shader;
+		bool 										shaderBind = false;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

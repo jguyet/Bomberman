@@ -11,6 +11,7 @@
 CharacterControllerScript::CharacterControllerScript ( int playerId )
 {
 	this->playerId = playerId;
+
 	return ;
 }
 
@@ -174,7 +175,7 @@ void						CharacterControllerScript::Update(void)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
 		// DOWN KeyBoard::instance->getKey(SDL_SCANCODE_KP_2)
-	} else {//other players
+	} else { //other players
 		if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 100L)) {
 			if (this->gameObject->transform.position != this->lastPosition)
 				this->has_moved = true;
@@ -204,11 +205,20 @@ void						CharacterControllerScript::Update(void)
 void								CharacterControllerScript::OnPreRender(void)
 {
 	//bind shader
+	Model *playerObjectModel = this->gameObject->GetComponent<Model>();
+	glUseProgram(playerObjectModel->shader);
+	playerObjectModel->shaderBind = true;
+
+	glm::vec3 colors = glm::vec3(0.8f,0.1f,0.0f);
+	if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player)
+		colors = glm::vec3(0.0f,0.1f,0.8f);
+	glUniform3fv(playerObjectModel->color,1 , &colors[0]);
 }
 
 void								CharacterControllerScript::OnEndRender(void)
 {
 	//unbind shader
+
 }
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
@@ -290,6 +300,8 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 			contact_point.x = -contact_point.x;
 		if (this->gameObject->transform.position.y <= collider->transform.position.y)
 			contact_point.y = -contact_point.y;
+
+
 		if (this->gameObject->transform.position.z <= collider->transform.position.z)
 			contact_point.z = -contact_point.z;
 

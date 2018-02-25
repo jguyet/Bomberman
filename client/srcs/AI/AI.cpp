@@ -75,7 +75,7 @@ int 				AI::getInfos(void)
 		GameObject *current = it->second;
 		if (current->tag == "ice_block")
 		{
-			//std::cout << current->tag << " " <<current->transform.position.x << " " << current->transform.position.z << std::endl;
+			// std::cout << current->tag << " " <<current->transform.position.x << " " << current->transform.position.z << std::endl;
 			this->Objects.push_back(current);
 		}
 	}
@@ -108,39 +108,26 @@ int					AI::brain()
 {
 	static int info = 0;
 
-
-/*
-
-	for (GameObject *object : this->Objects)
-	{
-		//std::cout << " " << object->tag << object->transform.position.x << " " <<  object->transform.position.z << "" << std::endl;
-	}
-*/
-
-
 	// moves.clear();
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
-	int nx = moves.front().pos_x;
-	int ny = moves.front().pos_y;
-
 	if (this->select_t == false)
 	{
-		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->all_player);
+		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->all_player);
 
-		if (info == 0)
-			this->getInfos();
-
-		GameObject *near;
-		near = this->getNearestBlock();
-
-		std::cout << glm::distance(this->my_player->transform.position, near->transform.position) << std::endl;
-
-		this->target.pos_x = near->transform.position.x;
-		this->target.pos_y = near->transform.position.z + 2;
-		this->tplayer = near;
-		this->select_t = true;
+		// if (info == 0)
+		// 	this->getInfos();
+        //
+		// GameObject *near;
+		// near = this->getNearestBlock();
+        //
+		// std::cout << glm::distance(this->my_player->transform.position, near->transform.position) << std::endl;
+        //
+		// this->target.pos_x = near->transform.position.x;
+		// this->target.pos_y = near->transform.position.z + 2;
+		// this->tplayer = near;
+		// this->select_t = true;
 	}
 	else
 	{
@@ -155,22 +142,24 @@ int					AI::brain()
 	{
 		float t = SPEED; // Tolerance
 		//If current target close delete them
-		if (x >= nx - t && x <= nx + t && y >= ny - t && y <= ny + t)
+		if (x >= moves.front().pos_x - t && x <= moves.front().pos_x + t && y >= moves.front().pos_y - t && y <= moves.front().pos_y + t)
 			moves.pop_front();
 	} else if (this->a_star.path_finding(x, y, this->target, moves) == false){
 		return (0);
 	}
 
-	if (x <= nx && (abs(x-nx) > SPEED) )
+	std::cout << "  X:" << moves.front().pos_x << "  Y:" << moves.front().pos_y << "  X:" << x << "  Y:" << y << std::endl;
+
+	if (x <= moves.front().pos_x && (abs(x-moves.front().pos_x) > SPEED) )
 		return(SDL_SCANCODE_UP);
-	if (x > nx && (abs(x-nx) > SPEED))
+	if (x > moves.front().pos_x && (abs(x-moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_DOWN);
-	if (y > ny && (abs(y-ny) > SPEED))
+	if (y > moves.front().pos_y && (abs(y-moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_LEFT);
-	if (y < ny && (abs(y-ny) > SPEED))
+	if (y < moves.front().pos_y && (abs(y-moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
 
-	return (SDL_SCANCODE_Q);
+	// return (SDL_SCANCODE_Q);
 	return (0);
 }
 

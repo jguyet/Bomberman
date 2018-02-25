@@ -10,6 +10,7 @@ layout (std140) uniform u_material {
 };
 
 uniform	sampler2D u_texUnit;
+uniform vec3	  color;
 
 in vec3 v_norm;
 
@@ -20,11 +21,11 @@ void main()
 
 	vec4 diffusem = vec4(diffuse);
 	if (diffusem.x == 0.8 && diffusem.y == 0.8 && diffusem.z == 0.8) {//COLOR PLAYER
-		diffusem = vec4(0.558,0.034,0.052,1);
+		diffusem = vec4(color.xyz,1);
 	} else if (diffusem.x == 0.658229 && diffusem.y == 0.142446 && diffusem.z == 0.475947) {//COLOR BALLS
 		diffusem = vec4(1,1,1,1);
 	} else if (diffusem.x == 0.074000 && diffusem.y == 0.237000 && diffusem.z == 0.558400) {//COLOR TISHIRT
-		diffusem = vec4(0.558,0.034,0.052,1);
+		diffusem = vec4(color.xyz,1);
 	}
 
 	vec3 lightDir = normalize(vec3(0,0,1.0));

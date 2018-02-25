@@ -152,6 +152,9 @@ void						Model::buildShader(Model *model)
 	model->modelMatrixLoc = glGetUniformLocation(model->shader, "u_modelMatrix");
 	model->transformMatrixLoc = glGetUniformLocation(model->shader, "u_transformMatrix");
 
+	model->color = glGetUniformLocation(model->shader, "color");
+
+
 	//fragment shader
 	GLuint m = glGetUniformBlockIndex(model->shader,"u_material");
 	glUniformBlockBinding(model->shader, m, model->materialUniLoc);
@@ -329,9 +332,16 @@ std::ostream &				operator<<(std::ostream & o, Model const & i)
 
 // PUBLIC METHOD #################################################
 
+void					Model::bindShaderProgram(void)
+{
+	if (!this->shaderBind) {//si on a pas bind un shader avant l'affichage
+		glUseProgram(this->shader);
+	}
+}
+
 void					Model::draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale, glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix)
 {
-	glUseProgram(this->shader);
+	this->bindShaderProgram();
 
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 

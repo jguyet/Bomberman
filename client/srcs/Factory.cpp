@@ -15,6 +15,7 @@ GameObject							*Factory::newPlayer(int id)
 {
 	GameObject	*obj = new GameObject();
 
+	std::cout << "Factory::newPlayer: " << id << " " << std::endl;
 	obj->tag = "Donkey Kong";
 
 	//ANIMATOR
