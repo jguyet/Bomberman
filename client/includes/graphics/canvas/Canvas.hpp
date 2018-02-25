@@ -24,6 +24,7 @@ class Canvas
 		void								addImage(const char *key, Image *img);
 		void								addSquare(const char *key, Square *square);
 		void								addButton(const char *key, Button *button);
+		void								setElementsMap(std::map<std::string, Tag*> *elements);
 
 	private:
 		void								build(void);
@@ -36,6 +37,7 @@ class Canvas
 		std::map<const char*, Text*>		texts;
 		std::map<const char*, Square*>		squares;
 		std::map<const char*, Button*>		buttons;
+		std::map<std::string, Tag*>			*elements;
 };
 
 #endif

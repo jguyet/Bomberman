@@ -12,6 +12,7 @@ Canvas::Canvas ( int width, int height )
 	this->height = height;
 	this->canvas = NULL;
 	this->updated = false;
+	this->elements = NULL;
 	return ;
 }
 
@@ -66,6 +67,11 @@ void						Canvas::build(void)
 	}
 	for (std::map<const char*, Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++) {
 		(*it).second->draw(this->canvas);
+	}
+	if (this->elements != NULL) {
+		for (std::map<std::string, Tag*>::iterator it = this->elements->begin(); it != this->elements->end(); it++) {
+			it->second->draw(this->canvas);
+		}
 	}
 	glGenTextures(1, &this->textureID);
 	glBindTexture(GL_TEXTURE_2D, this->textureID);
@@ -132,6 +138,11 @@ void						Canvas::addButton(const char *key, Button *button)
 	}
 	this->buttons[key] = button;
 	this->updated = false;
+}
+
+void						Canvas::setElementsMap(std::map<std::string, Tag*> *elements)
+{
+	this->elements = elements;
 }
 
 // ###############################################################

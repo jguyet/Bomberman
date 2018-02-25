@@ -227,7 +227,7 @@ void						BombermanClient::updateFps( void )
 		lastTime = TimeUtils::getCurrentSystemMillis();
 		fps = fpsCount;
 		fpsCount = 0;
-		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str(), "color:#ffffff;font-size:25px;font-family:arial;float:right;");
+		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str(), "color:#ffffff;font-size:25px;float:right;");
 		//Text *t = new Text(2, "FPS : ", 55);
 		t->transform.position.x = -110;
 		t->transform.position.y = 0;

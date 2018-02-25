@@ -135,12 +135,12 @@ void								GameScene::drawGameObjects(void)
 		this->camera->transform.position.x = topoint.x;
 		this->camera->transform.position.z = topoint.z;
 		//Eloignement sur x
-		this->camera->transform.position.x += 30;
+		this->camera->transform.position.x += 10;
 		//Eloignement sur y
-		this->camera->transform.position.y = 35;
+		this->camera->transform.position.y = 80;
 	}
-	this->camera->buildFPSProjection();
-	// this->camera->buildLookAtProjection(topoint);
+	//this->camera->buildFPSProjection();
+	this->camera->buildLookAtProjection(topoint);
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas

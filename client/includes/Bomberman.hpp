@@ -64,6 +64,7 @@
 */
 std::vector<std::string>		split(const std::string &s, char delim);
 void							file_get_contents(std::string &content, const char *file_path);
+std::string						trim(std::string const &s);
 
 # include "network/Socket.hpp"
 

@@ -139,6 +139,9 @@ void						Image::draw(SDL_Surface *surface, glm::vec3 &parent_position)
 {
 	SDL_Rect	text_position;
 
+	if (this->image == NULL)
+		return ;
+
 	text_position.x = this->transform.position.x + parent_position.x;
 	text_position.y = this->transform.position.y + parent_position.y;
 

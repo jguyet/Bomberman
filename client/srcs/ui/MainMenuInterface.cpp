@@ -6,7 +6,7 @@
 
 // CANONICAL #####################################################
 
-MainMenuInterface::MainMenuInterface ( void ) : UIInterface("unknow")
+MainMenuInterface::MainMenuInterface ( void ) : UIInterface("MainMenuInterface.html")
 {
 	this->current_position = 0;
 	this->canvas = new Canvas(BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
@@ -43,6 +43,7 @@ MainMenuInterface::MainMenuInterface ( void ) : UIInterface("unknow")
 	// this->button = new Button(new Text("SELECT SERVER"), 150, 150, 100, 100);
 	// this->button->css("color:#ff0000;background-color:#ffffff");
 	// this->canvas->addButton("Local", this->button);
+	this->canvas->setElementsMap(&this->elements);
 	return ;
 }
 
