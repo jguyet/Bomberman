@@ -1,5 +1,4 @@
 #include "Bomberman.hpp"
-#include "managers/MapManager.hpp"
 
 // CANONICAL #####################################################
 
@@ -12,11 +11,10 @@ GameScene::GameScene (std::string selected_map)
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
 
+	MapManager mapManager(this);
+	this->map = mapManager.getMap(selected_map);
+	mapManager.buildObjects(this->map);
 
-	//MAP
-	this->mapManager = new MapManager(this);
-	this->map = this->mapManager->getMap(selected_map);
-	mapManager->buildObjects(this->map);
 	this->current_player = NULL;
 
 	// BombermanClient::instance::current_scene;
@@ -53,14 +51,13 @@ void GameScene::StartSolo(void)
 	this->all_player.push_back(playerObject);
 	this->add(playerObject);
 
-	GameObject 				*playerAIObject = Factory::newPlayer(100);
-	playerAIObject->transform.scale = glm::vec3(3,3,3);
-	playerAIObject->transform.rotation = glm::vec3(0,0,0);
-	playerAIObject->transform.position = glm::vec3(4.0f, 0.f, 38.0f);
-	//this->current_player = playerObject;
-	this->players.push_back(playerAIObject);
-	this->all_player.push_back(playerAIObject);
-	this->add(playerAIObject);
+	GameObject *player = Factory::newPlayer(100);
+	this->all_player.push_back(player);
+	this->players.push_back(player);
+	player->transform.position = glm::vec3(4,1,36);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
 
 	//BombermanClient::instance->current_scene->current_player = player;
 }
@@ -90,12 +87,6 @@ GameObject				*GameScene::findPlayer(GameObject *player)
 
 GameObject				*GameScene::findPlayerById(int playerId)
 {
-	if (this->current_player != NULL) {
-		CharacterControllerScript *script = ((CharacterControllerScript*)this->current_player->GetComponent<Script>());
-		if (script != NULL && script->getPlayerId() == playerId) {
-			return this->current_player;
-		}
-	}
 	for (int i = 0; i < this->players.size(); i++)
 	{
 		CharacterControllerScript *script = ((CharacterControllerScript*)this->players[i]->GetComponent<Script>());
@@ -117,7 +108,7 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
-	delete this->mapManager;
+	return ;
 }
 
 std::ostream &				operator<<(std::ostream & o, GameScene const & i)
@@ -161,15 +152,16 @@ void								GameScene::drawGameObjects(void)
 	//this->camera->buildFPSProjection();
 	if (this->current_player != NULL) {
 		topoint.x = -this->current_player->transform.position.x;
-		topoint.y = 0;//this->current_player->transform.position.y;
+		topoint.y = 0 ;//this->current_player->transform.position.y;
 		topoint.z = -this->current_player->transform.position.z;
 		this->camera->transform.position.x = topoint.x;
 		this->camera->transform.position.z = topoint.z;
 		//Eloignement sur x
 		this->camera->transform.position.x += 30;
 		//Eloignement sur y
-		this->camera->transform.position.y = 35;
+		this->camera->transform.position.y = 75;
 	}
+	// this->camera->buildFPSProjection();
 	this->camera->buildLookAtProjection(topoint);
 	//call parent method
 	this->_drawGameObjects();

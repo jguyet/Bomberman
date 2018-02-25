@@ -1,6 +1,4 @@
 #include "Bomberman.hpp"
-#include "Packet.hpp"
-#include "messages/ActionMessage.hpp"
 
 // STATIC ########################################################
 
@@ -23,6 +21,10 @@ CharacterControllerScript::CharacterControllerScript ( CharacterControllerScript
 
 CharacterControllerScript &				CharacterControllerScript::operator=( CharacterControllerScript const & rhs )
 {
+	if (this != &rhs)
+	{
+		// make stuff
+	}
 	return (*this);
 }
 
@@ -55,19 +57,13 @@ void								CharacterControllerScript::Attack(void)
 		return ;
 	c->walkable = false;
 	this->bomb--;
+	GameObject *bomb = Factory::newBomb(this);
 
-	ActionType type = ActionType::TYPE_BOMB;
-	ActionObject object(type, fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), c->position.y, fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
-
-	Packet packet(new ActionMessage(object, this->getPlayerId()));
-	packet.sendPacket(BombermanClient::instance->sock->getSocket());
-
-	// GameObject *bomb = Factory::newBomb(this);
-	// bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
-	// bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
-	// bomb->transform.rotation = glm::vec3(0,0,0);
-	// BombermanClient::instance->current_scene->add(bomb);
-	// c->obstacle = bomb;
+	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
+	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
+	bomb->transform.rotation = glm::vec3(0,0,0);
+	BombermanClient::instance->current_scene->add(bomb);
+	c->obstacle = bomb;
 }
 
 void 								CharacterControllerScript::BombExplode()
@@ -118,9 +114,11 @@ void						CharacterControllerScript::Update(void)
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
-	static AI robot = AI(this->gameObject);
+
+
 	int currentPlayerId = -1;
 	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+
 
 	if (scene->current_player != NULL)
 	{
@@ -129,12 +127,14 @@ void						CharacterControllerScript::Update(void)
 			currentPlayerId = controllerScript->getPlayerId();
 		}
 	}
-	this->has_moved = false;
+
 	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
-		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
-			BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
+			//BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+
+		this->has_moved = false;
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
 			this->MRight();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT
@@ -146,24 +146,28 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
 
+		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
+		{
+			BombermanClient::instance->sock->updateMovement(this);
+			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+		}
+
 		if (this->has_moved) {
-			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
-				BombermanClient::instance->sock->updateMovement(this);
-				this->lastNetwork = TimeUtils::getCurrentSystemMillis();
-			}
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
+			BombermanClient::instance->sock->updateMovement(this);
 		} else {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
 	}
 	else if (this->playerId == 100)
 	{
+		static AI robot = AI(this->gameObject);
 		int i = 0;
-		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
+
+		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();
-
 
 		if (this->has_moved) {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
@@ -223,9 +227,6 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
-
-	if (dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player == NULL)
-		return ;
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
 	//std::cout << "OnCollisionEnter on " << collider->tag << std::endl;
