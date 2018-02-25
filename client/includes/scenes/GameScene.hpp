@@ -8,6 +8,7 @@
 # include "scripts/GameScene/BombControllerScript.hpp"
 
 #include "models/Map.hpp"
+class MapManager;
 class GameScene : public Scene
 {
 	public:
@@ -40,6 +41,7 @@ class GameScene : public Scene
 		std::vector<GameObject*>			players;
 		std::vector<GameObject*>			all_player;
 		Map									*map;
+		MapManager							*mapManager;
 		// ####################################################################
 };
 

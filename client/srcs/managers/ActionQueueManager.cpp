@@ -71,7 +71,15 @@ void ActionQueueManager::doAction(ActionQueue *action)
 		case MapSelectMessage::ID: {
 			MapSelectMessage	*mapMessage = (MapSelectMessage*)action->message;
 			BombermanClient::instance->current_scene = new GameScene(mapMessage->name);
-			BombermanClient::instance->sock->newPlayer(2, 1, 4); // set a position random by available cases
+
+			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			Case *spawn = scene->mapManager->getRandomWalkableCase(scene->map);
+			if (spawn) {
+				glm::vec3 pos = spawn->ground->transform.position;
+				BombermanClient::instance->sock->newPlayer(pos.x, 1, pos.z);
+			} else {
+				BombermanClient::instance->sock->newPlayer(2, 1, 4);
+			}
 		}
 		break;
 

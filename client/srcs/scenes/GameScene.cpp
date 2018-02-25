@@ -1,4 +1,5 @@
 #include "Bomberman.hpp"
+#include "managers/MapManager.hpp"
 
 // CANONICAL #####################################################
 
@@ -11,13 +12,13 @@ GameScene::GameScene (std::string selected_map)
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
 
-	MapManager mapManager(this);
-	this->map = mapManager.getMap(selected_map);
-	mapManager.buildObjects(this->map);
 
+	//MAP
+	this->mapManager = new MapManager(this);
+	this->map = this->mapManager->getMap(selected_map);
+	mapManager->buildObjects(this->map);
 	this->current_player = NULL;
 	// BombermanClient::instance::current_scene;
-
 	// GameObject *player = Factory::newPlayer(100);
 	// this->all_player.push_back(player);
 	// player->transform.position = glm::vec3(2,1,36);
@@ -91,7 +92,7 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
-	return ;
+	delete this->mapManager;
 }
 
 std::ostream &				operator<<(std::ostream & o, GameScene const & i)

@@ -22,10 +22,6 @@ CharacterControllerScript::CharacterControllerScript ( CharacterControllerScript
 
 CharacterControllerScript &				CharacterControllerScript::operator=( CharacterControllerScript const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 

@@ -35,6 +35,19 @@ Map		*MapManager::getMap(std::string name)
 	return this->maps[name];
 }
 
+Case	*MapManager::getRandomWalkableCase(Map *from)
+{
+	std::vector<Case*> walkables;
+	Random randomGen;
+	for (auto & elem : from->content)
+	{
+		if (elem.second.ground && !elem.second.obstacle) {
+			walkables.push_back(&elem.second);
+		}
+	}
+	return (walkables.size() > 0) ? walkables[randomGen.getRandom(0, walkables.size())] : NULL;
+}
+
 void	MapManager::readMaps()
 {
 	DIR *dir;
