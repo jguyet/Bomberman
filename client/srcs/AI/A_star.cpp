@@ -43,8 +43,6 @@ std::ostream &				operator<<(std::ostream & o, A_star const & i)
 bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_h> &moves)
 {
 	moves.clear();
-	//std::cout <<  "Start A star pos x" << x << " pos y "  << y << std::endl;
-
 	///////// format
 	if ((x % 2) != 0)
 		x++;
@@ -60,12 +58,9 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 	this->start.pos_x = x;
 	this->start.pos_y = y;
 
-	//std::cout <<  "Start A star pos x" << x << " pos y "  << y << std::endl;
-
 	if (this->get_heuristic(y, x, target, 0))
 		return (false);
 
-	//std::cout <<  "Start A star 2 " << std::endl;
 	target.heuristic = this->open_list.top().heuristic;
 	int tmp_h = target.heuristic;
 
@@ -74,19 +69,16 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 	else
 		return (false);
 
-	if (this->open_list.empty())
+	if (this->close_list.empty())
+	{
+		std::cout << " empty close list "<< std::endl;
 		return (false);
-	//std::cout <<  "Start A star 3 " << std::endl;
+	}
 
 	if (this->FormatMoves(moves, target.pos_x, target.pos_y, this->close_list[std::make_pair(target.pos_x, target.pos_y)].p, x, y))
 	{
 		// moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
 	}
-
-	//std::cout <<  "Start A star 4 " << std::endl;
-
-	// if ((target.pos_x % 2) == 0 && (target.pos_y % 2) != 0)
-		// moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
 
 	this->close_list.clear();
 	while (!this->open_list.empty())
@@ -175,16 +167,7 @@ void						A_star::find_path(Module_h &target)
 	int p;
 	while (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x)
 	{
-		// TODO: find ERROR
-		if (i == max_i || this->open_list.empty())
-		{
-			this->close_list.clear();
-			while (!this->open_list.empty())
-				this->open_list.pop();
-			return ;
-		}
 		p = c_case.p;
-
 		// UP
 		get_adjacent(c_case, target, c_case.pos_x, c_case.pos_y + 2, p);
 		// Down
@@ -195,6 +178,14 @@ void						A_star::find_path(Module_h &target)
 		get_adjacent(c_case, target, c_case.pos_x - 2, c_case.pos_y, p);
 
 		c_case = this->open_list.top();
+
+		if (i == max_i || this->open_list.empty())
+		{
+			this->close_list.clear();
+			while (!this->open_list.empty())
+				this->open_list.pop();
+			return ;
+		}
 		this->open_list.pop();
 		i++;
 	}

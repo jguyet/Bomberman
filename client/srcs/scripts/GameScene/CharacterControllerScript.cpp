@@ -1,6 +1,4 @@
 #include "Bomberman.hpp"
-#include "Packet.hpp"
-#include "messages/ActionMessage.hpp"
 
 // STATIC ########################################################
 
@@ -22,6 +20,10 @@ CharacterControllerScript::CharacterControllerScript ( CharacterControllerScript
 
 CharacterControllerScript &				CharacterControllerScript::operator=( CharacterControllerScript const & rhs )
 {
+	if (this != &rhs)
+	{
+		// make stuff
+	}
 	return (*this);
 }
 
@@ -54,19 +56,13 @@ void								CharacterControllerScript::Attack(void)
 		return ;
 	c->walkable = false;
 	this->bomb--;
+	GameObject *bomb = Factory::newBomb(this);
 
-	ActionType type = ActionType::TYPE_BOMB;
-	ActionObject object(type, fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), c->position.y, fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
-
-	Packet packet(new ActionMessage(object, this->getPlayerId()));
-	packet.sendPacket(BombermanClient::instance->sock->getSocket());
-
-	// GameObject *bomb = Factory::newBomb(this);
-	// bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
-	// bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
-	// bomb->transform.rotation = glm::vec3(0,0,0);
-	// BombermanClient::instance->current_scene->add(bomb);
-	// c->obstacle = bomb;
+	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
+	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
+	bomb->transform.rotation = glm::vec3(0,0,0);
+	BombermanClient::instance->current_scene->add(bomb);
+	c->obstacle = bomb;
 }
 
 void 								CharacterControllerScript::BombExplode()
@@ -128,12 +124,14 @@ void						CharacterControllerScript::Update(void)
 			currentPlayerId = controllerScript->getPlayerId();
 		}
 	}
-	this->has_moved = false;
+
 	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
-		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
-			BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
+			//BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+
+		this->has_moved = false;
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
 			this->MRight();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT
@@ -145,12 +143,15 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
 
+		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
+		{
+			BombermanClient::instance->sock->updateMovement(this);
+			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+		}
+
 		if (this->has_moved) {
-			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
-				BombermanClient::instance->sock->updateMovement(this);
-				this->lastNetwork = TimeUtils::getCurrentSystemMillis();
-			}
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
+			BombermanClient::instance->sock->updateMovement(this);
 		} else {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
@@ -160,6 +161,7 @@ void						CharacterControllerScript::Update(void)
 		int i = 0;
 		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
+		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();
 
@@ -172,49 +174,22 @@ void						CharacterControllerScript::Update(void)
 		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
-		// DOWN KeyBoard::instance->getKey(SDL_SCANCODE_KP_2
-	} else {//other players
-		if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 100L)) {
-			if (this->gameObject->transform.position != this->lastPosition)
-				this->has_moved = true;
-			if (this->has_moved) {
-				if ((this->gameObject->transform.position.z - this->lastPosition.z) > 0) {
-					this->gameObject->transform.rotation.y = 180.f;
-				}
-				if ((this->gameObject->transform.position.z - this->lastPosition.z) < 0) {
-					this->gameObject->transform.rotation.y = 0.f;
-				}
-				if ((this->gameObject->transform.position.x - this->lastPosition.x) > 0) {
-					this->gameObject->transform.rotation.y = 270.f;
-				}
-				if ((this->gameObject->transform.position.x - this->lastPosition.x) < 0) {
-					this->gameObject->transform.rotation.y = 90.f;
-				}
-				this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
-			} else {
-				this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
-			}
-			this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
-			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
-		}
+		// DOWN KeyBoard::instance->getKey(SDL_SCANCODE_KP_2)
 	}
 }
 
 void								CharacterControllerScript::OnPreRender(void)
 {
-	//bind shader
+
 }
 
 void								CharacterControllerScript::OnEndRender(void)
 {
-	//unbind shader
+
 }
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
-
-	if (dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player == NULL)
-		return ;
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
 	//std::cout << "OnCollisionEnter on " << collider->tag << std::endl;
@@ -244,16 +219,9 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "Explosion")
 	{
-		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player) {
-			// BombermanClient::instance->current_scene = new MainMenuScene();
-			// dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player = NULL;
-			// Something bad happens when we delete the current player, so why we need to delete?
-			exit(-1);
-		} else {
-			printf("Player id %d is dead !\n", this->getPlayerId());
-			dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->removePlayer(this->gameObject);
-			this->gameObject->toDelete = true;
-		}
+		//BombermanClient::instance->sock->updateMovement(this);
+		std::cout << " DEAD " << this->gameObject->tag << " DIE " << std::endl;
+		//this->gameObject->toDelete = true;
 	}
 	else if (collider->tag == "bonus-bomb-up")
 	{
