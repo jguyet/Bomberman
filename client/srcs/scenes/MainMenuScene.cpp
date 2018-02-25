@@ -57,7 +57,7 @@ void								MainMenuScene::calculPhisics(void)
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_ENTER) || KeyBoard::instance->getKey(SDL_SCANCODE_RETURN)) {//ESC
 		//BombermanClient::instance->current_scene = new GameScene("map_01");
 		BombermanClient::instance->current_scene = new GameScene("map_01");
-		char host[] = "10.11.9.4";
+		char host[] = "localhost";
 		BombermanClient::instance->sock = new Socket(host, 8964);
 		return ;
 	}

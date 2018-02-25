@@ -46,6 +46,7 @@ void					GameScene::removePlayer(GameObject *player)
 	for (int i = 0; i < this->players.size(); i++)
 	{
 		if (this->players[i] == player) {
+			this->remove(player);
 			this->players.erase(this->players.begin() + i);
 			break;
 		}
@@ -134,8 +135,6 @@ void								GameScene::drawGameObjects(void)
 {
 	//build Matrixs
 	//this->camera->buildFPSProjection();
-	glm::vec3 topoint = glm::vec3(0,0,0);
-
 	if (this->current_player != NULL) {
 		topoint.x = -this->current_player->transform.position.x;
 		topoint.y = 0;//this->current_player->transform.position.y;

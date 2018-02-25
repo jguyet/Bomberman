@@ -8,6 +8,8 @@
 #include "messages/NewPlayerMessage.hpp"
 #include "Managers/DataManager.hpp"
 #include "messages/ActionMessage.hpp"
+#include "messages/PlayerDeadMessage.hpp"
+
 class Processor
 {
 	public:
@@ -20,6 +22,7 @@ class Processor
 		static void			PlayerPositionMessageHandler(SOCK, PlayerPositionMessage*);
 		static void			NewPlayerMessageHandler(SOCK, NewPlayerMessage*);
 		static void			ActionMessageHandler(SOCK, ActionMessage*);
+		static void			PlayerDeadMessageHandler(SOCK, PlayerDeadMessage*);
 		static int			*getMessageId(int id);
 };
 

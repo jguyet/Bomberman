@@ -26,11 +26,9 @@ void								Scene::add(GameObject *obj)
 
 void								Scene::remove(GameObject *obj)
 {
-	while (this->lock) {usleep(10);}
-	this->lock = true;
+	std::lock_guard<std::mutex> lock(mutex);
 	if (this->gameObjects.count(obj->id) != 0)
 		this->gameObjects.erase(obj->id);
-	this->lock = false;
 }
 
 void								Scene::_calculPhisics(void)
@@ -60,9 +58,7 @@ void								Scene::_calculPhisics(void)
 
 void								Scene::_drawGameObjects(void)
 {
-	//if locked wait
-	while (this->lock) {usleep(10);}
-	this->lock = true;
+	std::lock_guard<std::mutex> lock(mutex);
 	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
 		GameObject *currentGameObject = it->second;
 
@@ -91,7 +87,6 @@ void								Scene::_drawGameObjects(void)
 			script->OnEndRender();
 		}
 	}
-	this->lock = false;
 }
 
 // ###############################################################

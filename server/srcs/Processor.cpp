@@ -53,7 +53,7 @@ void Processor::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *message)
 	manager->addNewPlayer(socket, position);
 }
 
-void Processor::ActionMessageHandler(SOCK, ActionMessage *message)
+void Processor::ActionMessageHandler(SOCK socket, ActionMessage *message)
 {
 	DataManager	*manager = DataManager::Instance();
 	Packet packet(new ActionMessage(message->action, message->byPlayer));
@@ -62,5 +62,22 @@ void Processor::ActionMessageHandler(SOCK, ActionMessage *message)
 		if (player != NULL) {
 			packet.sendPacket(manager->server->clients[i]->getSocket());
 		}
+	}
+}
+
+void Processor::PlayerDeadMessageHandler(SOCK socket, PlayerDeadMessage *message)
+{
+	DataManager	*manager	= DataManager::Instance();
+	Player		*player		= NULL;
+	if ((player = manager->findPlayerById(message->playerId)) != NULL)
+	{
+		Packet packet(new PlayerDeadMessage(message->playerId));
+		for (int i = 0; i < manager->server->clients.size(); i++) {
+			Player *player = manager->server->clients[i]->player;
+			if (player != NULL) {
+				packet.sendPacket(manager->server->clients[i]->getSocket());
+			}
+		}
+		manager->removePlayer(player);
 	}
 }
