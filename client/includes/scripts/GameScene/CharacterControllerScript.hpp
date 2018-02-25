@@ -39,11 +39,12 @@ class CharacterControllerScript : public Script
 		bool								has_moved = false;
 
 		float								speed = SPEED;
-		int 								bomb = 1;
-		int 								power = 1;
+		int 								bomb = 5;
+		int 								power = 5;
 		int 								life = 5;
 
 		long 								lastNetwork = 0;
+		glm::vec3							lastPosition;
 		// ####################################################################
 };
 

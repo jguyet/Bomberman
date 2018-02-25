@@ -1,4 +1,5 @@
 #include "Bomberman.hpp"
+#include "managers/MapManager.hpp"
 
 // CANONICAL #####################################################
 
@@ -11,13 +12,13 @@ GameScene::GameScene (std::string selected_map)
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
 
-	MapManager mapManager(this);
-	this->map = mapManager.getMap(selected_map);
-	mapManager.buildObjects(this->map);
 
+	//MAP
+	this->mapManager = new MapManager(this);
+	this->map = this->mapManager->getMap(selected_map);
+	mapManager->buildObjects(this->map);
 	this->current_player = NULL;
 	// BombermanClient::instance::current_scene;
-
 	GameObject *player = Factory::newPlayer(100);
 	this->all_player.push_back(player);
 	player->transform.position = glm::vec3(2,1,36);
@@ -40,6 +41,17 @@ GameScene::GameScene (std::string selected_map)
 	return ;
 }
 
+void					GameScene::removePlayer(GameObject *player)
+{
+	for (int i = 0; i < this->players.size(); i++)
+	{
+		if (this->players[i] == player) {
+			this->players.erase(this->players.begin() + i);
+			break;
+		}
+	}
+}
+
 GameObject				*GameScene::findPlayer(GameObject *player)
 {
 	for (int i = 0; i < this->players.size(); i++)
@@ -53,6 +65,12 @@ GameObject				*GameScene::findPlayer(GameObject *player)
 
 GameObject				*GameScene::findPlayerById(int playerId)
 {
+	if (this->current_player != NULL) {
+		CharacterControllerScript *script = ((CharacterControllerScript*)this->current_player->GetComponent<Script>());
+		if (script != NULL && script->getPlayerId() == playerId) {
+			return this->current_player;
+		}
+	}
 	for (int i = 0; i < this->players.size(); i++)
 	{
 		CharacterControllerScript *script = ((CharacterControllerScript*)this->players[i]->GetComponent<Script>());
@@ -74,7 +92,7 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
-	return ;
+	delete this->mapManager;
 }
 
 std::ostream &				operator<<(std::ostream & o, GameScene const & i)

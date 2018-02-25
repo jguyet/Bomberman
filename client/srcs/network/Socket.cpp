@@ -10,15 +10,44 @@ int *Socket::getId(int id)
 	return new_id;
 }
 
-Socket::Socket (char *host, int port)
+void Socket::listenTcp(struct sockaddr_in &sin)
 {
-	struct hostent *hostinfo = NULL;
-	struct sockaddr_in sin = { 0 };
-
 	if ((this->sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-		perror("socket()");
+		perror("Can't open the TCP socket");
 		exit(errno);
 	}
+
+	if(connect(this->sock,(struct sockaddr *) &sin, sizeof(struct sockaddr)) == -1) {
+		perror("Can't connect to the server");
+		exit(errno);
+	}
+}
+
+void Socket::listenUdp(int playerId)
+{
+	struct sockaddr_in sin = { 0 };
+
+	sin.sin_addr.s_addr = htonl(INADDR_ANY);
+	sin.sin_port = htons(this->basePort + playerId);
+	sin.sin_family = AF_INET;
+
+	if ((this->sockUdp = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
+    	perror("Can't open the UDP socket");
+		exit(errno);
+	}
+	if (bind(this->sockUdp, (struct sockaddr *) &sin, sizeof(sin)) == -1) {
+		perror("Can't bind UDP socket");
+		exit(errno);
+	}
+
+	printf("UDP Listening on port %d\n", this->basePort + playerId);
+}
+
+Socket::Socket (char *host, int port) : basePort(port), baseHost(host)
+{
+	struct sockaddr_in sin = { 0 };
+	struct hostent *hostinfo = NULL;
+
 	if ((hostinfo = gethostbyname(host)) == NULL) {
 		fprintf (stderr, "Unknown host %s.\n", host);
 		exit(EXIT_FAILURE);
@@ -26,12 +55,10 @@ Socket::Socket (char *host, int port)
 	sin.sin_addr = *(struct in_addr *) hostinfo->h_addr;
 	sin.sin_port = htons(port);
 	sin.sin_family = AF_INET;
-	if(connect(this->sock,(struct sockaddr *) &sin, sizeof(struct sockaddr)) == -1) {
-		perror("connect()");
-		exit(errno);
-	}
 
-	std::cout << "Connected to the server" << std::endl;
+	this->listenTcp(sin);
+
+	std::cout << "Successfully connected to " << host << " on port " << std::to_string(port) << std::endl;
 	this->state = true;
 
 	this->handler = new Handler(this->sock,
@@ -39,6 +66,8 @@ Socket::Socket (char *host, int port)
 	 this->getId(MapSelectMessage::ID), &MessageHandler::MapSelectMessageHandler,
 	 this->getId(NewPlayerMessage::ID), &MessageHandler::NewPlayerMessageHandler,
 	 this->getId(PlayerPositionMessage::ID), &MessageHandler::PlayerPositionMessageHandler,
+	 this->getId(PlayersPositionMessage::ID), &MessageHandler::PlayersPositionMessageHandler,
+	 this->getId(ActionMessage::ID), &MessageHandler::ActionMessageHandler,
 	 	END_OF_HANDLER);
 
 	std::thread thread(Socket::Thread, this);
@@ -79,10 +108,29 @@ void						Socket::Thread(Socket *socket)
 		return;
 	}
 	memset((char*)&buffer, 0, (BUF_SIZE - 1));
-	while ((rcv = recv(socket->sock, buffer, (BUF_SIZE - 1), 0)) > 0)
+	while (42)
 	{
-		socket->handler->handleMessage((IMessage*)&buffer);
-		memset((char*)&buffer, 0, (BUF_SIZE - 1));
+		FD_ZERO(&socket->rdfs);
+		FD_SET(socket->sock, &socket->rdfs);
+		FD_SET(socket->sockUdp, &socket->rdfs);
+
+		if (select((socket->sockUdp > 0) ? socket->sockUdp + 1 : socket->sock + 1, &socket->rdfs, NULL, NULL, &tv) == -1)
+		{
+			perror("Can't open select");
+			exit(errno);
+		}
+		if (FD_ISSET(socket->sock, &socket->rdfs)) {
+			if ((rcv = recv(socket->sock, buffer, (BUF_SIZE - 1), 0)) > 0) {
+				socket->handler->handleMessage((IMessage*)&buffer);
+				memset((char*)&buffer, 0, (BUF_SIZE - 1));
+			}
+		}
+		else if (FD_ISSET(socket->sockUdp, &socket->rdfs)) {
+			if ((rcv = recv(socket->sockUdp, buffer, (BUF_SIZE - 1), 0)) > 0) {
+				socket->handler->handleMessage((IMessage*)&buffer);
+				memset((char*)&buffer, 0, (BUF_SIZE - 1));
+			}
+		}
 	}
 }
 
@@ -104,4 +152,9 @@ void					Socket::newPlayer(float x, float y, float z)
 	// dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->players.push_back(playerObject);
 	Packet playerPacket = Packet(new NewPlayerMessage(positionObject, true));
 	playerPacket.sendPacket(this->sock);
+}
+
+int 					Socket::getSocket()
+{
+	return this->sock;
 }

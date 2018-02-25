@@ -10,12 +10,8 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 
 BombermanClient::BombermanClient ( void )
 {
-	this->screen = new Screen(2000, 1200);
+	this->screen = new Screen(1000, 1000);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
-
-
-	char host[] = "localhost";
-	this->sock = new Socket(host, 8964);
 
 	return ;
 }
@@ -49,6 +45,9 @@ std::ostream &				operator<<(std::ostream & o, BombermanClient const & i)
 void						BombermanClient::initialize_properties( void )
 {
 	//TODO properties reader;
+	Properties *test = new Properties("test.properties");
+	//std::cout << test->get("salut") << std::endl;
+	delete test;
 }
 
 void						BombermanClient::initialize_resources( void )
@@ -63,10 +62,6 @@ void						BombermanClient::initialize_resources( void )
 	ShaderUtils::instance->loadShader("player", "./assets/shaders/player.vert", "./assets/shaders/player.frag");
 
 	//Player
-	Model::load("launch_bomb_anim_0", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/1.obj");
-	Model::load("launch_bomb_anim_1", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/2.obj");
-	Model::load("launch_bomb_anim_2", ShaderUtils::instance->get("player"), "assets/launch_bomb_anim/3.obj");
-
 	Model::load("bomberman", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
 	Model::load("bomberman2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
 
@@ -232,10 +227,10 @@ void						BombermanClient::updateFps( void )
 		lastTime = TimeUtils::getCurrentSystemMillis();
 		fps = fpsCount;
 		fpsCount = 0;
-		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str());
+		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str(), "color:#ffffff;font-size:25px;font-family:arial;float:right;");
 		//Text *t = new Text(2, "FPS : ", 55);
-		t->transform.position.x = this->screen->width - 130;
-		t->transform.position.y = 50;
+		t->transform.position.x = -110;
+		t->transform.position.y = 0;
 		this->canvas->addText("fps", t);
 	}
 

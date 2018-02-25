@@ -3,7 +3,7 @@
 
 # include "Bomberman.hpp"
 
-class GameInterface
+class GameInterface : public UIInterface
 {
 	public:
 

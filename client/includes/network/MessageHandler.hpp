@@ -7,6 +7,8 @@
 #include "messages/MapSelectMessage.hpp"
 #include "messages/NewPlayerMessage.hpp"
 #include "messages/PlayerPositionMessage.hpp"
+#include "messages/PlayersPositionMessage.hpp"
+#include "messages/ActionMessage.hpp"
 #include "managers/ActionQueueManager.hpp"
 
 class MessageHandler
@@ -21,6 +23,8 @@ class MessageHandler
 		static void MapSelectMessageHandler(SOCK socket, MapSelectMessage *message);
 		static void NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *message);
 		static void PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage *message);
+		static void PlayersPositionMessageHandler(SOCK socket, PlayersPositionMessage *message);
+		static void ActionMessageHandler(SOCK socket, ActionMessage *message);
 
 		MessageHandler &							operator=( MessageHandler const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, MessageHandler const & i);

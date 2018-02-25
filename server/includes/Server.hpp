@@ -14,6 +14,9 @@ class Server
 		Server( Server const & src );
 		virtual ~Server();
 
+
+		void listenTcp();
+		void listenUdp();
 		void start();
 		void waitClients();
 		void removeClient(Client *client);
@@ -57,13 +60,15 @@ class Server
 		};
 		Client						*getClientBySock(SOCK);
 		std::vector<Client*>		clients;
+		int							listenPort;
+		SOCK						getUdpSocket();
 
 	private:
 
 		std::mutex					mutex;
-		int							listenPort;
 		struct sockaddr_in			in;
 		SOCK						sock;
+		SOCK						udpSock;
 };
 
 #endif

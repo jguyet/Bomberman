@@ -3,7 +3,7 @@
 
 # include "Bomberman.hpp"
 
-class MainMenuInterface
+class MainMenuInterface : public UIInterface
 {
 	public:
 
@@ -17,6 +17,7 @@ class MainMenuInterface
 		void								draw(void);
 
 		Text								*input_lbl;
+		Button								*button;
 	private:
 		int									current_position;
 		Canvas								*canvas;

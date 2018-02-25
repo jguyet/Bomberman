@@ -20,10 +20,6 @@ ExplosionControllerScript::ExplosionControllerScript ( ExplosionControllerScript
 
 ExplosionControllerScript &				ExplosionControllerScript::operator=( ExplosionControllerScript const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 

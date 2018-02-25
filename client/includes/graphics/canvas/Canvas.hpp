@@ -1,9 +1,11 @@
 #ifndef CANVAS_HPP
 # define CANVAS_HPP
 
+# include "graphics/canvas/Tag.hpp"
 # include "graphics/canvas/Text.hpp"
 # include "graphics/canvas/Image.hpp"
 # include "graphics/canvas/Square.hpp"
+# include "graphics/canvas/Button.hpp"
 # include "Bomberman.hpp"
 
 class Canvas
@@ -21,6 +23,7 @@ class Canvas
 		void								addText(const char *key, Text *text);
 		void								addImage(const char *key, Image *img);
 		void								addSquare(const char *key, Square *square);
+		void								addButton(const char *key, Button *button);
 
 	private:
 		void								build(void);
@@ -32,7 +35,7 @@ class Canvas
 		std::map<const char*, Image*>		images;
 		std::map<const char*, Text*>		texts;
 		std::map<const char*, Square*>		squares;
-
+		std::map<const char*, Button*>		buttons;
 };
 
 #endif

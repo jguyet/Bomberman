@@ -49,20 +49,21 @@
 # include <map>
 # include <algorithm>
 
-#include <assimp/Importer.hpp>      // C++ importer interface
-#include <assimp/scene.h>           // Output data structure
-#include <assimp/postprocess.h>     // Post processing flags
+# include <assimp/Importer.hpp>      // C++ importer interface
+# include <assimp/scene.h>           // Output data structure
+# include <assimp/postprocess.h>     // Post processing flags
 
 # define RELEASE GLFW_RELEASE
 # define PRESS GLFW_PRESS
 # define REPEAT GLFW_REPEAT
 
-# define SPEED 0.05f
+# define SPEED 0.1f
 
 /*
 ** Utils Methodes
 */
 std::vector<std::string>		split(const std::string &s, char delim);
+void							file_get_contents(std::string &content, const char *file_path);
 
 # include "network/Socket.hpp"
 
@@ -71,6 +72,9 @@ std::vector<std::string>		split(const std::string &s, char delim);
 */
 # include "utils/TimeUtils.hpp"
 # include "utils/ShaderUtils.hpp"
+# include "utils/ColorUtils.hpp"
+# include "utils/CSSInterpretor.hpp"
+# include "utils/Properties.hpp"
 
 // GRAPHICS ####################################################################
 /*
@@ -80,6 +84,10 @@ std::vector<std::string>		split(const std::string &s, char delim);
 # include "graphics/Camera.hpp"
 # include "graphics/GameObject.hpp"
 # include "graphics/canvas/Canvas.hpp"
+/*
+** UI Module
+*/
+# include "graphics/UIInterface.hpp"
 /*
 ** Components
 */

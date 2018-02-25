@@ -10,7 +10,7 @@ Server::Server ( Server const & src )
 	*this = src;
 }
 
-void Server::removeClient(Client *client)
+void					 Server::removeClient(Client *client)
 {
 	this->mutex.lock();
 	if (client->player) {
@@ -27,7 +27,7 @@ void Server::removeClient(Client *client)
 	this->mutex.unlock();
 }
 
-void Server::waitClients()
+void 						Server::waitClients()
 {
 	SOCK 					fd		= 0;
 	socklen_t				length	= sizeof(in);
@@ -42,7 +42,7 @@ void Server::waitClients()
 	}
 }
 
-void Server::start()
+void 						Server::listenTcp()
 {
 	int opt = true;
 	if ((this->sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
@@ -57,7 +57,18 @@ void Server::start()
 		throw ServerCantBindSocket();
 	if ((listen(this->sock, 3)) == -1)
 		throw ServerCantListenOnSocket();
+}
 
+void 						Server::listenUdp()
+{
+	if ((this->udpSock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
+		throw ServerCantCreateSocket();
+}
+
+void						 Server::start()
+{
+	this->listenTcp();
+	this->listenUdp();
 	std::cout << "Bomber server listening on port " << std::to_string(this->listenPort) << std::endl;
 	this->waitClients();
 }
@@ -73,7 +84,7 @@ Client						*Server::getClientBySock(SOCK socket)
 	return NULL;
 }
 
-Server &				Server::operator=( Server const & rhs )
+Server &					Server::operator=( Server const & rhs )
 {
 	return (*this);
 }
@@ -87,4 +98,9 @@ std::ostream &				operator<<(std::ostream & o, Server const & i)
 {
 
 	return (o);
+}
+
+SOCK 						Server::getUdpSocket()
+{
+	return this->udpSock;
 }

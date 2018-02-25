@@ -8,24 +8,24 @@ MacOS (build OK)
 
 ##### require :
 cmake minimum VERSION 3.2  
-make minimum VERSION 3.8
-git minimum VERSION 2.1
-opengl framework minimum VERSION 3.3.0
-openal framework minimum VERSION 1.0
+make minimum VERSION 3.8  
+git minimum VERSION 2.1  
+opengl framework minimum VERSION 3.3.0  
+openal framework minimum VERSION 1.0  
 
 ##### use :
-Compilation command `make all`  
-Recompilation command `make recompile`  
-Recompilation command `make compile` or `make re`  
-Clean build folder `make fclean`  
-Clean external libraries `make libclean`  
-Clean all project `make cleanall`  
+Compilation command :  
+`cd Build`  
+`cmake ..`  
+`make`  
+`./Bomberman`  
+Recompilation command `make`  
 
 ##### developement :
 Trello -> [https://trello.com/b/GyST89x2/bomberman](https://trello.com/b/GyST89x2/bomberman)  
 
-##### glfw documentation :
-[http://www.glfw.org/](http://www.glfw.org/)  
+##### sdl2 documentation :
+[https://www.libsdl.org/](https://www.libsdl.org/)  
 
 ##### glm documentation :
 [https://glm.g-truc.net/0.9.8/index.html](https://glm.g-truc.net/0.9.8/index.html)  
@@ -35,3 +35,9 @@ Trello -> [https://trello.com/b/GyST89x2/bomberman](https://trello.com/b/GyST89x
 
 ##### soil documentation :
 [http://www.lonesock.net/soil.html](http://www.lonesock.net/soil.html)  
+
+##### Contributors :
+Frmarinh    
+Dmoureu-  
+Amerelo   
+Jguyet   

@@ -52,3 +52,15 @@ void Processor::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *message)
 
 	manager->addNewPlayer(socket, position);
 }
+
+void Processor::ActionMessageHandler(SOCK, ActionMessage *message)
+{
+	DataManager	*manager = DataManager::Instance();
+	Packet packet(new ActionMessage(message->action, message->byPlayer));
+	for (int i = 0 ; i < manager->server->clients.size(); i++) {
+		Player *player = manager->server->clients[i]->player;
+		if (player != NULL) {
+			packet.sendPacket(manager->server->clients[i]->getSocket());
+		}
+	}
+}

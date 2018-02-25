@@ -20,8 +20,7 @@ DataManager* DataManager::Instance()
 int	DataManager::getNextPlayerId()
 {
 	int id = 0;
-	for (int i = 0; i < this->players.size(); i++)
-	{
+	for (int i = 0; i < this->players.size(); i++) {
 		id = this->players[i]->getId();
 	}
 	return id + 1;
@@ -42,32 +41,34 @@ void DataManager::removePlayer(Player *player)
 	mutex.unlock();
 }
 
-void DataManager::sendPlayers(Client *client)
+void DataManager::updatePlayers(DataManager *instance)
 {
-	for (int i = 0; i < client->server->clients.size(); i++)
+	while (42)
 	{
-		Player *player = client->server->clients[i]->player;
-		if (player != NULL && player != client->player) {
-			PlayerPositionObject obj(player->id, player->x, player->y, player->z);
-			Packet packet(new NewPlayerMessage(obj, false));
-			packet.sendPacket(client->getSocket());
+		mutex.lock();
+		if (instance->playersPos.size() > 0) {
+		 	Packet packet(new PlayersPositionMessage(instance->playersPos));
+			for (int i = 0; i < instance->server->clients.size(); i++) {
+				Player *player = instance->server->clients[i]->player;
+				if (player != NULL) {
+					packet.sendUdpPacket(instance->server->getUdpSocket(), player->getAddr());
+				}
+			}
+			instance->playersPos.clear();
 		}
-		i++;
+		usleep(50 * 1000);
+		mutex.unlock();
 	}
 }
 
-void DataManager::sendPlayersPositions(Client *client)
+void DataManager::sendPlayers(Client *client)
 {
-	DataManager				*manager = DataManager::Instance();
-
-	for (int i = 0; i < manager->server->clients.size(); i++)
-	{
-		Player *player = manager->server->clients[i]->player;
-		if (player != NULL && manager->server->clients[i] != client) {
-			PlayerPositionObject position(player->getId(), player->x, player->y, player->z);
-			Packet packet(new PlayerPositionMessage(position));
-			packet.sendPacket(client->fd);
-			printf("Position of player %d (%f, %f, %f), sent to player %d\n", player->getId(), player->x, player->y, player->z, client->player->getId());
+	for (int i = 0; i < this->players.size(); i++) {
+		Player *player = this->players[i];
+		if (player != client->player) {
+			PlayerPositionObject obj(player->id, player->x, player->y, player->z);
+			Packet packet(new NewPlayerMessage(obj, false));
+			packet.sendUdpPacket(client->server->getUdpSocket(), client->player->getAddr());
 		}
 	}
 }
@@ -79,7 +80,10 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 	Client	*client	= this->server->getClientBySock(socket);
 
 	if (client) {
-		Player *player = new Player(playerId);
+		Player *player = new Player(playerId, socket, (client->server->listenPort + playerId));
+		player->x = pos.x;
+		player->y = pos.y;
+		player->z = pos.z;
 		client->player = player;
 
 		pos.playerId = playerId;
@@ -97,7 +101,7 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 					playerMessage.sendPacket(this->server->clients[i]->getSocket());
 				}
 		}
-		usleep(1000);
+		usleep(500 * 1000);
 		this->sendPlayers(client);
 	}
 
@@ -106,18 +110,24 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 
 void DataManager::updatePos(PlayerPositionObject &pos)
 {
+	std::lock_guard<std::mutex> lock(mutex);
+
 	for (int i = 0; i < this->server->clients.size(); i++)
 	{
 		Player *player = this->server->clients[i]->player;
 		if (player != NULL && player->id == pos.playerId) {
-			player->setPosition(pos.x, pos.y, pos.z);
+			player->x = pos.x;
+			player->y = pos.y;
+			player->z = pos.z;
+			this->playersPos.push_back(PlayerPositionObject(player->id, pos.x, pos.y, pos.z));
 		}
 	}
 }
 
 DataManager::DataManager ()
 {
-	return;
+	std::thread thread(DataManager::updatePlayers, this);
+	thread.detach();
 }
 
 DataManager::DataManager ( DataManager const & src )

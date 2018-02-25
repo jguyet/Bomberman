@@ -14,7 +14,6 @@ uniform vec3 u_color_bomb;
 uniform vec3 u_color_meche;
 
 in vec3 v_norm;
-in vec3 v_texCoord;
 
 out vec4 o_color;
 

@@ -7,6 +7,7 @@
 #include "messages/PlayerPositionMessage.hpp"
 #include "messages/NewPlayerMessage.hpp"
 #include "Managers/DataManager.hpp"
+#include "messages/ActionMessage.hpp"
 class Processor
 {
 	public:
@@ -18,6 +19,7 @@ class Processor
 		friend std::ostream &				operator<<(std::ostream & o, Processor const & i);
 		static void			PlayerPositionMessageHandler(SOCK, PlayerPositionMessage*);
 		static void			NewPlayerMessageHandler(SOCK, NewPlayerMessage*);
+		static void			ActionMessageHandler(SOCK, ActionMessage*);
 		static int			*getMessageId(int id);
 };
 

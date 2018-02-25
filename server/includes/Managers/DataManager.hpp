@@ -8,6 +8,7 @@
 #include "Models/Player.hpp"
 #include "objs/PlayerPositionObject.hpp"
 #include "Packet.hpp"
+#include "messages/PlayersPositionMessage.hpp"
 
 class Client;
 class Server;
@@ -23,17 +24,18 @@ class DataManager
 		DataManager &							operator=( DataManager const & rhs );
 		friend std::ostream &					operator<<(std::ostream & o, DataManager const & i);
 
-		static std::atomic<DataManager*>		pInstance;
-		static std::mutex						mutex;
 		void									addNewPlayer(SOCK socket, PlayerPositionObject&);
 		void									removePlayer(Player*);
 		int										getNextPlayerId();
 		void									updatePos(PlayerPositionObject&);
-		void 									sendPlayers(Client *client);
-		void								 	sendPlayersPositions(Client *client);
+		void									sendPlayers(Client *client);
+		static void								updatePlayers(DataManager *manager);
 
+		static std::atomic<DataManager*>			pInstance;
+		static std::mutex							mutex;
 		std::vector<Player*>						players;
 		Server										*server;
+		std::vector<PlayerPositionObject>			playersPos;
 };
 
 #endif

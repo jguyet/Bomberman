@@ -10,6 +10,20 @@ void			KeyBoard::key_callback(SDL_Event *event)
 	//std::cout << "Key entry : " << event->key.keysym.scancode << std::endl;
 	KeyBoard::instance->pressedKeys[event->key.keysym.scancode] = (event->type == SDL_KEYDOWN) ? true : false;
 
+	//copy handlers
+	std::map<const char*, KeyBoardEventHandler*> cpy = std::map<const char*, KeyBoardEventHandler*>(KeyBoard::instance->handlers);
+
+	for (std::map<const char*, KeyBoardEventHandler*>::iterator it = cpy.begin(); it != cpy.end(); it++) {
+		if (event->type == SDL_KEYUP) {
+			it->second->handleUP(event->key.keysym.scancode);
+		}
+		// if (event->type == SDL_KEYRELEASE) {
+		// 	it->second->handleRELEASE(event->key.keysym.scancode);
+		// }
+		if (event->type == SDL_KEYDOWN) {
+			it->second->handleDOWN(event->key.keysym.scancode);
+		}
+	}
 }
 
 // ###############################################################
@@ -57,6 +71,18 @@ std::ostream &				operator<<(std::ostream & o, KeyBoard const & i)
 bool						KeyBoard::getKey(unsigned int key)
 {
 	return (this->pressedKeys[key]);
+}
+
+void						KeyBoard::addHandler(const char *key, KeyBoardEventHandler *handler)
+{
+	this->handlers[key] = handler;
+}
+
+void						KeyBoard::removeHandler(const char *key)
+{
+	if (this->handlers.count(key) == 0)
+		return ;
+	this->handlers.erase(key);
 }
 
 // ###############################################################
