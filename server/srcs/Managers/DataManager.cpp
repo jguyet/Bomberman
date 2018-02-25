@@ -68,7 +68,7 @@ void DataManager::sendPlayers(Client *client)
 		if (player != client->player) {
 			PlayerPositionObject obj(player->id, player->x, player->y, player->z);
 			Packet packet(new NewPlayerMessage(obj, false));
-			packet.sendPacket(client->getSocket());
+			packet.sendUdpPacket(client->server->getUdpSocket(), client->player->getAddr());
 		}
 	}
 }
@@ -81,6 +81,9 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 
 	if (client) {
 		Player *player = new Player(playerId, socket, (client->server->listenPort + playerId));
+		player->x = pos.x;
+		player->y = pos.y;
+		player->z = pos.z;
 		client->player = player;
 
 		pos.playerId = playerId;
@@ -98,6 +101,7 @@ void DataManager::addNewPlayer(SOCK socket, PlayerPositionObject& pos)
 					playerMessage.sendPacket(this->server->clients[i]->getSocket());
 				}
 		}
+		usleep(500 * 1000);
 		this->sendPlayers(client);
 	}
 
@@ -112,6 +116,9 @@ void DataManager::updatePos(PlayerPositionObject &pos)
 	{
 		Player *player = this->server->clients[i]->player;
 		if (player != NULL && player->id == pos.playerId) {
+			player->x = pos.x;
+			player->y = pos.y;
+			player->z = pos.z;
 			this->playersPos.push_back(PlayerPositionObject(player->id, pos.x, pos.y, pos.z));
 		}
 	}
