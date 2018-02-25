@@ -2,12 +2,15 @@
 
 // STATIC ########################################################
 
+std::vector<BombControllerScript*> BombControllerScript::List = std::vector<BombControllerScript*>();
+
 // ###############################################################
 
 // CANONICAL #####################################################
 
 BombControllerScript::BombControllerScript ( CharacterControllerScript *playerController )
 {
+	BombControllerScript::List.push_back(this);
 	this->startTime = TimeUtils::getCurrentSystemMillis();
 	this->anim_time = TimeUtils::getCurrentSystemMillis();
 	this->sens = false;
@@ -37,6 +40,7 @@ BombControllerScript &				BombControllerScript::operator=( BombControllerScript 
 
 BombControllerScript::~BombControllerScript ( void )
 {
+	BombControllerScript::List.erase(std::remove(BombControllerScript::List.begin(), BombControllerScript::List.end(), this));
 	return ;
 }
 
@@ -52,7 +56,7 @@ std::ostream &				operator<<(std::ostream & o, BombControllerScript const & i)
 
 void								BombControllerScript::Update(void)
 {
-	if (TimeUtils::getCurrentSystemMillis() > this->startTime + 5000L) {
+	if (TimeUtils::getCurrentSystemMillis() > this->startTime + BOMB_TIME) {
 		this->explode();
 		return ;
 	}
@@ -81,7 +85,16 @@ void								BombControllerScript::Update(void)
 
 void								BombControllerScript::OnPreRender(void)
 {
-	//TODO add bomb color in shader
+
+	float timer = 1.0f - ((this->startTime + BOMB_TIME - TimeUtils::getCurrentSystemMillis())/(float)BOMB_TIME);
+
+	Model *bombObjectModel = this->gameObject->GetComponent<Model>();
+	glUseProgram(bombObjectModel->shader);
+	bombObjectModel->shaderBind = true;
+
+	glm::vec3 colors = glm::vec3(timer,0.f,0.f);
+	glUniform3fv(bombObjectModel->color,1 , &colors[0]);
+
 	//TODO add meche color in shader
 }
 

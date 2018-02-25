@@ -9,6 +9,7 @@
 CharacterControllerScript::CharacterControllerScript ( int playerId )
 {
 	this->playerId = playerId;
+
 	return ;
 }
 
@@ -113,9 +114,11 @@ void						CharacterControllerScript::Update(void)
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
-	static AI robot = AI(this->gameObject);
+
+
 	int currentPlayerId = -1;
 	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+
 
 	if (scene->current_player != NULL)
 	{
@@ -158,9 +161,10 @@ void						CharacterControllerScript::Update(void)
 	}
 	else if (this->playerId == 100)
 	{
+		static AI robot = AI(this->gameObject);
 		int i = 0;
-		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
+
 		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();
@@ -175,16 +179,49 @@ void						CharacterControllerScript::Update(void)
 		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
 		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
 		// DOWN KeyBoard::instance->getKey(SDL_SCANCODE_KP_2)
+	} else { //other players
+		if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 100L)) {
+			if (this->gameObject->transform.position != this->lastPosition)
+				this->has_moved = true;
+			if (this->has_moved) {
+				if ((this->gameObject->transform.position.z - this->lastPosition.z) > 0) {
+					this->gameObject->transform.rotation.y = 180.f;
+				}
+				if ((this->gameObject->transform.position.z - this->lastPosition.z) < 0) {
+					this->gameObject->transform.rotation.y = 0.f;
+				}
+				if ((this->gameObject->transform.position.x - this->lastPosition.x) > 0) {
+					this->gameObject->transform.rotation.y = 270.f;
+				}
+				if ((this->gameObject->transform.position.x - this->lastPosition.x) < 0) {
+					this->gameObject->transform.rotation.y = 90.f;
+				}
+				this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
+			} else {
+				this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
+			}
+			this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
+			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+		}
 	}
 }
 
 void								CharacterControllerScript::OnPreRender(void)
 {
+	//bind shader
+	Model *playerObjectModel = this->gameObject->GetComponent<Model>();
+	glUseProgram(playerObjectModel->shader);
+	playerObjectModel->shaderBind = true;
 
+	glm::vec3 colors = glm::vec3(0.8f,0.1f,0.0f);
+	if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player)
+		colors = glm::vec3(0.0f,0.1f,0.8f);
+	glUniform3fv(playerObjectModel->color,1 , &colors[0]);
 }
 
 void								CharacterControllerScript::OnEndRender(void)
 {
+	//unbind shader
 
 }
 
@@ -264,6 +301,8 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 			contact_point.x = -contact_point.x;
 		if (this->gameObject->transform.position.y <= collider->transform.position.y)
 			contact_point.y = -contact_point.y;
+
+
 		if (this->gameObject->transform.position.z <= collider->transform.position.z)
 			contact_point.z = -contact_point.z;
 

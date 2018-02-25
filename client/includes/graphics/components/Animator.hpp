@@ -18,7 +18,7 @@ class Animator : public Component
 		void										newAnimation(const char *key, long time_between_animation, int number_of_models, ...);
 		void										handleAnimation(const char *key);
 		void										removeAnimation(const char *key);
-		void										draw(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale, glm::mat4 &projectionMatrix, glm::mat4 &viewMatrix);
+		Model										*build(void);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

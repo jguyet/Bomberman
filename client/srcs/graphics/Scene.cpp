@@ -72,14 +72,15 @@ void								Scene::_drawGameObjects(void)
 			}
 			script->frame++;
 		}
+		if (animator != NULL) {
+			model = animator->build();
+		}
 		//before rendering
 		if (script != NULL) {
 			script->OnPreRender();
 		}
 		//model rendering
-		if (animator != NULL) {
-			animator->draw(currentGameObject->transform.position, currentGameObject->transform.rotation, currentGameObject->transform.scale, this->camera->projectionMatrix, this->camera->viewMatrix);
-		} else if (model != NULL) {
+		if (model != NULL) {
 			model->draw(currentGameObject->transform.position, currentGameObject->transform.rotation, currentGameObject->transform.scale, this->camera->projectionMatrix, this->camera->viewMatrix);
 		}
 		//after rendering

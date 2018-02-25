@@ -7,6 +7,7 @@ class BombControllerScript : public Script
 {
 	public:
 		// STATICS ############################################################
+		static std::vector<BombControllerScript*> List;
 		// ####################################################################
 		// CANONICAL ##########################################################
 											BombControllerScript( CharacterControllerScript *playerController);

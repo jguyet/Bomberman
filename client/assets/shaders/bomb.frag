@@ -10,7 +10,7 @@ layout (std140) uniform u_material {
 };
 
 uniform	sampler2D u_texUnit;
-uniform vec3 u_color_bomb;
+uniform vec3	  color;
 uniform vec3 u_color_meche;
 
 in vec3 v_norm;
@@ -25,7 +25,7 @@ void main()
 {
 	vec4 diffusem = vec4(diffuse);
 	if (diffusem.x < 0.2 && diffusem.y < 0.2 && diffusem.y < 0.2) { //BOMB
-		diffusem = vec4(0.3,0.3,0.3,1);
+		diffusem = vec4(color.xyz,1);
 	} else { //MECHE
 		diffusem = vec4(0.8,0.1,0.1,1);
 	}

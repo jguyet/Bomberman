@@ -21,6 +21,7 @@ class GameScene : public Scene
 		friend std::ostream &				operator<<(std::ostream & o, GameScene const & i);
 		// ####################################################################
 		// @OVERRIDE Scene ###################################################
+		void 								StartSolo(void);
 		void								calculPhisics(void);
 		void								drawGameObjects(void);
 		GameObject							*findPlayer(GameObject*);

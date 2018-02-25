@@ -70,10 +70,7 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 		return (false);
 
 	if (this->close_list.empty())
-	{
-		std::cout << " empty close list "<< std::endl;
 		return (false);
-	}
 
 	if (this->FormatMoves(moves, target.pos_x, target.pos_y, this->close_list[std::make_pair(target.pos_x, target.pos_y)].p, x, y))
 	{
@@ -83,6 +80,12 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 	this->close_list.clear();
 	while (!this->open_list.empty())
 		this->open_list.pop();
+
+	// for (auto &elem : moves)
+	// {
+	// 	std::cout << "-x " << elem.pos_x << " -y " << elem.pos_y << std::endl;
+	// }
+
 	return (true);
 }
 

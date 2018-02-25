@@ -41,8 +41,8 @@ class Socket
 		friend std::ostream &				operator<<(std::ostream & o, Socket const & i);
 
 		static void							Thread(Socket *socket);
-		void								listenTcp(struct sockaddr_in &sin);
-		void								listenUdp(int playerId);
+		bool								listenTcp(struct sockaddr_in &sin);
+		bool								listenUdp(int playerId);
 		int									*getId(int id);
 		void								updateMovement(Script*);
 		void								newPlayer(float x, float y, float z);
@@ -50,12 +50,12 @@ class Socket
 		int									getSocket();
 		std::string							baseHost;
 		int									basePort;
+		bool								state = false;
 
 	private:
 		int		tmp;
 		int 	sock = 0;
 		int		sockUdp = 0;
-		bool	state = false;
 		fd_set	rdfs;
 		Handler	*handler;
 };
