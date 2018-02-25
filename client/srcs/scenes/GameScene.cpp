@@ -134,7 +134,20 @@ void								GameScene::drawGameObjects(void)
 {
 	//build Matrixs
 	//this->camera->buildFPSProjection();
-	this->camera->buildLookAtProjection(glm::vec3(-12.f,1,-18.f));
+	glm::vec3 topoint = glm::vec3(0,0,0);
+
+	if (this->current_player != NULL) {
+		topoint.x = -this->current_player->transform.position.x;
+		topoint.y = 0;//this->current_player->transform.position.y;
+		topoint.z = -this->current_player->transform.position.z;
+		this->camera->transform.position.x = topoint.x;
+		this->camera->transform.position.z = topoint.z;
+		//Eloignement sur x
+		this->camera->transform.position.x += 30;
+		//Eloignement sur y
+		this->camera->transform.position.y = 35;
+	}
+	this->camera->buildLookAtProjection(topoint);
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas

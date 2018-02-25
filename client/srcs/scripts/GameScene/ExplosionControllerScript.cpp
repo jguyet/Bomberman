@@ -62,7 +62,7 @@ void						ExplosionControllerScript::Update(void)
 		if (b->obstacle != NULL && b->obstacle->tag != "Bomb" && b->obstacle->tag != "ground1") {
 			if (b->obstacle->tag == "ice_block")
 			{
-				BombermanClient::instance->current_scene->add(Factory::newPowerUp(x, z));
+			//	BombermanClient::instance->current_scene->add(Factory::newPowerUp(x, z));
 			}
 			BombermanClient::instance->current_scene->remove(b->obstacle);
 			delete b->obstacle;

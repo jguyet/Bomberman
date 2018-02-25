@@ -202,12 +202,12 @@ void						CharacterControllerScript::Update(void)
 
 void								CharacterControllerScript::OnPreRender(void)
 {
-
+	//bind shader
 }
 
 void								CharacterControllerScript::OnEndRender(void)
 {
-
+	//unbind shader
 }
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
