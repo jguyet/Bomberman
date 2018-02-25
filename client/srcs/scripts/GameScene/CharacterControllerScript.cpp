@@ -113,9 +113,11 @@ void						CharacterControllerScript::Update(void)
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
-	static AI robot = AI(this->gameObject);
+
+
 	int currentPlayerId = -1;
 	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+
 
 	if (scene->current_player != NULL)
 	{
@@ -158,9 +160,10 @@ void						CharacterControllerScript::Update(void)
 	}
 	else if (this->playerId == 100)
 	{
+		static AI robot = AI(this->gameObject);
 		int i = 0;
-		// this->gameObject->transform.position.x, this->gameObject->transform.position.z
 		i = robot.brain();
+
 		this->has_moved = false;
 		if (i != 0)
 			(this->*cmd[i])();

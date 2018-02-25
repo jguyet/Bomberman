@@ -101,19 +101,11 @@ GameObject 			*AI::getNearestBlock()
 	return (near);
 }
 
-// int x, int y
-int					AI::brain()
+int					AI::brain(void)
 {
 	static int info = 0;
 
-/*
-
-	for (GameObject *object : this->Objects)
-	{
-		//std::cout << " " << object->tag << object->transform.position.x << " " <<  object->transform.position.z << "" << std::endl;
-	}
-*/
-	// moves.clear();
+	// this->moves.clear();
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
@@ -151,28 +143,30 @@ int					AI::brain()
 	if (this->select_t == false)
 		return (0);
 
-	if (moves.size() > 0)
+	if (this->moves.size() > 0)
 	{
 		float t = SPEED; // Tolerance
 		//If current target close delete them
-		if (x >= moves.front().pos_x - t && x <= moves.front().pos_x + t && y >= moves.front().pos_y - t && y <= moves.front().pos_y + t)
-			moves.pop_front();
+		if (x >= this->moves.front().pos_x - t && x <= this->moves.front().pos_x + t && y >= this->moves.front().pos_y - t && y <= this->moves.front().pos_y + t)
+		{
+			this->moves.pop_front();
+			// std::cout << "target x " << this->moves.front().pos_x << " target y " << this->moves.front().pos_y << std::endl;
+		}
 
-		if (moves.size() == 0)
+		if (this->moves.size() == 0)
 			return (0);
 	} else if (this->a_star.path_finding(x, y, this->target, moves) == false){
 		return (0);
 	}
 
-	std::cout << "target x " << moves.front().pos_x << " target y " << moves.front().pos_y << std::endl;
 
-	if (x <= moves.front().pos_x && (abs(x-moves.front().pos_x) > SPEED))
+	if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_UP);
-	if (x > moves.front().pos_x && (abs(x-moves.front().pos_x) > SPEED))
+	if (x > this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_DOWN);
-	if (y > moves.front().pos_y && (abs(y-moves.front().pos_y) > SPEED))
+	if (y > this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_LEFT);
-	if (y < moves.front().pos_y && (abs(y-moves.front().pos_y) > SPEED))
+	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
 
 	return (SDL_SCANCODE_Q);
