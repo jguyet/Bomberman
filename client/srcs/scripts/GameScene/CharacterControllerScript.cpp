@@ -137,7 +137,7 @@ void						CharacterControllerScript::Update(void)
 	}
 
 	this->has_moved = false;
-	
+
 	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
@@ -238,6 +238,8 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
+	if (dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player == NULL)
+		return ;
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
 	//std::cout << "OnCollisionEnter on " << collider->tag << std::endl;

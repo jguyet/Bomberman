@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/cmake
+CMAKE_COMMAND = /Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/cmake
 
 # The command to remove a file.
-RM = /Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/cmake -E remove -f
+RM = /Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/amerelo/42/Bomberman/client
+CMAKE_SOURCE_DIR = /Users/jguyet/sgoinfre/Bomberman/client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/amerelo/42/Bomberman/client
+CMAKE_BINARY_DIR = /Users/jguyet/sgoinfre/Bomberman/client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /Users/amerelo/42/Bomberman/client
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/Users/amerelo/.brew/Cellar/cmake/3.10.2/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/Users/jguyet/.brew/Cellar/cmake/3.10.2/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/amerelo/42/Bomberman/client/CMakeFiles /Users/amerelo/42/Bomberman/client/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/amerelo/42/Bomberman/client/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -339,32 +339,32 @@ srcs/graphics/Scene.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/Scene.cpp.s
 .PHONY : srcs/graphics/Scene.cpp.s
 
-srcs/graphics/canvas/Button.o: srcs/graphics/canvas/Button.cpp.o
+srcs/graphics/UIInterface.o: srcs/graphics/UIInterface.cpp.o
 
-.PHONY : srcs/graphics/canvas/Button.o
+.PHONY : srcs/graphics/UIInterface.o
 
 # target to build an object file
-srcs/graphics/canvas/Button.cpp.o:
-	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Button.cpp.o
-.PHONY : srcs/graphics/canvas/Button.cpp.o
+srcs/graphics/UIInterface.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/UIInterface.cpp.o
+.PHONY : srcs/graphics/UIInterface.cpp.o
 
-srcs/graphics/canvas/Button.i: srcs/graphics/canvas/Button.cpp.i
+srcs/graphics/UIInterface.i: srcs/graphics/UIInterface.cpp.i
 
-.PHONY : srcs/graphics/canvas/Button.i
+.PHONY : srcs/graphics/UIInterface.i
 
 # target to preprocess a source file
-srcs/graphics/canvas/Button.cpp.i:
-	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Button.cpp.i
-.PHONY : srcs/graphics/canvas/Button.cpp.i
+srcs/graphics/UIInterface.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/UIInterface.cpp.i
+.PHONY : srcs/graphics/UIInterface.cpp.i
 
-srcs/graphics/canvas/Button.s: srcs/graphics/canvas/Button.cpp.s
+srcs/graphics/UIInterface.s: srcs/graphics/UIInterface.cpp.s
 
-.PHONY : srcs/graphics/canvas/Button.s
+.PHONY : srcs/graphics/UIInterface.s
 
 # target to generate assembly for a file
-srcs/graphics/canvas/Button.cpp.s:
-	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/canvas/Button.cpp.s
-.PHONY : srcs/graphics/canvas/Button.cpp.s
+srcs/graphics/UIInterface.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/graphics/UIInterface.cpp.s
+.PHONY : srcs/graphics/UIInterface.cpp.s
 
 srcs/graphics/canvas/Canvas.o: srcs/graphics/canvas/Canvas.cpp.o
 
@@ -1095,6 +1095,60 @@ srcs/utils/ColorUtils.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/ColorUtils.cpp.s
 .PHONY : srcs/utils/ColorUtils.cpp.s
 
+srcs/utils/Properties.o: srcs/utils/Properties.cpp.o
+
+.PHONY : srcs/utils/Properties.o
+
+# target to build an object file
+srcs/utils/Properties.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/Properties.cpp.o
+.PHONY : srcs/utils/Properties.cpp.o
+
+srcs/utils/Properties.i: srcs/utils/Properties.cpp.i
+
+.PHONY : srcs/utils/Properties.i
+
+# target to preprocess a source file
+srcs/utils/Properties.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/Properties.cpp.i
+.PHONY : srcs/utils/Properties.cpp.i
+
+srcs/utils/Properties.s: srcs/utils/Properties.cpp.s
+
+.PHONY : srcs/utils/Properties.s
+
+# target to generate assembly for a file
+srcs/utils/Properties.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/Properties.cpp.s
+.PHONY : srcs/utils/Properties.cpp.s
+
+srcs/utils/Random.o: srcs/utils/Random.cpp.o
+
+.PHONY : srcs/utils/Random.o
+
+# target to build an object file
+srcs/utils/Random.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/Random.cpp.o
+.PHONY : srcs/utils/Random.cpp.o
+
+srcs/utils/Random.i: srcs/utils/Random.cpp.i
+
+.PHONY : srcs/utils/Random.i
+
+# target to preprocess a source file
+srcs/utils/Random.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/Random.cpp.i
+.PHONY : srcs/utils/Random.cpp.i
+
+srcs/utils/Random.s: srcs/utils/Random.cpp.s
+
+.PHONY : srcs/utils/Random.s
+
+# target to generate assembly for a file
+srcs/utils/Random.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/Random.cpp.s
+.PHONY : srcs/utils/Random.cpp.s
+
 srcs/utils/ShaderUtils.o: srcs/utils/ShaderUtils.cpp.o
 
 .PHONY : srcs/utils/ShaderUtils.o
@@ -1149,6 +1203,33 @@ srcs/utils/TimeUtils.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/TimeUtils.cpp.s
 .PHONY : srcs/utils/TimeUtils.cpp.s
 
+srcs/utils/file_get_contents.o: srcs/utils/file_get_contents.cpp.o
+
+.PHONY : srcs/utils/file_get_contents.o
+
+# target to build an object file
+srcs/utils/file_get_contents.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/file_get_contents.cpp.o
+.PHONY : srcs/utils/file_get_contents.cpp.o
+
+srcs/utils/file_get_contents.i: srcs/utils/file_get_contents.cpp.i
+
+.PHONY : srcs/utils/file_get_contents.i
+
+# target to preprocess a source file
+srcs/utils/file_get_contents.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/file_get_contents.cpp.i
+.PHONY : srcs/utils/file_get_contents.cpp.i
+
+srcs/utils/file_get_contents.s: srcs/utils/file_get_contents.cpp.s
+
+.PHONY : srcs/utils/file_get_contents.s
+
+# target to generate assembly for a file
+srcs/utils/file_get_contents.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/file_get_contents.cpp.s
+.PHONY : srcs/utils/file_get_contents.cpp.s
+
 srcs/utils/split.o: srcs/utils/split.cpp.o
 
 .PHONY : srcs/utils/split.o
@@ -1175,6 +1256,33 @@ srcs/utils/split.s: srcs/utils/split.cpp.s
 srcs/utils/split.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/split.cpp.s
 .PHONY : srcs/utils/split.cpp.s
+
+srcs/utils/trim.o: srcs/utils/trim.cpp.o
+
+.PHONY : srcs/utils/trim.o
+
+# target to build an object file
+srcs/utils/trim.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/trim.cpp.o
+.PHONY : srcs/utils/trim.cpp.o
+
+srcs/utils/trim.i: srcs/utils/trim.cpp.i
+
+.PHONY : srcs/utils/trim.i
+
+# target to preprocess a source file
+srcs/utils/trim.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/trim.cpp.i
+.PHONY : srcs/utils/trim.cpp.i
+
+srcs/utils/trim.s: srcs/utils/trim.cpp.s
+
+.PHONY : srcs/utils/trim.s
+
+# target to generate assembly for a file
+srcs/utils/trim.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/trim.cpp.s
+.PHONY : srcs/utils/trim.cpp.s
 
 # Help Target
 help:
@@ -1209,9 +1317,9 @@ help:
 	@echo "... srcs/graphics/Scene.o"
 	@echo "... srcs/graphics/Scene.i"
 	@echo "... srcs/graphics/Scene.s"
-	@echo "... srcs/graphics/canvas/Button.o"
-	@echo "... srcs/graphics/canvas/Button.i"
-	@echo "... srcs/graphics/canvas/Button.s"
+	@echo "... srcs/graphics/UIInterface.o"
+	@echo "... srcs/graphics/UIInterface.i"
+	@echo "... srcs/graphics/UIInterface.s"
 	@echo "... srcs/graphics/canvas/Canvas.o"
 	@echo "... srcs/graphics/canvas/Canvas.i"
 	@echo "... srcs/graphics/canvas/Canvas.s"
@@ -1293,15 +1401,27 @@ help:
 	@echo "... srcs/utils/ColorUtils.o"
 	@echo "... srcs/utils/ColorUtils.i"
 	@echo "... srcs/utils/ColorUtils.s"
+	@echo "... srcs/utils/Properties.o"
+	@echo "... srcs/utils/Properties.i"
+	@echo "... srcs/utils/Properties.s"
+	@echo "... srcs/utils/Random.o"
+	@echo "... srcs/utils/Random.i"
+	@echo "... srcs/utils/Random.s"
 	@echo "... srcs/utils/ShaderUtils.o"
 	@echo "... srcs/utils/ShaderUtils.i"
 	@echo "... srcs/utils/ShaderUtils.s"
 	@echo "... srcs/utils/TimeUtils.o"
 	@echo "... srcs/utils/TimeUtils.i"
 	@echo "... srcs/utils/TimeUtils.s"
+	@echo "... srcs/utils/file_get_contents.o"
+	@echo "... srcs/utils/file_get_contents.i"
+	@echo "... srcs/utils/file_get_contents.s"
 	@echo "... srcs/utils/split.o"
 	@echo "... srcs/utils/split.i"
 	@echo "... srcs/utils/split.s"
+	@echo "... srcs/utils/trim.o"
+	@echo "... srcs/utils/trim.i"
+	@echo "... srcs/utils/trim.s"
 .PHONY : help
 
 
