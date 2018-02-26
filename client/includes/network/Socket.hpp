@@ -33,7 +33,7 @@ class Socket
 {
 	public:
 
-											Socket(char *host, int port);
+											Socket(const char *host, int port);
 											Socket( Socket const & src );
 											virtual ~Socket();
 

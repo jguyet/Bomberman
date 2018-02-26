@@ -54,27 +54,6 @@ Tag							*UIInterface::getElementById(const char *id)
 
 // ###############################################################
 
-void replaceAll(std::string& source, const std::string& from, const std::string& to)
-{
-    std::string newString;
-    newString.reserve(source.length());  // avoids a few memory allocations
-
-    std::string::size_type lastPos = 0;
-    std::string::size_type findPos;
-
-    while(std::string::npos != (findPos = source.find(from, lastPos)))
-    {
-        newString.append(source, lastPos, findPos - lastPos);
-        newString += to;
-        lastPos = findPos + from.length();
-    }
-
-    // Care for the rest after last occurrence
-    newString += source.substr(lastPos);
-
-    source.swap(newString);
-}
-
 void						UIInterface::initialize( std::string const &ui_file )
 {
 	//TODO build elements
@@ -214,6 +193,9 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 				tag->transform.position.y = (BombermanClient::getInstance()->screen->height / 100) * tag->transform.position.y;
 			}
 		}
+		if (parameters_map.count("z") == 1) {
+			tag->transform.position.z = atoi(parameters_map["z"].c_str());
+		}
 		if (parameters_map.count("parent") == 1 && this->elements.count(parameters_map["parent"]) == 1) {
 			tag->parent = this->elements[parameters_map["parent"]];
 		}
@@ -282,4 +264,12 @@ void						UIInterface::build_parser( std::string const & content )
 
 		i += offset - 1;
 	}
+
+	typedef std::function<bool(std::pair<std::string, Tag*>, std::pair<std::string, Tag*>)> Comparator;
+
+	Comparator compFunctor = [](std::pair<std::string, Tag*> elem1 ,std::pair<std::string, Tag*> elem2)
+							{
+								return elem1.second->transform.position.z < elem2.second->transform.position.z;
+							};
+	std::set<std::pair<std::string, Tag*>, Comparator> setOfWords(this->elements.begin(), this->elements.end(), compFunctor);
 }

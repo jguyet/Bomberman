@@ -52,6 +52,8 @@
 # include <sstream>
 # include <fstream>
 # include <map>
+# include <set>
+# include <functional>
 # include <algorithm>
 
 # include <assimp/Importer.hpp>      // C++ importer interface
@@ -69,8 +71,9 @@
 ** Utils Methodes
 */
 std::vector<std::string>		split(const std::string &s, char delim);
-void							file_get_contents(std::string &content, const char *file_path);
+void							file_get_contents(std::string &content, std::string const &file_path);
 std::string						trim(std::string const &s);
+void							replaceAll(std::string& source, const std::string& from, const std::string& to);
 
 # include "network/Socket.hpp"
 

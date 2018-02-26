@@ -49,20 +49,49 @@ std::ostream &				operator<<(std::ostream & o, MainMenuScene const & i)
 
 // ###############################################################
 
+bool								MainMenuScene::select_server(void)
+{
+	std::string network_addr = BombermanClient::getInstance()->properties->get("Network.address");
+	std::vector<std::string> string_split = split(network_addr, ':');
+	if (network_addr == "" || string_split.size() != 2)
+	{
+		std::cerr << "Unknow Network.address on properties file" << std::endl;
+		return false;
+	}
+	std::string ip = string_split.at(0);
+	int port = atoi(string_split.at(1).c_str());
+
+	BombermanClient::getInstance()->sock = new Socket(ip.c_str(), port);
+
+	if (BombermanClient::getInstance()->sock->state == true)
+	{
+		BombermanClient::getInstance()->current_scene = new GameScene("map_01");
+		return true;
+	}
+	return false;
+}
+
+bool								MainMenuScene::select_local(void)
+{
+	BombermanClient::getInstance()->current_scene = new GameScene("map_01");
+	return true;
+}
+
 void								MainMenuScene::calculPhisics(void)
 {
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE)) {//ESC
 		BombermanClient::getInstance()->stop();
 	}
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_ENTER) || KeyBoard::instance->getKey(SDL_SCANCODE_RETURN)) {//ESC
-		//BombermanClient::getInstance()->current_scene = new GameScene("map_01");
-
-
-		char host[] = "localhost";
-		BombermanClient::getInstance()->sock = new Socket(host, 8964);
-		BombermanClient::getInstance()->current_scene = new GameScene("map_01");
-
-		return ;
+		switch(this->interface->current_position)
+		{
+			case 0:
+				this->select_local();
+			break ;
+			case 1:
+				this->select_server();
+			break;
+		}
 	}
 	//call parent method
 	this->_calculPhisics();

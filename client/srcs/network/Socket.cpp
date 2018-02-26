@@ -45,7 +45,7 @@ bool Socket::listenUdp(int playerId)
 	return true;
 }
 
-Socket::Socket (char *host, int port) : basePort(port), baseHost(host)
+Socket::Socket (const char *host, int port) : basePort(port), baseHost(host)
 {
 	struct sockaddr_in sin = { 0 };
 	struct hostent *hostinfo = NULL;

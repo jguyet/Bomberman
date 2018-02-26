@@ -29,6 +29,8 @@ class MainMenuScene : public Scene
 		//Camera							*camera;
 		// ####################################################################
 		// PUBLICS ############################################################
+		bool								select_server(void);
+		bool								select_local(void);
 		MainMenuInterface					*interface;
 		// ####################################################################
 };

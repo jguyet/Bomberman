@@ -8,9 +8,6 @@
 
 BombermanClient::BombermanClient ( void )
 {
-	this->screen = new Screen(1000, 1000);
-	this->canvas = new Canvas(this->screen->width, this->screen->height);
-
 	return ;
 }
 
@@ -43,9 +40,7 @@ std::ostream &				operator<<(std::ostream & o, BombermanClient const & i)
 void						BombermanClient::initialize_properties( void )
 {
 	//TODO properties reader;
-	Properties *test = new Properties("test.properties");
-	//std::cout << test->get("salut") << std::endl;
-	delete test;
+	this->properties = new Properties("bomberman.properties");
 }
 
 void						BombermanClient::initialize_resources( void )
@@ -53,24 +48,19 @@ void						BombermanClient::initialize_resources( void )
 	//reserved for canvas
 	ShaderUtils::instance->loadShader("canvas", "./assets/reserved/canvas.vert", "./assets/reserved/canvas.frag");
 	Model::load("canvas", ShaderUtils::instance->get("canvas"), "assets/reserved/canvas.obj");
-
 	//SHADERS
 	ShaderUtils::instance->loadShader("dir", "./assets/shaders/global.vert", "./assets/shaders/global.frag");
 	ShaderUtils::instance->loadShader("bomb", "./assets/shaders/bomb.vert", "./assets/shaders/bomb.frag");
 	ShaderUtils::instance->loadShader("player", "./assets/shaders/player.vert", "./assets/shaders/player.frag");
-
 	//Player
 	Model::load("bomberman", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
 	Model::load("bomberman2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/test.obj");
-
 	Model::load("walk_0", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/3.obj");
 	Model::load("walk_1", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/2.obj");
 	Model::load("walk_2", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/1.obj");
 	Model::load("walk_3", ShaderUtils::instance->get("player"), "assets/bomberman_animations/walk/0.obj");
-
 	//bomb
 	Model::load("bomb", ShaderUtils::instance->get("bomb"), "assets/bomb/bomb.obj");
-
 	//textures
 	Model::load("flamme_block", ShaderUtils::instance->get("dir"), "assets/textures/blocks/Flamme.obj");
 	Model::load("N64", ShaderUtils::instance->get("dir"), "assets/textures/N64 Cube/N64 Cube.obj");
@@ -80,7 +70,6 @@ void						BombermanClient::initialize_resources( void )
 	Model::load("brick", ShaderUtils::instance->get("dir"), "assets/textures/grass.obj");
 	Model::load("skybox", ShaderUtils::instance->get("dir"), "assets/skybox/skybox2.obj");
 
-
 	Model::load("bonus-bomb-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/bomb-up.obj");
 	Model::load("bonus-power-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/power-up.obj");
 	Model::load("bonus-speed-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/speed-up.obj");
@@ -88,51 +77,59 @@ void						BombermanClient::initialize_resources( void )
 
 void						BombermanClient::build_window( void )
 {
+	int width, height;
+	bool fullscreen;
+
+	width = this->properties->getInt("BombermanClient.screen.width");
+	height = this->properties->getInt("BombermanClient.screen.height");
+	fullscreen = this->properties->getBool("BombermanClient.screen.fullscreen");
+
+	if (width < 500 || height < 500 || width > 3000 || height > 3000) {
+		printf( "Error not conform display: width:%d, height:%d\n", width, height);
+		exit(0);
+	}
+
+	this->screen = new Screen(width, height);
+	this->canvas = new Canvas(this->screen->width, this->screen->height);
+
 	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
     {
         printf( "Can't init SDL:  %s\n", SDL_GetError( ) );
         exit(0);
     }
-
 	if(TTF_Init() == -1)
 	{
 	    printf("Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
 	    exit(0);
 	}
-
-	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL );
+	int flags = SDL_WINDOW_OPENGL;
+	if (fullscreen)
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, flags);
 	if (!this->window) {
 	    printf("Couldn't create window: %s\n", SDL_GetError());
 	    exit(0);
 	}
-
 	//OPENGL version 3.3
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
-
-	this->context = SDL_GL_CreateContext(this->window);
-	if (!this->context) {
-	    printf("Couldn't create context: %s\n", SDL_GetError());
-	    exit(0);
-	}
 	//################################################
 	//include this BEFORE GLFW for vao fonctionnality (for macos)
 	//# if __APPLE__
 	//#  define GLFW_INCLUDE_GLCOREARB
 	//# endif
 	//################################################
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+	this->context = SDL_GL_CreateContext(this->window);
+	if (!this->context) {
+	    printf("Couldn't create context: %s\n", SDL_GetError());
+	    exit(0);
+	}
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	// // Enable depth test
 	glEnable(GL_DEPTH_TEST);
-	//Accept fragment if it closer to the camera than the former one
-	//glDepthFunc(GL_LESS);
-	// Cull triangles which normal is not towards the camera
-	//glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
-
 	//0 for immediate updates, 1 for updates synchronized with the vertical retrace, -1 for late swap tearing
 	SDL_GL_SetSwapInterval(0);
 }
@@ -243,8 +240,8 @@ int main(void)
 {
 	BombermanClient *client = BombermanClient::getInstance();
 
-	client->build_window();
 	client->initialize_properties();
+	client->build_window();
 	client->initialize_resources();
 	client->initialize_inputs();
 

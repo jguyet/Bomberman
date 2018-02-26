@@ -6,7 +6,7 @@
 
 // CANONICAL #####################################################
 
-Properties::Properties ( const char *file_path )
+Properties::Properties ( std::string const &file_path )
 {
 	this->initialize(file_path);
 	return ;
@@ -42,7 +42,7 @@ std::ostream &				operator<<(std::ostream & o, Properties const & i)
 
 // PUBLIC METHOD #################################################
 
-const char					*Properties::get(const char *key)
+std::string					Properties::get(std::string const &key)
 {
 	std::ostringstream os;
 	std::string k;
@@ -51,14 +51,40 @@ const char					*Properties::get(const char *key)
 	k = os.str();
 	if (this->map.count(k) == 0)
 		return "";
-	return (this->map[k].c_str());
+	return (this->map[k]);
+}
+
+int							Properties::getInt(std::string const &key)
+{
+	std::ostringstream os;
+	std::string k;
+
+	os << key;
+	k = os.str();
+	if (this->map.count(k) == 0)
+		return 0;
+	return (atoi(this->map[k].c_str()));
+}
+
+bool						Properties::getBool(std::string const &key)
+{
+	std::ostringstream os;
+	std::string k;
+
+	os << key;
+	k = os.str();
+	if (this->map.count(k) == 0)
+		return false;
+	if (this->map[k] == "true" || this->map[k] == "TRUE")
+		return true;
+	return false;
 }
 
 // ###############################################################
 
 // PRIVATE METHOD ################################################
 
-void						Properties::initialize(const char *file_path)
+void						Properties::initialize(std::string const &file_path)
 {
 	this->file_path = file_path;
 	file_get_contents(this->content, this->file_path);
@@ -74,8 +100,8 @@ void						Properties::initialize(const char *file_path)
 		if (splited_line.size() < 2)
 			continue ;
 
-		key = splited_line.at(0);
-		value = splited_line.at(1);
+		key = trim(splited_line.at(0));
+		value = trim(splited_line.at(1));
 		this->map[key] = value;
 	}
 }

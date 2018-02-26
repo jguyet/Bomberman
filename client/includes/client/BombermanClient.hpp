@@ -62,10 +62,9 @@ class BombermanClient : public IRenderLoop
 		SDL_Event									event;
 
 		Scene										*current_scene;
-
 		Screen										*screen;
-
 		Socket 										*sock;
+		Properties									*properties;
 
 
 		//sound
