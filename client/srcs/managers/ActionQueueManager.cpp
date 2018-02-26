@@ -71,15 +71,15 @@ void ActionQueueManager::doAction(ActionQueue *action)
 	{
 		case MapSelectMessage::ID: {
 			MapSelectMessage	*mapMessage = (MapSelectMessage*)action->message;
-			BombermanClient::instance->current_scene = new GameScene(mapMessage->name);
+			BombermanClient::getInstance()->current_scene = new GameScene(mapMessage->name);
 
-			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			Case *spawn = scene->mapManager->getRandomWalkableCase(scene->map);
 			if (spawn) {
 				glm::vec3 pos = spawn->ground->transform.position;
-				BombermanClient::instance->sock->newPlayer(pos.x, 1, pos.z);
+				BombermanClient::getInstance()->sock->newPlayer(pos.x, 1, pos.z);
 			} else {
-				BombermanClient::instance->sock->newPlayer(2, 1, 4);
+				BombermanClient::getInstance()->sock->newPlayer(2, 1, 4);
 			}
 		}
 		break;
@@ -87,7 +87,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 		case NewPlayerMessage::ID: {
 			NewPlayerMessage		*message = (NewPlayerMessage*)action->message;
 			GameObject 				*playerObject = Factory::newPlayer(message->position.playerId);
-			GameScene				*scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene				*scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 
 			playerObject->transform.scale = glm::vec3(3,3,3);
 			playerObject->transform.rotation = glm::vec3(0,0,0);
@@ -98,13 +98,13 @@ void ActionQueueManager::doAction(ActionQueue *action)
 				scene->players.push_back(playerObject);
 			}
 			scene->all_player.push_back(playerObject);
-			BombermanClient::instance->current_scene->add(playerObject);
+			BombermanClient::getInstance()->current_scene->add(playerObject);
 		}
 		break;
 
 		case PlayersPositionMessage::ID: {
 			PlayersPositionMessage	*message = (PlayersPositionMessage*)action->message;
-			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			for (int i = 0; i < message->positions_length; i++) {
 				PlayerPositionObject &object = message->positions[i];
 				GameObject *player = scene->findPlayerById(object.playerId);
@@ -122,7 +122,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 
 		case ActionMessage::ID: {
 			ActionObject	object = ((ActionMessage*)action->message)->action;
-			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			if (object.type == ActionType::TYPE_BOMB) {
 				Case *c = scene->map->getCase(object.x, object.z);
 				if (c != NULL) {
@@ -133,7 +133,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 						bomb->transform.position = glm::vec3(c->position.x,c->position.y,c->position.z);
 						bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
 						bomb->transform.rotation = glm::vec3(0,0,0);
-						BombermanClient::instance->current_scene->add(bomb);
+						BombermanClient::getInstance()->current_scene->add(bomb);
 						c->obstacle = bomb;
 					}
 				}
@@ -143,7 +143,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 
 		case PlayerDeadMessage::ID: {
 			PlayerDeadMessage	*message = (PlayerDeadMessage*)action->message;
-			GameScene			*scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene			*scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			GameObject			*player = scene->findPlayerById(message->playerId);
 
 			if (player != NULL)

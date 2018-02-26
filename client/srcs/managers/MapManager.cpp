@@ -207,5 +207,3 @@ std::ostream &				operator<<(std::ostream & o, MapManager const & i)
 
 	return (o);
 }
-
-std::map<std::string, Map*> MapManager::maps;

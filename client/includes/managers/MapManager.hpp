@@ -33,7 +33,7 @@ class MapManager
 		void			buildObjects(Map *selected);
 		Case			*getRandomWalkableCase(Map *from);
 	private:
-		static	std::map<std::string, Map*> maps;
+		std::map<std::string, Map*>			maps;
 		Scene								*scene;
 };
 

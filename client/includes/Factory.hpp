@@ -2,6 +2,7 @@
 # define FACTORY_HPP
 
 #include "Bomberman.hpp"
+#include <mutex>
 
 class Factory
 {

@@ -52,25 +52,25 @@ void								CharacterControllerScript::Attack(void)
 {
 	if (this->bomb <= 0)
 		return ;
-	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 	if (c->obstacle != NULL)
 		return ;
 	c->walkable = false;
 	this->bomb--;
 
 
-	if (BombermanClient::instance->sock->state) {
+	if (BombermanClient::getInstance()->sock->state) {
 		ActionType type = ActionType::TYPE_BOMB;
 		ActionObject object(type, fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), c->position.y, fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 		Packet packet(new ActionMessage(object, this->getPlayerId()));
-		packet.sendPacket(BombermanClient::instance->sock->getSocket());
+		packet.sendPacket(BombermanClient::getInstance()->sock->getSocket());
 	}
 	GameObject *bomb = Factory::newBomb(this);
 
 	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
 	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
 	bomb->transform.rotation = glm::vec3(0,0,0);
-	BombermanClient::instance->current_scene->add(bomb);
+	BombermanClient::getInstance()->current_scene->add(bomb);
 	c->obstacle = bomb;
 }
 
@@ -125,7 +125,7 @@ void						CharacterControllerScript::Update(void)
 
 
 	int currentPlayerId = -1;
-	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 
 
 	if (scene->current_player != NULL)
@@ -142,7 +142,7 @@ void						CharacterControllerScript::Update(void)
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
 		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
-			//BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+			//BombermanClient::getInstance()->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
 			this->MRight();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT
@@ -156,13 +156,13 @@ void						CharacterControllerScript::Update(void)
 
 		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
 		{
-			BombermanClient::instance->sock->updateMovement(this);
+			BombermanClient::getInstance()->sock->updateMovement(this);
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
 
 		if (this->has_moved) {
 			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
-				BombermanClient::instance->sock->updateMovement(this);
+				BombermanClient::getInstance()->sock->updateMovement(this);
 				this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 			}
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
@@ -182,7 +182,7 @@ void						CharacterControllerScript::Update(void)
 
 		if (this->has_moved) {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
-			BombermanClient::instance->sock->updateMovement(this);
+			BombermanClient::getInstance()->sock->updateMovement(this);
 		} else {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
@@ -225,7 +225,7 @@ void								CharacterControllerScript::OnPreRender(void)
 	playerObjectModel->shaderBind = true;
 
 	glm::vec3 colors = glm::vec3(0.8f,0.1f,0.0f);
-	if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player)
+	if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player)
 		colors = glm::vec3(0.0f,0.1f,0.8f);
 	glUniform3fv(playerObjectModel->color,1 , &colors[0]);
 }
@@ -238,9 +238,9 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
-	if (dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player == NULL)
+	if (dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player == NULL)
 		return ;
-	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
 	//std::cout << "OnCollisionEnter on " << collider->tag << std::endl;
 
@@ -269,14 +269,14 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "Explosion")
 	{
-		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player) {
-			// BombermanClient::instance->current_scene = new MainMenuScene();
-			BombermanClient::instance->sock->playerDead(this->getPlayerId());
-			dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->current_player = NULL;
+		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player) {
+			// BombermanClient::getInstance()->current_scene = new MainMenuScene();
+			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
+			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player = NULL;
 			// Something bad happens when we delete the current player, so why we need to delete?
 		} else {
 			printf("Player id %d is dead !\n", this->getPlayerId());
-			dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->removePlayer(this->gameObject);
+			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->removePlayer(this->gameObject);
 			this->gameObject->toDelete = true;
 		}
 	}
@@ -297,7 +297,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else
 	{
-		c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase( fmax(collider->transform.position.x / 2.f, 0), fmax(collider->transform.position.z / 2.f, 0));
+		c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase( fmax(collider->transform.position.x / 2.f, 0), fmax(collider->transform.position.z / 2.f, 0));
 
 		if (c == NULL || c->obstacle == NULL)
 			return ;

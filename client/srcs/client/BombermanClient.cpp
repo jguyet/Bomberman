@@ -1,16 +1,14 @@
 #include "Bomberman.hpp"
 
-// STATIC ########################################################
-
-BombermanClient*			BombermanClient::instance = new BombermanClient();
-
 // ###############################################################
 
 // CANONICAL #####################################################
 
+
+
 BombermanClient::BombermanClient ( void )
 {
-	this->screen = new Screen(1280, 720);
+	this->screen = new Screen(1000, 1000);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
 	return ;
@@ -90,7 +88,7 @@ void						BombermanClient::initialize_resources( void )
 
 void						BombermanClient::build_window( void )
 {
-	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1 )
+	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
     {
         printf( "Can't init SDL:  %s\n", SDL_GetError( ) );
         exit(0);
@@ -102,25 +100,11 @@ void						BombermanClient::build_window( void )
 	    exit(0);
 	}
 
-	if (Mix_Init(MIX_INIT_MP3)) {
-        printf("Mix_Init: %s\n", Mix_GetError());
-    }
-
-	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP );
+	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL );
 	if (!this->window) {
 	    printf("Couldn't create window: %s\n", SDL_GetError());
 	    exit(0);
 	}
-
-	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
-
-	this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
-	this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
-	this->music = Mix_LoadMUS("./assets/sound/stage2.mp3");
-	this->music_menu = Mix_LoadMUS("./assets/sound/stage1.mp3");
-
-	Mix_VolumeMusic(20);
-
 
 	//OPENGL version 3.3
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -241,7 +225,7 @@ void						BombermanClient::updateFps( void )
 		lastTime = TimeUtils::getCurrentSystemMillis();
 		fps = fpsCount;
 		fpsCount = 0;
-		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str(), "color:#ffffff;font-size:25px;float:right;");
+		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str(), "color:#ffffff;font-size:25px;font-family:arial;float:right;");
 		//Text *t = new Text(2, "FPS : ", 55);
 		t->transform.position.x = -110;
 		t->transform.position.y = 0;
@@ -253,94 +237,16 @@ void						BombermanClient::updateFps( void )
 
 // ###############################################################
 
-/*
-bool BombermanClient::InitOpenAL()
-{
-    // Ouverture du device
-    this->Device = alcOpenDevice(NULL);
-    if (!this->Device)
-        return false;
-
-    // Création du contexte
-    this->Context = alcCreateContext(this->Device, NULL);
-    if (!this->Context)
-        return false;
-
-    // Activation du contexte
-    if (!alcMakeContextCurrent(this->Context))
-        return false;
-
-    return true;
-}
-
-void BombermanClient::ShutdownOpenAL()
-{
-    // Désactivation du contexte
-    alcMakeContextCurrent(NULL);
-
-    // Destruction du contexte
-    alcDestroyContext(this->Context);
-
-    // Fermeture du device
-    alcCloseDevice(this->Device);
-}
-
 // EXTERNAL ######################################################
 
-ALuint LoadSound(const std::string& Filename)
-{
-    // Ouverture du fichier audio avec libsndfile
-    SF_INFO FileInfos;
-    SNDFILE* File = sf_open(Filename.c_str(), SFM_READ, &FileInfos);
-    if (!File)
-        return 0;
-	// Lecture du nombre d'échantillons et du taux d'échantillonnage (nombre d'échantillons à lire par seconde)
-    ALsizei NbSamples  = static_cast<ALsizei>(FileInfos.channels * FileInfos.frames);
-    ALsizei SampleRate = static_cast<ALsizei>(FileInfos.samplerate);
-
-	std::vector<ALshort> Samples(NbSamples);
-    if (sf_read_short(File, &Samples[0], NbSamples) < NbSamples)
-    	return 0;
-	sf_close(File);
-
-	ALenum Format;
-	switch (FileInfos.channels)
-	{
-		case 1 :  Format = AL_FORMAT_MONO16;   break;
-		case 2 :  Format = AL_FORMAT_STEREO16; break;
-		default : return 0;
-	}
-
-	ALuint Buffer;
- 	alGenBuffers(1, &Buffer);
-	alBufferData(Buffer, Format, &Samples[0], NbSamples * sizeof(ALushort), SampleRate);
-
-    // Vérification des erreurs
-	if (alGetError() != AL_NO_ERROR)
-		return 0;
-
-	return Buffer;
-}
-*/
 int main(void)
 {
-	BombermanClient *client = BombermanClient::instance;
-
-
+	BombermanClient *client = BombermanClient::getInstance();
 
 	client->build_window();
 	client->initialize_properties();
 	client->initialize_resources();
 	client->initialize_inputs();
-
-	//client->InitOpenAL();
-	/*
-	ALuint Buffer = LoadSound("./assets/sound/bombe.wav");
-	ALuint Source;
-	alGenSources(1, &Source);
-	alSourcei(Source, AL_BUFFER, Buffer);
-	alSourcePlay(Source);
-	*/
 
 	//client->current_scene = new GameScene();
 	client->current_scene = new MainMenuScene();

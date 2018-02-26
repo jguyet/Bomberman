@@ -175,10 +175,10 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 			int height = atoi(parameters_map["height"].c_str());
 
 			if (parameters_map["width"].find("%") != std::string::npos) {
-				width = BombermanClient::instance->screen->width * width / 100;
+				width = BombermanClient::getInstance()->screen->width * width / 100;
 			}
 			if (parameters_map["height"].find("%") != std::string::npos) {
-				height = BombermanClient::instance->screen->height * height / 100;
+				height = BombermanClient::getInstance()->screen->height * height / 100;
 			}
 
 			tag = new Image(parameters_map["src"].c_str(), w, h, width, height);
@@ -204,14 +204,14 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 			tag->transform.position.x = atoi(parameters_map["x"].c_str());
 
 			if (parameters_map["x"].find("%") != std::string::npos) {
-				tag->transform.position.x = (BombermanClient::instance->screen->width / 100) * tag->transform.position.x;
+				tag->transform.position.x = (BombermanClient::getInstance()->screen->width / 100) * tag->transform.position.x;
 			}
 		}
 		if (parameters_map.count("y") == 1) {
 			tag->transform.position.y = atoi(parameters_map["y"].c_str());
 
 			if (parameters_map["y"].find("%") != std::string::npos) {
-				tag->transform.position.y = (BombermanClient::instance->screen->height / 100) * tag->transform.position.y;
+				tag->transform.position.y = (BombermanClient::getInstance()->screen->height / 100) * tag->transform.position.y;
 			}
 		}
 		if (parameters_map.count("parent") == 1 && this->elements.count(parameters_map["parent"]) == 1) {

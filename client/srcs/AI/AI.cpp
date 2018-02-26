@@ -7,7 +7,7 @@
 
 AI::AI (GameObject* my_player) : my_player(my_player)
 {
-	this->a_star.set_map(dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map);
+	this->a_star.set_map(dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map);
 	this->select_t = false;
 	return ;
 }
@@ -68,7 +68,7 @@ void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 int 				AI::getInfos(void)
 {
 	Scene *scene;
-	scene = BombermanClient::instance->current_scene;
+	scene = BombermanClient::getInstance()->current_scene;
 	for (std::map<long, GameObject*>::iterator it = scene->gameObjects.begin(); it != scene->gameObjects.end(); it++) {
 		GameObject *current = it->second;
 		if (current->tag == "ice_block")
@@ -111,7 +111,7 @@ int					AI::brain(void)
 
 	if (this->select_t == false)
 	{
-		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->all_player);
+		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
 		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->players);
 
 		// if (info == 0)
