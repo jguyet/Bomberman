@@ -105,6 +105,9 @@ void								BombControllerScript::OnEndRender(void)
 
 void								BombControllerScript::explode(void)
 {
+
+	Mix_PlayChannel(-1, BombermanClient::instance->bomb, 0);
+
 	int x = this->gameObject->transform.position.x / 2;
 	int z = this->gameObject->transform.position.z / 2;
 	this->playerController->BombExplode();

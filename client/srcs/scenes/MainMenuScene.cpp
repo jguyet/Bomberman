@@ -17,6 +17,7 @@ MainMenuScene::MainMenuScene ( void )
 	this->camera->buildFPSProjection();
 
 	this->interface = new MainMenuInterface();
+	Mix_PlayMusic(BombermanClient::instance->music_menu, 1);
 	return ;
 }
 

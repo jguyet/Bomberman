@@ -269,19 +269,16 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "bonus-bomb-up")
 	{
-		//std::cout << " bomb-up  " << this->gameObject->tag << " New Bomb add " << std::endl;
 		this->bomb++;
 		collider->toDelete = true;
 	}
 	else if (collider->tag == "bonus-power-up")
 	{
-		//std::cout << " power-up  " << this->gameObject->tag << " New power add " << std::endl;
 		this->power++;
 		collider->toDelete = true;
 	}
 	else if (collider->tag == "bonus-speed-up")
 	{
-		//std::cout << " speed-up  " << this->gameObject->tag << " New speed add " << std::endl;
 		this->speed+= 0.003;
 		collider->toDelete = true;
 	}

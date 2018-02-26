@@ -169,7 +169,7 @@ int					AI::brain(void)
 	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
 
-	// return (SDL_SCANCODE_Q);
+	return (SDL_SCANCODE_Q);
 	return (0);
 }
 

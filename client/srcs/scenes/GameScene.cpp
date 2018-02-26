@@ -15,6 +15,9 @@ GameScene::GameScene (std::string selected_map)
 	this->map = mapManager.getMap(selected_map);
 	mapManager.buildObjects(this->map);
 
+
+	Mix_PlayMusic(BombermanClient::instance->music, 1);
+
 	this->current_player = NULL;
 
 	// BombermanClient::instance::current_scene;
@@ -23,7 +26,6 @@ GameScene::GameScene (std::string selected_map)
 	{
 		this->StartSolo();
 	}
-
 
 	//add LOGO WESH
 	/*GameObject *logo_N = new GameObject();
@@ -35,8 +37,8 @@ GameScene::GameScene (std::string selected_map)
 
 	this->interface = new GameInterface(1);
 
-	//SDL_ShowCursor(SDL_DISABLE);
-	//SDL_SetWindowGrab(BombermanClient::instance->window, SDL_TRUE);
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_SetWindowGrab(BombermanClient::instance->window, SDL_TRUE);
 	return ;
 }
 
@@ -45,7 +47,7 @@ void GameScene::StartSolo(void)
 	GameObject 				*playerObject = Factory::newPlayer(1);
 	playerObject->transform.scale = glm::vec3(3,3,3);
 	playerObject->transform.rotation = glm::vec3(0,0,0);
-	playerObject->transform.position = glm::vec3(6.0f, 0.f, 2.0f);
+	playerObject->transform.position = glm::vec3(6.0f, 1.f, 2.0f);
 	this->current_player = playerObject;
 	this->players.push_back(playerObject);
 	this->all_player.push_back(playerObject);
@@ -149,8 +151,8 @@ void								GameScene::calculPhisics(void)
 void								GameScene::drawGameObjects(void)
 {
 	//build Matrixs
-	//this->camera->buildFPSProjection();
-	if (this->current_player != NULL) {
+	this->camera->buildFPSProjection();
+	/*if (this->current_player != NULL) {
 		topoint.x = -this->current_player->transform.position.x;
 		topoint.y = 0 ;//this->current_player->transform.position.y;
 		topoint.z = -this->current_player->transform.position.z;
@@ -160,13 +162,13 @@ void								GameScene::drawGameObjects(void)
 		this->camera->transform.position.x += 10;
 		//Eloignement sur y
 		this->camera->transform.position.y = 80;
-	}
+	}*/
 	//this->camera->buildFPSProjection();
-	this->camera->buildLookAtProjection(topoint);
+	//this->camera->buildLookAtProjection(topoint);
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas
 	this->interface->draw();
 	//reset mouse to center of screen
-	//SDL_WarpMouseInWindow(BombermanClient::instance->window, BombermanClient::instance->screen->middleWidth, BombermanClient::instance->screen->middleHeight);
+	SDL_WarpMouseInWindow(BombermanClient::instance->window, BombermanClient::instance->screen->middleWidth, BombermanClient::instance->screen->middleHeight);
 }

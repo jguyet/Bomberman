@@ -23,13 +23,18 @@
 #   include <SDL2/SDL.h>
 #   include <SDL2/SDL_image.h>
 #   include <SDL2/SDL_ttf.h>
+#   include <SDL2/SDL_mixer.h>
 # endif
 # ifdef __APPLE__
 #   include <OpenGL/gl3.h>
 #   include <SDL2/SDL.h>
 #   include <SDL2/SDL_image.h>
 #   include <SDL2/SDL_ttf.h>
+#   include <SDL2/SDL_mixer.h>
 # endif
+
+#include <OpenAL/OpenAL.h>
+#include <sndfile.h>
 
 # include <SOIL2.h>
 # include <glm/glm.hpp>
@@ -57,8 +62,8 @@
 # define PRESS GLFW_PRESS
 # define REPEAT GLFW_REPEAT
 
-# define SPEED 0.05f
-# define BOMB_TIME 3000L
+# define SPEED 0.1f
+# define BOMB_TIME 5000L
 
 /*
 ** Utils Methodes

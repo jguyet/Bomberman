@@ -143,7 +143,7 @@ void					Socket::updateMovement(Script *script)
 {
 	if (!this->state)
 		return ;
-	std::cout << "updateMovement" << std::endl;
+	//std::cout << "updateMovement" << std::endl;
 	glm::vec3	position = script->gameObject->transform.position;
 	int			playerId = ((CharacterControllerScript*)script)->getPlayerId();
 	PlayerPositionObject positionObject(playerId, position.x, position.y, position.z);

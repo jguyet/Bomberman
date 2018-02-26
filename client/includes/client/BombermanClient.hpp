@@ -44,6 +44,8 @@ class BombermanClient : public IRenderLoop
 		void										stop( void );
 
 		void										setWindowSize(int width, int height);
+		bool 										InitOpenAL();
+		void 										ShutdownOpenAL();
 
 		//sdl dependencies
 		SDL_Window									*window;
@@ -57,12 +59,25 @@ class BombermanClient : public IRenderLoop
 
 		Socket 										*sock;
 
+
+		//sound
+		Mix_Music *music;
+		Mix_Music *music_menu;
+		Mix_Chunk *bomb;
+		Mix_Chunk *bomb2;
+
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
 		void										updateFps( void );
 		RenderLoop									*loop;
 		Canvas										*canvas;
+
+		//InitOpenAL
+
+		ALCdevice									*Device;
+		ALCcontext									*Context;
+
 		// #####################################################################
 };
 
