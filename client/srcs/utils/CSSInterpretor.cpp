@@ -2,9 +2,8 @@
 
 // STATIC ########################################################
 
-void				CSSInterpretor::interpretCSS( Tag *tag, const char *style )
+void				CSSInterpretor::interpretCSS( Tag *tag, std::string const &style_pattern )
 {
-	std::string style_pattern = (std::ostringstream() << style).str();
 	std::vector<std::string> style_splited = split(style_pattern, ';');
 
 	for (int command_n = 0; command_n < style_splited.size(); command_n++)
@@ -17,8 +16,8 @@ void				CSSInterpretor::interpretCSS( Tag *tag, const char *style )
 		if (splited_line.size() < 2)
 			continue ;
 
-		cmd = splited_line.at(0);
-		value = splited_line.at(1);
+		cmd = trim(splited_line.at(0));
+		value = trim(splited_line.at(1));
 
 		if (cmd == "float")//float:left
 		{

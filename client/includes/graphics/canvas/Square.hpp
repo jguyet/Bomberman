@@ -26,7 +26,7 @@ class Square : public Tag
 		void								setDisplay(bool visible);
 		void								setStyle(const char *style);
 		void								draw(SDL_Surface *surface);
-		void								draw(SDL_Surface *surface, glm::vec3 &parent_position);
+		void								draw(SDL_Surface *surface, glm::vec3 &parent_position, glm::vec3 &parent_scale);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

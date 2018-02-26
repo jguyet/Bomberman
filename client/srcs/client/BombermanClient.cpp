@@ -106,8 +106,6 @@ void						BombermanClient::build_window( void )
         printf("Mix_Init: %s\n", Mix_GetError());
     }
 
-
-
 	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP );
 	if (!this->window) {
 	    printf("Couldn't create window: %s\n", SDL_GetError());
@@ -122,7 +120,7 @@ void						BombermanClient::build_window( void )
 	this->music_menu = Mix_LoadMUS("./assets/sound/stage1.mp3");
 
 	Mix_VolumeMusic(20);
-    
+
 
 	//OPENGL version 3.3
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);

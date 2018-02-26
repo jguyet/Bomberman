@@ -18,6 +18,7 @@ class UIInterface
 	protected:
 		std::map<std::string, Tag*>			elements;
 		std::map<std::string, std::string>	styles;
+		std::map<std::string, std::map<std::string, std::string>> elements_params;
 	private:
 		//lexer methods
 		typedef int (UIInterface::*LexerMethods)( std::string const & value );

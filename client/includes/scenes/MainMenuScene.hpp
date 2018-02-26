@@ -31,7 +31,6 @@ class MainMenuScene : public Scene
 		// PUBLICS ############################################################
 		MainMenuInterface					*interface;
 		// ####################################################################
-
 };
 
 #endif

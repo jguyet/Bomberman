@@ -10,40 +10,8 @@ MainMenuInterface::MainMenuInterface ( void ) : UIInterface("MainMenuInterface.h
 {
 	this->current_position = 0;
 	this->canvas = new Canvas(BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
-
-	// Image *img = new Image("assets/ui/mainmenuinterface/background.jpg", 1024, 819, BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
-	// img->transform.position.x = 0;
-	// img->transform.position.y = 0;
-	// this->canvas->addImage("background", img);
-    //
-	// Square *square = new Square((BombermanClient::instance->screen->width / 2) - 300, 100, 600, 600);
-	// square->setColor(27,36,38);
-	// this->canvas->addSquare("bg", square);
-    //
-	// Square *input = new Square(square->transform.position.x + (square->transform.scale.x / 2) - 150, 400, 300, 40);
-	// input->setColor(255,255,255);
-	// this->canvas->addSquare("input", input);
-    //
-	// Text *login_lbl = new Text("Server ip :");
-	// login_lbl->transform.position.x = square->transform.position.x + (square->transform.scale.x / 2) - 150;
-	// login_lbl->transform.position.y = 350;
-	// this->canvas->addText("lbl_input", login_lbl);
-    //
-	// Text *play = new Text("SELECT SERVER");
-	// play->transform.position.x = (BombermanClient::instance->screen->width / 2) - 115;
-	// play->transform.position.y = 100;
-	// this->canvas->addText("btn_play", play);
-    //
-	// this->input_lbl = new Text("127.0.0.1");
-	// this->input_lbl->setColor(0,0,0);
-	// this->input_lbl->transform.position.x = square->transform.position.x + (square->transform.scale.x / 2) - 150;
-	// this->input_lbl->transform.position.y = 401;
-	// this->canvas->addText("lbl_ip", this->input_lbl);
-    //
-	// this->button = new Button(new Text("SELECT SERVER"), 150, 150, 100, 100);
-	// this->button->css("color:#ff0000;background-color:#ffffff");
-	// this->canvas->addButton("Local", this->button);
 	this->canvas->setElementsMap(&this->elements);
+	KeyBoard::instance->addHandler("MainMenuInterface", this);
 	return ;
 }
 
@@ -64,6 +32,7 @@ MainMenuInterface &				MainMenuInterface::operator=( MainMenuInterface const & r
 
 MainMenuInterface::~MainMenuInterface ( void )
 {
+	KeyBoard::instance->removeHandler("MainMenuInterface");
 	delete this->canvas;
 	return ;
 }
@@ -80,7 +49,29 @@ std::ostream &				operator<<(std::ostream & o, MainMenuInterface const & i)
 
 void						MainMenuInterface::draw(void)
 {
+	if (this->current_position == 0 && this->elements.count("background_solo") && this->elements.count("background_multi")) {
+		this->elements["background_solo"]->setStyle("color:#FF8000");
+		this->elements["background_multi"]->setStyle("color:#BDBDBD");
+	} else if (this->current_position == 1 && this->elements.count("background_multi") && this->elements.count("background_solo")) {
+		this->elements["background_multi"]->setStyle("color:#FF8000");
+		this->elements["background_solo"]->setStyle("color:#BDBDBD");
+	}
 	this->canvas->draw();
+
+	if (this->elements.count("background")) {
+		this->elements["background"]->transform.position.x += 0.1f;
+
+		if (this->elements["background"]->transform.position.x > 10) {
+			this->elements["background"]->transform.position.x = 0;
+		}
+	}
+}
+
+void						MainMenuInterface::handleUP(unsigned int key)
+{
+	if (key == SDL_SCANCODE_UP || key == SDL_SCANCODE_DOWN) {
+		this->current_position = (this->current_position + 1) % 2;
+	}
 }
 
 // ###############################################################

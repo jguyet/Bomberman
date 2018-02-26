@@ -78,6 +78,15 @@ void						Text::setFontFamily(const char *fontname)
 	this->fontName = sfontName.str();
 	s << "assets/fonts/" << this->fontName << ".ttf";
 	std::string font_path = s.str();
+	std::ifstream ifs(font_path.c_str());
+	if (this->font != NULL) {
+		TTF_CloseFont(this->font);
+		this->font = NULL;
+	}
+	if (!ifs) {
+		std::cerr << "font " << font_path << " doens't exists." << std::endl;
+		return ;
+	}
 	this->font = TTF_OpenFont(font_path.c_str(), this->fontSize);
 }
 
@@ -125,6 +134,13 @@ void						Text::draw(SDL_Surface *surface)
 
 	parent_scale.x = surface->w;
 	parent_scale.y = surface->h;
+
+	if (this->parent != NULL) {
+		parent_position.x = this->parent->transform.position.x;
+		parent_position.y = this->parent->transform.position.y;
+		parent_scale.x = this->parent->transform.scale.x;
+		parent_scale.y = this->parent->transform.scale.y;
+	}
 	this->draw(surface, parent_position, parent_scale);
 }
 
@@ -134,13 +150,21 @@ void						Text::draw(SDL_Surface *surface, glm::vec3 &parent_position, glm::vec3
 	SDL_Surface	*text_surface;
 	glm::vec3	final_position = glm::vec3(0,0,0);
 
+	if (this->font == NULL)
+		return ;
 
 	if (this->position == TAG_POSITION_CENTER) {
-		final_position.x = parent_position.x + (parent_scale.x / 2);
+		this->transform.position.x += parent_position.x + (parent_scale.x / 2);
+		this->position = TAG_POSITION_NULL;
 	} else if (this->position == TAG_POSITION_LEFT) {
-		final_position.x = parent_position.x;
+		this->transform.position.x += parent_position.x;
+		this->position = TAG_POSITION_NULL;
 	} else if (this->position == TAG_POSITION_RIGHT) {
-		final_position.x = parent_position.x + parent_scale.x;
+		this->transform.position.x += parent_position.x + parent_scale.x;
+		this->position = TAG_POSITION_NULL;
+	} else {
+		final_position.x = parent_position.x;
+		final_position.y = parent_position.y;
 	}
 
 	text_position.x = this->transform.position.x + final_position.x;
@@ -159,7 +183,6 @@ void						Text::initialize(const char *text, const char *style)
 	this->color = {255, 255, 255,0};
 	this->fontSize = 10;
 	this->font = NULL;
-	this->position = TAG_POSITION_NULL;
 	this->setStyle(style);
 	if (this->font == NULL) {
 		this->setFontFamily("arial");

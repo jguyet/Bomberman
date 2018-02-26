@@ -46,6 +46,8 @@ class Tag : public GameObject
 		//css updating
 		virtual void						setStyle(const char *style);
 		// ####################################################################
+		Tag									*parent = NULL;
+		e_tag_position						position;
 	private:
 		// PRIVATES ###########################################################
 		// ####################################################################
