@@ -57,6 +57,14 @@ void								CharacterControllerScript::Attack(void)
 		return ;
 	c->walkable = false;
 	this->bomb--;
+
+
+	if (BombermanClient::instance->sock->state) {
+		ActionType type = ActionType::TYPE_BOMB;
+		ActionObject object(type, fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), c->position.y, fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+		Packet packet(new ActionMessage(object, this->getPlayerId()));
+		packet.sendPacket(BombermanClient::instance->sock->getSocket());
+	}
 	GameObject *bomb = Factory::newBomb(this);
 
 	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
@@ -128,13 +136,13 @@ void						CharacterControllerScript::Update(void)
 		}
 	}
 
+	this->has_moved = false;
+	
 	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
 			this->Attack();
 		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
 			//BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
-
-		this->has_moved = false;
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
 			this->MRight();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT
@@ -153,8 +161,11 @@ void						CharacterControllerScript::Update(void)
 		}
 
 		if (this->has_moved) {
+			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
+				BombermanClient::instance->sock->updateMovement(this);
+				this->lastNetwork = TimeUtils::getCurrentSystemMillis();
+			}
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
-			BombermanClient::instance->sock->updateMovement(this);
 		} else {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
