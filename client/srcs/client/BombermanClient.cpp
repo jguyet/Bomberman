@@ -8,7 +8,7 @@
 
 BombermanClient::BombermanClient ( void )
 {
-	this->screen = new Screen(1000, 1000);
+	this->screen = new Screen(1280, 760);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
 	return ;
