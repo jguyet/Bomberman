@@ -159,15 +159,9 @@ void								GameScene::drawGameObjects(void)
 		//Eloignement sur x
 		this->camera->transform.position.x += 10;
 		//Eloignement sur y
-<<<<<<< HEAD
 		this->camera->transform.position.y = 80;
 	}
 	//this->camera->buildFPSProjection();
-=======
-		this->camera->transform.position.y = 75;
-	}
-	// this->camera->buildFPSProjection();
->>>>>>> 3a32a200892c4f69a1bbd2fc4f865be6a0317f7c
 	this->camera->buildLookAtProjection(topoint);
 	//call parent method
 	this->_drawGameObjects();
