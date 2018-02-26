@@ -142,23 +142,26 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 	if (content.size() == 0 || content[0] != '{' || content[content.size() - 1] != '}') {
 		return ;
 	}
-	std::cout << "-> " << tag_name << "|" << tag_params << "|" << trimcontent << std::endl;
+	//std::cout << "-> " << tag_name << "|" << tag_params << "|" << content << std::endl;
 	trimcontent = content.substr(1, content.size() - 2);
 	parameters = split(trimcontent, ',');
 	for (int i = 0; i < parameters.size(); i++) {
 		std::vector<std::string> param_split = split(parameters.at(i), ':');
 
-		if (param_split.size() != 2)
+		if (param_split.size() < 2)
 			continue;
 		std::string key = trim(param_split.at(0));
 		std::string value = trim(param_split.at(1));
+
+		for (int v = 2; v < param_split.size(); v++) {
+			value += ":" + param_split.at(v);
+		}
 
 		if (value.size() > 2 && value.find("\"") != std::string::npos) {
 			value = value.substr(1, value.size() - 2);
 		}
 		parameters_map[key] = value;
-
-		std::cout << key << ":" << value << std::endl;
+		//std::cout << key << ":" << value << std::endl;
 	}
 	if (parameters_map.count("id") == 0) {
 		std::cerr << "Error tag <" << tag_name << "> dont have id." << std::endl;
@@ -185,23 +188,74 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 	} else if (tag_name == "text") {
 		std::string text = parameters_map.count("value") ? parameters_map["value"] : "";
 		tag = new Text(text, "");
+	} else if (tag_name == "square") {
+		int x = 0;
+		int y = 0;
+		if (parameters_map.count("width") && parameters_map.count("height")) {
+			int width = atoi(parameters_map["width"].c_str());
+			int height = atoi(parameters_map["height"].c_str());
+
+			tag = new Square(x, y, width, height);
+		}
 	}
 
 	if (tag != NULL) {
+		if (parameters_map.count("x") == 1) {
+			tag->transform.position.x = atoi(parameters_map["x"].c_str());
+
+			if (parameters_map["x"].find("%") != std::string::npos) {
+				tag->transform.position.x = (BombermanClient::instance->screen->width / 100) * tag->transform.position.x;
+			}
+		}
+		if (parameters_map.count("y") == 1) {
+			tag->transform.position.y = atoi(parameters_map["y"].c_str());
+
+			if (parameters_map["y"].find("%") != std::string::npos) {
+				tag->transform.position.y = (BombermanClient::instance->screen->height / 100) * tag->transform.position.y;
+			}
+		}
+		if (parameters_map.count("parent") == 1 && this->elements.count(parameters_map["parent"]) == 1) {
+			tag->parent = this->elements[parameters_map["parent"]];
+		}
+		if (parameters_map.count("class") == 1) {
+			for (std::map<std::string, std::string>::iterator it = this->styles.begin(); it != this->styles.end(); it++) {
+				if (parameters_map["class"].find(it->first) != std::string::npos) {
+					tag->setStyle(it->second.c_str());
+				}
+			}
+		}
+
+		if (parameters_map.count("style") == 1) {
+			tag->setStyle(parameters_map["style"].c_str());
+		}
+		this->elements_params[parameters_map["id"]] = parameters_map;
 		this->elements[parameters_map["id"]] = tag;
 	}
 }
 
 void						UIInterface::addStyle(std::string const &tag_name, std::string const &tag_params, std::string const &content)
 {
-	// std::string trimcontent;
-	// std::vector<std::string> parameters;
-	// std::map<std::string, std::string> parameters_map;
-    //
-	// if (content.size() == 0 || content[0] != '{' || content[content.size() - 1] != '}') {
-	// 	return ;
-	// }
-	std::cout << "-> " << tag_name << "|" << tag_params << "|" << content << std::endl;
+	std::string trimcontent;
+	std::vector<std::string> string_split;
+	std::map<std::string, std::string> style_map;
+
+	if (content.size() == 0 || content.find("{") == std::string::npos || content.find("}") == std::string::npos) {
+	 	return ;
+	}
+	string_split = split(content, '}');
+	for (int i = 0; i < string_split.size(); i++) {
+		std::vector<std::string> style_split = split(string_split.at(i), '{');
+
+		if (style_split.size() != 2)
+		 continue ;
+		std::string id = style_split.at(0);
+		std::string style = style_split.at(1);
+
+		if (id[0] == '.')
+			id = id.substr(1);
+
+		this->styles[id] = style;
+	}
 }
 
 void						UIInterface::build_lexer( void )
@@ -213,7 +267,7 @@ void						UIInterface::build_lexer( void )
 	this->lexer_tag["button"] = &UIInterface::addElement;
 	this->lexer_tag["input"] = &UIInterface::addElement;
 	this->lexer_tag["text"] = &UIInterface::addElement;
-	this->lexer_tag["div"] = &UIInterface::addElement;
+	this->lexer_tag["square"] = &UIInterface::addElement;
 }
 
 void						UIInterface::build_parser( std::string const & content )

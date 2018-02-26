@@ -5,8 +5,8 @@
 <style>
 .mainmenu-css
 {
-	color:#ffffff;
-	font-size: 20px;
+	color:#000000;
+	font-size: 30px;
 	font-family: arial;
 }
 </style>
@@ -19,11 +19,80 @@
 	height: 100%,
 	w: 1024,
 	h: 819,
+	x: 0,
+	y: 0
 }
 </img>
 
-<text>
-	id: "example_text",
+<square>
+{
+	id: "background_menu",
 	class: "mainmenu-css",
-	value: "test"
+	x: -200,
+	y: 33%,
+	width: 400,
+	height: 250,
+	style: "color:#2E2E2E;float:center;"
+}
+</square>
+
+<text>
+{
+	id: "lbl_mainmenu",
+	class: "mainmenu-css",
+	value: "MainMenu",
+	parent: "background_menu",
+	x: 100,
+	y: 7,
+	style: "color:#BDBDBD;font-size:40px;"
+}
+</text>
+
+<square>
+{
+	id: "background_solo",
+	class: "mainmenu-css",
+	x: -150,
+	y: 45%,
+	width: 300,
+	height: 50,
+	style: "color:#424242;float:center;"
+}
+</square>
+
+<text>
+{
+	id: "button_solo",
+	class: "mainmenu-css",
+	value: "Solo",
+	parent: "background_solo",
+	x: 120,
+	y: 7,
+	style: "color:#848484;"
+}
+</text>
+
+
+<square>
+{
+	id: "background_multi",
+	class: "mainmenu-css",
+	x: -150,
+	y: 55%,
+	width: 300,
+	height: 50,
+	style: "color:#424242;float:center;"
+}
+</square>
+
+<text>
+{
+	id: "button_multi",
+	class: "mainmenu-css",
+	value: "Multi players",
+	parent: "background_multi",
+	x: 70,
+	y: 7,
+	style: "color:#848484;"
+}
 </text>

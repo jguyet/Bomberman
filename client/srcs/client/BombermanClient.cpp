@@ -10,7 +10,7 @@ BombermanClient*			BombermanClient::instance = new BombermanClient();
 
 BombermanClient::BombermanClient ( void )
 {
-	this->screen = new Screen(1000, 1000);
+	this->screen = new Screen(1280, 720);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
 	return ;
@@ -102,7 +102,7 @@ void						BombermanClient::build_window( void )
 	    exit(0);
 	}
 
-	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL );
+	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->screen->width, this->screen->height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP );
 	if (!this->window) {
 	    printf("Couldn't create window: %s\n", SDL_GetError());
 	    exit(0);

@@ -10,7 +10,7 @@ class CSSInterpretor
 {
 	public:
 		// STATICS #############################################################
-		static void							interpretCSS( Tag *tag, const char *style );
+		static void							interpretCSS( Tag *tag, std::string const &style_pattern );
 		// #####################################################################
 		// CANONICAL ###########################################################
 											CSSInterpretor( void );

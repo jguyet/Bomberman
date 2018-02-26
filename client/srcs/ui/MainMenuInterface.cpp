@@ -44,6 +44,7 @@ MainMenuInterface::MainMenuInterface ( void ) : UIInterface("MainMenuInterface.h
 	// this->button->css("color:#ff0000;background-color:#ffffff");
 	// this->canvas->addButton("Local", this->button);
 	this->canvas->setElementsMap(&this->elements);
+	KeyBoard::instance->addHandler("MainMenuInterface", this);
 	return ;
 }
 
@@ -64,6 +65,7 @@ MainMenuInterface &				MainMenuInterface::operator=( MainMenuInterface const & r
 
 MainMenuInterface::~MainMenuInterface ( void )
 {
+	KeyBoard::instance->removeHandler("MainMenuInterface");
 	delete this->canvas;
 	return ;
 }
@@ -80,7 +82,21 @@ std::ostream &				operator<<(std::ostream & o, MainMenuInterface const & i)
 
 void						MainMenuInterface::draw(void)
 {
+	if (this->current_position == 0 && this->elements.count("background_solo") && this->elements.count("background_multi")) {
+		this->elements["background_solo"]->setStyle("color:#FF8000");
+		this->elements["background_multi"]->setStyle("color:#BDBDBD");
+	} else if (this->current_position == 1 && this->elements.count("background_multi") && this->elements.count("background_solo")) {
+		this->elements["background_multi"]->setStyle("color:#FF8000");
+		this->elements["background_solo"]->setStyle("color:#BDBDBD");
+	}
 	this->canvas->draw();
+}
+
+void						MainMenuInterface::handleUP(unsigned int key)
+{
+	if (key == SDL_SCANCODE_UP || key == SDL_SCANCODE_DOWN) {
+		this->current_position = (this->current_position + 1) % 2;
+	}
 }
 
 // ###############################################################

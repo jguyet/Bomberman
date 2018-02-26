@@ -38,8 +38,6 @@ class Text : public Tag
 		const char							*text;
 		std::string							saveptr;
 
-		e_tag_position						position;
-
 		std::string							fontName;
 		int									fontSize;
 		// ####################################################################

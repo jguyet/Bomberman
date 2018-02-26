@@ -65,12 +65,14 @@ void						Canvas::build(void)
 	for (std::map<const char*, Text*>::iterator it = this->texts.begin(); it != this->texts.end(); it++) {
 		(*it).second->draw(this->canvas);
 	}
-	for (std::map<const char*, Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++) {
-		(*it).second->draw(this->canvas);
-	}
 	if (this->elements != NULL) {
 		for (std::map<std::string, Tag*>::iterator it = this->elements->begin(); it != this->elements->end(); it++) {
-			it->second->draw(this->canvas);
+			if (it->second->parent == NULL)
+				it->second->draw(this->canvas);
+		}
+		for (std::map<std::string, Tag*>::iterator it = this->elements->begin(); it != this->elements->end(); it++) {
+			if (it->second->parent != NULL)
+				it->second->draw(this->canvas);
 		}
 	}
 	glGenTextures(1, &this->textureID);
@@ -126,17 +128,6 @@ void						Canvas::addSquare(const char *key, Square *square)
 		delete tmp;
 	}
 	this->squares[key] = square;
-	this->updated = false;
-}
-
-void						Canvas::addButton(const char *key, Button *button)
-{
-	if (this->buttons.count(key) != 0) {
-		Button *tmp = this->buttons[key];
-		this->buttons.erase(key);
-		delete tmp;
-	}
-	this->buttons[key] = button;
 	this->updated = false;
 }
 

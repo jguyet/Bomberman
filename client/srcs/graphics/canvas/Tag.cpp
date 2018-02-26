@@ -8,6 +8,7 @@
 
 Tag::Tag ( void )
 {
+	this->position = TAG_POSITION_NULL;
 	return ;
 }
 
