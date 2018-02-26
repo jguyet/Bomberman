@@ -25,6 +25,10 @@
 # include "messages/NewPlayerMessage.hpp"
 # include "messages/ActionMessage.hpp"
 # include "messages/PlayerDeadMessage.hpp"
+# include "enums/ActionType.hpp"
+# include "objs/ActionObject.hpp"
+
+# include "utils/Random.hpp"
 # include "Packet.hpp"
 #define BUF_SIZE 16000
 
@@ -46,6 +50,7 @@ class Socket
 		int									*getId(int id);
 		void								updateMovement(Script*);
 		void								newPlayer(float x, float y, float z);
+		void								newBonus(float x, float z);
 		void								playerDead(int playerId);
 		int									getSocket();
 		std::string							baseHost;

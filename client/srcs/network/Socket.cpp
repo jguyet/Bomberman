@@ -52,7 +52,6 @@ Socket::Socket (const char *host, int port) : basePort(port), baseHost(host)
 
 	if ((hostinfo = gethostbyname(host)) == NULL) {
 		fprintf (stderr, "Unknown host %s.\n", host);
-		//exit(EXIT_FAILURE);
 	}
 	sin.sin_addr = *(struct in_addr *) hostinfo->h_addr;
 	sin.sin_port = htons(port);
@@ -118,10 +117,8 @@ void						Socket::Thread(Socket *socket)
 		FD_SET(socket->sock, &socket->rdfs);
 		FD_SET(socket->sockUdp, &socket->rdfs);
 
-		if (select((socket->sockUdp > 0) ? socket->sockUdp + 1 : socket->sock + 1, &socket->rdfs, NULL, NULL, &tv) == -1)
-		{
+		if (select((socket->sockUdp > 0) ? socket->sockUdp + 1 : socket->sock + 1, &socket->rdfs, NULL, NULL, &tv) == -1) {
 			perror("Can't open select");
-			//exit(errno);
 		}
 		if (FD_ISSET(socket->sock, &socket->rdfs)) {
 			if ((rcv = recv(socket->sock, buffer, (BUF_SIZE - 1), 0)) > 0) {
@@ -143,7 +140,6 @@ void					Socket::updateMovement(Script *script)
 {
 	if (!this->state)
 		return ;
-	//std::cout << "updateMovement" << std::endl;
 	glm::vec3	position = script->gameObject->transform.position;
 	int			playerId = ((CharacterControllerScript*)script)->getPlayerId();
 	PlayerPositionObject positionObject(playerId, position.x, position.y, position.z);
@@ -158,6 +154,30 @@ void					Socket::newPlayer(float x, float y, float z)
 
 	Packet playerPacket = Packet(new NewPlayerMessage(positionObject, true));
 	playerPacket.sendPacket(this->sock);
+}
+
+void					Socket::newBonus(float x, float z)
+{
+	ActionType	type		= ActionType::TYPE_NONE;
+	int			rand_nbr 	= 0;
+	Random		randomGen;
+
+	rand_nbr = randomGen.getRandom(0, 100);
+	if (rand_nbr < 10)
+		type = ActionType::TYPE_BONUS_POWER_UP;
+	else if (rand_nbr < 20)
+		type = ActionType::TYPE_BONUS_SPEED_UP;
+	else if (rand_nbr < 30)
+		type = ActionType::TYPE_BONUS_BOMB_UP;
+	if (type != ActionType::TYPE_NONE) {
+		GameObject *object = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player;
+		if (object) {
+			CharacterControllerScript *script = (CharacterControllerScript*)object->GetComponent<Script>();
+			ActionObject object(type, x, 0, z);
+			Packet packet(new ActionMessage(object, script->getPlayerId()));
+			packet.sendPacket(this->sock);
+		}
+	}
 }
 
 void					Socket::playerDead(int playerId)
