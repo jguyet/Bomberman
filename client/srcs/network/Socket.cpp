@@ -50,8 +50,12 @@ Socket::Socket (const char *host, int port) : basePort(port), baseHost(host)
 	struct sockaddr_in sin = { 0 };
 	struct hostent *hostinfo = NULL;
 
+	if (std::string(host) == "") {
+		return ;
+	}
 	if ((hostinfo = gethostbyname(host)) == NULL) {
 		fprintf (stderr, "Unknown host %s.\n", host);
+		return ;
 	}
 	sin.sin_addr = *(struct in_addr *) hostinfo->h_addr;
 	sin.sin_port = htons(port);

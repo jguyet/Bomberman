@@ -73,6 +73,7 @@ bool								MainMenuScene::select_server(void)
 
 bool								MainMenuScene::select_local(void)
 {
+	BombermanClient::getInstance()->sock = new Socket("", 0);
 	BombermanClient::getInstance()->current_scene = new GameScene("map_01");
 	return true;
 }

@@ -18,27 +18,36 @@ GameScene::GameScene (std::string selected_map)
 	this->map = this->mapManager->getMap(selected_map);
 	mapManager->buildObjects(this->map);
 	this->current_player = NULL;
-	// BombermanClient::getInstance()::current_scene;
-	// GameObject *player = Factory::newPlayer(100);
-	// this->all_player.push_back(player);
-	// player->transform.position = glm::vec3(2,1,36);
-	// player->transform.scale = glm::vec3(3,3,3);
-	// player->transform.rotation = glm::vec3(0,0,0);
-	// this->add(player);//add on scene
-
-	//add LOGO WESH
-	/*GameObject *logo_N = new GameObject();
-	logo_N->AddComponent<Model>(Model::model["N64"]);
-	logo_N->transform.position = glm::vec3(30,-5,0);
-	logo_N->transform.scale = glm::vec3(1,1,1);
-	logo_N->transform.rotation = glm::vec3(0,0,0);
-	this->add(logo_N);//add on scene*/
-
+	if (BombermanClient::getInstance()->sock->state == false)
+	{
+		this->StartSolo();
+	}
 	this->interface = new GameInterface(1);
 
+	//if grab mouse
 	//SDL_ShowCursor(SDL_DISABLE);
 	//SDL_SetWindowGrab(BombermanClient::getInstance()->window, SDL_TRUE);
 	return ;
+}
+
+void GameScene::StartSolo(void)
+{
+	GameObject 				*playerObject = Factory::newPlayer(1);
+	playerObject->transform.scale = glm::vec3(3,3,3);
+	playerObject->transform.rotation = glm::vec3(0,0,0);
+	playerObject->transform.position = glm::vec3(6.0f, 1.f, 2.0f);
+	this->current_player = playerObject;
+	this->players.push_back(playerObject);
+	this->all_player.push_back(playerObject);
+	this->add(playerObject);
+
+	GameObject *player = Factory::newPlayer(100);
+	this->all_player.push_back(player);
+	this->players.push_back(player);
+	player->transform.position = glm::vec3(4,1,36);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
 }
 
 void					GameScene::removePlayer(GameObject *player)
