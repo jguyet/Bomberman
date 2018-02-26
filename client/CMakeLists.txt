@@ -48,7 +48,7 @@ if (APPLE)
 	include_directories(${SDL2_INCLUDE_DIR})
 	message("${SDL2_INCLUDE_DIR}")
 	message("${SDL2_DIR}/../../../lib")
-	# sdl2_mixer sdl2_image
+	# sdl2_ttf
 	############################################################################
 	execute_process(COMMAND ${BIN_BREW} install sdl2_ttf
 				WORKING_DIRECTORY "${PROJECT_DIR}/")
@@ -66,6 +66,8 @@ if (APPLE)
 	message("${SDL2_TTF_LIB_DIR}")
 	link_directories("${SDL2_TTF_LIB_DIR}")
 
+	# sdl2_image
+	############################################################################
 	execute_process(COMMAND ${BIN_BREW} install sdl2_image
 				WORKING_DIRECTORY "${PROJECT_DIR}/")
 	execute_process(COMMAND homebrew install sdl2_image
@@ -83,6 +85,23 @@ if (APPLE)
 	find_path(SDL2_IMAGE_LIB_DIR libSDL2_image.a HINTS ${BREW_DIR}/../lib)
 	message("${SDL2_IMAGE_LIB_DIR}")
 	link_directories("${SDL2_IMAGE_LIB_DIR}")
+	# sdl2_mixer
+	############################################################################
+	execute_process(COMMAND ${BIN_BREW} install sdl2_mixer
+				WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_path(SDL2_MIXER_INCLUDE_DIR SDL2/SDL_mixer.h
+				  HINTS
+				    ENV HOME
+				    ${SDL2_DIR}
+					${BREW_DIR}
+				  PATH_SUFFIXES SDL2
+	                # path suffixes
+	                include/SDL2 include)
+	message(${SDL2_MIXER_INCLUDE_DIR})
+	include_directories(${SDL2_MIXER_INCLUDE_DIR})
+	find_path(SDL2_MIXER_LIB_DIR libSDL2_mixer.a HINTS ${BREW_DIR}/../lib)
+	message("${SDL2_MIXER_LIB_DIR}")
+	link_directories("${SDL2_MIXER_INCLUDE_DIR}")
 
 	#GLM
 	############################################################################
@@ -102,6 +121,21 @@ if (APPLE)
 	message("${GLM_INCLUDE_DIR}")
 	message("${GLM_DIR}/../../../lib")
 	include_directories("${GLM_INCLUDE_DIR}")
+	#libsndfile
+	############################################################################
+	message("\r\nINSTALLATION LIBSNDFILE------------------------------------------\r\n")
+	execute_process(COMMAND ${BIN_BREW} install libsndfile
+				WORKING_DIRECTORY "${PROJECT_DIR}/")
+	find_path(LIBSNDFILE_INCLUDE_DIR sndfile.h
+				  	HINTS
+				    ENV HOME
+					${BREW_DIR}
+				  	PATH_SUFFIXES include)
+	message(${LIBSNDFILE_INCLUDE_DIR})
+	include_directories(${LIBSNDFILE_INCLUDE_DIR})
+	find_path(LIBSNDFILE_LIB_DIR libsndfile.a HINTS ${BREW_DIR}/../lib)
+	message("${LIBSNDFILE_LIB_DIR}")
+	link_directories("${LIBSNDFILE_LIB_DIR}")
 	#ASSIMP
 	############################################################################
 	message("\r\nINSTALLATION ASSIMP----------------------------------------------\r\n")
@@ -163,5 +197,5 @@ file(GLOB_RECURSE CLIENT_SRC srcs/*.cpp)
 add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
-
-target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image glm assimp SOIL2 network ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
+message(${OPENAL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image sdl2_mixer glm sndfile assimp SOIL2 network ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
