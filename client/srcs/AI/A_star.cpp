@@ -166,8 +166,6 @@ int							A_star::bomb_col(std::vector<BombControllerScript*> bomb_l, float x, f
 {
 	float t = SPEED; // Tolerance
 
-	std::cout << "size " << bomb_l.size() << std::endl;
-
 	for (auto &elem : bomb_l)
 	{
 		float powe = elem->power * 2;
