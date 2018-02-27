@@ -47,19 +47,19 @@ std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
 
 void						GameInterface::draw(void)
 {
-	this->debug();
-	if (this->getElementById("bomb_lbl") != NULL) {
-		std::string value = "0";
-		if (this->scene->current_player != NULL) {
-			CharacterControllerScript *script = ((CharacterControllerScript*)this->scene->current_player->GetComponent<Script>());
-			if (script != NULL) {
-				std::ostringstream os;
-				os << script->bomb;
-				value = os.str();
-			}
+	this->build();
+
+	std::string value = "0";
+	if (this->scene->current_player != NULL) {
+		CharacterControllerScript *script = ((CharacterControllerScript*)this->scene->current_player->GetComponent<Script>());
+		if (script != NULL) {
+			std::ostringstream os;
+			os << script->bomb;
+			value = os.str();
 		}
-		this->getElementById("bomb_lbl")->setValue(value);
 	}
+	this->variables["$bomb"] = value;
+	
 	this->canvas->draw();
 }
 

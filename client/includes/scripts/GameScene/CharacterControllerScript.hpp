@@ -44,7 +44,11 @@ class CharacterControllerScript : public Script
 		float								speed = SPEED;
 
 		long 								lastNetwork = 0;
+		glm::vec3							lastPosition_direction;
 		glm::vec3							lastPosition;
+
+		bool								collide_with_mi_bomb = false;
+		bool								in_mi_bomb = false;
 		// ####################################################################
 };
 

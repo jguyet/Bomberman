@@ -45,7 +45,7 @@ std::ostream &				operator<<(std::ostream & o, StartGameInterface const & i)
 
 void						StartGameInterface::draw(void)
 {
-	this->debug();
+	this->build();
 	this->canvas->draw();
 }
 

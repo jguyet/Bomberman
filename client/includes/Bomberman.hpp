@@ -72,6 +72,8 @@
 ** Utils Methodes
 */
 std::vector<std::string>		split(const std::string &s, char delim);
+std::vector<std::string>		split_string(const std::string &s, const std::string &delim);
+std::vector<std::string> 		split_string_without(const std::string &s, const std::string &delim, const std::string &without);
 void							file_get_contents(std::string &content, std::string const &file_path);
 std::string						trim(std::string const &s);
 void							replaceAll(std::string& source, const std::string& from, const std::string& to);

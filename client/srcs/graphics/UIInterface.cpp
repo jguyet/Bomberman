@@ -69,10 +69,13 @@ bool					UIInterface::initialize( std::string const &ui_file )
 	date = result.st_mtime;
 	if (this->last_modified_date == date)
 		return false;
+	if (this->last_modified_date != 0) {
+		this->elements.clear();
+		this->elements_params.clear();
+		this->styles.clear();
+		this->conditions.clear();
+	}
 	this->last_modified_date = date;
-	this->elements.clear();
-	this->elements_params.clear();
-	this->styles.clear();
 	file_get_contents(this->content, this->ui_file.c_str());
 	replaceAll(this->content, "\n", "");
 	replaceAll(this->content, "\t", "");
@@ -81,16 +84,25 @@ bool					UIInterface::initialize( std::string const &ui_file )
 	return true;
 }
 
-void						UIInterface::debug(void)
+void						UIInterface::build(void)
 {
 	if (this->initialize(this->ui_file)) {
 		std::cout << this->ui_file << " Updated modification detected." << std::endl;
+	}
+
+	for (int i = 0; i < this->conditions.size(); i++)
+	{
+		std::vector<std::string> cond_split = split(this->conditions.at(i), '\t');
+		std::string tag_name = cond_split.at(0);
+		std::string tag_params = cond_split.at(1);;
+		std::string content = cond_split.at(2);
+		this->buildCondition(tag_name, tag_params, content);
 	}
 }
 
 int							UIInterface::scoop_enter(std::string const & value)
 {
-	std::string line = split(value, '>').at(0);
+	std::string line = split_string_without(value, ">", "\"").at(0);
 	std::string tag_line;
 	std::string tag_name = "unknow";
 	std::string content;
@@ -98,6 +110,7 @@ int							UIInterface::scoop_enter(std::string const & value)
 
 	try {
 		if (line.size() <= 3 || line[0] == '/' || line[1] == '/') {
+			offset = line.size();
 			replaceAll(line, "<", "");
 			replaceAll(line, ">", "");
 			replaceAll(line, "/", "");
@@ -113,8 +126,10 @@ int							UIInterface::scoop_enter(std::string const & value)
 			tag_line = line.substr(1);
 			tag_name = split(tag_line, ' ').at(0);
 			std::string endtag = "</" + tag_name + ">";
-			if (value.find(endtag) == std::string::npos)
+			if (value.find(endtag) == std::string::npos) {
+				offset = line.size();
 				throw std::exception();
+			}
 			content = value.substr(tag_line.size() + 2);
 			content = content.substr(0, content.find(endtag));
 			offset = (tag_line.size() + 1) + content.size() + endtag.size();
@@ -122,14 +137,13 @@ int							UIInterface::scoop_enter(std::string const & value)
 		if (tag_line.size() == tag_name.size())
 			tag_line = "";
 		else
-			tag_line = tag_line.substr(tag_name.size() + 1);
+			tag_line = trim(tag_line.substr(tag_name.size() + 1));
 		content = trim(content);
 		if (this->lexer_tag.count(tag_name) == 1) {//add new Element
 			(*this.*this->lexer_tag[tag_name])(tag_name, tag_line, content);
 		}
 	} catch (std::exception e) {
 		std::cerr << this->ui_file << " error syntax on tag <" << tag_name << ">" << std::endl;
-		offset = line.size();
 	}
 	return offset;
 }
@@ -146,6 +160,11 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 	}
 	//std::cout << "-> " << tag_name << "|" << tag_params << "|" << content << std::endl;
 	trimcontent = content.substr(1, content.size() - 2);
+	for (std::map<std::string, std::string>::iterator it = this->variables.begin(); it != this->variables.end(); it++) {
+		if (trimcontent.find(it->first) != std::string::npos) {
+			replaceAll(trimcontent, it->first, it->second);
+		}
+	}
 	parameters = split(trimcontent, ',');
 	for (int i = 0; i < parameters.size(); i++) {
 		std::vector<std::string> param_split = split(parameters.at(i), ':');
@@ -270,6 +289,73 @@ void						UIInterface::addStyle(std::string const &tag_name, std::string const &
 	}
 }
 
+void						UIInterface::buildCondition(std::string const &tag_name, std::string const &tag_params, std::string const &content)
+{
+	std::string params = std::string(tag_params);
+	if (params.find("condition=") == std::string::npos)
+		return ;
+	replaceAll(params, "condition=", "");
+	replaceAll(params, "\"", "");
+	for (std::map<std::string, LexerConditionMethods>::iterator it = this->lexer_condition.begin(); it != this->lexer_condition.end(); it++) {
+		if (params.find(it->first) != std::string::npos)
+		{
+			std::vector<std::string> condition_split = split(params, it->first[0]);//'='
+
+			if (condition_split.size() != 2)
+				return ;
+			std::string var1 = trim(condition_split.at(0));
+			std::string var2 = trim(condition_split.at(1));
+			replaceAll(var1, "=", "");
+			replaceAll(var1, ">", "");
+			replaceAll(var1, "<", "");
+			replaceAll(var2, "=", "");
+			replaceAll(var2, ">", "");
+			replaceAll(var2, "<", "");
+			if (this->variables.count(var1)) {
+				var1 = this->variables[var1];
+			}
+			if (this->variables.count(var2)) {
+				var2 = this->variables[var2];
+			}
+			bool result = (*this.*it->second)(var1, var2);
+
+			if (result) {
+				this->build_parser(content);
+			}
+		}
+	}
+}
+
+void						UIInterface::addCondition(std::string const &tag_name, std::string const &tag_params, std::string const &content)
+{
+	if (tag_name == "" || tag_params == "" || content == "")
+		return ;
+	std::ostringstream cond;
+	cond << tag_name << "\t" << tag_params << "\t" << content;
+	this->conditions.push_back(cond.str());
+}
+
+bool						UIInterface::equals(std::string const &first, std::string const &second)
+{
+	if (first == second)
+		return true;
+	return false;
+}
+
+bool						UIInterface::superior(std::string const &first, std::string const &second)
+{
+	if (atoi(first.c_str()) > atoi(second.c_str()))
+		return true;
+	return false;
+}
+
+bool						UIInterface::inferior(std::string const &first, std::string const &second)
+{
+	if (atoi(first.c_str()) < atoi(second.c_str()))
+		return true;
+	return false;
+}
+
 void						UIInterface::build_lexer( void )
 {
 	this->lexer["<"] = &UIInterface::scoop_enter;
@@ -280,6 +366,11 @@ void						UIInterface::build_lexer( void )
 	this->lexer_tag["input"] = &UIInterface::addElement;
 	this->lexer_tag["text"] = &UIInterface::addElement;
 	this->lexer_tag["square"] = &UIInterface::addElement;
+	this->lexer_tag["if"] = &UIInterface::addCondition;
+
+	this->lexer_condition["="] = &UIInterface::equals;
+	this->lexer_condition[">"] = &UIInterface::superior;
+	this->lexer_condition["<"] = &UIInterface::inferior;
 }
 
 void						UIInterface::build_parser( std::string const & content )

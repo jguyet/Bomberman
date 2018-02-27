@@ -25,6 +25,8 @@ class BombControllerScript : public Script
 		// ####################################################################
 		// PUBLICS ############################################################
 		void								explode(void);
+
+		CharacterControllerScript 			*playerController;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
@@ -35,7 +37,6 @@ class BombControllerScript : public Script
 		long								anim_time;
 
 		int 								power;
-		CharacterControllerScript 			*playerController;
 		// ####################################################################
 };
 

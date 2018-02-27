@@ -72,6 +72,7 @@ void								CharacterControllerScript::Attack(void)
 	bomb->transform.rotation = glm::vec3(0,0,0);
 	BombermanClient::getInstance()->current_scene->add(bomb);
 	c->obstacle = bomb;
+	this->in_mi_bomb = true;
 }
 
 void 								CharacterControllerScript::BombExplode()
@@ -117,6 +118,9 @@ void								CharacterControllerScript::MRight(void)
 
 void						CharacterControllerScript::Update(void)
 {
+	if (this->collide_with_mi_bomb == false)
+		this->in_mi_bomb = false;
+	this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
 	static std::map<int, P> cmd = {
 		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
@@ -192,29 +196,30 @@ void						CharacterControllerScript::Update(void)
 		// DOWN KeyBoard::instance->getKey(SDL_SCANCODE_KP_2)
 	} else { //other players
 		if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 100L)) {
-			if (this->gameObject->transform.position != this->lastPosition)
+			if (this->gameObject->transform.position != this->lastPosition_direction)
 				this->has_moved = true;
 			if (this->has_moved) {
-				if ((this->gameObject->transform.position.z - this->lastPosition.z) > 0) {
+				if ((this->gameObject->transform.position.z - this->lastPosition_direction.z) > 0) {
 					this->gameObject->transform.rotation.y = 180.f;
 				}
-				if ((this->gameObject->transform.position.z - this->lastPosition.z) < 0) {
+				if ((this->gameObject->transform.position.z - this->lastPosition_direction.z) < 0) {
 					this->gameObject->transform.rotation.y = 0.f;
 				}
-				if ((this->gameObject->transform.position.x - this->lastPosition.x) > 0) {
+				if ((this->gameObject->transform.position.x - this->lastPosition_direction.x) > 0) {
 					this->gameObject->transform.rotation.y = 270.f;
 				}
-				if ((this->gameObject->transform.position.x - this->lastPosition.x) < 0) {
+				if ((this->gameObject->transform.position.x - this->lastPosition_direction.x) < 0) {
 					this->gameObject->transform.rotation.y = 90.f;
 				}
 				this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
 			} else {
 				this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 			}
-			this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
+			this->lastPosition_direction = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
 	}
+	this->collide_with_mi_bomb = false;
 }
 
 void								CharacterControllerScript::OnPreRender(void)
@@ -246,29 +251,19 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 
 	if (collider->tag == "Bomb") {
-		if (c->obstacle == NULL || (c->obstacle != NULL && c->obstacle->id != collider->id)) {
-			BoxCollider *b = this->gameObject->GetComponent<BoxCollider>();
-			//get contact point
-			glm::vec3 contact_point = glm::vec3(0,0,0);
-			contact_point.x = fmax(abs(this->gameObject->transform.position.x - collider->transform.position.x) - ((2.f + b->size.x)/2.f), 0);
-			contact_point.y = fmax(abs(this->gameObject->transform.position.y - collider->transform.position.y) - ((2.f + b->size.y)/2.f), 0);
-			contact_point.z = fmax(abs(this->gameObject->transform.position.z - collider->transform.position.z) - ((2.f + b->size.z)/2.f), 0);
-			if (this->gameObject->transform.position.x <= collider->transform.position.x)
-				contact_point.x = -contact_point.x;
-			if (this->gameObject->transform.position.y <= collider->transform.position.y)
-				contact_point.y = -contact_point.y;
-			if (this->gameObject->transform.position.z <= collider->transform.position.z)
-				contact_point.z = -contact_point.z;
-
-			this->gameObject->transform.position.x += contact_point.x;
-			this->gameObject->transform.position.y += contact_point.y;
-			this->gameObject->transform.position.z += contact_point.z;
+		BombControllerScript *script = dynamic_cast<BombControllerScript*>(collider->GetComponent<Script>());
+		if (script->playerController->gameObject->id == this->gameObject->id) {
+			this->collide_with_mi_bomb = true;
 		}
+		if (this->in_mi_bomb == false) {//si c'est pas ma derniere bomb je suis bloquer
+			this->gameObject->transform.position.x = this->lastPosition.x;
+			this->gameObject->transform.position.z = this->lastPosition.z;
+		}
+		//}
 	}
 	else if (collider->tag == "Explosion")
 	{
 		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player) {
-			// BombermanClient::getInstance()->current_scene = new MainMenuScene();
 			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
 			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player = NULL;
 		} else {
@@ -294,28 +289,8 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else
 	{
-		c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase( fmax(collider->transform.position.x / 2.f, 0), fmax(collider->transform.position.z / 2.f, 0));
-
-		if (c == NULL || c->obstacle == NULL)
-			return ;
-		BoxCollider *b = this->gameObject->GetComponent<BoxCollider>();
-		//get contact point
-		glm::vec3 contact_point = glm::vec3(0,0,0);
-		contact_point.x = fmax(abs(this->gameObject->transform.position.x - collider->transform.position.x) - ((2.f + b->size.x)/2.f), 0);
-		contact_point.y = fmax(abs(this->gameObject->transform.position.y - collider->transform.position.y) - ((2.f + b->size.y)/2.f), 0);
-		contact_point.z = fmax(abs(this->gameObject->transform.position.z - collider->transform.position.z) - ((2.f + b->size.z)/2.f), 0);
-		if (this->gameObject->transform.position.x <= collider->transform.position.x)
-			contact_point.x = -contact_point.x;
-		if (this->gameObject->transform.position.y <= collider->transform.position.y)
-			contact_point.y = -contact_point.y;
-
-
-		if (this->gameObject->transform.position.z <= collider->transform.position.z)
-			contact_point.z = -contact_point.z;
-
-		this->gameObject->transform.position.x += contact_point.x;
-		this->gameObject->transform.position.y += contact_point.y;
-		this->gameObject->transform.position.z += contact_point.z;
+		this->gameObject->transform.position.x = this->lastPosition.x;
+		this->gameObject->transform.position.z = this->lastPosition.z;
 	}
 }
 

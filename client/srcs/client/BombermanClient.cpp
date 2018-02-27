@@ -223,7 +223,7 @@ void						BombermanClient::updateFps( void )
 		fps = fpsCount;
 		fpsCount = 0;
 		Text *t = new Text((std::ostringstream() << "FPS : " << fps).str(), "color:#ffffff;font-size:25px;font-family:arial;float:right;");
-		t->transform.position.x = -110;
+		t->transform.position.x = -115;
 		t->transform.position.y = 0;
 		this->canvas->addText("fps", t);
 	}

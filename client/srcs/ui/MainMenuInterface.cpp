@@ -49,7 +49,7 @@ std::ostream &				operator<<(std::ostream & o, MainMenuInterface const & i)
 
 void						MainMenuInterface::draw(void)
 {
-	this->debug();
+	this->build();
 	if (this->current_position == 0 && this->elements.count("background_solo") && this->elements.count("background_multi")) {
 		this->elements["background_solo"]->setStyle("color:#FF8000");		this->elements["background_multi"]->setStyle("color:#BDBDBD");
 	} else if (this->current_position == 1 && this->elements.count("background_multi") && this->elements.count("background_solo")) {

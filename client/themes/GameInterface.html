@@ -24,14 +24,16 @@
 }
 </img>
 
-<text>
-{
-	id: "bomb_lbl",
-	value: "1",
-	parent: "bomb_img",
-	class: "base_css",
-	style: "color:#FFFFFF;",
-	x: -30,
-	y: 15
-}
-</text>
+<if condition="true==true" >
+	<text>
+	{
+		id: "bomb_lbl",
+		value: "$bomb",
+		parent: "bomb_img",
+		class: "base_css",
+		style: "color:#FFFFFF;",
+		x: -30,
+		y: 15
+	}
+	</text>
+</if>

@@ -48,8 +48,8 @@ void						ExplosionControllerScript::Start(void)
 void						ExplosionControllerScript::Update(void)
 {
 	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 30L))) {
-		if (this->timerExplode < TimeUtils::getCurrentSystemMillis()) {
-			this->gameObject->transform.scale+=0.2f;
+		if (this->timerExplode < TimeUtils::getCurrentSystemMillis() && this->gameObject->transform.scale.x < 4.f) {
+			this->gameObject->transform.scale+=0.15f;
 			this->timerExplode = TimeUtils::getCurrentSystemMillis() + 1L;
 		}
 	}
