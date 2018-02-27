@@ -10,7 +10,7 @@ std::vector<BombControllerScript*> BombControllerScript::List = std::vector<Bomb
 
 BombControllerScript::BombControllerScript ( CharacterControllerScript *playerController )
 {
-	//BombControllerScript::List.push_back(this);
+	BombControllerScript::List.push_back(this);
 	this->startTime = TimeUtils::getCurrentSystemMillis();
 	this->anim_time = TimeUtils::getCurrentSystemMillis();
 	this->sens = false;
@@ -39,7 +39,7 @@ BombControllerScript &				BombControllerScript::operator=( BombControllerScript 
 
 BombControllerScript::~BombControllerScript ( void )
 {
-	//BombControllerScript::List.erase(std::remove(BombControllerScript::List.begin(), BombControllerScript::List.end(), this));
+	BombControllerScript::List.erase(std::remove(BombControllerScript::List.begin(), BombControllerScript::List.end(), this));
 	return ;
 }
 
