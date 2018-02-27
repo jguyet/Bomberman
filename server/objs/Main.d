@@ -10,4 +10,6 @@ objs/Main.o: srcs/Main.cpp includes/All.hpp includes/Server.hpp \
   ../network/includes/messages/PlayersPositionMessage.hpp \
   ../network/includes/messages/ActionMessage.hpp \
   ../network/includes/objs/ActionObject.hpp \
-  ../network/includes/enums/ActionType.hpp
+  ../network/includes/enums/ActionType.hpp \
+  ../network/includes/messages/PlayerDeadMessage.hpp \
+  ../network/includes/messages/GameStartedMessage.hpp

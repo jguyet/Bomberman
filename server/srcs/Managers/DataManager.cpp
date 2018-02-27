@@ -54,6 +54,7 @@ void DataManager::removePlayer(Player *player)
 
 void DataManager::disconnectClients()
 {
+	DataManager *instance = DataManager::Instance();
 	for (int i = 0; i < instance->server->clients.size(); i++) {
 		Client *client = instance->server->clients[i];
 		if (client->fd) {
@@ -77,7 +78,7 @@ void DataManager::updatePlayers(DataManager *instance)
 			}
 			instance->playersPos.clear();
 		}
-		if (instance->gameState && players.size() <= 1) {
+		if (instance->gameState && instance->players.size() <= 1) {
 			instance->disconnectClients();
 			instance->gameState = false;
 		}
