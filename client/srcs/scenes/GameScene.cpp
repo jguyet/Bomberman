@@ -17,11 +17,10 @@ GameScene::GameScene (std::string selected_map)
 	mapManager->buildObjects(this->map);
 	this->current_player = NULL;
 	this->startGameInterface = NULL;
-	this->interface = new GameInterface(1);
+	this->interface = new GameInterface(this);
 
 	if (BombermanClient::getInstance()->sock->state == false)
 	{
-		this->startGameInterface = new StartGameInterface();
 		this->StartSolo();
 	} else {
 		this->startGameInterface = new StartGameInterface();

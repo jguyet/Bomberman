@@ -1,1 +1,37 @@
+# Script
+# GameInterface :
+#
+<style>
+.base_css
+{
+	color:#000000;
+	font-size: 30px;
+	font-family: arial;
+}
+</style>
 
+<img>
+{
+	id: "bomb_img",
+	src: "assets/ui/gameinterface/bomb.png",
+	width: 50,
+	height: 50,
+	w: 256,
+	h: 256,
+	x: 100%,
+	y: 30%,
+	z-index: -1
+}
+</img>
+
+<text>
+{
+	id: "bomb_lbl",
+	value: "1",
+	parent: "bomb_img",
+	class: "base_css",
+	style: "color:#FFFFFF;",
+	x: -30,
+	y: 15
+}
+</text>

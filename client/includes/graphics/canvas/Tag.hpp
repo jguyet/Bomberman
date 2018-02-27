@@ -30,21 +30,22 @@ class Tag : public GameObject
 		virtual void						setFloat(e_tag_position position);
 		//font
 		virtual void						setColor(glm::vec3 &color);
-		virtual void						setFontFamily(const char *fontname);
+		virtual void						setFontFamily(std::string const &fontname);
 		virtual void						setFontSize(int font_size);
 		virtual void						setTextAlign(e_tag_position position);
 
 		//others
 		virtual void						setBackgroundColor(glm::vec3 &color);
-		virtual void						setBackgroundImage(const char *path);
+		virtual void						setBackgroundImage(std::string const &path);
 		virtual void						setDisplay(bool visible);
+		virtual void						setValue(std::string const &value);
 
 		//drawing
 		virtual void						draw(SDL_Surface *surface);
 		virtual void						draw(SDL_Surface *surface, glm::vec3 &parent_position);
 
 		//css updating
-		virtual void						setStyle(const char *style);
+		virtual void						setStyle(std::string const &style);
 		// ####################################################################
 		Tag									*parent = NULL;
 		e_tag_position						position;

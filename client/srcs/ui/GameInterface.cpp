@@ -6,9 +6,9 @@
 
 // CANONICAL #####################################################
 
-GameInterface::GameInterface ( int number_of_player ) : UIInterface("unknow")
+GameInterface::GameInterface ( GameScene *scene ) : UIInterface("themes/GameInterface.html")
 {
-	this->number_of_player = number_of_player;
+	this->scene = scene;
 	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
 	this->canvas->setElementsMap(&this->elements);
 	return ;
@@ -48,6 +48,18 @@ std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
 void						GameInterface::draw(void)
 {
 	this->debug();
+	if (this->getElementById("bomb_lbl") != NULL) {
+		std::string value = "0";
+		if (this->scene->current_player != NULL) {
+			CharacterControllerScript *script = ((CharacterControllerScript*)this->scene->current_player->GetComponent<Script>());
+			if (script != NULL) {
+				std::ostringstream os;
+				os << script->bomb;
+				value = os.str();
+			}
+		}
+		this->getElementById("bomb_lbl")->setValue(value);
+	}
 	this->canvas->draw();
 }
 

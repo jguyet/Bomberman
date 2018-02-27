@@ -18,14 +18,14 @@ class Image : public Tag
 		// ####################################################################
 		// PUBLICS ############################################################
 		void								setFloat(e_tag_position position);
-		void								setFontFamily(const char *fontname);
+		void								setFontFamily(std::string const &fontname);
 		void								setFontSize(int font_size);
 		void								setColor(glm::vec3 &color);
 		void								setTextAlign(e_tag_position position);
 		void								setBackgroundColor(glm::vec3 &color);
-		void								setBackgroundImage(const char *path);
+		void								setBackgroundImage(std::string const &path);
 		void								setDisplay(bool visible);
-		void								setStyle(const char *style);
+		void								setStyle(std::string const &style);
 		void								draw(SDL_Surface *surface);
 		void								draw(SDL_Surface *surface, glm::vec3 &parent_position);
 		// ####################################################################

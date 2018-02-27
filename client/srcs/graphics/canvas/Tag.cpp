@@ -63,7 +63,7 @@ void						Tag::setFloat(e_tag_position position)
 
 }
 
-void						Tag::setFontFamily(const char *fontname)
+void						Tag::setFontFamily(std::string const &fontname)
 {
 
 }
@@ -88,7 +88,7 @@ void						Tag::setBackgroundColor(glm::vec3 &color)
 
 }
 
-void						Tag::setBackgroundImage(const char *path)
+void						Tag::setBackgroundImage(std::string const &path)
 {
 
 }
@@ -98,7 +98,12 @@ void						Tag::setDisplay(bool visible)
 
 }
 
-void						Tag::setStyle(const char *style)
+void						Tag::setValue(std::string const &value)
+{
+
+}
+
+void						Tag::setStyle(std::string const &style)
 {
 
 }

@@ -5,20 +5,14 @@
 
 // CANONICAL #####################################################
 
-Text::Text (const char *text, const char *style)
+Text::Text (std::string const &text, std::string const &style)
 {
-	this->initialize(text, style);
-	return ;
-}
-
-Text::Text (std::string text, const char *style)
-{
-	this->saveptr = text;
+	this->saveptr = std::string(text);
 	this->initialize(this->saveptr.c_str(), style);
 	return ;
 }
 
-Text::Text (int number, const char *style)
+Text::Text (int number, std::string const &style)
 {
 	this->saveptr = (std::ostringstream() << number).str();
 	this->initialize(this->saveptr.c_str(), style);
@@ -68,12 +62,12 @@ void						Text::setFloat(e_tag_position position)
 	this->position = position;
 }
 
-void						Text::setFontFamily(const char *fontname)
+void						Text::setFontFamily(std::string const &fontname)
 {
 	std::ostringstream s;
 	std::ostringstream sfontName;
 
-	if (fontname == NULL || std::string(fontname) == "")
+	if (fontname == "")
 		return ;
 	sfontName << fontname << "_" << this->fontSize;
 	this->fontName = sfontName.str();
@@ -120,7 +114,7 @@ void						Text::setBackgroundColor(glm::vec3 &color)
 
 }
 
-void						Text::setBackgroundImage(const char *path)
+void						Text::setBackgroundImage(std::string const &path)
 {
 
 }
@@ -130,9 +124,15 @@ void						Text::setDisplay(bool visible)
 
 }
 
-void						Text::setStyle(const char *style)
+void						Text::setStyle(std::string const &style)
 {
 	CSSInterpretor::interpretCSS(this, style);
+}
+
+void						Text::setValue(std::string const &value)
+{
+
+	this->text = value.c_str();
 }
 
 void						Text::draw(SDL_Surface *surface)
@@ -185,7 +185,7 @@ void						Text::draw(SDL_Surface *surface, glm::vec3 &parent_position, glm::vec3
 
 // PRIVATE METHOD ################################################
 
-void						Text::initialize(const char *text, const char *style)
+void						Text::initialize(const char *text, std::string const &style)
 {
 	this->text = text;
 	this->color = {255, 255, 255,0};
