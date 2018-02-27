@@ -65,14 +65,19 @@ void						Canvas::build(void)
 	for (std::map<const char*, Text*>::iterator it = this->texts.begin(); it != this->texts.end(); it++) {
 		(*it).second->draw(this->canvas);
 	}
+
 	if (this->elements != NULL) {
-		for (std::map<std::string, Tag*>::iterator it = this->elements->begin(); it != this->elements->end(); it++) {
-			if (it->second->parent == NULL)
-				it->second->draw(this->canvas);
-		}
-		for (std::map<std::string, Tag*>::iterator it = this->elements->begin(); it != this->elements->end(); it++) {
-			if (it->second->parent != NULL)
-				it->second->draw(this->canvas);
+		typedef std::function<bool(std::pair<std::string, Tag*>, std::pair<std::string, Tag*>)> Comparator;
+
+		Comparator compFunctor = [](std::pair<std::string, Tag*> elem1 ,std::pair<std::string, Tag*> elem2)
+								{
+									return elem1.second->transform.position.z <= elem2.second->transform.position.z;
+								};
+		std::set<std::pair<std::string, Tag*>, Comparator> sorted_map(this->elements->begin(), this->elements->end(), compFunctor);
+
+		for (std::pair<std::string, Tag*> element : sorted_map)
+		{
+			element.second->draw(this->canvas);
 		}
 	}
 	glGenTextures(1, &this->textureID);

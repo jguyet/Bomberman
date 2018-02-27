@@ -1,0 +1,61 @@
+# Script
+# StartGameInterface :
+#
+
+<style>
+.startgame
+{
+	color:#000000;
+	font-size: 30px;
+	font-family: arial;
+}
+</style>
+
+<square>
+{
+	id: "background",
+	class: "startgame",
+	x: -250,
+	y: 87%,
+	width: 200,
+	height: 65,
+	style: "color:#2E2E2E;float:right;"
+}
+</square>
+
+<square>
+{
+	id: "background_start",
+	class: "startgame",
+	x: -244,
+	y: 88%,
+	width: 190,
+	height: 50,
+	z-index: 1,
+	style: "color:#424242;float:right;"
+}
+</square>
+
+<text>
+{
+	id: "button_start",
+	class: "startgame",
+	value: "Start Game",
+	parent: "background_start",
+	x: 22,
+	y: 7,
+	z-index: 2,
+	style: "color:#2E2E2E;"
+}
+</text>
+
+<text>
+{
+	id: "loading",
+	class: "startgame",
+	value: "Wait others players...",
+	x: 42%,
+	y: 90%,
+	style: "color:#ffffff;"
+}
+</text>

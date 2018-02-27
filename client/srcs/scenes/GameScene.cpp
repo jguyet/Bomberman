@@ -11,18 +11,21 @@ GameScene::GameScene (std::string selected_map)
 	this->camera->transform.position = glm::vec3(-3.4917f,36.6297f,-17.5657f);
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
-
-
 	//MAP
 	this->mapManager = new MapManager(this);
 	this->map = this->mapManager->getMap(selected_map);
 	mapManager->buildObjects(this->map);
 	this->current_player = NULL;
+	this->startGameInterface = NULL;
+	this->interface = new GameInterface(1);
+
 	if (BombermanClient::getInstance()->sock->state == false)
 	{
+		this->startGameInterface = new StartGameInterface();
 		this->StartSolo();
+	} else {
+		this->startGameInterface = new StartGameInterface();
 	}
-	this->interface = new GameInterface(1);
 
 	//if grab mouse
 	//SDL_ShowCursor(SDL_DISABLE);
@@ -159,7 +162,10 @@ void								GameScene::drawGameObjects(void)
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas
-	this->interface->draw();
+	if (this->interface != NULL)
+		this->interface->draw();
+	if (this->startGameInterface != NULL)
+		this->startGameInterface->draw();
 	//reset mouse to center of screen
 	//SDL_WarpMouseInWindow(BombermanClient::getInstance()->window, BombermanClient::getInstance()->screen->middleWidth, BombermanClient::getInstance()->screen->middleHeight);
 }

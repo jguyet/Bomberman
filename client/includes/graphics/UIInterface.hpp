@@ -19,6 +19,10 @@ class UIInterface
 		std::map<std::string, Tag*>			elements;
 		std::map<std::string, std::string>	styles;
 		std::map<std::string, std::map<std::string, std::string>> elements_params;
+
+		void								debug(void);
+		int									last_modified_date = 0;
+		bool								debug_mode = false;
 	private:
 		//lexer methods
 		typedef int (UIInterface::*LexerMethods)( std::string const & value );
@@ -31,7 +35,7 @@ class UIInterface
 
 		void								build_lexer( void );
 		void								build_parser( std::string const & content );
-		void								initialize( std::string const &ui_file );
+		bool								initialize( std::string const &ui_file );
 
 		std::map<std::string, LexerMethods>	lexer;
 		std::map<std::string, LexerTagMethods>	lexer_tag;

@@ -73,6 +73,7 @@ class BombermanClient : public IRenderLoop
 		Mix_Chunk *bomb;
 		Mix_Chunk *bomb2;
 
+		std::map<std::string, TTF_Font*>			fonts;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

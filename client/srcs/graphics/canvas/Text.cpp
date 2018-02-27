@@ -73,28 +73,36 @@ void						Text::setFontFamily(const char *fontname)
 	std::ostringstream s;
 	std::ostringstream sfontName;
 
-	sfontName << fontname;
-
+	if (fontname == NULL || std::string(fontname) == "")
+		return ;
+	sfontName << fontname << "_" << this->fontSize;
 	this->fontName = sfontName.str();
-	s << "assets/fonts/" << this->fontName << ".ttf";
+	if (BombermanClient::getInstance()->fonts.count(sfontName.str()))
+	{
+		this->font = BombermanClient::getInstance()->fonts[sfontName.str()];
+		return ;
+	}
+	s << "assets/fonts/" << split(this->fontName, '_').at(0) << ".ttf";
 	std::string font_path = s.str();
 	std::ifstream ifs(font_path.c_str());
-	if (this->font != NULL) {
-		TTF_CloseFont(this->font);
-		this->font = NULL;
-	}
 	if (!ifs) {
 		std::cerr << "font " << font_path << " doens't exists." << std::endl;
 		return ;
 	}
 	this->font = TTF_OpenFont(font_path.c_str(), this->fontSize);
+	BombermanClient::getInstance()->fonts[sfontName.str()] = this->font;
 }
 
 void						Text::setFontSize(int font_size)
 {
+	if (this->fontSize == font_size)
+		return ;
 	this->fontSize = font_size;
 	if (this->font != NULL)
-		this->setFontFamily(this->fontName.c_str());
+	{
+		std::string fname = split(this->fontName, '_').at(0);
+		this->setFontFamily(fname.c_str());
+	}
 }
 
 void						Text::setColor(glm::vec3 &color)

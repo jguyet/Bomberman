@@ -6,21 +6,20 @@
 
 // CANONICAL #####################################################
 
-GameInterface::GameInterface ( int number_of_player ) : UIInterface("unknow")
+StartGameInterface::StartGameInterface ( void ) : UIInterface("themes/StartGameInterface.html")
 {
-	this->number_of_player = number_of_player;
 	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
 	this->canvas->setElementsMap(&this->elements);
 	return ;
 }
 
-GameInterface::GameInterface ( GameInterface const & src ) : UIInterface("")
+StartGameInterface::StartGameInterface ( StartGameInterface const & src ) : UIInterface("unknow")
 {
 	*this = src;
 	return ;
 }
 
-GameInterface &				GameInterface::operator=( GameInterface const & rhs )
+StartGameInterface &				StartGameInterface::operator=( StartGameInterface const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -29,13 +28,12 @@ GameInterface &				GameInterface::operator=( GameInterface const & rhs )
 	return (*this);
 }
 
-GameInterface::~GameInterface ( void )
+StartGameInterface::~StartGameInterface ( void )
 {
-	delete this->canvas;
 	return ;
 }
 
-std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
+std::ostream &				operator<<(std::ostream & o, StartGameInterface const & i)
 {
 	(void)i;
 	return (o);
@@ -45,7 +43,7 @@ std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
 
 // PUBLIC METHOD #################################################
 
-void						GameInterface::draw(void)
+void						StartGameInterface::draw(void)
 {
 	this->debug();
 	this->canvas->draw();

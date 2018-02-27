@@ -54,15 +54,38 @@ Tag							*UIInterface::getElementById(const char *id)
 
 // ###############################################################
 
-void						UIInterface::initialize( std::string const &ui_file )
+bool					UIInterface::initialize( std::string const &ui_file )
 {
 	//TODO build elements
-	this->ui_file = "themes/" + ui_file;
+	this->ui_file = ui_file;
+	std::ifstream ifs(this->ui_file.c_str());
+
+	if (!ifs)
+		return false;
+	int date = 0;
+	struct stat result;
+	if(stat(this->ui_file.c_str(), &result)!=0)
+		return false;
+	date = result.st_mtime;
+	if (this->last_modified_date == date)
+		return false;
+	this->last_modified_date = date;
+	this->elements.clear();
+	this->elements_params.clear();
+	this->styles.clear();
 	file_get_contents(this->content, this->ui_file.c_str());
 	replaceAll(this->content, "\n", "");
 	replaceAll(this->content, "\t", "");
 	build_lexer();
 	build_parser(this->content);
+	return true;
+}
+
+void						UIInterface::debug(void)
+{
+	if (this->initialize(this->ui_file)) {
+		std::cout << this->ui_file << " Updated modification detected." << std::endl;
+	}
 }
 
 int							UIInterface::scoop_enter(std::string const & value)
@@ -150,8 +173,8 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 		if (parameters_map.count("width") && parameters_map.count("height") && parameters_map.count("w") && parameters_map.count("h")) {
 			int w = atoi(parameters_map["w"].c_str());
 			int h = atoi(parameters_map["h"].c_str());
-			int width = atoi(parameters_map["width"].c_str());
-			int height = atoi(parameters_map["height"].c_str());
+			int width = atoi(parameters_map["width"].c_str()) % 101;
+			int height = atoi(parameters_map["height"].c_str()) % 101;
 
 			if (parameters_map["width"].find("%") != std::string::npos) {
 				width = BombermanClient::getInstance()->screen->width * width / 100;
@@ -183,6 +206,7 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 			tag->transform.position.x = atoi(parameters_map["x"].c_str());
 
 			if (parameters_map["x"].find("%") != std::string::npos) {
+				tag->transform.position.x = (int)tag->transform.position.x % 101;
 				tag->transform.position.x = (BombermanClient::getInstance()->screen->width / 100) * tag->transform.position.x;
 			}
 		}
@@ -190,11 +214,12 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 			tag->transform.position.y = atoi(parameters_map["y"].c_str());
 
 			if (parameters_map["y"].find("%") != std::string::npos) {
+				tag->transform.position.y = (int)tag->transform.position.y % 101;
 				tag->transform.position.y = (BombermanClient::getInstance()->screen->height / 100) * tag->transform.position.y;
 			}
 		}
-		if (parameters_map.count("z") == 1) {
-			tag->transform.position.z = atoi(parameters_map["z"].c_str());
+		if (parameters_map.count("z-index") == 1) {
+			tag->transform.position.z = atoi(parameters_map["z-index"].c_str());
 		}
 		if (parameters_map.count("parent") == 1 && this->elements.count(parameters_map["parent"]) == 1) {
 			tag->parent = this->elements[parameters_map["parent"]];
@@ -209,6 +234,11 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 
 		if (parameters_map.count("style") == 1) {
 			tag->setStyle(parameters_map["style"].c_str());
+		}
+		if (this->elements.count(parameters_map["id"]) != 0) {
+			Tag *tmp = this->elements[parameters_map["id"]];
+			delete tmp;
+			this->elements.erase(parameters_map["id"]);
 		}
 		this->elements_params[parameters_map["id"]] = parameters_map;
 		this->elements[parameters_map["id"]] = tag;
@@ -262,14 +292,7 @@ void						UIInterface::build_parser( std::string const & content )
 
 		int offset = (*this.*this->lexer[os.str()])(content.substr(i));
 
-		i += offset - 1;
+		if (offset != 0)
+			i += offset - 1;
 	}
-
-	typedef std::function<bool(std::pair<std::string, Tag*>, std::pair<std::string, Tag*>)> Comparator;
-
-	Comparator compFunctor = [](std::pair<std::string, Tag*> elem1 ,std::pair<std::string, Tag*> elem2)
-							{
-								return elem1.second->transform.position.z < elem2.second->transform.position.z;
-							};
-	std::set<std::pair<std::string, Tag*>, Comparator> setOfWords(this->elements.begin(), this->elements.end(), compFunctor);
 }

@@ -34,7 +34,6 @@
 # endif
 
 #include <OpenAL/OpenAL.h>
-#include <sndfile.h>
 
 # include <SOIL2.h>
 # include <glm/glm.hpp>
@@ -45,6 +44,8 @@
 # include <glm/gtc/quaternion.hpp>
 # include <stdlib.h>
 # include <stdio.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <unistd.h>
 # include <iostream> //std::
 # include <vector>
