@@ -4,6 +4,7 @@
 #include "messages/NewPlayerMessage.hpp"
 #include "messages/PlayerPositionMessage.hpp"
 #include "messages/PlayersPositionMessage.hpp"
+# include "messages/GameStartedMessage.hpp"
 #include "messages/ActionMessage.hpp"
 #include "messages/PlayerDeadMessage.hpp"
 

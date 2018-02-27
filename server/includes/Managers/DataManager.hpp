@@ -30,8 +30,10 @@ class DataManager
 		Player									*findPlayerById(int playerId);
 		void									updatePos(PlayerPositionObject&);
 		void									sendPlayers(Client *client);
+		void									disconnectClients();
 		static void								updatePlayers(DataManager *manager);
 
+		bool										gameState;
 		static std::atomic<DataManager*>			pInstance;
 		static std::mutex							mutex;
 		std::vector<Player*>						players;

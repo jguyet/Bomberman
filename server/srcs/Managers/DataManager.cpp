@@ -52,6 +52,16 @@ void DataManager::removePlayer(Player *player)
 	mutex.unlock();
 }
 
+void DataManager::disconnectClients()
+{
+	for (int i = 0; i < instance->server->clients.size(); i++) {
+		Client *client = instance->server->clients[i];
+		if (client->fd) {
+			close(client->fd);
+		}
+	}
+}
+
 void DataManager::updatePlayers(DataManager *instance)
 {
 	while (42)
@@ -66,6 +76,10 @@ void DataManager::updatePlayers(DataManager *instance)
 				}
 			}
 			instance->playersPos.clear();
+		}
+		if (instance->gameState && players.size() <= 1) {
+			instance->disconnectClients();
+			instance->gameState = false;
 		}
 		usleep(50 * 1000);
 		mutex.unlock();

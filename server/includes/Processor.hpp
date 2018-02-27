@@ -9,6 +9,7 @@
 #include "Managers/DataManager.hpp"
 #include "messages/ActionMessage.hpp"
 #include "messages/PlayerDeadMessage.hpp"
+#include "messages/GameStartedMessage.hpp"
 
 class Processor
 {
@@ -23,6 +24,7 @@ class Processor
 		static void			NewPlayerMessageHandler(SOCK, NewPlayerMessage*);
 		static void			ActionMessageHandler(SOCK, ActionMessage*);
 		static void			PlayerDeadMessageHandler(SOCK, PlayerDeadMessage*);
+		static void			GameStartedMessageHandler(SOCK, GameStartedMessage*);
 		static int			*getMessageId(int id);
 };
 

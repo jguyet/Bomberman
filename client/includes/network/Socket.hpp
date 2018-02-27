@@ -25,6 +25,8 @@
 # include "messages/NewPlayerMessage.hpp"
 # include "messages/ActionMessage.hpp"
 # include "messages/PlayerDeadMessage.hpp"
+# include "messages/GameStartedMessage.hpp"
+# include "messages/EndOfGameMessage.hpp"
 # include "enums/ActionType.hpp"
 # include "objs/ActionObject.hpp"
 
@@ -52,6 +54,7 @@ class Socket
 		void								newPlayer(float x, float y, float z);
 		void								newBonus(float x, float z);
 		void								playerDead(int playerId);
+		void								sendGameStarted();
 		int									getSocket();
 		std::string							baseHost;
 		int									basePort;

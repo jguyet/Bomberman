@@ -14,6 +14,7 @@
 
 Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), in(in), address(inet_ntoa(in.sin_addr)), server(server)
 {
+	DataManager		*manager = DataManager::Instance();
 	this->player = NULL;
 	this->messageHandler = new Handler(sock,
 		Processor::getMessageId(PlayerPositionMessage::ID), &Processor::PlayerPositionMessageHandler,
@@ -22,13 +23,17 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 		Processor::getMessageId(PlayerDeadMessage::ID), &Processor::PlayerDeadMessageHandler,
 		END_OF_HANDLER);
 
-	Packet mapPacket = Packet(new MapSelectMessage("map_01"));
-	mapPacket.sendPacket(sock);
+	if (!manager->gameState) {
+		Packet mapPacket = Packet(new MapSelectMessage("map_01"));
+		mapPacket.sendPacket(sock);
 
-	fcntl(this->fd, F_SETFL, 0 | O_NONBLOCK);
+		fcntl(this->fd, F_SETFL, 0 | O_NONBLOCK);
 
-	std::thread thread(Client::clientThread, this);
-	thread.detach();
+		std::thread thread(Client::clientThread, this);
+		thread.detach();
+	} else {
+		printf("A player tried to enter while the game is already started !\n");
+	}
 }
 
 Client::Client ( Client const & src )

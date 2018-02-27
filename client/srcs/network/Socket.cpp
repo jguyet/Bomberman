@@ -74,6 +74,7 @@ Socket::Socket (const char *host, int port) : basePort(port), baseHost(host)
 		 this->getId(PlayersPositionMessage::ID), &MessageHandler::PlayersPositionMessageHandler,
 		 this->getId(ActionMessage::ID), &MessageHandler::ActionMessageHandler,
 		 this->getId(PlayerDeadMessage::ID), &MessageHandler::PlayerDeadMessageHandler,
+		 this->getId(GameStartedMessage::ID), &MessageHandler::GameStartedMessageHandler,
 		 	END_OF_HANDLER);
 
 		std::thread thread(Socket::Thread, this);
@@ -187,6 +188,12 @@ void					Socket::newBonus(float x, float z)
 void					Socket::playerDead(int playerId)
 {
 	Packet playerPacket = Packet(new PlayerDeadMessage(playerId));
+	playerPacket.sendPacket(this->sock);
+}
+
+void					Socket::sendGameStarted()
+{
+	Packet playerPacket = Packet(new GameStartedMessage(true));
 	playerPacket.sendPacket(this->sock);
 }
 

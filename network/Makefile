@@ -6,7 +6,7 @@
 #    By: frmarinh <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/23 12:48:21 by frmarinh          #+#    #+#              #
-#    Updated: 2017/09/14 19:08:39 by frmarinh         ###   ########.fr        #
+#    Updated: 2018/02/27 01:56:18 by frmarinh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ SRCS_BASE			=	Packet.cpp								\
 						messages/NewPlayerMessage.cpp			\
 						messages/ActionMessage.cpp				\
 						messages/PlayerDeadMessage.cpp			\
+						messages/GameStartedMessage.cpp			\
+						messages/EndOfGameMessage.cpp			\
 
 SRCS	=	$(addprefix $(SRCDIR), $(SRCS_BASE))
 OBJS	=	$(addprefix $(OBJDIR), $(SRCS_BASE:.cpp=.o))
