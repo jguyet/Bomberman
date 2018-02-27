@@ -5,20 +5,14 @@
 
 // CANONICAL #####################################################
 
-Text::Text (const char *text, const char *style)
+Text::Text (std::string const &text, std::string const &style)
 {
-	this->initialize(text, style);
-	return ;
-}
-
-Text::Text (std::string text, const char *style)
-{
-	this->saveptr = text;
+	this->saveptr = std::string(text);
 	this->initialize(this->saveptr.c_str(), style);
 	return ;
 }
 
-Text::Text (int number, const char *style)
+Text::Text (int number, std::string const &style)
 {
 	this->saveptr = (std::ostringstream() << number).str();
 	this->initialize(this->saveptr.c_str(), style);
@@ -68,33 +62,41 @@ void						Text::setFloat(e_tag_position position)
 	this->position = position;
 }
 
-void						Text::setFontFamily(const char *fontname)
+void						Text::setFontFamily(std::string const &fontname)
 {
 	std::ostringstream s;
 	std::ostringstream sfontName;
 
-	sfontName << fontname;
-
+	if (fontname == "")
+		return ;
+	sfontName << fontname << "_" << this->fontSize;
 	this->fontName = sfontName.str();
-	s << "assets/fonts/" << this->fontName << ".ttf";
+	if (BombermanClient::getInstance()->fonts.count(sfontName.str()))
+	{
+		this->font = BombermanClient::getInstance()->fonts[sfontName.str()];
+		return ;
+	}
+	s << "assets/fonts/" << split(this->fontName, '_').at(0) << ".ttf";
 	std::string font_path = s.str();
 	std::ifstream ifs(font_path.c_str());
-	if (this->font != NULL) {
-		TTF_CloseFont(this->font);
-		this->font = NULL;
-	}
 	if (!ifs) {
 		std::cerr << "font " << font_path << " doens't exists." << std::endl;
 		return ;
 	}
 	this->font = TTF_OpenFont(font_path.c_str(), this->fontSize);
+	BombermanClient::getInstance()->fonts[sfontName.str()] = this->font;
 }
 
 void						Text::setFontSize(int font_size)
 {
+	if (this->fontSize == font_size)
+		return ;
 	this->fontSize = font_size;
 	if (this->font != NULL)
-		this->setFontFamily(this->fontName.c_str());
+	{
+		std::string fname = split(this->fontName, '_').at(0);
+		this->setFontFamily(fname.c_str());
+	}
 }
 
 void						Text::setColor(glm::vec3 &color)
@@ -112,7 +114,7 @@ void						Text::setBackgroundColor(glm::vec3 &color)
 
 }
 
-void						Text::setBackgroundImage(const char *path)
+void						Text::setBackgroundImage(std::string const &path)
 {
 
 }
@@ -122,9 +124,15 @@ void						Text::setDisplay(bool visible)
 
 }
 
-void						Text::setStyle(const char *style)
+void						Text::setStyle(std::string const &style)
 {
 	CSSInterpretor::interpretCSS(this, style);
+}
+
+void						Text::setValue(std::string const &value)
+{
+
+	this->text = value.c_str();
 }
 
 void						Text::draw(SDL_Surface *surface)
@@ -177,7 +185,7 @@ void						Text::draw(SDL_Surface *surface, glm::vec3 &parent_position, glm::vec3
 
 // PRIVATE METHOD ################################################
 
-void						Text::initialize(const char *text, const char *style)
+void						Text::initialize(const char *text, std::string const &style)
 {
 	this->text = text;
 	this->color = {255, 255, 255,0};

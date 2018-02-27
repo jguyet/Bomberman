@@ -25,6 +25,12 @@
 # include "messages/NewPlayerMessage.hpp"
 # include "messages/ActionMessage.hpp"
 # include "messages/PlayerDeadMessage.hpp"
+# include "messages/GameStartedMessage.hpp"
+# include "messages/EndOfGameMessage.hpp"
+# include "enums/ActionType.hpp"
+# include "objs/ActionObject.hpp"
+
+# include "utils/Random.hpp"
 # include "Packet.hpp"
 #define BUF_SIZE 16000
 
@@ -33,7 +39,7 @@ class Socket
 {
 	public:
 
-											Socket(char *host, int port);
+											Socket(const char *host, int port);
 											Socket( Socket const & src );
 											virtual ~Socket();
 
@@ -46,7 +52,9 @@ class Socket
 		int									*getId(int id);
 		void								updateMovement(Script*);
 		void								newPlayer(float x, float y, float z);
+		void								newBonus(float x, float z);
 		void								playerDead(int playerId);
+		void								sendGameStarted();
 		int									getSocket();
 		std::string							baseHost;
 		int									basePort;

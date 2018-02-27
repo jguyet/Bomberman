@@ -47,7 +47,7 @@ void						Square::setFloat(e_tag_position position)
 	this->position = position;
 }
 
-void						Square::setFontFamily(const char *fontname)
+void						Square::setFontFamily(std::string const &fontname)
 {
 
 }
@@ -74,7 +74,7 @@ void						Square::setBackgroundColor(glm::vec3 &color)
 	this->setColor(color);
 }
 
-void						Square::setBackgroundImage(const char *path)
+void						Square::setBackgroundImage(std::string const &path)
 {
 
 }
@@ -84,7 +84,7 @@ void						Square::setDisplay(bool visible)
 
 }
 
-void						Square::setStyle(const char *style)
+void						Square::setStyle(std::string const &style)
 {
 	CSSInterpretor::interpretCSS(this, style);
 }

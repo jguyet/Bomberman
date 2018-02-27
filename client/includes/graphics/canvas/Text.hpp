@@ -9,9 +9,8 @@ class Text : public Tag
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											Text(const char *text, const char *style);
-											Text(std::string text, const char *style);
-											Text (int number, const char *style);
+											Text (std::string const &text, std::string const &style);
+											Text (int number, std::string const &style);
 											Text( Text const & src );
 		virtual								~Text( void );
 		Text &								operator=( Text const & rhs );
@@ -19,20 +18,21 @@ class Text : public Tag
 		// ####################################################################
 		// PUBLICS ############################################################
 		void								setFloat(e_tag_position position);
-		void								setFontFamily(const char *fontname);
+		void								setFontFamily(std::string const &fontname);
 		void								setFontSize(int font_size);
 		void								setColor(glm::vec3 &color);
 		void								setTextAlign(e_tag_position position);
 		void								setBackgroundColor(glm::vec3 &color);
-		void								setBackgroundImage(const char *path);
+		void								setBackgroundImage(std::string const &path);
 		void								setDisplay(bool visible);
-		void								setStyle(const char *style);
+		void								setStyle(std::string const &style);
+		void								setValue(std::string const &value);
 		void								draw(SDL_Surface *surface);
 		void								draw(SDL_Surface *surface, glm::vec3 &parent_position, glm::vec3 &parent_scale);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
-		void								initialize(const char *text, const char *font);
+		void								initialize(const char *text, std::string const &font);
 		TTF_Font							*font;
 		SDL_Color							color;
 		const char							*text;

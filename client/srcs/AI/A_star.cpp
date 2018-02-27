@@ -141,12 +141,12 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 {
 	Module_h elem;
 	bool flag_t = false;
-	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(fmax(0.5f + x / 2.f, 0), fmax(0.5f + y / 2.f, 0));
+	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(fmax(0.5f + x / 2.f, 0), fmax(0.5f + y / 2.f, 0));
 
 	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y))
 		flag_t = true;
 
-	if ((c->walkable == true || flag_t) && this->bomb_col(this->bomb_list, x, y) && this->close_list.count(std::make_pair(x, y)) == 0 && (x % 2) == 0 && (y % 2) == 0)
+	if ((c->walkable == true || flag_t) && this->close_list.count(std::make_pair(x, y)) == 0 && (x % 2) == 0 && (y % 2) == 0 && this->bomb_col(this->bomb_list, x, y))
 	{
 		int dif_x = std::abs(x - target.pos_x);
 		int dif_y = std::abs(y - target.pos_y);
@@ -164,11 +164,11 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 
 int							A_star::bomb_col(std::vector<BombControllerScript*> bomb_l, float x, float y)
 {
-	// float x = this->gameObject->transform.position.x;
-	// float y = this->gameObject->transform.position.z;
 	float t = SPEED; // Tolerance
 
-	for (auto &elem : bomb_l) // this->bomb_l
+	std::cout << "size " << bomb_l.size() << std::endl;
+
+	for (auto &elem : bomb_l)
 	{
 		float powe = elem->power * 2;
 		if (x >= elem->gameObject->transform.position.x - t && x <= elem->gameObject->transform.position.x + t + powe &&

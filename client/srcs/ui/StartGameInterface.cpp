@@ -6,21 +6,20 @@
 
 // CANONICAL #####################################################
 
-GameInterface::GameInterface ( GameScene *scene ) : UIInterface("themes/GameInterface.html")
+StartGameInterface::StartGameInterface ( void ) : UIInterface("themes/StartGameInterface.html")
 {
-	this->scene = scene;
 	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
 	this->canvas->setElementsMap(&this->elements);
 	return ;
 }
 
-GameInterface::GameInterface ( GameInterface const & src ) : UIInterface("")
+StartGameInterface::StartGameInterface ( StartGameInterface const & src ) : UIInterface("unknow")
 {
 	*this = src;
 	return ;
 }
 
-GameInterface &				GameInterface::operator=( GameInterface const & rhs )
+StartGameInterface &				StartGameInterface::operator=( StartGameInterface const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -29,13 +28,12 @@ GameInterface &				GameInterface::operator=( GameInterface const & rhs )
 	return (*this);
 }
 
-GameInterface::~GameInterface ( void )
+StartGameInterface::~StartGameInterface ( void )
 {
-	delete this->canvas;
 	return ;
 }
 
-std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
+std::ostream &				operator<<(std::ostream & o, StartGameInterface const & i)
 {
 	(void)i;
 	return (o);
@@ -45,21 +43,9 @@ std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
 
 // PUBLIC METHOD #################################################
 
-void						GameInterface::draw(void)
+void						StartGameInterface::draw(void)
 {
 	this->build();
-
-	std::string value = "0";
-	if (this->scene->current_player != NULL) {
-		CharacterControllerScript *script = ((CharacterControllerScript*)this->scene->current_player->GetComponent<Script>());
-		if (script != NULL) {
-			std::ostringstream os;
-			os << script->bomb;
-			value = os.str();
-		}
-	}
-	this->variables["$bomb"] = value;
-	
 	this->canvas->draw();
 }
 

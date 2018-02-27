@@ -11,4 +11,6 @@ objs/Managers/DataManager.o: srcs/Managers/DataManager.cpp \
   ../network/includes/messages/NewPlayerMessage.hpp \
   ../network/includes/messages/ActionMessage.hpp \
   ../network/includes/objs/ActionObject.hpp \
-  ../network/includes/enums/ActionType.hpp
+  ../network/includes/enums/ActionType.hpp \
+  ../network/includes/messages/PlayerDeadMessage.hpp \
+  ../network/includes/messages/GameStartedMessage.hpp

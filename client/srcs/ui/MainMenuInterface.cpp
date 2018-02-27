@@ -6,10 +6,10 @@
 
 // CANONICAL #####################################################
 
-MainMenuInterface::MainMenuInterface ( void ) : UIInterface("MainMenuInterface.html")
+MainMenuInterface::MainMenuInterface ( void ) : UIInterface("themes/MainMenuInterface.html")
 {
 	this->current_position = 0;
-	this->canvas = new Canvas(BombermanClient::instance->screen->width, BombermanClient::instance->screen->height);
+	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
 	this->canvas->setElementsMap(&this->elements);
 	KeyBoard::instance->addHandler("MainMenuInterface", this);
 	return ;
@@ -49,9 +49,9 @@ std::ostream &				operator<<(std::ostream & o, MainMenuInterface const & i)
 
 void						MainMenuInterface::draw(void)
 {
+	this->build();
 	if (this->current_position == 0 && this->elements.count("background_solo") && this->elements.count("background_multi")) {
-		this->elements["background_solo"]->setStyle("color:#FF8000");
-		this->elements["background_multi"]->setStyle("color:#BDBDBD");
+		this->elements["background_solo"]->setStyle("color:#FF8000");		this->elements["background_multi"]->setStyle("color:#BDBDBD");
 	} else if (this->current_position == 1 && this->elements.count("background_multi") && this->elements.count("background_solo")) {
 		this->elements["background_multi"]->setStyle("color:#FF8000");
 		this->elements["background_solo"]->setStyle("color:#BDBDBD");

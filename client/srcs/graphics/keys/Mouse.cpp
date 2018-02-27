@@ -51,8 +51,8 @@ void 					Mouse::handle_event_mousemotion(SDL_Event *event)
 {
 	if (event->type != SDL_MOUSEMOTION)
 		return ;
-	float mw = BombermanClient::instance->screen->middleWidth;
-	float mh = BombermanClient::instance->screen->middleHeight;
+	float mw = BombermanClient::getInstance()->screen->middleWidth;
+	float mh = BombermanClient::getInstance()->screen->middleHeight;
 	Mouse::instance->lastPosition.x = Mouse::instance->position.x;
 	Mouse::instance->lastPosition.y = Mouse::instance->position.y;
 	Mouse::instance->position.x = -(event->motion.x - mw);
@@ -61,7 +61,7 @@ void 					Mouse::handle_event_mousemotion(SDL_Event *event)
 		return ;
 	}
 	//warn
-	BombermanClient::instance->current_scene->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
+	BombermanClient::getInstance()->current_scene->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
 }
 
 void					Mouse::handle_mousebutton(SDL_Event *event)

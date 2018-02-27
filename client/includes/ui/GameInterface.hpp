@@ -2,12 +2,12 @@
 # define GAMEINTERFACE_HPP
 
 # include "Bomberman.hpp"
-
+class GameScene;
 class GameInterface : public UIInterface
 {
 	public:
 
-		GameInterface( int number_of_player );
+		GameInterface( GameScene *scene );
 		GameInterface( GameInterface const & src );
 		virtual ~GameInterface( void );
 
@@ -17,8 +17,8 @@ class GameInterface : public UIInterface
 		void								draw(void);
 
 	private:
-		int									number_of_player;
 		Canvas								*canvas;
+		GameScene							*scene;
 
 };
 

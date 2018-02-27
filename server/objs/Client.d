@@ -9,8 +9,10 @@ objs/Client.o: srcs/Client.cpp includes/Client.hpp includes/All.hpp \
   ../network/includes/messages/PlayersPositionMessage.hpp \
   ../network/includes/messages/ActionMessage.hpp \
   ../network/includes/objs/ActionObject.hpp \
-  ../network/includes/enums/ActionType.hpp includes/Server.hpp \
-  ../network/includes/messages/ServerListMessage.hpp \
+  ../network/includes/enums/ActionType.hpp \
+  ../network/includes/messages/PlayerDeadMessage.hpp \
+  ../network/includes/messages/GameStartedMessage.hpp \
+  includes/Server.hpp ../network/includes/messages/ServerListMessage.hpp \
   ../network/includes/objs/ServerObject.hpp \
   ../network/includes/enums/ServerType.hpp \
   ../network/includes/messages/MapSelectMessage.hpp

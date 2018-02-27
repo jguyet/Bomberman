@@ -4,6 +4,7 @@
 #include "messages/NewPlayerMessage.hpp"
 #include "messages/PlayerPositionMessage.hpp"
 #include "messages/PlayersPositionMessage.hpp"
+# include "messages/GameStartedMessage.hpp"
 #include "messages/ActionMessage.hpp"
 #include "messages/PlayerDeadMessage.hpp"
 
@@ -71,15 +72,15 @@ void ActionQueueManager::doAction(ActionQueue *action)
 	{
 		case MapSelectMessage::ID: {
 			MapSelectMessage	*mapMessage = (MapSelectMessage*)action->message;
-			BombermanClient::instance->current_scene = new GameScene(mapMessage->name);
+			BombermanClient::getInstance()->current_scene = new GameScene(mapMessage->name);
 
-			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			Case *spawn = scene->mapManager->getRandomWalkableCase(scene->map);
 			if (spawn) {
 				glm::vec3 pos = spawn->ground->transform.position;
-				BombermanClient::instance->sock->newPlayer(pos.x, 1, pos.z);
+				BombermanClient::getInstance()->sock->newPlayer(pos.x, 1, pos.z);
 			} else {
-				BombermanClient::instance->sock->newPlayer(2, 1, 4);
+				BombermanClient::getInstance()->sock->newPlayer(2, 1, 4);
 			}
 		}
 		break;
@@ -87,7 +88,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 		case NewPlayerMessage::ID: {
 			NewPlayerMessage		*message = (NewPlayerMessage*)action->message;
 			GameObject 				*playerObject = Factory::newPlayer(message->position.playerId);
-			GameScene				*scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene				*scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 
 			playerObject->transform.scale = glm::vec3(3,3,3);
 			playerObject->transform.rotation = glm::vec3(0,0,0);
@@ -98,13 +99,13 @@ void ActionQueueManager::doAction(ActionQueue *action)
 				scene->players.push_back(playerObject);
 			}
 			scene->all_player.push_back(playerObject);
-			BombermanClient::instance->current_scene->add(playerObject);
+			BombermanClient::getInstance()->current_scene->add(playerObject);
 		}
 		break;
 
 		case PlayersPositionMessage::ID: {
 			PlayersPositionMessage	*message = (PlayersPositionMessage*)action->message;
-			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			for (int i = 0; i < message->positions_length; i++) {
 				PlayerPositionObject &object = message->positions[i];
 				GameObject *player = scene->findPlayerById(object.playerId);
@@ -122,7 +123,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 
 		case ActionMessage::ID: {
 			ActionObject	object = ((ActionMessage*)action->message)->action;
-			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			if (object.type == ActionType::TYPE_BOMB) {
 				Case *c = scene->map->getCase(object.x, object.z);
 				if (c != NULL) {
@@ -133,17 +134,37 @@ void ActionQueueManager::doAction(ActionQueue *action)
 						bomb->transform.position = glm::vec3(c->position.x,c->position.y,c->position.z);
 						bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
 						bomb->transform.rotation = glm::vec3(0,0,0);
-						BombermanClient::instance->current_scene->add(bomb);
+						BombermanClient::getInstance()->current_scene->add(bomb);
 						c->obstacle = bomb;
 					}
 				}
+			}
+			else
+			{
+				GameObject	*obj = new GameObject();
+				obj->transform.position = glm::vec3(object.x * 2, 0, object.z * 2);
+				obj->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+
+				if (object.type == ActionType::TYPE_BONUS_POWER_UP) {
+					obj->tag = "bonus-power-up";
+					obj->AddComponent<Model>(Model::model["bonus-power-up"]);
+				}
+				else if (object.type == ActionType::TYPE_BONUS_SPEED_UP) {
+					obj->tag = "bonus-speed-up";
+					obj->AddComponent<Model>(Model::model["bonus-speed-up"]);
+				}
+				else if (object.type == ActionType::TYPE_BONUS_BOMB_UP) {
+					obj->tag = "bonus-bomb-up";
+					obj->AddComponent<Model>(Model::model["bonus-bomb-up"]);
+				}
+				BombermanClient::getInstance()->current_scene->add(obj);
 			}
 		}
 		break;
 
 		case PlayerDeadMessage::ID: {
 			PlayerDeadMessage	*message = (PlayerDeadMessage*)action->message;
-			GameScene			*scene = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene);
+			GameScene			*scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			GameObject			*player = scene->findPlayerById(message->playerId);
 
 			if (player != NULL)

@@ -19,8 +19,9 @@ class MainMenuInterface : public UIInterface , public KeyBoardEventHandler
 		void								handleUP(unsigned int key);
 
 		void								draw(void);
-	private:
+
 		int									current_position;
+	private:
 		Canvas								*canvas;
 };
 

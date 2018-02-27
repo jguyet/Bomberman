@@ -48,29 +48,33 @@ void						ExplosionControllerScript::Start(void)
 void						ExplosionControllerScript::Update(void)
 {
 	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 30L))) {
-		if (this->timerExplode < TimeUtils::getCurrentSystemMillis()) {
-			this->gameObject->transform.scale+=0.2f;
+		if (this->timerExplode < TimeUtils::getCurrentSystemMillis() && this->gameObject->transform.scale.x < 4.f) {
+			this->gameObject->transform.scale+=0.15f;
 			this->timerExplode = TimeUtils::getCurrentSystemMillis() + 1L;
 		}
 	}
 	if (TimeUtils::getCurrentSystemMillis() > (this->startTime + (this->timer * 50L) + 200L)) {
 
-		int x = this->gameObject->transform.position.x / 2;
-		int z = this->gameObject->transform.position.z / 2;
-		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z);
+		float x = this->gameObject->transform.position.x / 2;
+		float z = this->gameObject->transform.position.z / 2;
+		Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z);
 
 		if (b->obstacle != NULL && b->obstacle->tag != "Bomb" && b->obstacle->tag != "ground1") {
 			if (b->obstacle->tag == "ice_block")
 			{
-				BombermanClient::instance->current_scene->add(Factory::newPowerUp(x, z));
+				if (BombermanClient::getInstance()->sock->state == false) {
+					BombermanClient::getInstance()->current_scene->add(Factory::newPowerUp(x, z));
+				} else {
+					BombermanClient::getInstance()->sock->newBonus(x, z);
+				}
 			}
-			BombermanClient::instance->current_scene->remove(b->obstacle);
+			BombermanClient::getInstance()->current_scene->remove(b->obstacle);
 			delete b->obstacle;
 			b->obstacle = NULL;
 			b->walkable = true;
 		}
 
-		BombermanClient::instance->current_scene->remove(this->gameObject);
+		BombermanClient::getInstance()->current_scene->remove(this->gameObject);
 		delete this->gameObject;
 		delete this;
 	}

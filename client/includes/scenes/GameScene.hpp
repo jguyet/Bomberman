@@ -2,6 +2,7 @@
 # define GAMESCENE_HPP
 
 # include "Bomberman.hpp"
+# include "ui/StartGameInterface.hpp"
 # include "ui/GameInterface.hpp"
 # include "scripts/GameScene/CharacterControllerScript.hpp"
 # include "scripts/GameScene/ExplosionControllerScript.hpp"
@@ -39,11 +40,13 @@ class GameScene : public Scene
 		// PUBLICS ############################################################
 		glm::vec3							topoint;
 		GameObject							*current_player;
-		GameInterface						*interface;
 		std::vector<GameObject*>			players;
 		std::vector<GameObject*>			all_player;
 		Map									*map;
 		MapManager							*mapManager;
+		//ui
+		GameInterface						*interface;
+		StartGameInterface					*startGameInterface;
 		// ####################################################################
 };
 

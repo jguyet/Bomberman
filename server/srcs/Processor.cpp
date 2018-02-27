@@ -81,3 +81,17 @@ void Processor::PlayerDeadMessageHandler(SOCK socket, PlayerDeadMessage *message
 		manager->removePlayer(player);
 	}
 }
+
+void Processor::GameStartedMessageHandler(SOCK, GameStartedMessage *message)
+{
+	DataManager	*manager	= DataManager::Instance();
+	manager->gameState		= message->started;
+
+	Packet packet(new GameStartedMessage(message->started));
+	for (int i = 0 ; i < manager->server->clients.size(); i++) {
+		Player *player = manager->server->clients[i]->player;
+		if (player != NULL) {
+			packet.sendPacket(manager->server->clients[i]->getSocket());
+		}
+	}
+}

@@ -33,18 +33,22 @@ class CharacterControllerScript : public Script
 		int									getPlayerId();
 
 		int 								playerId = 1;
+		int 								bomb = 5;
+		int 								power = 5;
+		int 								life = 5;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
 		bool								has_moved = false;
 
 		float								speed = SPEED;
-		int 								bomb = 5;
-		int 								power = 5;
-		int 								life = 5;
 
 		long 								lastNetwork = 0;
+		glm::vec3							lastPosition_direction;
 		glm::vec3							lastPosition;
+
+		bool								collide_with_mi_bomb = false;
+		bool								in_mi_bomb = false;
 		// ####################################################################
 };
 

@@ -1,7 +1,6 @@
 # Script
 # MainMenuInterface :
 #
-
 <style>
 .mainmenu-css
 {
@@ -20,7 +19,8 @@
 	w: 1024,
 	h: 819,
 	x: 0,
-	y: 0
+	y: 0,
+	z-index: -1
 }
 </img>
 
@@ -32,7 +32,8 @@
 	y: 33%,
 	width: 400,
 	height: 250,
-	style: "color:#2E2E2E;float:center;"
+	style: "color:#2E2E2E;float:center;",
+	z-index: 1
 }
 </square>
 
@@ -42,9 +43,10 @@
 	class: "mainmenu-css",
 	value: "BOMBERMAN",
 	parent: "background_menu",
-	x: 100,
+	x: 70,
 	y: 7,
-	style: "color:#BDBDBD;font-size:40px;"
+	style: "color:#BDBDBD;font-size:40px;",
+	z-index: 2
 }
 </text>
 
@@ -56,7 +58,8 @@
 	y: 45%,
 	width: 300,
 	height: 50,
-	style: "color:#424242;float:center;"
+	style: "color:#424242;float:center;",
+	z-index: 2
 }
 </square>
 
@@ -68,7 +71,8 @@
 	parent: "background_solo",
 	x: 120,
 	y: 7,
-	style: "color:#848484;"
+	style: "color:#848484;",
+	z-index: 3
 }
 </text>
 
@@ -81,7 +85,8 @@
 	y: 55%,
 	width: 300,
 	height: 50,
-	style: "color:#424242;float:center;"
+	style: "color:#424242;float:center;",
+	z-index: 2
 }
 </square>
 
@@ -89,11 +94,12 @@
 {
 	id: "button_multi",
 	class: "mainmenu-css",
-	value: "Multi players",
+	value: "Multiplayer",
 	parent: "background_multi",
 	x: 70,
 	y: 7,
-	style: "color:#848484;"
+	style: "color:#848484;",
+	z-index: 3
 }
 </text>
 
@@ -104,6 +110,7 @@
 	value: "Credit: Frmarinh Dmoureu- Amerelo Jguyet",
 	x: 5,
 	y: 100%,
-	style: "color:#000000;font-size:10px;"
+	style: "color:#000000;font-size:10px;",
+	z-index: 1
 }
 </text>

@@ -191,7 +191,6 @@ void						MapManager::buildObjects(Map *selected)
 
 	this->scene->add(Factory::newBackground());
 	this->scene->add(Factory::newSkybox());
-	//this->scene->add(Factory::newPowerUp(10,10));
 }
 
 MapManager::~MapManager ()
@@ -207,5 +206,3 @@ std::ostream &				operator<<(std::ostream & o, MapManager const & i)
 
 	return (o);
 }
-
-std::map<std::string, Map*> MapManager::maps;

@@ -21,7 +21,14 @@ class BombermanClient : public IRenderLoop
 {
 	public:
 		// STATICS #############################################################
-		static BombermanClient						*instance;
+		static BombermanClient						*getInstance() {
+			static BombermanClient *client = NULL;
+			if (!client) {
+				client = new BombermanClient();
+			}
+			return client;
+		}
+
 		static void									glfw_error_callback( int error, const char* description );
 		// #####################################################################
 		// CANONICAL ###########################################################
@@ -47,6 +54,7 @@ class BombermanClient : public IRenderLoop
 		bool 										InitOpenAL();
 		void 										ShutdownOpenAL();
 
+
 		//sdl dependencies
 		SDL_Window									*window;
 		SDL_GLContext								context;
@@ -54,10 +62,9 @@ class BombermanClient : public IRenderLoop
 		SDL_Event									event;
 
 		Scene										*current_scene;
-
 		Screen										*screen;
-
 		Socket 										*sock;
+		Properties									*properties;
 
 
 		//sound
@@ -66,6 +73,7 @@ class BombermanClient : public IRenderLoop
 		Mix_Chunk *bomb;
 		Mix_Chunk *bomb2;
 
+		std::map<std::string, TTF_Font*>			fonts;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

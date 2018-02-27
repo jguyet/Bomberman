@@ -10,7 +10,7 @@ std::vector<BombControllerScript*> BombControllerScript::List = std::vector<Bomb
 
 BombControllerScript::BombControllerScript ( CharacterControllerScript *playerController )
 {
-	BombControllerScript::List.push_back(this);
+	//BombControllerScript::List.push_back(this);
 	this->startTime = TimeUtils::getCurrentSystemMillis();
 	this->anim_time = TimeUtils::getCurrentSystemMillis();
 	this->sens = false;
@@ -39,7 +39,7 @@ BombControllerScript &				BombControllerScript::operator=( BombControllerScript 
 
 BombControllerScript::~BombControllerScript ( void )
 {
-	BombControllerScript::List.erase(std::remove(BombControllerScript::List.begin(), BombControllerScript::List.end(), this));
+	//BombControllerScript::List.erase(std::remove(BombControllerScript::List.begin(), BombControllerScript::List.end(), this));
 	return ;
 }
 
@@ -105,12 +105,12 @@ void								BombControllerScript::OnEndRender(void)
 void								BombControllerScript::explode(void)
 {
 
-	Mix_PlayChannel(-1, BombermanClient::instance->bomb, 0);
+	Mix_PlayChannel(-1, BombermanClient::getInstance()->bomb, 0);
 
 	int x = this->gameObject->transform.position.x / 2;
 	int z = this->gameObject->transform.position.z / 2;
 	this->playerController->BombExplode();
-	Case *c = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z);
+	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z);
 	if (c == NULL)
 		return ;
 	c->obstacle = NULL;
@@ -118,45 +118,45 @@ void								BombControllerScript::explode(void)
 	int puissance = this->power;
 	//z+
 	for (int i = 1; i < (puissance + 1); i++) {
-		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z + i);
+		Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z + i);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion(x, (z + i), i));
+		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z + i), i));
 		if (b->obstacle != NULL)
 			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
 				break;
 	}
 	//z-
 	for (int i = 1; i < (puissance + 1); i++) {
-		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x, z - i);
+		Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z - i);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion(x, (z - i), i));
+		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z - i), i));
 		if (b->obstacle != NULL)
 			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
 				break;
 	}
 	//x+
 	for (int i = 1; i < (puissance + 1); i++) {
-		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x + i, z);
+		Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x + i, z);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion((x + i), z, i));
+		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x + i), z, i));
 		if (b->obstacle != NULL)
 			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
 				break;
 	}
 	//x-
 	for (int i = 1; i < (puissance + 1); i++) {
-		Case *b = dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->map->getCase(x - i, z);
+		Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x - i, z);
 		if (b == NULL)
 			break ;
-		BombermanClient::instance->current_scene->add(Factory::newExplosion((x - i), z, i));
+		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x - i), z, i));
 		if (b->obstacle != NULL)
 			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
 				break;
 	}
-	BombermanClient::instance->current_scene->remove(this->gameObject);
+	BombermanClient::getInstance()->current_scene->remove(this->gameObject);
 	delete this->gameObject;
 	delete this;
 }

@@ -4,9 +4,9 @@
 #include <iterator>
 #include <fstream>
 
-void						file_get_contents(std::string &content, const char *file_path)
+void						file_get_contents(std::string &content, std::string const &file_path)
 {
-	std::ifstream ifs(file_path);
+	std::ifstream ifs(file_path.c_str());
 
 	if (!ifs)
 		return ;

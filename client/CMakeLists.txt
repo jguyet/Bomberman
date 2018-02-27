@@ -121,21 +121,6 @@ if (APPLE)
 	message("${GLM_INCLUDE_DIR}")
 	message("${GLM_DIR}/../../../lib")
 	include_directories("${GLM_INCLUDE_DIR}")
-	#libsndfile
-	############################################################################
-	message("\r\nINSTALLATION LIBSNDFILE------------------------------------------\r\n")
-	execute_process(COMMAND ${BIN_BREW} install libsndfile
-				WORKING_DIRECTORY "${PROJECT_DIR}/")
-	find_path(LIBSNDFILE_INCLUDE_DIR sndfile.h
-				  	HINTS
-				    ENV HOME
-					${BREW_DIR}
-				  	PATH_SUFFIXES include)
-	message(${LIBSNDFILE_INCLUDE_DIR})
-	include_directories(${LIBSNDFILE_INCLUDE_DIR})
-	find_path(LIBSNDFILE_LIB_DIR libsndfile.a HINTS ${BREW_DIR}/../lib)
-	message("${LIBSNDFILE_LIB_DIR}")
-	link_directories("${LIBSNDFILE_LIB_DIR}")
 	#ASSIMP
 	############################################################################
 	message("\r\nINSTALLATION ASSIMP----------------------------------------------\r\n")
@@ -168,15 +153,11 @@ if (APPLE)
 	message("${PROJECT_DIR}/SOIL/incs")
 	message("${PROJECT_DIR}/SOIL")
 	message("\r\nINSTALLATION NETWORK --------------------------------------------\r\n")
-	#if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../network/libnetwork.a")
-		execute_process(COMMAND make
-					WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../network/
-					)
-	#else()
-		#message("Warning: libnetwork.a is already installed")
-	#endif()
-		link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../network/)
-		include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../network/includes/)
+	execute_process(COMMAND make re
+				WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../network/
+				)
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../network/)
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../network/includes/)
 	message("")
 endif()
 
@@ -198,4 +179,4 @@ add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
 message(${OPENAL_LIBRARY})
-target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image sdl2_mixer glm sndfile assimp SOIL2 network ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image sdl2_mixer glm assimp SOIL2 network ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
