@@ -80,7 +80,7 @@ int 				AI::getInfos(void)
 	return (0);
 }
 
-GameObject 			*AI::getNearestBlock()
+GameObject			*AI::getNearestBlock()
 {
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
@@ -101,13 +101,52 @@ GameObject 			*AI::getNearestBlock()
 	return (near);
 }
 
+void				AI::bomblist(void)
+{
+	this->bomb_l = BombControllerScript::List;
+
+	// float x = this->gameObject->transform.position.x;
+	// float y = this->gameObject->transform.position.z;
+	// float t = SPEED; // Tolerance
+    //
+	// for (auto &elem : this->bomb_l)
+	// {
+	// 	float powe = elem->power * 2;
+	// 	if (x >= elem->gameObject->transform.position.x - t && x <= elem->gameObject->transform.position.x + t + powe &&
+	// 		y >= elem->gameObject->transform.position.z - 1.0f - t && y <= elem->gameObject->transform.position.z + 1.0f + t)
+	// 	{
+	// 		std::cout << "hit bomb x+ X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
+	// 	}
+    //
+	// 	if (x >= elem->gameObject->transform.position.x - t - powe && x <= elem->gameObject->transform.position.x + t &&
+	// 		y >= elem->gameObject->transform.position.z - 1.0f - t && y <= elem->gameObject->transform.position.z + 1.0f + t)
+	// 	{
+	// 		std::cout << "hit bomb x- X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
+	// 	}
+    //
+	// 	if (x >= elem->gameObject->transform.position.x - 1.0f - t && x <= elem->gameObject->transform.position.x + 1.0f + t &&
+	// 		y >= elem->gameObject->transform.position.z - t && y <= elem->gameObject->transform.position.z + t + powe)
+	// 	{
+	// 		std::cout << "hit bomb y+ X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
+	// 	}
+    //
+	// 	if (x >= elem->gameObject->transform.position.x - 1.0f - t && x <= elem->gameObject->transform.position.x + 1.0f + t &&
+	// 		y >= elem->gameObject->transform.position.z - t - powe  && y <= elem->gameObject->transform.position.z + t)
+	// 	{
+	// 		std::cout << "hit bomb y- X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
+	// 	}
+	// }
+}
+
 int					AI::brain(void)
 {
 	static int info = 0;
 
-	// this->moves.clear();
+	// this->bomblist();
+	this->bomb_l = BombControllerScript::List;
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
+	// this->moves.clear();
 
 	if (this->select_t == false)
 	{
@@ -152,13 +191,11 @@ int					AI::brain(void)
 			this->moves.pop_front();
 			// std::cout << "target x " << this->moves.front().pos_x << " target y " << this->moves.front().pos_y << std::endl;
 		}
-
 		if (this->moves.size() == 0)
 			return (0);
-	} else if (this->a_star.path_finding(x, y, this->target, moves) == false){
+	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l) == false){
 		return (0);
 	}
-
 
 	if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_UP);
@@ -169,7 +206,7 @@ int					AI::brain(void)
 	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
 
-	return (SDL_SCANCODE_Q);
+	// return (SDL_SCANCODE_Q);
 	return (0);
 }
 

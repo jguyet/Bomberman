@@ -140,7 +140,10 @@ void						CharacterControllerScript::Update(void)
 
 	if (this->playerId == currentPlayerId) {
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
+		{
 			this->Attack();
+			// std::cout << std::endl;
+		}
 		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
 			//BombermanClient::instance->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT

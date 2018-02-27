@@ -25,6 +25,7 @@ class AI
 
 		int 										getInfos(void);
 		GameObject 									*getNearestBlock();
+		void										bomblist(void);
 		// #####################################################################
 		Module_h 									target;
 		GameObject*									tplayer;
@@ -35,6 +36,7 @@ class AI
 		A_star										a_star;
 
 		std::vector<GameObject*> 					Objects;
+		std::vector<BombControllerScript*>			bomb_l;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

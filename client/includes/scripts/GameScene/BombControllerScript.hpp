@@ -26,6 +26,7 @@ class BombControllerScript : public Script
 		// PUBLICS ############################################################
 		void								explode(void);
 		// ####################################################################
+		int 								power;
 	private:
 		// PRIVATES ###########################################################
 		long								startTime;
@@ -34,8 +35,8 @@ class BombControllerScript : public Script
 		float								min_scale;
 		long								anim_time;
 
-		int 								power;
 		CharacterControllerScript 			*playerController;
+		std::vector<BombControllerScript*>	bomb_l;
 		// ####################################################################
 };
 

@@ -40,9 +40,10 @@ std::ostream &				operator<<(std::ostream & o, A_star const & i)
 
 // PUBLIC METHOD #################################################
 
-bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_h> &moves)
+bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_h> &moves, std::vector<BombControllerScript*> &bomb_l)
 {
 	moves.clear();
+	this->bomb_list = bomb_l;
 	///////// format
 	if ((x % 2) != 0)
 		x++;
@@ -145,7 +146,7 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y))
 		flag_t = true;
 
-	if ((c->walkable == true || flag_t) && this->close_list.count(std::make_pair(x, y)) == 0 && (x % 2) == 0 && (y % 2) == 0)
+	if ((c->walkable == true || flag_t) && this->bomb_col(this->bomb_list, x, y) && this->close_list.count(std::make_pair(x, y)) == 0 && (x % 2) == 0 && (y % 2) == 0)
 	{
 		int dif_x = std::abs(x - target.pos_x);
 		int dif_y = std::abs(y - target.pos_y);
@@ -159,6 +160,36 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 	}
 	else
 		return (1);
+}
+
+int							A_star::bomb_col(std::vector<BombControllerScript*> bomb_l, float x, float y)
+{
+	// float x = this->gameObject->transform.position.x;
+	// float y = this->gameObject->transform.position.z;
+	float t = SPEED; // Tolerance
+
+	for (auto &elem : bomb_l) // this->bomb_l
+	{
+		float powe = elem->power * 2;
+		if (x >= elem->gameObject->transform.position.x - t && x <= elem->gameObject->transform.position.x + t + powe &&
+			y >= elem->gameObject->transform.position.z - 1.0f - t && y <= elem->gameObject->transform.position.z + 1.0f + t)
+			return (0);
+
+		if (x >= elem->gameObject->transform.position.x - t - powe && x <= elem->gameObject->transform.position.x + t &&
+			y >= elem->gameObject->transform.position.z - 1.0f - t && y <= elem->gameObject->transform.position.z + 1.0f + t)
+			return (0);
+
+		if (x >= elem->gameObject->transform.position.x - 1.0f - t && x <= elem->gameObject->transform.position.x + 1.0f + t &&
+			y >= elem->gameObject->transform.position.z - t && y <= elem->gameObject->transform.position.z + t + powe)
+		{
+			return (0);
+		}
+
+		if (x >= elem->gameObject->transform.position.x - 1.0f - t && x <= elem->gameObject->transform.position.x + 1.0f + t &&
+			y >= elem->gameObject->transform.position.z - t - powe  && y <= elem->gameObject->transform.position.z + t)
+			return (0);
+	}
+	return (1);
 }
 
 void						A_star::find_path(Module_h &target)

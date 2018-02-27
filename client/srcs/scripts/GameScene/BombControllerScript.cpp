@@ -17,7 +17,6 @@ BombControllerScript::BombControllerScript ( CharacterControllerScript *playerCo
 	this->max_scale = 2.f;
 	this->min_scale = 1.f;
 
-
 	this->power = playerController->getPower();
 	this->playerController = playerController;
 	return ;

@@ -17,11 +17,13 @@ class A_star
 		friend std::ostream &						operator<<(std::ostream & o, A_star const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		bool										path_finding(int y, int x, Module_h &target, std::list<Module_h> &moves);
+		bool										path_finding(int y, int x, Module_h &target, std::list<Module_h> &moves, std::vector<BombControllerScript*> &bomb_l);
 		void										set_map(Map* map);
+		int											bomb_col(std::vector<BombControllerScript*> bomb_l, float x, float y);
 		// #####################################################################
 		Map* 										map;
 		Module_h									start;
+		std::vector<BombControllerScript*>			bomb_list;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
