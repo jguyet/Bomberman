@@ -33,6 +33,7 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 		thread.detach();
 	} else {
 		printf("A player tried to enter while the game is already started !\n");
+		close(sock);
 	}
 }
 
