@@ -264,8 +264,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		}
 		//}
 	}
-	else if (collider->tag == "Explosion")
-	{
+	else if (collider->tag == "Explosion") {
 		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player) {
 			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
 			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player = NULL;
@@ -275,23 +274,22 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 			this->gameObject->toDelete = true;
 		}
 	}
-	else if (collider->tag == "bonus-bomb-up")
-	{
+	else if (collider->tag == "bonus-bomb-up") {
 		this->bomb++;
 		collider->toDelete = true;
 	}
-	else if (collider->tag == "bonus-power-up")
-	{
+	else if (collider->tag == "bonus-power-up") {
 		this->power++;
 		collider->toDelete = true;
 	}
-	else if (collider->tag == "bonus-speed-up")
-	{
+	else if (collider->tag == "bonus-speed-up") {
 		this->speed+= 0.003;
 		collider->toDelete = true;
 	}
-	else
-	{
+	else if (collider->tag == "Player") {
+
+	}
+	else {
 		this->gameObject->transform.position.x = this->lastPosition.x;
 		this->gameObject->transform.position.z = this->lastPosition.z;
 	}

@@ -29,9 +29,9 @@ class BombControllerScript : public Script
 		CharacterControllerScript 			*playerController;
 		// ####################################################################
 		int 								power;
+		long								startTime;
 	private:
 		// PRIVATES ###########################################################
-		long								startTime;
 		bool								sens;
 		float								max_scale;
 		float								min_scale;

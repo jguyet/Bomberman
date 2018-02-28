@@ -122,9 +122,10 @@ void								BombControllerScript::explode(void)
 		if (b == NULL)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z + i), i));
-		if (b->obstacle != NULL)
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
+		if (b->obstacle != NULL) {
+			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
 				break;
+		}
 	}
 	//z-
 	for (int i = 1; i < (puissance + 1); i++) {
@@ -132,9 +133,10 @@ void								BombControllerScript::explode(void)
 		if (b == NULL)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z - i), i));
-		if (b->obstacle != NULL)
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
+		if (b->obstacle != NULL) {
+			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
 				break;
+		}
 	}
 	//x+
 	for (int i = 1; i < (puissance + 1); i++) {
@@ -142,9 +144,10 @@ void								BombControllerScript::explode(void)
 		if (b == NULL)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x + i), z, i));
-		if (b->obstacle != NULL)
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
+		if (b->obstacle != NULL) {
+			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
 				break;
+		}
 	}
 	//x-
 	for (int i = 1; i < (puissance + 1); i++) {
@@ -152,9 +155,10 @@ void								BombControllerScript::explode(void)
 		if (b == NULL)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x - i), z, i));
-		if (b->obstacle != NULL)
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block")
+		if (b->obstacle != NULL) {
+			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
 				break;
+		}
 	}
 	BombermanClient::getInstance()->current_scene->remove(this->gameObject);
 	delete this->gameObject;

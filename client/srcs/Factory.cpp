@@ -14,7 +14,7 @@ GameObject							*Factory::newBlock(std::string model)
 GameObject							*Factory::newPlayer(int id)
 {
 	GameObject	*obj = new GameObject();
-	obj->tag = "Donkey Kong";
+	obj->tag = "Player";
 
 	//ANIMATOR
 	Animator *animator = new Animator();
