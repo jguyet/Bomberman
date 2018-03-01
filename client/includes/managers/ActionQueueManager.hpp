@@ -19,6 +19,7 @@ class ActionQueueManager
 		void	removeAction(ActionQueue *action);
 		void	consume();
 		void	doAction(ActionQueue *action);
+		void	removeAllActions(void);
 		ActionQueueManager &							operator=( ActionQueueManager const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, ActionQueueManager const & i);
 		std::vector<ActionQueue*>			actions;

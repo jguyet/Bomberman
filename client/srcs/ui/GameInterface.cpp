@@ -81,8 +81,6 @@ void						GameInterface::addPlayers(void)
 
 void						GameInterface::draw(void)
 {
-	this->addPlayers();
-
 	std::string bomb_value = "0";
 	std::string power_value = "0";
 	std::string speed_value = "0";

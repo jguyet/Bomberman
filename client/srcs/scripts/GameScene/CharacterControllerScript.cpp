@@ -9,7 +9,6 @@
 CharacterControllerScript::CharacterControllerScript ( int playerId )
 {
 	this->playerId = playerId;
-
 	return ;
 }
 
@@ -45,14 +44,14 @@ std::ostream &				operator<<(std::ostream & o, CharacterControllerScript const &
 
 void						CharacterControllerScript::Start(void)
 {
-
+	this->scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 }
 
 void								CharacterControllerScript::Attack(void)
 {
 	if (this->bomb <= 0)
 		return ;
-	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+	Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 	if (c->obstacle != NULL)
 		return ;
 	c->walkable = false;
@@ -70,7 +69,7 @@ void								CharacterControllerScript::Attack(void)
 	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
 	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
 	bomb->transform.rotation = glm::vec3(0,0,0);
-	BombermanClient::getInstance()->current_scene->add(bomb);
+	this->scene->add(bomb);
 	c->obstacle = bomb;
 	this->in_mi_bomb = true;
 	this->last_bomb_2 = this->last_bomb_1;
@@ -139,12 +138,10 @@ void						CharacterControllerScript::Update(void)
 
 
 	int currentPlayerId = -1;
-	GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
-
 
 	if (scene->current_player != NULL)
 	{
-		CharacterControllerScript *controllerScript = ((CharacterControllerScript*)scene->current_player->GetComponent<Script>());
+		CharacterControllerScript *controllerScript = ((CharacterControllerScript*)this->scene->current_player->GetComponent<Script>());
 		if (controllerScript) {
 			currentPlayerId = controllerScript->getPlayerId();
 		}
@@ -243,7 +240,7 @@ void								CharacterControllerScript::OnPreRender(void)
 	playerObjectModel->shaderBind = true;
 
 	glm::vec3 colors = glm::vec3(0.8f,0.1f,0.0f);
-	if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player)
+	if (this->gameObject == this->scene->current_player)
 		colors = glm::vec3(0.0f,0.1f,0.8f);
 	glUniform3fv(playerObjectModel->color,1 , &colors[0]);
 }
@@ -256,9 +253,9 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
-	if (dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player == NULL)
+	if (this->scene->current_player == NULL)
 		return ;
-	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+	Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
 	if (c == NULL)
 		return ;
@@ -279,15 +276,15 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		//}
 	}
 	else if (collider->tag == "Explosion") {
-		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player) {
+		if (this->scene->current_player != NULL && this->gameObject->id == this->scene->current_player->id) {
 			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
-			GameObject *gameObject = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player;
-			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player = NULL;
-			gameObject->toDelete = true;
+			this->scene->removePlayer(this->gameObject);
+			this->scene->current_player->toDelete = true;
+			this->scene->current_player = NULL;
 		} else {
 			printf("Player id %d is dead !\n", this->getPlayerId());
-			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->removePlayer(this->gameObject);
 			this->gameObject->toDelete = true;
+			this->scene->removePlayer(this->gameObject);
 		}
 	}
 	else if (collider->tag == "bonus-bomb-up") {

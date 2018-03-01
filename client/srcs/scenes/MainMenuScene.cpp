@@ -66,18 +66,14 @@ bool								MainMenuScene::select_server(void)
 	int port = atoi(string_split.at(1).c_str());
 
 	if (BombermanClient::getInstance()->sock != NULL) {
-		delete BombermanClient::getInstance()->sock;
+		BombermanClient::getInstance()->sock->state = false;
 		BombermanClient::getInstance()->sock = NULL;
 	}
 	BombermanClient::getInstance()->sock = new Socket(ip.c_str(), port);
 
 	if (BombermanClient::getInstance()->sock->state == true)
-	{
-		BombermanClient::getInstance()->current_scene = new GameScene("map_01");
-		delete this;
 		return true;
-	}
-	delete BombermanClient::getInstance()->sock;
+	BombermanClient::getInstance()->sock->state = false;
 	BombermanClient::getInstance()->sock = NULL;
 	return false;
 }
@@ -85,12 +81,11 @@ bool								MainMenuScene::select_server(void)
 bool								MainMenuScene::select_local(void)
 {
 	if (BombermanClient::getInstance()->sock != NULL) {
-		delete BombermanClient::getInstance()->sock;
+		BombermanClient::getInstance()->sock->state = false;
 		BombermanClient::getInstance()->sock = NULL;
 	}
 	BombermanClient::getInstance()->sock = new Socket("", 0);
-	BombermanClient::getInstance()->current_scene = new GameScene("map_01");
-	delete this;
+	BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
 	return true;
 }
 

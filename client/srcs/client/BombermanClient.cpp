@@ -218,8 +218,11 @@ void						BombermanClient::glfw_error_callback( int error, const char* descripti
 
 void						BombermanClient::controllerLoop( void )//100fps
 {
-	//this->currentController->process();
-	this->current_scene->calculPhisics();
+	Scene *scene = this->getCurrentScene<Scene>();
+
+	if (scene != NULL) {
+		scene->calculPhisics();
+	}
 }
 
 void						BombermanClient::renderLoop( void )//60fps
@@ -232,8 +235,11 @@ void						BombermanClient::renderLoop( void )//60fps
 	this->updateFps();
 	this->canvas->draw();
 
-	//this->currentController->render();
-	this->current_scene->drawGameObjects();
+	Scene *scene = this->getCurrentScene<Scene>();
+
+	if (scene != NULL) {
+		scene->drawGameObjects();
+	}
 
 	while(SDL_PollEvent(&this->event))
 	{
@@ -277,7 +283,8 @@ int main(void)
 	client->initialize_resources();
 	client->initialize_inputs();
 
-	client->current_scene = new MainMenuScene();
+
+	client->setCurrentScene<MainMenuScene>(new MainMenuScene());
 
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));

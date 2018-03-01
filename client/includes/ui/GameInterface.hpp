@@ -15,9 +15,9 @@ class GameInterface : public UIInterface
 		friend std::ostream &				operator<<(std::ostream & o, GameInterface const & i);
 
 		void								draw(void);
-
-	private:
 		void								addPlayers(void);
+		
+	private:
 
 		Canvas								*canvas;
 		GameScene							*scene;

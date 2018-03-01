@@ -104,6 +104,7 @@ void						RenderLoop::looprender( void )
 			frames = 0;
 		}
 	}
+	delete queueManager;
 }
 
 // ###############################################################

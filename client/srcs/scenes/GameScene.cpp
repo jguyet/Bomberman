@@ -58,7 +58,6 @@ void					GameScene::removePlayer(GameObject *player)
 	for (int i = 0; i < this->players.size(); i++)
 	{
 		if (this->players[i] == player) {
-			this->remove(player);
 			this->players.erase(this->players.begin() + i);
 			break;
 		}
@@ -105,6 +104,10 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
+	if (BombermanClient::getInstance()->sock != NULL) {
+		BombermanClient::getInstance()->sock->state = false;
+		BombermanClient::getInstance()->sock = NULL;
+	}
 	if (this->current_player != NULL) {
 		this->remove(this->current_player);
 		delete this->current_player;
@@ -142,6 +145,9 @@ void								GameScene::closeQuitInterface(void)
 
 void								GameScene::calculPhisics(void)
 {
+	if (this->interface != NULL) {
+		this->interface->addPlayers();
+	}
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE) && this->quitInterface == NULL) {//ESC
 		this->quitInterface = new QuitMenuInterface(this);
 		if (this->current_player != NULL) {
@@ -166,7 +172,6 @@ void								GameScene::calculPhisics(void)
 	}
 	//call parent method
 	this->_calculPhisics();
-
 	// std::cout << this->camera->transform
 }
 

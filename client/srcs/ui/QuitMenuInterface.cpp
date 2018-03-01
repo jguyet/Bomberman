@@ -51,7 +51,6 @@ std::ostream &				operator<<(std::ostream & o, QuitMenuInterface const & i)
 void						QuitMenuInterface::draw(void)
 {
 	this->variables["$selected"] = (std::ostringstream() << this->current_position).str();
-
 	this->build();
 	this->canvas->draw();
 }

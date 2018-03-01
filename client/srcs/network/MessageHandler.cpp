@@ -65,7 +65,7 @@ void MessageHandler::NewPlayerMessageHandler(SOCK socket, NewPlayerMessage *mess
 
 void MessageHandler::PlayerPositionMessageHandler(SOCK socket, PlayerPositionMessage *message)
 {
-	GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
+	GameScene *scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 	PlayerPositionObject object = message->playerPosition;
 	GameObject *player = scene->findPlayerById(object.playerId); // check if its not too much for the thread
 

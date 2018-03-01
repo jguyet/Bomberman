@@ -53,6 +53,8 @@ class CharacterControllerScript : public Script
 		bool								in_mi_bomb = false;
 		int									last_bomb_1 = 0;
 		int									last_bomb_2 = 0;
+
+		GameScene							*scene;
 		// ####################################################################
 };
 

@@ -66,15 +66,25 @@ void	ActionQueueManager::removeAction(ActionQueue *action)
 	}
 }
 
+void	ActionQueueManager::removeAllActions(void)
+{
+	for (int i = 0; i < this->actions.size(); i++)
+	{
+		ActionQueue	*action = this->actions.at(i);
+
+		delete action;
+	}
+	this->actions.clear();
+}
+
 void ActionQueueManager::doAction(ActionQueue *action)
 {
 	switch (action->messageId)
 	{
 		case MapSelectMessage::ID: {
 			MapSelectMessage	*mapMessage = (MapSelectMessage*)action->message;
-			BombermanClient::getInstance()->current_scene = new GameScene(mapMessage->name);
+			GameScene* scene = BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene(mapMessage->name));
 
-			GameScene* scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
 			Case *spawn = scene->mapManager->getRandomWalkableCase(scene->map);
 			if (spawn) {
 				glm::vec3 pos = spawn->ground->transform.position;
@@ -88,7 +98,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 		case NewPlayerMessage::ID: {
 			NewPlayerMessage		*message = (NewPlayerMessage*)action->message;
 			GameObject 				*playerObject = Factory::newPlayer(message->position.playerId);
-			GameScene				*scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
+			GameScene				*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 
 			playerObject->transform.scale = glm::vec3(3,3,3);
 			playerObject->transform.rotation = glm::vec3(0,0,0);
@@ -99,13 +109,13 @@ void ActionQueueManager::doAction(ActionQueue *action)
 				scene->players.push_back(playerObject);
 			}
 			scene->all_player.push_back(playerObject);
-			BombermanClient::getInstance()->current_scene->add(playerObject);
+			scene->add(playerObject);
 		}
 		break;
 
 		case PlayersPositionMessage::ID: {
 			PlayersPositionMessage	*message = (PlayersPositionMessage*)action->message;
-			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
+			GameScene				*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 			for (int i = 0; i < message->positions_length; i++) {
 				PlayerPositionObject &object = message->positions[i];
 				GameObject *player = scene->findPlayerById(object.playerId);
@@ -123,7 +133,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 
 		case ActionMessage::ID: {
 			ActionObject	object = ((ActionMessage*)action->message)->action;
-			GameScene *scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
+			GameScene		*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 			if (object.type == ActionType::TYPE_BOMB) {
 				Case *c = scene->map->getCase(object.x, object.z);
 				if (c != NULL) {
@@ -134,7 +144,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 						bomb->transform.position = glm::vec3(c->position.x,c->position.y,c->position.z);
 						bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
 						bomb->transform.rotation = glm::vec3(0,0,0);
-						BombermanClient::getInstance()->current_scene->add(bomb);
+						scene->add(bomb);
 						c->obstacle = bomb;
 					}
 				}
@@ -157,14 +167,14 @@ void ActionQueueManager::doAction(ActionQueue *action)
 					obj->tag = "bonus-bomb-up";
 					obj->AddComponent<Model>(Model::model["bonus-bomb-up"]);
 				}
-				BombermanClient::getInstance()->current_scene->add(obj);
+				scene->add(obj);
 			}
 		}
 		break;
 
 		case PlayerDeadMessage::ID: {
 			PlayerDeadMessage	*message = (PlayerDeadMessage*)action->message;
-			GameScene			*scene = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene);
+			GameScene			*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 			GameObject			*player = scene->findPlayerById(message->playerId);
 
 			if (player != NULL)
@@ -178,6 +188,10 @@ void ActionQueueManager::doAction(ActionQueue *action)
 
 void ActionQueueManager::consume()
 {
+	if (BombermanClient::getInstance()->sock == NULL || BombermanClient::getInstance()->sock->state == false) {
+		this->removeAllActions();
+		return ;
+	}
 	if (this->actions.size() > 0) {
 		ActionQueueManager::mutex.lock();
 		this->doAction(this->actions[0]);

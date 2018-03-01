@@ -50,7 +50,6 @@ std::ostream &				operator<<(std::ostream & o, MainMenuInterface const & i)
 void						MainMenuInterface::draw(void)
 {
 	this->variables["$selected"] = (std::ostringstream() << this->current_position).str();
-
 	this->build();
 	this->canvas->draw();
 }

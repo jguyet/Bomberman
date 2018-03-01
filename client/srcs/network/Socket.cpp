@@ -40,7 +40,6 @@ bool Socket::listenUdp(int playerId)
 		perror("Can't bind UDP socket");
 		return false;
 	}
-
 	printf("UDP Listening on port %d\n", this->basePort + playerId);
 	return true;
 }
@@ -116,7 +115,7 @@ void						Socket::Thread(Socket *socket)
 		return;
 	}
 	memset((char*)&buffer, 0, (BUF_SIZE - 1));
-	while (42)
+	while (socket->state == true)
 	{
 		FD_ZERO(&socket->rdfs);
 		FD_SET(socket->sock, &socket->rdfs);
@@ -138,6 +137,11 @@ void						Socket::Thread(Socket *socket)
 			}
 		}
 	}
+	if (socket->sock != 0)
+		close(socket->sock);
+	if (socket->sockUdp != 0)
+		close(socket->sockUdp);
+	delete socket;
 }
 
 
@@ -175,7 +179,7 @@ void					Socket::newBonus(float x, float z)
 	else if (rand_nbr < 30)
 		type = ActionType::TYPE_BONUS_BOMB_UP;
 	if (type != ActionType::TYPE_NONE) {
-		GameObject *object = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player;
+		GameObject *object = BombermanClient::getInstance()->getCurrentScene<GameScene>()->current_player;
 		if (object) {
 			CharacterControllerScript *script = (CharacterControllerScript*)object->GetComponent<Script>();
 			ActionObject object(type, x, 0, z);

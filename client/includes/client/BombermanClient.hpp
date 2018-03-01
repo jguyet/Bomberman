@@ -54,6 +54,10 @@ class BombermanClient : public IRenderLoop
 		void										delete_window( void );
 		void										delete_fonts( void );
 
+		template <typename T> T						*getCurrentScene(void);
+		template <typename T> T						*setCurrentScene(Scene *scene);
+
+
 		void										run( void );
 		void										stop( void );
 
@@ -93,7 +97,35 @@ class BombermanClient : public IRenderLoop
 		ALCdevice									*Device;
 		ALCcontext									*Context;
 
+		std::mutex									mutex;
 		// #####################################################################
 };
+
+template <typename T>
+T							*BombermanClient::getCurrentScene( void )
+{
+	std::lock_guard<std::mutex> lock(this->mutex);
+	if (this->current_scene == NULL)
+		return NULL;
+	return dynamic_cast<T*>(this->current_scene);
+}
+
+template <typename T>
+T							*BombermanClient::setCurrentScene( Scene *scene )
+{
+	std::lock_guard<std::mutex> lock(this->mutex);
+	Scene *last_scene = NULL;
+	if (this->current_scene != NULL) {
+		last_scene = this->current_scene;
+	}
+	this->current_scene = scene;
+
+	if (last_scene != NULL) {
+		delete last_scene;
+	}
+	if (this->current_scene == NULL)
+		return NULL;
+	return dynamic_cast<T*>(this->current_scene);
+}
 
 #endif
