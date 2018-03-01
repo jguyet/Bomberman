@@ -44,6 +44,8 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 {
 	moves.clear();
 	this->bomb_list = bomb_l;
+	// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
+
 	///////// format
 	if ((x % 2) != 0)
 		x++;
@@ -55,6 +57,7 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 	if ((target.pos_y % 2) != 0)
 		target.pos_y++;
 	///////////////////////////////////////
+	// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
 
 	this->start.pos_x = x;
 	this->start.pos_y = y;
@@ -145,8 +148,9 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 
 	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y))
 		flag_t = true;
-
-	if ((c->walkable == true || flag_t) && this->close_list.count(std::make_pair(x, y)) == 0 && (x % 2) == 0 && (y % 2) == 0 && this->bomb_col(this->bomb_list, x, y))
+	// if ((x == target.pos_x && y == target.pos_y))
+	// 	std::cout << "target" << std::endl;
+	if ((c->walkable == true || flag_t) && (x % 2) == 0 && (y % 2) == 0)
 	{
 		int dif_x = std::abs(x - target.pos_x);
 		int dif_y = std::abs(y - target.pos_y);
@@ -209,8 +213,6 @@ void						A_star::find_path(Module_h &target)
 		// Left
 		get_adjacent(c_case, target, c_case.pos_x - 2, c_case.pos_y, p);
 
-		c_case = this->open_list.top();
-
 		if (i == max_i || this->open_list.empty())
 		{
 			this->close_list.clear();
@@ -218,6 +220,8 @@ void						A_star::find_path(Module_h &target)
 				this->open_list.pop();
 			return ;
 		}
+		c_case = this->open_list.top();
+		// std::cout << "case  x " << c_case.pos_x << " y " << c_case.pos_y << std::endl;
 		this->open_list.pop();
 		i++;
 	}

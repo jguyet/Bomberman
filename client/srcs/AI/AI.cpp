@@ -9,6 +9,7 @@ AI::AI (GameObject* my_player) : my_player(my_player)
 {
 	this->a_star.set_map(dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map);
 	this->select_t = false;
+	this->pause = 0;
 	return ;
 }
 
@@ -65,17 +66,47 @@ void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 	}
 }
 
+void				AI::select_target(void)
+{
+	static int info = 0;
+	float x = this->my_player->transform.position.x;
+	float y = this->my_player->transform.position.z;
+
+	if (this->select_t == false)
+	{
+		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
+
+		if (info == 0)
+		{
+			this->getInfos();
+			info = 1;
+		}
+
+		GameObject *near;
+		near = this->getNearestBlock();
+
+		this->target.pos_x = near->transform.position.x;
+		this->target.pos_y = near->transform.position.z;
+		this->tplayer = near;
+		this->select_t = true;
+		std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
+	}
+	else if ((std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
+		this->restart_target_pos();
+}
+
 int 				AI::getInfos(void)
 {
-	Scene *scene;
-	scene = BombermanClient::getInstance()->current_scene;
+	Scene *scene = BombermanClient::getInstance()->current_scene;
+
+	this->Objects.clear();
 	for (std::map<long, GameObject*>::iterator it = scene->gameObjects.begin(); it != scene->gameObjects.end(); it++) {
 		GameObject *current = it->second;
+		// std::cout << current->tag << " " <<current->transform.position.x << " " << current->transform.position.z << std::endl;
 		if (current->tag == "ice_block")
-		{
-			// std::cout << current->tag << " " <<current->transform.position.x << " " << current->transform.position.z << std::endl;
 			this->Objects.push_back(current);
-		}
+		// if (current->tag == "ice_block")
+		// 	this->Objects.push_back(current);
 	}
 	return (0);
 }
@@ -101,88 +132,37 @@ GameObject			*AI::getNearestBlock()
 	return (near);
 }
 
-void				AI::bomblist(void)
+int				AI::bombcol(int x, int y, int next_x, int next_y)
 {
-	this->bomb_l = BombControllerScript::List;
-
-	// float x = this->gameObject->transform.position.x;
-	// float y = this->gameObject->transform.position.z;
-	// float t = SPEED; // Tolerance
-    //
-	// for (auto &elem : this->bomb_l)
+	if (this->a_star.bomb_col(this->bomb_l, x, y) == 0 && this->a_star.bomb_col(this->bomb_l, this->moves.back().pos_x, this->moves.back().pos_y) == 0)
+	{
+		// std::cout << " DEAD :( last pos x " <<  this->moves.back().pos_x << " y " << this->moves.back().pos_y << std::endl;
+		this->restart_target_pos();
+		return (1);
+	}
+	// if (!this->a_star.bomb_col(this->bomb_l, next_x, next_y))
 	// {
-	// 	float powe = elem->power * 2;
-	// 	if (x >= elem->gameObject->transform.position.x - t && x <= elem->gameObject->transform.position.x + t + powe &&
-	// 		y >= elem->gameObject->transform.position.z - 1.0f - t && y <= elem->gameObject->transform.position.z + 1.0f + t)
-	// 	{
-	// 		std::cout << "hit bomb x+ X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
-	// 	}
-    //
-	// 	if (x >= elem->gameObject->transform.position.x - t - powe && x <= elem->gameObject->transform.position.x + t &&
-	// 		y >= elem->gameObject->transform.position.z - 1.0f - t && y <= elem->gameObject->transform.position.z + 1.0f + t)
-	// 	{
-	// 		std::cout << "hit bomb x- X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
-	// 	}
-    //
-	// 	if (x >= elem->gameObject->transform.position.x - 1.0f - t && x <= elem->gameObject->transform.position.x + 1.0f + t &&
-	// 		y >= elem->gameObject->transform.position.z - t && y <= elem->gameObject->transform.position.z + t + powe)
-	// 	{
-	// 		std::cout << "hit bomb y+ X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
-	// 	}
-    //
-	// 	if (x >= elem->gameObject->transform.position.x - 1.0f - t && x <= elem->gameObject->transform.position.x + 1.0f + t &&
-	// 		y >= elem->gameObject->transform.position.z - t - powe  && y <= elem->gameObject->transform.position.z + t)
-	// 	{
-	// 		std::cout << "hit bomb y- X:" << this->gameObject->transform.position.x << " Z:" << this->gameObject->transform.position.z << " " << std::endl;
-	// 	}
+	// 	this->pause = 120;
+	// 	// this->restart_target_pos();
+	// 	return (2);
 	// }
+	return (0);
 }
 
-int					AI::brain(void)
+int				AI::brain(void)
 {
-	static int info = 0;
-
-	// this->bomblist();
 	this->bomb_l = BombControllerScript::List;
-
-
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
-	// this->moves.clear();
 
-	if (this->select_t == false)
-	{
-		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
-		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::instance->current_scene)->players);
+	this->select_target();
 
-		// if (info == 0)
-		// 	this->getInfos();
-        //
-		// GameObject *near;
-		// near = this->getNearestBlock();
-        //
-		// std::cout << glm::distance(this->my_player->transform.position, near->transform.position) << std::endl;
-        //
-		// this->target.pos_x = near->transform.position.x;
-		// this->target.pos_y = near->transform.position.z + 2;
-		// this->tplayer = near;
-		// this->select_t = true;
-	}
-	else
-	{
-		this->target.pos_x = this->tplayer->transform.position.x;
-		this->target.pos_y = this->tplayer->transform.position.z;
-	}
+	// checker ##########################
 
-	// if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
-	// {
-	// 	info = 0;
-	// 	this->select_t = false;
-	// 	std::cout << " NO ice_block :)" << std::endl;
-	// }
-
-	if (this->select_t == false)
+	if (this->start_checks())
 		return (0);
+
+	// #################################
 
 	if (this->moves.size() > 0)
 	{
@@ -193,13 +173,13 @@ int					AI::brain(void)
 			this->moves.pop_front();
 			// std::cout << "target x " << this->moves.front().pos_x << " target y " << this->moves.front().pos_y << std::endl;
 		}
-
-		if (this->moves.size() == 0 || !this->a_star.bomb_col(this->bomb_l, x, y))
+		if (this->moves.size() == 0 || this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
 			return (0);
-	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l) == false){
+	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l) == false) {
 		return (0);
 	}
 
+	// move ############################
 	if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_UP);
 	if (x > this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
@@ -208,13 +188,43 @@ int					AI::brain(void)
 		return(SDL_SCANCODE_LEFT);
 	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
-
 	// return (SDL_SCANCODE_Q);
+
+	// #################################
 	return (0);
 }
 
 // ###############################################################
 
 // PRIVATE METHOD ################################################
+
+int				AI::start_checks(void)
+{
+	if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
+	{
+		// info = 0;
+		this->select_t = false;
+		std::cout << " NO ice_block :)" << std::endl;
+		return (1);
+	}
+
+	if (this->select_t == false)
+		return (1);
+
+	if (this->pause)
+	{
+		this->pause--;
+		return (1);
+	}
+
+	return (0);
+}
+
+void				AI::restart_target_pos(void)
+{
+	this->target.pos_x = this->tplayer->transform.position.x;
+	this->target.pos_y = this->tplayer->transform.position.z;
+	this->moves.clear();
+}
 
 // ###############################################################

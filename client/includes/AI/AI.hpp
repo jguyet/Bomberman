@@ -4,6 +4,11 @@
 # include "Bomberman.hpp"
 # include <queue>
 
+enum e_action {
+	ATTACK,
+	SEARCH
+}
+
 class AI
 {
 	public:
@@ -21,11 +26,12 @@ class AI
 		// #####################################################################
 		// PUBLIC ##############################################################
 		void										get_target(float x, float y, std::vector<GameObject*> players);
+		void										select_target(void);
 		int											brain();
 
 		int 										getInfos(void);
 		GameObject 									*getNearestBlock();
-		void										bomblist(void);
+		int											bombcol(int x, int y, int next_x, int next_y);
 		// #####################################################################
 		Module_h 									target;
 		GameObject*									tplayer;
@@ -34,12 +40,15 @@ class AI
 		bool										select_t;
 		std::list<Module_h> 						moves;
 		A_star										a_star;
+		int											pause;
 
 		std::vector<GameObject*> 					Objects;
 		std::vector<BombControllerScript*>			bomb_l;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
+		void										restart_target_pos(void);
+		int											start_checks(void);
 		// #####################################################################
 };
 

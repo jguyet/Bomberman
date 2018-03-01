@@ -111,7 +111,7 @@ void						Canvas::addText(const char *key, Text *text)
 		delete tmp;
 	}
 	this->texts[key] = text;
-	this->updated = false;
+	//this->updated = false;
 }
 
 void						Canvas::addImage(const char *key, Image *img)
