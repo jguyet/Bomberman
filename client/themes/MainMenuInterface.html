@@ -31,7 +31,7 @@
 	x: -200,
 	y: 33%,
 	width: 400,
-	height: 250,
+	height: 375,
 	style: "color:#2E2E2E;float:center;",
 	z-index: 1
 }
@@ -50,58 +50,221 @@
 }
 </text>
 
-<square>
-{
-	id: "background_solo",
-	class: "mainmenu-css",
-	x: -150,
-	y: 45%,
-	width: 300,
-	height: 50,
-	style: "color:#424242;float:center;",
-	z-index: 2
-}
-</square>
+<if condition="$selected==0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		x: -150,
+		y: 45%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Solo",
+		parent: "background_solo",
+		x: 120,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
 
-<text>
-{
-	id: "button_solo",
-	class: "mainmenu-css",
-	value: "Solo",
-	parent: "background_solo",
-	x: 120,
-	y: 7,
-	style: "color:#848484;",
-	z-index: 3
-}
-</text>
+<if condition="$selected!=0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		x: -150,
+		y: 45%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Solo",
+		parent: "background_solo",
+		x: 120,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
 
+<if condition="$selected==1">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		x: -150,
+		y: 55%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Multiplayer",
+		parent: "background_multi",
+		x: 70,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
 
-<square>
-{
-	id: "background_multi",
-	class: "mainmenu-css",
-	x: -150,
-	y: 55%,
-	width: 300,
-	height: 50,
-	style: "color:#424242;float:center;",
-	z-index: 2
-}
-</square>
+<if condition="$selected!=1">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		x: -150,
+		y: 55%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Multiplayer",
+		parent: "background_multi",
+		x: 70,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
 
-<text>
-{
-	id: "button_multi",
-	class: "mainmenu-css",
-	value: "Multiplayer",
-	parent: "background_multi",
-	x: 70,
-	y: 7,
-	style: "color:#848484;",
-	z-index: 3
-}
-</text>
+<if condition="$selected==2">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		x: -150,
+		y: 65%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Settings",
+		parent: "background_btn_options",
+		x: 100,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=2">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		x: -150,
+		y: 65%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Settings",
+		parent: "background_btn_options",
+		x: 100,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==3">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 75%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Credits",
+		parent: "background_btn_credit",
+		x: 100,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=3">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 75%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Credits",
+		parent: "background_btn_credit",
+		x: 100,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
 
 <text>
 {

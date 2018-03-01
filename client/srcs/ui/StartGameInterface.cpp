@@ -30,6 +30,7 @@ StartGameInterface &				StartGameInterface::operator=( StartGameInterface const 
 
 StartGameInterface::~StartGameInterface ( void )
 {
+	delete this->canvas;
 	return ;
 }
 

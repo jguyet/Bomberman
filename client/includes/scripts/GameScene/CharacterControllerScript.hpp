@@ -36,12 +36,12 @@ class CharacterControllerScript : public Script
 		int 								bomb = 5;
 		int 								power = 5;
 		int 								life = 5;
+		int									speed_count = 1;
+		float								speed = SPEED;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
 		bool								has_moved = false;
-
-		float								speed = SPEED;
 
 		long 								lastNetwork = 0;
 		glm::vec3							lastPosition_direction;
@@ -49,6 +49,8 @@ class CharacterControllerScript : public Script
 
 		bool								collide_with_mi_bomb = false;
 		bool								in_mi_bomb = false;
+		int									last_bomb_1 = 0;
+		int									last_bomb_2 = 0;
 		// ####################################################################
 };
 

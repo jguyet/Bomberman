@@ -73,6 +73,8 @@ void								CharacterControllerScript::Attack(void)
 	BombermanClient::getInstance()->current_scene->add(bomb);
 	c->obstacle = bomb;
 	this->in_mi_bomb = true;
+	this->last_bomb_2 = this->last_bomb_1;
+	this->last_bomb_1 = bomb->id;
 }
 
 void 								CharacterControllerScript::BombExplode()
@@ -258,6 +260,10 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		if (script->playerController->gameObject->id == this->gameObject->id) {
 			this->collide_with_mi_bomb = true;
 		}
+		if (collider->id == this->last_bomb_1 || collider->id == this->last_bomb_2) {
+		} else {
+			this->in_mi_bomb = false;
+		}
 		if (this->in_mi_bomb == false) {//si c'est pas ma derniere bomb je suis bloquer
 			this->gameObject->transform.position.x = this->lastPosition.x;
 			this->gameObject->transform.position.z = this->lastPosition.z;
@@ -285,6 +291,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	else if (collider->tag == "bonus-speed-up") {
 		this->speed+= 0.003;
 		collider->toDelete = true;
+		this->speed_count++;
 	}
 	else if (collider->tag == "Player") {
 

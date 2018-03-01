@@ -1,0 +1,90 @@
+# Script
+# StartGameInterface :
+#
+
+<style>
+.startgame
+{
+	color:#000000;
+	font-size: 30px;
+	font-family: arial;
+}
+</style>
+
+<square>
+{
+	id: "background_menu",
+	class: "mainmenu-css",
+	x: -200,
+	y: 33%,
+	width: 400,
+	height: 220,
+	style: "color:#2E2E2E;float:center;",
+	z-index: 1
+}
+</square>
+
+<text>
+{
+	id: "lbl_mainmenu",
+	class: "mainmenu-css",
+	value: "Exit",
+	parent: "background_menu",
+	x: 160,
+	y: 7,
+	style: "color:#BDBDBD;font-size:40px;",
+	z-index: 2
+}
+</text>
+
+<square>
+{
+	id: "background_solo",
+	class: "mainmenu-css",
+	x: -150,
+	y: 45%,
+	width: 300,
+	height: 50,
+	style: "color:#424242;float:center;",
+	z-index: 2
+}
+</square>
+
+<text>
+{
+	id: "button_solo",
+	class: "mainmenu-css",
+	value: "Return to mainmenu",
+	parent: "background_solo",
+	x: 10,
+	y: 7,
+	style: "color:#848484;font-size: 30px;",
+	z-index: 3
+}
+</text>
+
+<square>
+{
+	id: "background_to_game",
+	class: "mainmenu-css",
+	x: -150,
+	y: 55%,
+	width: 300,
+	height: 50,
+	style: "color:#424242;float:center;",
+	z-index: 2
+}
+</square>
+
+<text>
+{
+	id: "button_to_game",
+	class: "mainmenu-css",
+	value: "Return to game",
+	parent: "background_to_game",
+	x: 50,
+	y: 7,
+	style: "color:#848484;font-size: 30px;",
+	z-index: 3
+}
+</text>

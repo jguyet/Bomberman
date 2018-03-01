@@ -17,6 +17,7 @@ GameScene::GameScene (std::string selected_map)
 	mapManager->buildObjects(this->map);
 	this->current_player = NULL;
 	this->startGameInterface = NULL;
+	this->quitInterface = NULL;
 	this->interface = new GameInterface(this);
 
 	if (BombermanClient::getInstance()->sock->state == false)
@@ -104,6 +105,15 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
+	if (this->interface != NULL) {
+		delete this->interface;
+	}
+	if (this->startGameInterface != NULL) {
+		delete this->startGameInterface;
+	}
+	if (this->quitInterface != NULL) {
+		delete this->quitInterface;
+	}
 	delete this->mapManager;
 }
 
@@ -118,8 +128,8 @@ std::ostream &				operator<<(std::ostream & o, GameScene const & i)
 
 void								GameScene::calculPhisics(void)
 {
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE)) {//ESC
-		BombermanClient::getInstance()->stop();
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE) && this->quitInterface == NULL) {//ESC
+		this->quitInterface = new QuitMenuInterface();
 	}
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_W)) {//UP
 		this->camera->move(glm::vec3(0, 0, 2));
@@ -165,6 +175,8 @@ void								GameScene::drawGameObjects(void)
 		this->interface->draw();
 	if (this->startGameInterface != NULL)
 		this->startGameInterface->draw();
+	if (this->quitInterface != NULL)
+		this->quitInterface->draw();
 	//reset mouse to center of screen
 	//SDL_WarpMouseInWindow(BombermanClient::getInstance()->window, BombermanClient::getInstance()->screen->middleWidth, BombermanClient::getInstance()->screen->middleHeight);
 }

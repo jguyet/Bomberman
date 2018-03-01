@@ -299,18 +299,12 @@ void						UIInterface::buildCondition(std::string const &tag_name, std::string c
 	for (std::map<std::string, LexerConditionMethods>::iterator it = this->lexer_condition.begin(); it != this->lexer_condition.end(); it++) {
 		if (params.find(it->first) != std::string::npos)
 		{
-			std::vector<std::string> condition_split = split(params, it->first[0]);//'='
+			std::vector<std::string> condition_split = split_string_without(params, it->first, "\"");
 
 			if (condition_split.size() != 2)
 				return ;
 			std::string var1 = trim(condition_split.at(0));
 			std::string var2 = trim(condition_split.at(1));
-			replaceAll(var1, "=", "");
-			replaceAll(var1, ">", "");
-			replaceAll(var1, "<", "");
-			replaceAll(var2, "=", "");
-			replaceAll(var2, ">", "");
-			replaceAll(var2, "<", "");
 			if (this->variables.count(var1)) {
 				var1 = this->variables[var1];
 			}
@@ -337,7 +331,18 @@ void						UIInterface::addCondition(std::string const &tag_name, std::string con
 
 bool						UIInterface::equals(std::string const &first, std::string const &second)
 {
+	if (second == "NULL" && first.find("$") != std::string::npos)
+		return true;
 	if (first == second)
+		return true;
+	return false;
+}
+
+bool						UIInterface::notequals(std::string const &first, std::string const &second)
+{
+	if (second == "NULL" && first.find("$") != std::string::npos)
+		return false;
+	if (first != second)
 		return true;
 	return false;
 }
@@ -368,9 +373,10 @@ void						UIInterface::build_lexer( void )
 	this->lexer_tag["square"] = &UIInterface::addElement;
 	this->lexer_tag["if"] = &UIInterface::addCondition;
 
-	this->lexer_condition["="] = &UIInterface::equals;
-	this->lexer_condition[">"] = &UIInterface::superior;
-	this->lexer_condition["<"] = &UIInterface::inferior;
+	this->lexer_condition["=="] = &UIInterface::equals;
+	this->lexer_condition[">="] = &UIInterface::superior;
+	this->lexer_condition["<="] = &UIInterface::inferior;
+	this->lexer_condition["!="] = &UIInterface::notequals;
 }
 
 void						UIInterface::build_parser( std::string const & content )

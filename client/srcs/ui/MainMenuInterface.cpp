@@ -49,28 +49,19 @@ std::ostream &				operator<<(std::ostream & o, MainMenuInterface const & i)
 
 void						MainMenuInterface::draw(void)
 {
+	this->variables["$selected"] = (std::ostringstream() << this->current_position).str();
+
 	this->build();
-	if (this->current_position == 0 && this->elements.count("background_solo") && this->elements.count("background_multi")) {
-		this->elements["background_solo"]->setStyle("color:#FF8000");		this->elements["background_multi"]->setStyle("color:#BDBDBD");
-	} else if (this->current_position == 1 && this->elements.count("background_multi") && this->elements.count("background_solo")) {
-		this->elements["background_multi"]->setStyle("color:#FF8000");
-		this->elements["background_solo"]->setStyle("color:#BDBDBD");
-	}
 	this->canvas->draw();
-
-	if (this->elements.count("background")) {
-		this->elements["background"]->transform.position.x += 0.1f;
-
-		if (this->elements["background"]->transform.position.x > 10) {
-			this->elements["background"]->transform.position.x = 0;
-		}
-	}
 }
 
 void						MainMenuInterface::handleUP(unsigned int key)
 {
-	if (key == SDL_SCANCODE_UP || key == SDL_SCANCODE_DOWN) {
-		this->current_position = (this->current_position + 1) % 2;
+	if (key == SDL_SCANCODE_UP) {
+		this->current_position = (this->current_position - 1) < 0 ? 3 : (this->current_position - 1) % 4;
+	}
+	if (key == SDL_SCANCODE_DOWN) {
+		this->current_position = (this->current_position + 1) % 4;
 	}
 }
 

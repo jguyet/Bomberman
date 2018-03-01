@@ -45,21 +45,63 @@ std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
 
 // PUBLIC METHOD #################################################
 
+void						GameInterface::addPlayers(void)
+{
+	std::vector<GameObject*>	players = std::vector<GameObject*>(this->scene->players);
+
+	int order = 1;
+	for (int i = 0; i < players.size(); i++)
+	{
+		GameObject *player = players.at(i);
+
+		if (player == NULL)
+			continue ;
+		CharacterControllerScript *script = ((CharacterControllerScript*)player->GetComponent<Script>());
+		if (script == NULL)
+			continue ;
+		std::string key = (std::ostringstream() << "$player_name" << order).str();
+
+		std::string player_name;
+
+		if (script->playerId == 100) {
+			player_name = (std::ostringstream() << "bot (" << player->id << ")").str();
+		} else {
+			player_name = (std::ostringstream() << "player (" << script->playerId << ")").str();
+		}
+		this->variables[key] = player_name;
+		order++;
+	}
+
+	for (; order < 8; order++)
+	{
+		std::string key = (std::ostringstream() << "$player_name" << order).str();
+		this->variables[key] = "";
+	}
+}
+
 void						GameInterface::draw(void)
 {
-	this->build();
+	this->addPlayers();
 
-	std::string value = "0";
+	std::string bomb_value = "0";
+	std::string power_value = "0";
+	std::string speed_value = "0";
+	std::string player_name = "";
 	if (this->scene->current_player != NULL) {
 		CharacterControllerScript *script = ((CharacterControllerScript*)this->scene->current_player->GetComponent<Script>());
 		if (script != NULL) {
-			std::ostringstream os;
-			os << script->bomb;
-			value = os.str();
+			bomb_value = (std::ostringstream() << script->bomb).str();
+			power_value = (std::ostringstream() << script->power).str();
+			speed_value = (std::ostringstream() << script->speed_count).str();
+			player_name = (std::ostringstream() << script->playerId).str();
 		}
 	}
-	this->variables["$bomb"] = value;
-	
+	this->variables["$bomb"] = bomb_value;
+	this->variables["$power"] = power_value;
+	this->variables["$speed"] = speed_value;
+	this->variables["$current_player_name"] = player_name;
+
+	this->build();
 	this->canvas->draw();
 }
 

@@ -17,6 +17,8 @@ class GameInterface : public UIInterface
 		void								draw(void);
 
 	private:
+		void								addPlayers(void);
+
 		Canvas								*canvas;
 		GameScene							*scene;
 

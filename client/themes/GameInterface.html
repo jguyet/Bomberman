@@ -2,38 +2,330 @@
 # GameInterface :
 #
 <style>
-.base_css
+.ladder-background
 {
-	color:#000000;
+	color:#6E6E6E;
+}
+.ladder-background-bar
+{
+	color:#424242;
+}
+.bomb
+{
 	font-size: 30px;
+	font-family: arial;
+	color:#ffffff;
+}
+.ladder
+{
+	font-size: 16px;
+	color:#ffffff;
 	font-family: arial;
 }
 </style>
 
 <img>
 {
+	id: "ico_img",
+	src: "assets/ui/gameinterface/ico.png",
+	width: 100,
+	height: 100,
+	w: 218,
+	h: 216,
+	x: 0,
+	y: 0%,
+	z-index: -1
+}
+</img>
+
+<if condition="$current_player_name != NULL" >
+	<text>
+	{
+		id: "current_player_lbl",
+		value: "player ($current_player_name)",
+		parent: "ico_img",
+		class: "bomb",
+		x: 5,
+		y: 100
+	}
+	</text>
+</if>
+
+<img>
+{
 	id: "bomb_img",
-	src: "assets/ui/gameinterface/bomb.png",
+	src: "assets/ui/gameinterface/bomb-up.jpg",
 	width: 50,
 	height: 50,
-	w: 256,
-	h: 256,
+	w: 98,
+	h: 103,
 	x: 100%,
 	y: 30%,
 	z-index: -1
 }
 </img>
 
-<if condition="true==true" >
+<if condition="$bomb != NULL" >
 	<text>
 	{
 		id: "bomb_lbl",
 		value: "$bomb",
 		parent: "bomb_img",
-		class: "base_css",
-		style: "color:#FFFFFF;",
+		class: "bomb",
 		x: -30,
 		y: 15
+	}
+	</text>
+</if>
+
+<img>
+{
+	id: "power_img",
+	src: "assets/ui/gameinterface/power-up.png",
+	width: 50,
+	height: 50,
+	w: 98,
+	h: 103,
+	x: 100%,
+	y: 40%,
+	z-index: -1
+}
+</img>
+
+<if condition="$power != NULL" >
+	<text>
+	{
+		id: "power_lbl",
+		value: "$power",
+		parent: "power_img",
+		class: "bomb",
+		x: -30,
+		y: 15
+	}
+	</text>
+</if>
+
+<img>
+{
+	id: "speed_img",
+	src: "assets/ui/gameinterface/speed-up.jpg",
+	width: 50,
+	height: 50,
+	w: 98,
+	h: 103,
+	x: 100%,
+	y: 50%,
+	z-index: -1
+}
+</img>
+
+<if condition="$speed != NULL" >
+	<text>
+	{
+		id: "speed_lbl",
+		value: "$speed",
+		parent: "speed_img",
+		class: "bomb",
+		x: -30,
+		y: 15
+	}
+	</text>
+</if>
+
+<square>
+{
+	id:"background_ladder",
+	x: 95%,
+	y: 5%,
+	width: 130,
+	height: 140,
+	class: "ladder-background"
+}
+</square>
+
+<square>
+{
+	id:"l0",
+	parent: "background_ladder",
+	x: 0,
+	y: 0,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<square>
+{
+	id:"l1",
+	parent: "background_ladder",
+	x: 0,
+	y: 20,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<square>
+{
+	id:"l2",
+	parent: "background_ladder",
+	x: 0,
+	y: 40,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<square>
+{
+	id:"l3",
+	parent: "background_ladder",
+	x: 0,
+	y: 60,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<square>
+{
+	id:"l4",
+	parent: "background_ladder",
+	x: 0,
+	y: 80,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<square>
+{
+	id:"l5",
+	parent: "background_ladder",
+	x: 0,
+	y: 100,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<square>
+{
+	id:"l6",
+	parent: "background_ladder",
+	x: 0,
+	y: 120,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<square>
+{
+	id:"l7",
+	parent: "background_ladder",
+	x: 0,
+	y: 140,
+	width: 130,
+	height: 2,
+	class: "ladder-background-bar"
+}
+</square>
+
+<if condition="$player_name1 != NULL">
+	<text>
+	{
+		id: "text1",
+		parent: "background_ladder",
+		x: 0,
+		y: 0,
+		value: "1 $player_name1",
+		class: "ladder"
+	}
+	</text>
+</if>
+
+<if condition="$player_name2 != NULL">
+	<text>
+	{
+		id: "text2",
+		parent: "background_ladder",
+		x: 0,
+		y: 20,
+		value: "2 $player_name2",
+		class: "ladder"
+	}
+	</text>
+</if>
+
+<if condition="$player_name3 != NULL">
+	<text>
+	{
+		id: "text3",
+		parent: "background_ladder",
+		x: 0,
+		y: 40,
+		value: "3 $player_name3",
+		class: "ladder"
+	}
+	</text>
+</if>
+
+<if condition="$player_name4 != NULL">
+	<text>
+	{
+		id: "text4",
+		parent: "background_ladder",
+		x: 0,
+		y: 60,
+		value: "4 $player_name4",
+		class: "ladder"
+	}
+	</text>
+</if>
+
+<if condition="$player_name5 != NULL">
+	<text>
+	{
+		id: "text5",
+		parent: "background_ladder",
+		x: 0,
+		y: 80,
+		value: "5 $player_name5",
+		class: "ladder"
+	}
+	</text>
+</if>
+
+<if condition="$player_name6 != NULL">
+	<text>
+	{
+		id: "text6",
+		parent: "background_ladder",
+		x: 0,
+		y: 100,
+		value: "6 $player_name6",
+		class: "ladder"
+	}
+	</text>
+</if>
+
+<if condition="$player_name7 != NULL">
+	<text>
+	{
+		id: "text7",
+		parent: "background_ladder",
+		x: 0,
+		y: 120,
+		value: "7 $player_name7",
+		class: "ladder"
 	}
 	</text>
 </if>

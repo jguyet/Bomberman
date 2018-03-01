@@ -40,6 +40,7 @@ class UIInterface
 		bool								equals(std::string const &first, std::string const &second);
 		bool								superior(std::string const &first, std::string const &second);
 		bool								inferior(std::string const &first, std::string const &second);
+		bool								notequals(std::string const &first, std::string const &second);
 		//end lexer methods
 
 		void								build_lexer( void );
