@@ -7,7 +7,7 @@
 enum e_action {
 	ATTACK,
 	SEARCH
-}
+};
 
 class AI
 {
