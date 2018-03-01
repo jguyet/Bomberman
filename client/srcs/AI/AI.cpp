@@ -82,14 +82,21 @@ void				AI::select_target(void)
 			info = 1;
 		}
 
-		GameObject *near;
-		near = this->getNearestBlock();
+		if (this->action != SEARCH)
+		{
+			GameObject *near;
+			near = this->getNearestBlock();
 
-		this->target.pos_x = near->transform.position.x;
-		this->target.pos_y = near->transform.position.z;
-		this->tplayer = near;
+			this->target.pos_x = near->transform.position.x;
+			this->target.pos_y = near->transform.position.z;
+			this->tplayer = near;
+			this->action = SEARCH;
+			std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
+		}
+		else {
+
+		}
 		this->select_t = true;
-		std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
 	}
 	else if ((std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
 		this->restart_target_pos();
@@ -100,9 +107,10 @@ int 				AI::getInfos(void)
 	Scene *scene = BombermanClient::getInstance()->current_scene;
 
 	this->Objects.clear();
-	for (std::map<long, GameObject*>::iterator it = scene->gameObjects.begin(); it != scene->gameObjects.end(); it++) {
-		GameObject *current = it->second;
-		// std::cout << current->tag << " " <<current->transform.position.x << " " << current->transform.position.z << std::endl;
+	std::map<long, GameObject*>  cpy_scene = std::map<long, GameObject*>(scene->gameObjects);
+	for (auto &it : cpy_scene) {
+		GameObject *current = it.second;
+
 		if (current->tag == "ice_block")
 			this->Objects.push_back(current);
 		// if (current->tag == "ice_block")
@@ -154,9 +162,9 @@ int				AI::brain(void)
 	this->bomb_l = BombControllerScript::List;
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
+	this->action = IDLE;
 
 	this->select_target();
-
 	// checker ##########################
 
 	if (this->start_checks())
