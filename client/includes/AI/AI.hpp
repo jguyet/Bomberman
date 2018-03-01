@@ -6,7 +6,8 @@
 
 enum e_action {
 	ATTACK,
-	SEARCH
+	SEARCH,
+	IDLE
 };
 
 class AI
@@ -37,10 +38,11 @@ class AI
 		GameObject*									tplayer;
 		GameObject*									my_player;
 
-		bool										select_t;
 		std::list<Module_h> 						moves;
 		A_star										a_star;
 		int											pause;
+		bool										select_t;
+		e_action									action;
 
 		std::vector<GameObject*> 					Objects;
 		std::vector<BombControllerScript*>			bomb_l;
