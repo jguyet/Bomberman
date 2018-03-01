@@ -37,54 +37,114 @@
 }
 </text>
 
-<square>
-{
-	id: "background_solo",
-	class: "mainmenu-css",
-	x: -150,
-	y: 45%,
-	width: 300,
-	height: 50,
-	style: "color:#424242;float:center;",
-	z-index: 2
-}
-</square>
+<if condition="$selected!=0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		x: -150,
+		y: 45%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
 
-<text>
-{
-	id: "button_solo",
-	class: "mainmenu-css",
-	value: "Return to mainmenu",
-	parent: "background_solo",
-	x: 10,
-	y: 7,
-	style: "color:#848484;font-size: 30px;",
-	z-index: 3
-}
-</text>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Return to mainmenu",
+		parent: "background_solo",
+		x: 10,
+		y: 7,
+		style: "color:#848484;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>
 
-<square>
-{
-	id: "background_to_game",
-	class: "mainmenu-css",
-	x: -150,
-	y: 55%,
-	width: 300,
-	height: 50,
-	style: "color:#424242;float:center;",
-	z-index: 2
-}
-</square>
+<if condition="$selected==0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		x: -150,
+		y: 45%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
 
-<text>
-{
-	id: "button_to_game",
-	class: "mainmenu-css",
-	value: "Return to game",
-	parent: "background_to_game",
-	x: 50,
-	y: 7,
-	style: "color:#848484;font-size: 30px;",
-	z-index: 3
-}
-</text>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Return to mainmenu",
+		parent: "background_solo",
+		x: 10,
+		y: 7,
+		style: "color:#000000;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=1">
+	<square>
+	{
+		id: "background_to_game",
+		class: "mainmenu-css",
+		x: -150,
+		y: 55%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+
+	<text>
+	{
+		id: "button_to_game",
+		class: "mainmenu-css",
+		value: "Return to game",
+		parent: "background_to_game",
+		x: 50,
+		y: 7,
+		style: "color:#848484;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==1">
+	<square>
+	{
+		id: "background_to_game",
+		class: "mainmenu-css",
+		x: -150,
+		y: 55%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+
+	<text>
+	{
+		id: "button_to_game",
+		class: "mainmenu-css",
+		value: "Return to game",
+		parent: "background_to_game",
+		x: 50,
+		y: 7,
+		style: "color:#000000;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>

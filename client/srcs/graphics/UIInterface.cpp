@@ -29,6 +29,10 @@ UIInterface &				UIInterface::operator=( UIInterface const & rhs )
 
 UIInterface::~UIInterface ( void )
 {
+	this->clearElements();
+	this->elements_params.clear();
+	this->styles.clear();
+	this->conditions.clear();
 	return ;
 }
 
@@ -41,6 +45,17 @@ std::ostream &				operator<<(std::ostream & o, UIInterface const & i)
 // ###############################################################
 
 // PUBLIC METHOD #################################################
+
+void						UIInterface::clearElements(void)
+{
+	for (std::map<std::string, Tag*>::iterator it = this->elements.begin(); it != this->elements.end(); it++)
+	{
+		Tag *tmp = it->second;
+
+		delete tmp;
+	}
+	this->elements.clear();
+}
 
 Tag							*UIInterface::getElementById(const char *id)
 {
@@ -70,7 +85,7 @@ bool					UIInterface::initialize( std::string const &ui_file )
 	if (this->last_modified_date == date)
 		return false;
 	if (this->last_modified_date != 0) {
-		this->elements.clear();
+		this->clearElements();
 		this->elements_params.clear();
 		this->styles.clear();
 		this->conditions.clear();

@@ -134,6 +134,39 @@ void						BombermanClient::build_window( void )
 	SDL_GL_SetSwapInterval(0);
 }
 
+void						BombermanClient::delete_inputs( void )
+{
+	delete KeyBoard::instance;
+	delete Mouse::instance;
+}
+
+void						BombermanClient::delete_properties( void )
+{
+	delete this->properties;
+}
+
+void						BombermanClient::delete_resources( void )
+{
+	Model::deleteModels();
+}
+
+void						BombermanClient::delete_window( void )
+{
+	SDL_GL_DeleteContext(this->context);
+	SDL_DestroyWindow(this->window);
+	delete this->screen;
+}
+
+void						BombermanClient::delete_fonts( void )
+{
+	for (std::map<std::string, TTF_Font*>::iterator it = this->fonts.begin(); it != this->fonts.end(); it++)
+	{
+		TTF_Font *f = it->second;
+		TTF_CloseFont(f);
+	}
+	this->fonts.clear();
+}
+
 void						BombermanClient::setWindowSize(int width, int height)
 {
 	SDL_SetWindowSize(this->window, width, height);
@@ -251,8 +284,13 @@ int main(void)
 
 	client->run();
 
-	Model::deleteModels();
+	client->delete_inputs();
+	client->delete_resources();
+	client->delete_fonts();
+	client->delete_properties();
+	client->delete_window();
 	delete client;
+	std::cout << "EXIT OK" << std::endl;
 	return (0);
 }
 

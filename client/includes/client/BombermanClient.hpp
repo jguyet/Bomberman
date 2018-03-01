@@ -47,6 +47,13 @@ class BombermanClient : public IRenderLoop
 		void										initialize_resources( void );
 		void										initialize_inputs( void );
 		void										build_window( void );
+
+		void										delete_inputs( void );
+		void										delete_properties( void );
+		void										delete_resources( void );
+		void										delete_window( void );
+		void										delete_fonts( void );
+
 		void										run( void );
 		void										stop( void );
 

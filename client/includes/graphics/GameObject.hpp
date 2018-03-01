@@ -44,7 +44,7 @@ class GameObject
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
-		std::map<const std::string, Component*>	components;
+		std::map<std::string, Component*>	components;
 		// #####################################################################
 };
 
@@ -52,7 +52,8 @@ class GameObject
 template <typename T>
 bool						GameObject::AddComponent(Component *component)
 {
-	const char* name = typeid(T).name();
+	std::string name = std::string(typeid(T).name());
+	name.erase(std::remove_if(name.begin(), name.end(), &isdigit), name.end());
 	this->components[name] = component;
 	component->gameObject = this;
 	return true;
@@ -61,7 +62,8 @@ bool						GameObject::AddComponent(Component *component)
 template <typename T>
 bool						GameObject::AddComponent( void )
 {
-	const char* name = typeid(T).name();
+	std::string name = std::string(typeid(T).name());
+	name.erase(std::remove_if(name.begin(), name.end(), &isdigit), name.end());
 	T *component = new T();
 	this->components[name] = component;
 	component->gameObject = this;
@@ -71,7 +73,8 @@ bool						GameObject::AddComponent( void )
 template <typename T>
 bool						GameObject::RemoveComponent(void)
 {
-	const char* name = typeid(T).name();
+	std::string name = std::string(typeid(T).name());
+	name.erase(std::remove_if(name.begin(), name.end(), &isdigit), name.end());
 	if (this->components.count(name) == 0) {
 		return false;
 	}
@@ -82,7 +85,8 @@ bool						GameObject::RemoveComponent(void)
 template<typename T>
 T*							GameObject::GetComponent(void)
 {
-	const char* name = typeid(T).name();
+	std::string name = std::string(typeid(T).name());
+	name.erase(std::remove_if(name.begin(), name.end(), &isdigit), name.end());
 	if (this->components.count(name) == 0) {
 		return NULL;
 	}

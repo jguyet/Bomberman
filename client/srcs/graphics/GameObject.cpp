@@ -34,6 +34,12 @@ GameObject &				GameObject::operator=( GameObject const & rhs )
 
 GameObject::~GameObject ( void )
 {
+	for (std::map<std::string, Component*>::iterator it = this->components.begin(); it != this->components.end(); it++)
+	{
+		if (it->first == "Model")
+			continue ;
+		delete it->second;
+	}
 	this->components.clear();
 	return ;
 }

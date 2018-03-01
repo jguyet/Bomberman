@@ -18,6 +18,8 @@ MainMenuScene::MainMenuScene ( void )
 
 	this->interface = new MainMenuInterface();
 	Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
+
+	KeyBoard::instance->addHandler("MainMenuScene", this);
 	return ;
 }
 
@@ -38,6 +40,8 @@ MainMenuScene &				MainMenuScene::operator=( MainMenuScene const & rhs )
 
 MainMenuScene::~MainMenuScene ( void )
 {
+	delete this->interface;
+	KeyBoard::instance->removeHandler("MainMenuScene");
 	return ;
 }
 
@@ -61,29 +65,41 @@ bool								MainMenuScene::select_server(void)
 	std::string ip = string_split.at(0);
 	int port = atoi(string_split.at(1).c_str());
 
+	if (BombermanClient::getInstance()->sock != NULL) {
+		delete BombermanClient::getInstance()->sock;
+		BombermanClient::getInstance()->sock = NULL;
+	}
 	BombermanClient::getInstance()->sock = new Socket(ip.c_str(), port);
 
 	if (BombermanClient::getInstance()->sock->state == true)
 	{
 		BombermanClient::getInstance()->current_scene = new GameScene("map_01");
+		delete this;
 		return true;
 	}
+	delete BombermanClient::getInstance()->sock;
+	BombermanClient::getInstance()->sock = NULL;
 	return false;
 }
 
 bool								MainMenuScene::select_local(void)
 {
+	if (BombermanClient::getInstance()->sock != NULL) {
+		delete BombermanClient::getInstance()->sock;
+		BombermanClient::getInstance()->sock = NULL;
+	}
 	BombermanClient::getInstance()->sock = new Socket("", 0);
 	BombermanClient::getInstance()->current_scene = new GameScene("map_01");
+	delete this;
 	return true;
 }
 
-void								MainMenuScene::calculPhisics(void)
+void								MainMenuScene::handleUP(unsigned int key)
 {
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE)) {//ESC
+	if (key == SDL_SCANCODE_ESCAPE) {
 		BombermanClient::getInstance()->stop();
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_KP_ENTER) || KeyBoard::instance->getKey(SDL_SCANCODE_RETURN)) {//ESC
+	if (key == SDL_SCANCODE_KP_ENTER || key == SDL_SCANCODE_RETURN) {
 		switch(this->interface->current_position)
 		{
 			case 0:
@@ -92,8 +108,20 @@ void								MainMenuScene::calculPhisics(void)
 			case 1:
 				this->select_server();
 			break;
+			case 2:
+			break ;
+			case 3:
+			break;
+			case 4:
+				delete this;
+				BombermanClient::getInstance()->stop();
+			break ;
 		}
 	}
+}
+
+void								MainMenuScene::calculPhisics(void)
+{
 	//call parent method
 	this->_calculPhisics();
 }

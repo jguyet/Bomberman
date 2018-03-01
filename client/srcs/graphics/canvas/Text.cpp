@@ -131,7 +131,6 @@ void						Text::setStyle(std::string const &style)
 
 void						Text::setValue(std::string const &value)
 {
-
 	this->text = value.c_str();
 }
 

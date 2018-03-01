@@ -80,7 +80,6 @@ void						ExplosionControllerScript::Update(void)
 
 		BombermanClient::getInstance()->current_scene->remove(this->gameObject);
 		delete this->gameObject;
-		delete this;
 	}
 }
 

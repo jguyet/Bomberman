@@ -58,10 +58,10 @@ void						MainMenuInterface::draw(void)
 void						MainMenuInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_UP) {
-		this->current_position = (this->current_position - 1) < 0 ? 3 : (this->current_position - 1) % 4;
+		this->current_position = (this->current_position - 1) < 0 ? 4 : (this->current_position - 1) % 5;
 	}
 	if (key == SDL_SCANCODE_DOWN) {
-		this->current_position = (this->current_position + 1) % 4;
+		this->current_position = (this->current_position + 1) % 5;
 	}
 }
 

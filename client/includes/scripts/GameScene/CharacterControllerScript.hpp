@@ -38,6 +38,8 @@ class CharacterControllerScript : public Script
 		int 								life = 5;
 		int									speed_count = 1;
 		float								speed = SPEED;
+
+		bool								locked = false;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

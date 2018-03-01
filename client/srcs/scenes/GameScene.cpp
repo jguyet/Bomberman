@@ -44,13 +44,13 @@ void GameScene::StartSolo(void)
 	this->all_player.push_back(playerObject);
 	this->add(playerObject);
 
-	GameObject *player = Factory::newPlayer(100);
-	this->all_player.push_back(player);
-	this->players.push_back(player);
-	player->transform.position = glm::vec3(4,1,36);
-	player->transform.scale = glm::vec3(3,3,3);
-	player->transform.rotation = glm::vec3(0,0,0);
-	this->add(player);//add on scene
+	// GameObject *player = Factory::newPlayer(100);
+	// this->all_player.push_back(player);
+	// this->players.push_back(player);
+	// player->transform.position = glm::vec3(4,1,36);
+	// player->transform.scale = glm::vec3(3,3,3);
+	// player->transform.rotation = glm::vec3(0,0,0);
+	// this->add(player);//add on scene
 }
 
 void					GameScene::removePlayer(GameObject *player)
@@ -105,6 +105,10 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
+	if (this->current_player != NULL) {
+		this->remove(this->current_player);
+		delete this->current_player;
+	}
 	if (this->interface != NULL) {
 		delete this->interface;
 	}
@@ -125,25 +129,39 @@ std::ostream &				operator<<(std::ostream & o, GameScene const & i)
 
 // ###############################################################
 
+void								GameScene::closeQuitInterface(void)
+{
+	QuitMenuInterface *tmp = this->quitInterface;
+	this->quitInterface = NULL;
+	delete tmp;
+	if (this->current_player == NULL)
+		return ;
+	CharacterControllerScript *script = ((CharacterControllerScript*)this->current_player->GetComponent<Script>());
+	script->locked = false;
+}
 
 void								GameScene::calculPhisics(void)
 {
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE) && this->quitInterface == NULL) {//ESC
-		this->quitInterface = new QuitMenuInterface();
+		this->quitInterface = new QuitMenuInterface(this);
+		if (this->current_player != NULL) {
+			CharacterControllerScript *script = ((CharacterControllerScript*)this->current_player->GetComponent<Script>());
+			script->locked = true;
+		}
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_W)) {//UP
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_W) && this->quitInterface == NULL) {//UP
 		this->camera->move(glm::vec3(0, 0, 2));
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_D)) {//RIGHT
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_D) && this->quitInterface == NULL) {//RIGHT
 		this->camera->move(glm::vec3(2, 0, 0));
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_A)) {//LEFT
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_A) && this->quitInterface == NULL) {//LEFT
 		this->camera->move(glm::vec3(-2, 0, 0));
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_S)) {//DOWN
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_S) && this->quitInterface == NULL) {//DOWN
 		this->camera->move(glm::vec3(0, 0, -2));
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_SPACE)) {//DOWN
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_SPACE) && this->quitInterface == NULL) {//DOWN
 		this->camera->transform.position.y += 0.5f;
 	}
 	//call parent method

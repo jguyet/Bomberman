@@ -4,6 +4,16 @@
 
 Scene::~Scene ( void )
 {
+	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
+		GameObject *obj = it->second;
+		if (obj == NULL) {
+			continue ;
+		}
+		delete obj;
+		it->second = NULL;
+	}
+	this->gameObjects.clear();
+	delete this->camera;
 	return ;
 }
 
@@ -34,10 +44,10 @@ void								Scene::remove(GameObject *obj)
 void								Scene::_calculPhisics(void)
 {
 	//TODO by static Components
-
-
 	std::map<long, GameObject*> cpy = std::map<long, GameObject*>(this->gameObjects);
+
 	BoxCollider::Check3DCollisions(cpy);
+
 	for (std::map<long, GameObject*>::iterator it = cpy.begin(); it != cpy.end(); it++) {
 		GameObject *currentGameObject = it->second;
 		//script calling

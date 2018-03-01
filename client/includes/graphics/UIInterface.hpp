@@ -47,6 +47,8 @@ class UIInterface
 		void								build_parser( std::string const & content );
 		bool								initialize( std::string const &ui_file );
 
+		void								clearElements(void);
+
 		std::map<std::string, LexerMethods>				lexer;
 		std::map<std::string, LexerTagMethods>			lexer_tag;
 		std::map<std::string, LexerConditionMethods>	lexer_condition;

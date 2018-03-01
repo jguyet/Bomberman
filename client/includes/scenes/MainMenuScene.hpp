@@ -4,7 +4,7 @@
 # include "Bomberman.hpp"
 # include "ui/MainMenuInterface.hpp"
 
-class MainMenuScene : public Scene
+class MainMenuScene : public Scene , public KeyBoardEventHandler
 {
 	public:
 		// STATICS ############################################################
@@ -27,6 +27,7 @@ class MainMenuScene : public Scene
 		//void								remove(GameObject *obj);
 		//std::map<long, GameObject*>		gameObjects;
 		//Camera							*camera;
+		void								handleUP(unsigned int key);
 		// ####################################################################
 		// PUBLICS ############################################################
 		bool								select_server(void);

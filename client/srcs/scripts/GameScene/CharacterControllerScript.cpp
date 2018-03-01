@@ -84,6 +84,8 @@ void 								CharacterControllerScript::BombExplode()
 
 void								CharacterControllerScript::MUp(void)
 {
+	if (this->locked)
+		return ;
 	if (this->gameObject->transform.rotation.y != 270.f) {
 		this->gameObject->transform.rotation.y = 270.f;
 	}
@@ -93,6 +95,8 @@ void								CharacterControllerScript::MUp(void)
 
 void								CharacterControllerScript::MDown(void)
 {
+	if (this->locked)
+		return ;
 	if (this->gameObject->transform.rotation.y != 90.f) {
 		this->gameObject->transform.rotation.y = 90.f;
 	}
@@ -102,6 +106,8 @@ void								CharacterControllerScript::MDown(void)
 
 void								CharacterControllerScript::MLeft(void)
 {
+	if (this->locked)
+		return ;
 	if (this->gameObject->transform.rotation.y != 0.f) {
 		this->gameObject->transform.rotation.y = 0.f;
 	}
@@ -111,6 +117,8 @@ void								CharacterControllerScript::MLeft(void)
 
 void								CharacterControllerScript::MRight(void)
 {
+	if (this->locked)
+		return ;
 	if (this->gameObject->transform.rotation.y != 180.f) {
 		this->gameObject->transform.rotation.y = 180.f;
 	}
@@ -273,7 +281,9 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	else if (collider->tag == "Explosion") {
 		if (this->gameObject == dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player) {
 			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
+			GameObject *gameObject = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player;
 			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->current_player = NULL;
+			gameObject->toDelete = true;
 		} else {
 			printf("Player id %d is dead !\n", this->getPlayerId());
 			dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->removePlayer(this->gameObject);

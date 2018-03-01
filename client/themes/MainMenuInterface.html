@@ -29,9 +29,9 @@
 	id: "background_menu",
 	class: "mainmenu-css",
 	x: -200,
-	y: 33%,
+	y: 25%,
 	width: 400,
-	height: 375,
+	height: 425,
 	style: "color:#2E2E2E;float:center;",
 	z-index: 1
 }
@@ -56,7 +56,7 @@
 		id: "background_solo",
 		class: "mainmenu-css",
 		x: -150,
-		y: 45%,
+		y: 35%,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -83,7 +83,7 @@
 		id: "background_solo",
 		class: "mainmenu-css",
 		x: -150,
-		y: 45%,
+		y: 35%,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -110,7 +110,7 @@
 		id: "background_multi",
 		class: "mainmenu-css",
 		x: -150,
-		y: 55%,
+		y: 45%,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -137,7 +137,7 @@
 		id: "background_multi",
 		class: "mainmenu-css",
 		x: -150,
-		y: 55%,
+		y: 45%,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -164,7 +164,7 @@
 		id: "background_btn_options",
 		class: "mainmenu-css",
 		x: -150,
-		y: 65%,
+		y: 55%,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -191,7 +191,7 @@
 		id: "background_btn_options",
 		class: "mainmenu-css",
 		x: -150,
-		y: 65%,
+		y: 55%,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -218,7 +218,7 @@
 		id: "background_btn_credit",
 		class: "mainmenu-css",
 		x: -150,
-		y: 75%,
+		y: 65%,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -245,7 +245,7 @@
 		id: "background_btn_credit",
 		class: "mainmenu-css",
 		x: -150,
-		y: 75%,
+		y: 65%,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -259,6 +259,60 @@
 		value: "Credits",
 		parent: "background_btn_credit",
 		x: 100,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==4">
+	<square>
+	{
+		id: "background_btn_exit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 75%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_exit",
+		class: "mainmenu-css",
+		value: "Exit",
+		parent: "background_btn_exit",
+		x: 125,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=4">
+	<square>
+	{
+		id: "background_btn_exit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 75%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_exit",
+		class: "mainmenu-css",
+		value: "Exit",
+		parent: "background_btn_exit",
+		x: 125,
 		y: 7,
 		style: "color:#848484;",
 		z-index: 3

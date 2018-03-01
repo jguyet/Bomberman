@@ -60,6 +60,7 @@ class Model : public Component
 		std::map<std::string, GLuint>				textureIdMap;
 		std::vector<struct MyMesh>					myMeshes;
 		std::vector<unsigned int> 					indices;
+		std::vector<unsigned int *>					faces;
 
 		GLuint 										color;
 

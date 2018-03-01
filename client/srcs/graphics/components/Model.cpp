@@ -180,6 +180,7 @@ void						Model::genVAOsAndUniformBuffer(Model *model)
         // have to convert from Assimp format to array
         unsigned int *faceArray;
         faceArray = (unsigned int *)malloc(sizeof(unsigned int) * mesh->mNumFaces * 3);
+		model->faces.push_back(faceArray);
         unsigned int faceIndex = 0;
 
         for (unsigned int t = 0; t < mesh->mNumFaces; ++t) {
@@ -319,6 +320,11 @@ Model &				Model::operator=( Model const & rhs )
 
 Model::~Model ( void )
 {
+	for (int i = 0; i < this->faces.size(); i++) {
+		unsigned int *f = this->faces.at(i);
+		free(f);
+	}
+	//delete this->scene;
 	return ;
 }
 

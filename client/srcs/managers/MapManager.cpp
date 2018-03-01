@@ -185,20 +185,14 @@ void						MapManager::buildObjects(Map *selected)
 	{
 		if (elem.second.obstacle != NULL)
 			this->scene->add(elem.second.obstacle);
-		 //if (elem.second.ground != NULL)
-		//	 this->scene->add(elem.second.ground);
 	}
-
 	this->scene->add(Factory::newBackground());
 	this->scene->add(Factory::newSkybox());
 }
 
 MapManager::~MapManager ()
 {
-	// for (auto &elem : this->maps)
-	// {
-	// 	delete elem.second;
-	// }
+	//pas besoin de delete
 }
 
 std::ostream &				operator<<(std::ostream & o, MapManager const & i)

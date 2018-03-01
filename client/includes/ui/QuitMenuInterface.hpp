@@ -8,7 +8,7 @@ class QuitMenuInterface : public UIInterface , public KeyBoardEventHandler
 {
 	public:
 
-		QuitMenuInterface( void );
+		QuitMenuInterface( GameScene *scene );
 		QuitMenuInterface( QuitMenuInterface const & src );
 		virtual ~QuitMenuInterface( void );
 
@@ -20,6 +20,8 @@ class QuitMenuInterface : public UIInterface , public KeyBoardEventHandler
 		void								handleUP(unsigned int key);
 	private:
 		Canvas									*canvas;
+		GameScene								*scene;
+		int										current_position;
 };
 
 #endif
