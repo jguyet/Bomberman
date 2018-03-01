@@ -13,6 +13,7 @@ Canvas::Canvas ( int width, int height )
 	this->canvas = NULL;
 	this->updated = false;
 	this->elements = NULL;
+	this->textureID = 0;
 	return ;
 }
 
@@ -56,12 +57,12 @@ void						Canvas::build(void)
 	this->canvas = SDL_CreateRGBSurface(0, this->width, this->height, 32, 0,0,0,0);
 	SDL_FillRect(this->canvas, NULL, SDL_MapRGB(this->canvas->format, 0, 1, 0));
 
-	for (std::map<const char*, Image*>::iterator it = this->images.begin(); it != this->images.end(); it++) {
-		(*it).second->draw(this->canvas);
-	}
-	for (std::map<const char*, Square*>::iterator it = this->squares.begin(); it != this->squares.end(); it++) {
-		(*it).second->draw(this->canvas);
-	}
+	// for (std::map<const char*, Image*>::iterator it = this->images.begin(); it != this->images.end(); it++) {
+	// 	(*it).second->draw(this->canvas);
+	// }
+	// for (std::map<const char*, Square*>::iterator it = this->squares.begin(); it != this->squares.end(); it++) {
+	// 	(*it).second->draw(this->canvas);
+	// }
 	for (std::map<const char*, Text*>::iterator it = this->texts.begin(); it != this->texts.end(); it++) {
 		(*it).second->draw(this->canvas);
 	}
@@ -86,6 +87,7 @@ void						Canvas::build(void)
 			this->canvas->w, this->canvas->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, this->canvas->pixels);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	this->updated = true;
 }
 
 void						Canvas::draw(void)
@@ -111,7 +113,7 @@ void						Canvas::addText(const char *key, Text *text)
 		delete tmp;
 	}
 	this->texts[key] = text;
-	//this->updated = false;
+	this->updated = false;
 }
 
 void						Canvas::addImage(const char *key, Image *img)
@@ -139,6 +141,7 @@ void						Canvas::addSquare(const char *key, Square *square)
 void						Canvas::setElementsMap(std::map<std::string, Tag*> *elements)
 {
 	this->elements = elements;
+	this->updated = false;
 }
 
 // ###############################################################

@@ -25,6 +25,7 @@ class UIInterface
 		void								build(void);
 		int									last_modified_date = 0;
 		bool								debug_mode = false;
+		bool								modified = false;
 	private:
 		//lexer methods
 		typedef int (UIInterface::*LexerMethods)( std::string const & value );

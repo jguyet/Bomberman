@@ -47,6 +47,9 @@ std::ostream &				operator<<(std::ostream & o, StartGameInterface const & i)
 void						StartGameInterface::draw(void)
 {
 	this->build();
+	if (this->modified == true) {
+		this->canvas->setElementsMap(&this->elements);
+	}
 	this->canvas->draw();
 }
 
