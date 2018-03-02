@@ -92,7 +92,7 @@ void						BombermanClient::build_window( void )
 	this->screen = new Screen(width, height);
 	this->canvas = new Canvas(this->screen->width, this->screen->height);
 
-	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) == -1 )
     {
         printf( "Can't init SDL:  %s\n", SDL_GetError( ) );
         exit(0);
@@ -110,6 +110,15 @@ void						BombermanClient::build_window( void )
 	    printf("Couldn't create window: %s\n", SDL_GetError());
 	    exit(0);
 	}
+
+
+	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
+	this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
+	this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
+	this->music = Mix_LoadMUS("./assets/sound/stage2.mp3");
+	this->music_menu = Mix_LoadMUS("./assets/sound/stage1.mp3");
+	Mix_VolumeMusic(20);
+
 	//OPENGL version 3.3
 	//################################################
 	//include this BEFORE GLFW for vao fonctionnality (for macos)

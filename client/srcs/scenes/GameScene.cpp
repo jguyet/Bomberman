@@ -20,6 +20,8 @@ GameScene::GameScene (std::string selected_map)
 	this->quitInterface = NULL;
 	this->interface = new GameInterface(this);
 
+	Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
+
 	if (BombermanClient::getInstance()->sock->state == false)
 	{
 		this->StartSolo();
