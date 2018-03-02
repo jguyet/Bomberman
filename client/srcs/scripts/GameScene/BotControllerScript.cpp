@@ -2,15 +2,15 @@
 
 // STATIC ########################################################
 
-std::vector<GoombaControllerScript*> GoombaControllerScript::List = std::vector<GoombaControllerScript*>();
+std::vector<BotControllerScript*> BotControllerScript::List = std::vector<BotControllerScript*>();
 
 // ###############################################################
 
 // CANONICAL #####################################################
 
-GoombaControllerScript::GoombaControllerScript ( void ) : CharacterControllerScript(100)
+BotControllerScript::BotControllerScript ( void ) : CharacterControllerScript(100)
 {
-	GoombaControllerScript::List.push_back(this);
+	BotControllerScript::List.push_back(this);
 
 	this->startTime = TimeUtils::getCurrentSystemMillis();
 	this->anim_time = TimeUtils::getCurrentSystemMillis();
@@ -20,13 +20,13 @@ GoombaControllerScript::GoombaControllerScript ( void ) : CharacterControllerScr
 	return ;
 }
 
-GoombaControllerScript::GoombaControllerScript ( GoombaControllerScript const & src ) : CharacterControllerScript(100)
+BotControllerScript::BotControllerScript ( BotControllerScript const & src ) : CharacterControllerScript(100)
 {
 	*this = src;
 	return ;
 }
 
-GoombaControllerScript &				GoombaControllerScript::operator=( GoombaControllerScript const & rhs )
+BotControllerScript &				BotControllerScript::operator=( BotControllerScript const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -35,13 +35,13 @@ GoombaControllerScript &				GoombaControllerScript::operator=( GoombaControllerS
 	return (*this);
 }
 
-GoombaControllerScript::~GoombaControllerScript ( void )
+BotControllerScript::~BotControllerScript ( void )
 {
-	GoombaControllerScript::List.erase(std::remove(GoombaControllerScript::List.begin(), GoombaControllerScript::List.end(), this));
+	BotControllerScript::List.erase(std::remove(BotControllerScript::List.begin(), BotControllerScript::List.end(), this));
 	return ;
 }
 
-std::ostream &				operator<<(std::ostream & o, GoombaControllerScript const & i)
+std::ostream &				operator<<(std::ostream & o, BotControllerScript const & i)
 {
 	(void)i;
 	return (o);
@@ -51,12 +51,12 @@ std::ostream &				operator<<(std::ostream & o, GoombaControllerScript const & i)
 
 // PUBLIC METHOD #################################################
 
-void GoombaControllerScript::Start(void) {
+void BotControllerScript::Start(void) {
 	this->scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 	this->robot = new AI(this->gameObject);
 }
 
-void								GoombaControllerScript::Update(void)
+void								BotControllerScript::Update(void)
 {
 /*	if (TimeUtils::getCurrentSystemMillis() < this->anim_time + 40L)
 		return ;
@@ -93,7 +93,7 @@ void								GoombaControllerScript::Update(void)
 		(this->*cmd[i])();
 }
 
-void								GoombaControllerScript::OnPreRender(void)
+void								BotControllerScript::OnPreRender(void)
 {
 /*
 	float timer = 1.0f - ((this->startTime + BOMB_TIME - TimeUtils::getCurrentSystemMillis())/(float)BOMB_TIME);
@@ -108,7 +108,7 @@ void								GoombaControllerScript::OnPreRender(void)
 	//TODO add meche color in shader
 }
 
-void								GoombaControllerScript::OnEndRender(void)
+void								BotControllerScript::OnEndRender(void)
 {
 
 }

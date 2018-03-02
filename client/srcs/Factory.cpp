@@ -80,7 +80,7 @@ GameObject 							*Factory::newGoomba(void)
 	obj->transform.position = glm::vec3(0, 0, 0);
 	obj->transform.scale = glm::vec3(1.0f,1.0f,1.0f);
 	obj->AddComponent<Model>(Model::model["goomba"]);
-	obj->AddComponent<Script>(new GoombaControllerScript());
+	obj->AddComponent<Script>(new BotControllerScript());
 	return(obj);
 }
 
