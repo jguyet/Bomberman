@@ -6,7 +6,7 @@
 /*   By: jguyet <jguyet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 09:43:10 by jguyet            #+#    #+#             */
-/*   Updated: 2018/02/19 06:09:26 by amerelo          ###   ########.fr       */
+/*   Updated: 2018/03/02 03:20:17 by amerelo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 */
 # include "scenes/GameScene.hpp"
 # include "scenes/MainMenuScene.hpp"
+# include "scenes/SoloMenuScene.hpp"
 # include "scenes/SettingScene.hpp"
 
 /*
@@ -145,5 +146,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 # include "AI/Module_h.hpp"
 # include "AI/A_star.hpp"
 # include "AI/AI.hpp"
+
+# include "scripts/GameScene/GoombaControllerScript.hpp"
 
 #endif

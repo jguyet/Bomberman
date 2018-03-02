@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /Users/jguyet/sgoinfre/Bomberman/client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/jguyet/sgoinfre/Bomberman/client
+CMAKE_BINARY_DIR = /sgoinfre/goinfre/Perso/jguyet/Bomberman/client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /sgoinfre/goinfre/Perso/jguyet/Bomberman/client/CMakeFiles /sgoinfre/goinfre/Perso/jguyet/Bomberman/client/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /sgoinfre/goinfre/Perso/jguyet/Bomberman/client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -933,6 +933,33 @@ srcs/scenes/SettingScene.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/SettingScene.cpp.s
 .PHONY : srcs/scenes/SettingScene.cpp.s
 
+srcs/scenes/SoloMenuScene.o: srcs/scenes/SoloMenuScene.cpp.o
+
+.PHONY : srcs/scenes/SoloMenuScene.o
+
+# target to build an object file
+srcs/scenes/SoloMenuScene.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/SoloMenuScene.cpp.o
+.PHONY : srcs/scenes/SoloMenuScene.cpp.o
+
+srcs/scenes/SoloMenuScene.i: srcs/scenes/SoloMenuScene.cpp.i
+
+.PHONY : srcs/scenes/SoloMenuScene.i
+
+# target to preprocess a source file
+srcs/scenes/SoloMenuScene.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/SoloMenuScene.cpp.i
+.PHONY : srcs/scenes/SoloMenuScene.cpp.i
+
+srcs/scenes/SoloMenuScene.s: srcs/scenes/SoloMenuScene.cpp.s
+
+.PHONY : srcs/scenes/SoloMenuScene.s
+
+# target to generate assembly for a file
+srcs/scenes/SoloMenuScene.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/SoloMenuScene.cpp.s
+.PHONY : srcs/scenes/SoloMenuScene.cpp.s
+
 srcs/scripts/GameScene/BombControllerScript.o: srcs/scripts/GameScene/BombControllerScript.cpp.o
 
 .PHONY : srcs/scripts/GameScene/BombControllerScript.o
@@ -1013,6 +1040,33 @@ srcs/scripts/GameScene/ExplosionControllerScript.s: srcs/scripts/GameScene/Explo
 srcs/scripts/GameScene/ExplosionControllerScript.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scripts/GameScene/ExplosionControllerScript.cpp.s
 .PHONY : srcs/scripts/GameScene/ExplosionControllerScript.cpp.s
+
+srcs/scripts/GameScene/GoombaControllerScript.o: srcs/scripts/GameScene/GoombaControllerScript.cpp.o
+
+.PHONY : srcs/scripts/GameScene/GoombaControllerScript.o
+
+# target to build an object file
+srcs/scripts/GameScene/GoombaControllerScript.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scripts/GameScene/GoombaControllerScript.cpp.o
+.PHONY : srcs/scripts/GameScene/GoombaControllerScript.cpp.o
+
+srcs/scripts/GameScene/GoombaControllerScript.i: srcs/scripts/GameScene/GoombaControllerScript.cpp.i
+
+.PHONY : srcs/scripts/GameScene/GoombaControllerScript.i
+
+# target to preprocess a source file
+srcs/scripts/GameScene/GoombaControllerScript.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scripts/GameScene/GoombaControllerScript.cpp.i
+.PHONY : srcs/scripts/GameScene/GoombaControllerScript.cpp.i
+
+srcs/scripts/GameScene/GoombaControllerScript.s: srcs/scripts/GameScene/GoombaControllerScript.cpp.s
+
+.PHONY : srcs/scripts/GameScene/GoombaControllerScript.s
+
+# target to generate assembly for a file
+srcs/scripts/GameScene/GoombaControllerScript.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scripts/GameScene/GoombaControllerScript.cpp.s
+.PHONY : srcs/scripts/GameScene/GoombaControllerScript.cpp.s
 
 srcs/ui/GameInterface.o: srcs/ui/GameInterface.cpp.o
 
@@ -1121,6 +1175,33 @@ srcs/ui/SettingInterface.s: srcs/ui/SettingInterface.cpp.s
 srcs/ui/SettingInterface.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/SettingInterface.cpp.s
 .PHONY : srcs/ui/SettingInterface.cpp.s
+
+srcs/ui/SoloMenuInterface.o: srcs/ui/SoloMenuInterface.cpp.o
+
+.PHONY : srcs/ui/SoloMenuInterface.o
+
+# target to build an object file
+srcs/ui/SoloMenuInterface.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/SoloMenuInterface.cpp.o
+.PHONY : srcs/ui/SoloMenuInterface.cpp.o
+
+srcs/ui/SoloMenuInterface.i: srcs/ui/SoloMenuInterface.cpp.i
+
+.PHONY : srcs/ui/SoloMenuInterface.i
+
+# target to preprocess a source file
+srcs/ui/SoloMenuInterface.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/SoloMenuInterface.cpp.i
+.PHONY : srcs/ui/SoloMenuInterface.cpp.i
+
+srcs/ui/SoloMenuInterface.s: srcs/ui/SoloMenuInterface.cpp.s
+
+.PHONY : srcs/ui/SoloMenuInterface.s
+
+# target to generate assembly for a file
+srcs/ui/SoloMenuInterface.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/SoloMenuInterface.cpp.s
+.PHONY : srcs/ui/SoloMenuInterface.cpp.s
 
 srcs/ui/StartGameInterface.o: srcs/ui/StartGameInterface.cpp.o
 
@@ -1518,6 +1599,9 @@ help:
 	@echo "... srcs/scenes/SettingScene.o"
 	@echo "... srcs/scenes/SettingScene.i"
 	@echo "... srcs/scenes/SettingScene.s"
+	@echo "... srcs/scenes/SoloMenuScene.o"
+	@echo "... srcs/scenes/SoloMenuScene.i"
+	@echo "... srcs/scenes/SoloMenuScene.s"
 	@echo "... srcs/scripts/GameScene/BombControllerScript.o"
 	@echo "... srcs/scripts/GameScene/BombControllerScript.i"
 	@echo "... srcs/scripts/GameScene/BombControllerScript.s"
@@ -1527,6 +1611,9 @@ help:
 	@echo "... srcs/scripts/GameScene/ExplosionControllerScript.o"
 	@echo "... srcs/scripts/GameScene/ExplosionControllerScript.i"
 	@echo "... srcs/scripts/GameScene/ExplosionControllerScript.s"
+	@echo "... srcs/scripts/GameScene/GoombaControllerScript.o"
+	@echo "... srcs/scripts/GameScene/GoombaControllerScript.i"
+	@echo "... srcs/scripts/GameScene/GoombaControllerScript.s"
 	@echo "... srcs/ui/GameInterface.o"
 	@echo "... srcs/ui/GameInterface.i"
 	@echo "... srcs/ui/GameInterface.s"
@@ -1539,6 +1626,9 @@ help:
 	@echo "... srcs/ui/SettingInterface.o"
 	@echo "... srcs/ui/SettingInterface.i"
 	@echo "... srcs/ui/SettingInterface.s"
+	@echo "... srcs/ui/SoloMenuInterface.o"
+	@echo "... srcs/ui/SoloMenuInterface.i"
+	@echo "... srcs/ui/SoloMenuInterface.s"
 	@echo "... srcs/ui/StartGameInterface.o"
 	@echo "... srcs/ui/StartGameInterface.i"
 	@echo "... srcs/ui/StartGameInterface.s"

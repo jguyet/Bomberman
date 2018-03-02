@@ -4,6 +4,13 @@
 # include "Bomberman.hpp"
 # include <queue>
 
+enum e_action {
+	ATTACK,
+	SEARCH,
+	ESCAPE,
+	IDLE
+};
+
 class A_star
 {
 	public:
@@ -17,10 +24,11 @@ class A_star
 		friend std::ostream &						operator<<(std::ostream & o, A_star const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		bool										path_finding(int y, int x, Module_h &target, std::list<Module_h> &moves, std::vector<BombControllerScript*> &bomb_l);
+		bool										path_finding(int y, int x,
+			Module_h &target, std::list<Module_h> &moves,
+			std::vector<BombControllerScript*> &bomb_l, e_action action);
 		void										set_map(Map* map);
 		int											bomb_col(std::vector<BombControllerScript*> bomb_l, float x, float y);
-		int											stop_condition(Module_h &c_case, Module_h &target);
 		// #####################################################################
 		Map* 										map;
 		Module_h									start;
@@ -31,8 +39,10 @@ class A_star
 		int											Find_next(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
 		int											FormatMoves(std::list<Module_h> &moves, int x, int y, int p, int s_x, int s_y);
 		int											get_heuristic(int y, int x, Module_h &target, int p);
-		void										find_path(Module_h &target);
-		void										get_adjacent(Module_h c_case, Module_h &target, int x, int y, int p);
+		void										get_adjacent(Module_h &c_case, Module_h &target, int x, int y, int p);
+		void										find_path(Module_h &target, e_action action);
+		int											stop_condition(Module_h &c_case, Module_h &target, e_action action);
+		void										delete_lists(void);
 		// #####################################################################
 		std::priority_queue<Module_h, std::vector<Module_h>, std::greater<Module_h>>	open_list;
 		std::map<std::pair<int, int>, Module_h>											close_list;
