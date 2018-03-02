@@ -52,6 +52,7 @@ std::ostream &				operator<<(std::ostream & o, GoombaControllerScript const & i)
 // PUBLIC METHOD #################################################
 
 void GoombaControllerScript::Start(void) {
+	this->scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 	this->robot = new AI(this->gameObject);
 }
 
@@ -79,7 +80,7 @@ void								GoombaControllerScript::Update(void)
 	}
 	this->anim_time = TimeUtils::getCurrentSystemMillis();*/
 
-	static std::map<int, P> cmd = {
+	std::map<int, P> cmd = {
 		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)

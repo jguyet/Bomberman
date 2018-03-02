@@ -57,19 +57,21 @@ void								CharacterControllerScript::Attack(void)
 	c->walkable = false;
 	this->bomb--;
 
-
 	if (BombermanClient::getInstance()->sock->state) {
 		ActionType type = ActionType::TYPE_BOMB;
 		ActionObject object(type, fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), c->position.y, fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 		Packet packet(new ActionMessage(object, this->getPlayerId()));
 		packet.sendPacket(BombermanClient::getInstance()->sock->getSocket());
 	}
+
 	GameObject *bomb = Factory::newBomb(this);
 
 	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
 	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
 	bomb->transform.rotation = glm::vec3(0,0,0);
+	std::cout << "!!!!6" << std::endl;
 	this->scene->add(bomb);
+	std::cout << "!!!!7" << std::endl;
 	c->obstacle = bomb;
 	this->last_bomb_2 = this->last_bomb_1;
 	this->last_bomb_1 = bomb->id;

@@ -11,6 +11,7 @@ AI::AI (GameObject* my_player) : my_player(my_player)
 	this->select_t = false;
 	this->pause = 0;
 	this->action = IDLE;
+	this->info = 0;
 	return ;
 }
 
@@ -69,7 +70,6 @@ void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 
 void				AI::select_target(void)
 {
-	static int info = 0;
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
@@ -80,10 +80,10 @@ void				AI::select_target(void)
 	{
 		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
 
-		if (info == 0)
+		if (this->info == 0)
 		{
 			this->getInfos();
-			info = 1;
+			this->info = 1;
 		}
 
 		if (this->action == IDLE)
@@ -206,14 +206,28 @@ int				AI::brain(void)
 		return (0);
 	}
 	// move ############################
-	if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
-		return(SDL_SCANCODE_UP);
-	if (x > this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
-		return(SDL_SCANCODE_DOWN);
-	if (y > this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
-		return(SDL_SCANCODE_LEFT);
-	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
-		return(SDL_SCANCODE_RIGHT);
+
+	int nb = rand() % 100 + 1;
+
+		if (nb > 50) {
+			if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
+				return(SDL_SCANCODE_UP);
+			if (x > this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
+				return(SDL_SCANCODE_DOWN);
+			if (y > this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
+				return(SDL_SCANCODE_LEFT);
+			if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
+				return(SDL_SCANCODE_RIGHT);
+		} else {
+			if (nb > 40)
+				return(SDL_SCANCODE_UP);
+			else if (nb > 30)
+				return(SDL_SCANCODE_DOWN);
+			else if (nb > 20)
+				return(SDL_SCANCODE_LEFT);
+			else if (nb > 10)
+				return(SDL_SCANCODE_RIGHT);
+		}
 
 	// if (this->action == ATTACK)
 	// {
