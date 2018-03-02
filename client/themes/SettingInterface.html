@@ -1,0 +1,602 @@
+# Script
+# SettingInterface :
+#
+<style>
+.mainmenu-css
+{
+	color:#000000;
+	font-size: 30px;
+	font-family: arial;
+}
+</style>
+
+<square>
+{
+	id: "background_menu",
+	class: "mainmenu-css",
+	x: -400,
+	y: 150,
+	width: 800,
+	height: 425,
+	style: "color:#2E2E2E;float:center;",
+	z-index: 1
+}
+</square>
+
+<text>
+{
+	id: "lbl_mainmenu",
+	class: "mainmenu-css",
+	value: "SETTINGS",
+	parent: "background_menu",
+	x: 290,
+	y: 7,
+	style: "color:#BDBDBD;font-size:40px;",
+	z-index: 2
+}
+</text>
+
+<if condition="$selected==0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 75,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Width",
+		parent: "background_solo",
+		x: 110,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 75,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Width",
+		parent: "background_solo",
+		x: 110,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$width != NULL" >
+	<square>
+	{
+		id: "background_right_width",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 250,
+		y: 120,
+		width: 300,
+		height: 5,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<square>
+	{
+		id: "size_right_width",
+		class: "mainmenu-css",
+		parent: "background_right_width",
+		x: 0,
+		y: 0,
+		width: $w_size,
+		height: 5,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</square>
+	<text>
+	{
+		id: "width_lbl",
+		class: "mainmenu-css",
+		value: "$widthpx",
+		parent: "background_right_width",
+		x: 0,
+		y: -40,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==1">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 140,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Height",
+		parent: "background_multi",
+		x: 105,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=1">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 140,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Height",
+		parent: "background_multi",
+		x: 105,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$height != NULL" >
+	<square>
+	{
+		id: "background_right_height",
+		parent: "background_menu",
+		x: 250,
+		y: 185,
+		width: 300,
+		height: 5,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<square>
+	{
+		id: "size_right_height",
+		class: "mainmenu-css",
+		parent: "background_right_height",
+		x: 0,
+		y: 0,
+		width: $h_size,
+		height: 5,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</square>
+	<text>
+	{
+		id: "height_lbl",
+		class: "mainmenu-css",
+		value: "$heightpx",
+		parent: "background_right_height",
+		x: 0,
+		y: -40,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==2">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 205,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Full-Screen",
+		parent: "background_btn_options",
+		x: 75,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=2">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 205,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Full-Screen",
+		parent: "background_btn_options",
+		x: 75,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==3">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 270,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Sound",
+		parent: "background_btn_credit",
+		x: 105,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=3">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: -130,
+		y: 270,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Sound",
+		parent: "background_btn_credit",
+		x: 105,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==4">
+	<square>
+	{
+		id: "background_btn_exit",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 80,
+		y: 350,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_exit",
+		class: "mainmenu-css",
+		value: "Return",
+		parent: "background_btn_exit",
+		x: 105,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=4">
+	<square>
+	{
+		id: "background_btn_exit",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 80,
+		y: 350,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_exit",
+		class: "mainmenu-css",
+		value: "Return",
+		parent: "background_btn_exit",
+		x: 105,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$fullscreen == true">
+	<square>
+	{
+		id: "background_full_screen_on",
+		parent: "background_menu",
+		x: 250,
+		y: 212,
+		width: 100,
+		height: 40,
+		style: "color:#DF7401;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "full_screen_on",
+		class: "mainmenu-css",
+		value: "ON",
+		parent: "background_full_screen_on",
+		x: 25,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+	<square>
+	{
+		id: "background_full_screen_off",
+		parent: "background_menu",
+		x: 450,
+		y: 212,
+		width: 100,
+		height: 40,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "full_screen_off",
+		class: "mainmenu-css",
+		value: "OFF",
+		parent: "background_full_screen_off",
+		x: 22,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$fullscreen != true">
+	<square>
+	{
+		id: "background_full_screen_on",
+		parent: "background_menu",
+		x: 250,
+		y: 212,
+		width: 100,
+		height: 40,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "full_screen_on",
+		class: "mainmenu-css",
+		value: "ON",
+		parent: "background_full_screen_on",
+		x: 25,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+	<square>
+	{
+		id: "background_full_screen_off",
+		parent: "background_menu",
+		x: 450,
+		y: 212,
+		width: 100,
+		height: 40,
+		style: "color:#DF7401;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "full_screen_off",
+		class: "mainmenu-css",
+		value: "OFF",
+		parent: "background_full_screen_off",
+		x: 22,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$sound == true">
+	<square>
+	{
+		id: "background_sound_on",
+		parent: "background_menu",
+		x: 250,
+		y: 280,
+		width: 100,
+		height: 40,
+		style: "color:#DF7401;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "sound_on",
+		class: "mainmenu-css",
+		value: "ON",
+		parent: "background_sound_on",
+		x: 25,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+	<square>
+	{
+		id: "background_sound_off",
+		parent: "background_menu",
+		x: 450,
+		y: 280,
+		width: 100,
+		height: 40,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "sound_off",
+		class: "mainmenu-css",
+		value: "OFF",
+		parent: "background_sound_off",
+		x: 22,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$sound != true">
+	<square>
+	{
+		id: "background_sound_on",
+		parent: "background_menu",
+		x: 250,
+		y: 280,
+		width: 100,
+		height: 40,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "sound_on",
+		class: "mainmenu-css",
+		value: "ON",
+		parent: "background_sound_on",
+		x: 25,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+	<square>
+	{
+		id: "background_sound_off",
+		parent: "background_menu",
+		x: 450,
+		y: 280,
+		width: 100,
+		height: 40,
+		style: "color:#DF7401;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "sound_off",
+		class: "mainmenu-css",
+		value: "OFF",
+		parent: "background_sound_off",
+		x: 22,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+</if>

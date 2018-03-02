@@ -1,26 +1,32 @@
 #include "Bomberman.hpp"
 #include "managers/MapManager.hpp"
+#include "managers/SaveManager.hpp"
 
 // CANONICAL #####################################################
 
 GameScene::GameScene (std::string selected_map)
 {
-	//CAMERA
 	this->camera = new Camera();
 	this->camera->setProjection(45.0f, BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height, 0.1f, 1000000.0f);
 	this->camera->transform.position = glm::vec3(-3.4917f,36.6297f,-17.5657f);
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
-	//MAP
+
 	this->mapManager = new MapManager(this);
-	this->map = this->mapManager->getMap(selected_map);
-	mapManager->buildObjects(this->map);
+	this->saveManager = new SaveManager(this);
+
+	Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
+	if (selected_map.length() == 0) {
+		// load progression
+	} else {
+		this->map = this->mapManager->getMap(selected_map);
+		mapManager->buildObjects(this->map);
+	}
+
 	this->current_player = NULL;
 	this->startGameInterface = NULL;
 	this->quitInterface = NULL;
 	this->interface = new GameInterface(this);
-
-	Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
 
 	if (BombermanClient::getInstance()->sock->state == false)
 	{
@@ -45,22 +51,21 @@ void GameScene::StartSolo(void)
 	this->players.push_back(playerObject);
 	this->all_player.push_back(playerObject);
 	this->add(playerObject);
-/*
-	GameObject *player = Factory::newPlayer(100);
-	this->all_player.push_back(player);
-	this->players.push_back(player);
-	player->transform.position = glm::vec3(4,1,36);
-	player->transform.scale = glm::vec3(3,3,3);
-	player->transform.rotation = glm::vec3(0,0,0);
-	this->add(player);//add on scene
-*/
 
-	GameObject *goomba = Factory::newGoomba();
+	// GameObject *player = Factory::newPlayer(100);
+	// this->all_player.push_back(player);
+	// this->players.push_back(player);
+	// player->transform.position = glm::vec3(4,1,36);
+	// player->transform.scale = glm::vec3(3,3,3);
+	// player->transform.rotation = glm::vec3(0,0,0);
+	// this->add(player);//add on scene
 
-	goomba->transform.position = glm::vec3(4,1,36);
-	goomba->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-	goomba->transform.rotation = glm::vec3(0,0,0);
-	this->add(goomba);
+	// GameObject *goomba = Factory::newGoomba();
+    //
+	// goomba->transform.position = glm::vec3(4,1,36);
+	// goomba->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
+	// goomba->transform.rotation = glm::vec3(0,0,0);
+	// this->add(goomba);
 
 /*
 	GameObject *goomba1 = Factory::newGoomba();
@@ -149,6 +154,7 @@ GameScene::~GameScene ( void )
 		delete this->quitInterface;
 	}
 	delete this->mapManager;
+	delete this->saveManager;
 }
 
 std::ostream &				operator<<(std::ostream & o, GameScene const & i)
@@ -204,19 +210,19 @@ void								GameScene::calculPhisics(void)
 void								GameScene::drawGameObjects(void)
 {
 	//build Matrixs
-	this->camera->buildFPSProjection();
-	// if (this->current_player != NULL) {
-	// 	topoint.x = -this->current_player->transform.position.x;
-	// 	topoint.y = 0;//this->current_player->transform.position.y;
-	// 	topoint.z = -this->current_player->transform.position.z;
-	// 	this->camera->transform.position.x = topoint.x;
-	// 	this->camera->transform.position.z = topoint.z;
-	// 	//Eloignement sur x
-	// 	this->camera->transform.position.x += 30;
-	// 	//Eloignement sur y
-	// 	this->camera->transform.position.y = 35;
-	// }
-	// this->camera->buildLookAtProjection(topoint);
+	//this->camera->buildFPSProjection();
+	if (this->current_player != NULL) {
+		topoint.x = -this->current_player->transform.position.x;
+		topoint.y = 0;//this->current_player->transform.position.y;
+		topoint.z = -this->current_player->transform.position.z;
+		this->camera->transform.position.x = topoint.x;
+		this->camera->transform.position.z = topoint.z;
+		//Eloignement sur x
+		this->camera->transform.position.x += 25;
+		//Eloignement sur y
+		this->camera->transform.position.y = 35;
+	}
+	this->camera->buildLookAtProjection(topoint);
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas

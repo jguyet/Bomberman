@@ -28,7 +28,6 @@ class Text : public Tag
 		void								setStyle(std::string const &style);
 		void								setValue(std::string const &value);
 		void								draw(SDL_Surface *surface);
-		void								draw(SDL_Surface *surface, glm::vec3 &parent_position, glm::vec3 &parent_scale);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

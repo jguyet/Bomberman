@@ -9,7 +9,7 @@
 MainMenuInterface::MainMenuInterface ( void ) : UIInterface("themes/MainMenuInterface.html")
 {
 	this->current_position = 0;
-	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
+	this->canvas = new Canvas(BombermanClient::getInstance()->screen->canvas_width, BombermanClient::getInstance()->screen->canvas_height);
 	this->canvas->setElementsMap(&this->elements);
 	KeyBoard::instance->addHandler("MainMenuInterface", this);
 	return ;

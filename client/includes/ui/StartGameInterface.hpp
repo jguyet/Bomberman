@@ -17,7 +17,7 @@ class StartGameInterface : public UIInterface
 		void								draw(void);
 
 	private:
-	Canvas									*canvas;
+		Canvas									*canvas;
 };
 
 #endif

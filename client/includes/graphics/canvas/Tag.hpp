@@ -27,7 +27,11 @@ class Tag : public GameObject
 		void								setWidth(int width);
 		void								setHeight(int height);
 
+		glm::vec3 const						getPosition(SDL_Surface *surface);
+		glm::vec3 const						getScale(void);
+
 		virtual void						setFloat(e_tag_position position);
+		virtual void						setParent(Tag *parent);
 		//font
 		virtual void						setColor(glm::vec3 &color);
 		virtual void						setFontFamily(std::string const &fontname);
@@ -42,12 +46,13 @@ class Tag : public GameObject
 
 		//drawing
 		virtual void						draw(SDL_Surface *surface);
-		virtual void						draw(SDL_Surface *surface, glm::vec3 &parent_position);
 
 		//css updating
 		virtual void						setStyle(std::string const &style);
 		// ####################################################################
 		Tag									*parent = NULL;
+		glm::vec3							parent_position;
+		glm::vec3							parent_scale;
 		e_tag_position						position;
 	private:
 		// PRIVATES ###########################################################

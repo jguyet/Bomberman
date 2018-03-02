@@ -34,7 +34,9 @@ Canvas &				Canvas::operator=( Canvas const & rhs )
 
 Canvas::~Canvas ( void )
 {
-	SDL_FreeSurface(this->canvas);
+	if (this->canvas != NULL) {
+		SDL_FreeSurface(this->canvas);
+	}
 	return ;
 }
 
@@ -96,7 +98,7 @@ void						Canvas::draw(void)
 		this->build();
 	}
 	//drawing
-	glUseProgram(ShaderUtils::instance->get("canvas"));
+	glUseProgram(ShaderUtils::getInstance()->get("canvas"));
 	glUniform1i(Model::model["canvas"]->texUnit, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, this->textureID);

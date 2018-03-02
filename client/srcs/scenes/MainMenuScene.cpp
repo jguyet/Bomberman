@@ -11,7 +11,7 @@ MainMenuScene::MainMenuScene ( void )
 {
 	//CAMERA
 	this->camera = new Camera();
-	this->camera->setProjection(45.0f, BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height, 0.1f, 10.0f);
+	this->camera->setProjection(45.0f, BombermanClient::getInstance()->screen->canvas_width, BombermanClient::getInstance()->screen->canvas_height, 0.1f, 10.0f);
 	this->camera->transform.position = glm::vec3(0,0,0);
 	this->camera->transform.rotation = glm::vec3(0,0,0);
 	this->camera->buildFPSProjection();
@@ -53,6 +53,22 @@ std::ostream &				operator<<(std::ostream & o, MainMenuScene const & i)
 
 // ###############################################################
 
+bool								MainMenuScene::select_local(void)
+{
+	if (BombermanClient::getInstance()->sock != NULL) {
+		BombermanClient::getInstance()->sock->state = false;
+		BombermanClient::getInstance()->sock = NULL;
+	}
+	BombermanClient::getInstance()->sock = new Socket("", 0);
+	BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
+	return true;
+}
+
+void								MainMenuScene::select_settings(void)
+{
+	BombermanClient::getInstance()->setCurrentScene<GameScene>(new SettingScene());
+}
+
 bool								MainMenuScene::select_server(void)
 {
 	std::string network_addr = BombermanClient::getInstance()->properties->get("Network.address");
@@ -78,18 +94,6 @@ bool								MainMenuScene::select_server(void)
 	return false;
 }
 
-bool								MainMenuScene::select_local(void)
-{
-	if (BombermanClient::getInstance()->sock != NULL) {
-		BombermanClient::getInstance()->sock->state = false;
-		BombermanClient::getInstance()->sock = NULL;
-	}
-	BombermanClient::getInstance()->sock = new Socket("", 0);
-	//BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
-	BombermanClient::getInstance()->setCurrentScene<GameScene>(new SoloMenuScene());
-	return true;
-}
-
 void								MainMenuScene::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_ESCAPE) {
@@ -105,6 +109,7 @@ void								MainMenuScene::handleUP(unsigned int key)
 				this->select_server();
 			break;
 			case 2:
+				this->select_settings();
 			break ;
 			case 3:
 			break;

@@ -91,45 +91,18 @@ void						Square::setStyle(std::string const &style)
 
 void						Square::draw(SDL_Surface *surface)
 {
-	glm::vec3 parent_position = glm::vec3(0,0,0);
-	glm::vec3 parent_scale = glm::vec3(0,0,0);
-
-	parent_scale.x = surface->w;
-	parent_scale.y = surface->h;
-
-	if (this->parent != NULL) {
-		parent_position.x = this->parent->transform.position.x;
-		parent_position.y = this->parent->transform.position.y;
-		parent_scale.x = this->parent->transform.scale.x;
-		parent_scale.y = this->parent->transform.scale.y;
-	}
-	this->draw(surface, parent_position, parent_scale);
-}
-
-void						Square::draw(SDL_Surface *surface, glm::vec3 &parent_position, glm::vec3 &parent_scale)
-{
 	SDL_Rect rect;
 
 	glm::vec3	final_position = glm::vec3(0,0,0);
+	glm::vec3	final_scale = glm::vec3(0,0,0);
 
-	if (this->position == TAG_POSITION_CENTER) {
-		this->transform.position.x += parent_position.x + (parent_scale.x / 2);
-		this->position = TAG_POSITION_NULL;
-	} else if (this->position == TAG_POSITION_LEFT) {
-		this->transform.position.x += parent_position.x;
-		this->position = TAG_POSITION_NULL;
-	} else if (this->position == TAG_POSITION_RIGHT) {
-		this->transform.position.x += parent_position.x + parent_scale.x;
-		this->position = TAG_POSITION_NULL;
-	} else {
-		final_position.x = parent_position.x;
-		final_position.y = parent_position.y;
-	}
+	final_position = this->getPosition(surface);
+	final_scale = this->getScale();
 
-	rect.x = this->transform.position.x + final_position.x;
-	rect.y = this->transform.position.y + final_position.y;
-	rect.w = this->transform.scale.x;
-	rect.h = this->transform.scale.y;
+	rect.x = final_position.x;
+	rect.y = final_position.y;
+	rect.w = final_scale.x;
+	rect.h = final_scale.y;
 
 	SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, this->color.r, this->color.g, this->color.b));
 }

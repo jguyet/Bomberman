@@ -1,20 +1,22 @@
-#ifndef MAINMENUSCENE_HPP
-# define MAINMENUSCENE_HPP
+#ifndef SETTINGSCENE_HPP
+# define SETTINGSCENE_HPP
 
 # include "Bomberman.hpp"
-# include "ui/MainMenuInterface.hpp"
+# include "ui/SettingInterface.hpp"
+# include "graphics/keys/KeyBoard.hpp"
 
-class MainMenuScene : public Scene , public KeyBoardEventHandler
+class SettingScene : public Scene , public KeyBoardEventHandler
 {
 	public:
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											MainMenuScene( void );
-											MainMenuScene( MainMenuScene const & src );
-		virtual								~MainMenuScene( void );
-		MainMenuScene &							operator=( MainMenuScene const & rhs );
-		friend std::ostream &				operator<<(std::ostream & o, MainMenuScene const & i);
+											SettingScene( void );
+											SettingScene( SettingScene const & src );
+		virtual								~SettingScene( void );
+
+		SettingScene &						operator=( SettingScene const & rhs );
+		friend std::ostream &				operator<<(std::ostream & o, SettingScene const & i);
 		// ####################################################################
 		// @OVERRIDE Scene ###################################################
 		void								calculPhisics(void);
@@ -30,11 +32,12 @@ class MainMenuScene : public Scene , public KeyBoardEventHandler
 		void								handleUP(unsigned int key);
 		// ####################################################################
 		// PUBLICS ############################################################
-		bool								select_server(void);
-		bool								select_local(void);
-		void								select_settings(void);
-		MainMenuInterface					*interface;
 		// ####################################################################
+	private:
+		// PRIVATE ############################################################
+		SettingInterface					*interface;
+		// ####################################################################
+
 };
 
 #endif

@@ -7,7 +7,13 @@ class ShaderUtils
 {
 	public:
 		// STATICS #############################################################
-		static ShaderUtils						*instance;
+		static ShaderUtils						*getInstance() {
+			static ShaderUtils *shaderUtils = NULL;
+			if (!shaderUtils) {
+				shaderUtils = new ShaderUtils();
+			}
+			return shaderUtils;
+		}
 		// #####################################################################
 		// CANONICAL ###########################################################
 												ShaderUtils( void );

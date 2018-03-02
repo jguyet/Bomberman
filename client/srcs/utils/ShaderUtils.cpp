@@ -1,11 +1,5 @@
 #include "Bomberman.hpp"
 
-// STATIC ########################################################
-
-ShaderUtils				*ShaderUtils::instance = new ShaderUtils();
-
-// ###############################################################
-
 // CANONICAL #####################################################
 
 ShaderUtils::ShaderUtils ( void )

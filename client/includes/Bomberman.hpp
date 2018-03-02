@@ -123,6 +123,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 # include "scenes/GameScene.hpp"
 # include "scenes/MainMenuScene.hpp"
 # include "scenes/SoloMenuScene.hpp"
+# include "scenes/SettingScene.hpp"
 
 /*
 ** Others
@@ -137,6 +138,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 ** Main_Client
 */
 # include "client/BombermanClient.hpp"
+# include "client/Loader.hpp"
 # include "Factory.hpp"
 
 /*
