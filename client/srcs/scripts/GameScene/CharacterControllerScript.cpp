@@ -69,9 +69,7 @@ void								CharacterControllerScript::Attack(void)
 	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
 	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
 	bomb->transform.rotation = glm::vec3(0,0,0);
-	std::cout << "!!!!6" << std::endl;
 	this->scene->add(bomb);
-	std::cout << "!!!!7" << std::endl;
 	c->obstacle = bomb;
 	this->last_bomb_2 = this->last_bomb_1;
 	this->last_bomb_1 = bomb->id;

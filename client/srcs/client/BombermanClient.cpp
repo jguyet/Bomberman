@@ -7,6 +7,7 @@
 BombermanClient::BombermanClient ( void )
 {
 	this->current_scene = NULL;
+	this->sock = NULL;
 }
 
 BombermanClient::BombermanClient ( BombermanClient const & src )
