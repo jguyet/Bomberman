@@ -186,18 +186,18 @@ int				AI::brain(void)
 
 		if (this->moves.size() == 0)
 		{
-			if (this->action != ESCAPE)
-			{
+			// if (this->action != ESCAPE)
+			// {
 				// this->action = ATTACK;
 				// TODO : deselect target FOR path_finding
 				this->action = ESCAPE;
 				return (SDL_SCANCODE_Q);
-			}
-			else
-			{
-				this->action = IDLE;
-				this->select_t = false;
-			}
+			// }
+			// else
+			// {
+			// 	this->action = IDLE;
+			// 	this->select_t = false;
+			// }
 		}
 		// else if (this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
 		// 	return (0);
