@@ -3,20 +3,21 @@
 
 # include "Bomberman.hpp"
 
-class GoombaControllerScript : public Script
+class GoombaControllerScript : public CharacterControllerScript
 {
 	public:
 		// STATICS ############################################################
 		static std::vector<GoombaControllerScript*> List;
 		// ####################################################################
 		// CANONICAL ##########################################################
-											GoombaControllerScript( void);
+											GoombaControllerScript( );
 											GoombaControllerScript( GoombaControllerScript const & src );
 		virtual								~GoombaControllerScript( void );
-		GoombaControllerScript &				operator=( GoombaControllerScript const & rhs );
+		GoombaControllerScript &			operator=( GoombaControllerScript const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, GoombaControllerScript const & i);
 		// ####################################################################
 		// @OVERRIDE Script ###################################################
+		void								Start(void);
 		void								Update(void);
 		void								OnPreRender(void);
 		void								OnEndRender(void);
@@ -36,6 +37,7 @@ class GoombaControllerScript : public Script
 		float								min_scale;
 		long								anim_time;
 
+		AI 									*robot;
 		// std::vector<GoombaControllerScript*>	bomb_l;
 		// ####################################################################
 };

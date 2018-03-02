@@ -85,7 +85,8 @@ bool								MainMenuScene::select_local(void)
 		BombermanClient::getInstance()->sock = NULL;
 	}
 	BombermanClient::getInstance()->sock = new Socket("", 0);
-	BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
+	//BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
+	BombermanClient::getInstance()->setCurrentScene<GameScene>(new SoloMenuScene());
 	return true;
 }
 
