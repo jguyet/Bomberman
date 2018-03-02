@@ -149,8 +149,7 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 
 	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y))
 		flag_t = true;
-	// if ((x == target.pos_x && y == target.pos_y))
-	// 	std::cout << "target" << std::endl;
+
 	if ((c->walkable == true || flag_t) && (x % 2) == 0 && (y % 2) == 0)
 	{
 		int dif_x = std::abs(x - target.pos_x);
@@ -195,6 +194,13 @@ int							A_star::bomb_col(std::vector<BombControllerScript*> bomb_l, float x, f
 	return (1);
 }
 
+int							A_star::stop_condition(Module_h &c_case, Module_h &target)
+{
+	if (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x)
+		return (1);
+	return (0);
+}
+
 void						A_star::find_path(Module_h &target)
 {
 	int i = 0;
@@ -202,7 +208,7 @@ void						A_star::find_path(Module_h &target)
 
 	Module_h c_case = this->open_list.top();
 	int p;
-	while (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x)
+	while (this->stop_condition(c_case, target))
 	{
 		p = c_case.p;
 		// UP
