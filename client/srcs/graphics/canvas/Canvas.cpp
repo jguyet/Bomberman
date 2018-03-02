@@ -34,7 +34,9 @@ Canvas &				Canvas::operator=( Canvas const & rhs )
 
 Canvas::~Canvas ( void )
 {
-	SDL_FreeSurface(this->canvas);
+	if (this->canvas != NULL) {
+		SDL_FreeSurface(this->canvas);
+	}
 	return ;
 }
 
