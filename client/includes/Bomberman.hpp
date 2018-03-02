@@ -138,6 +138,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 ** Main_Client
 */
 # include "client/BombermanClient.hpp"
+# include "client/Loader.hpp"
 # include "Factory.hpp"
 
 /*
