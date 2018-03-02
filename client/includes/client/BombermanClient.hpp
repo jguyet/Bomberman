@@ -5,16 +5,22 @@
 
 struct Screen {
 	public:
-		Screen(unsigned int w, unsigned int h) {
+		Screen(unsigned int w, unsigned int h, bool fullscreen) {
 			this->width = w;
 			this->height = h;
 			this->middleWidth = w / 2;
 			this->middleHeight = h / 2;
+			this->canvas_width = 1280;
+			this->canvas_height = 720;
+			this->fullscreen = fullscreen;
 		}
 		unsigned int width;
 		unsigned int height;
 		unsigned int middleWidth;
 		unsigned int middleHeight;
+		unsigned int canvas_width;
+		unsigned int canvas_height;
+		bool fullscreen;
 };
 
 class BombermanClient : public IRenderLoop
@@ -57,11 +63,11 @@ class BombermanClient : public IRenderLoop
 		template <typename T> T						*getCurrentScene(void);
 		template <typename T> T						*setCurrentScene(Scene *scene);
 
+		void										setWindowSize(int newWidth, int newHeight, bool fullscreen);
 
 		void										run( void );
 		void										stop( void );
 
-		void										setWindowSize(int width, int height);
 		bool 										InitOpenAL();
 		void 										ShutdownOpenAL();
 

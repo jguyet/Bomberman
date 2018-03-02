@@ -58,9 +58,63 @@ void						Tag::setHeight(int height)
 	this->transform.scale.y = height;
 };
 
+glm::vec3 const						Tag::getPosition(SDL_Surface *surface)
+{
+	glm::vec3		tmp = glm::vec3(0,0,0);
+
+	if (this->parent != NULL && this->parent->id != this->id) {
+		glm::vec3 parent_p = this->parent->getPosition(surface);
+		glm::vec3 parent_s = this->parent->getScale();
+
+		if (this->position == TAG_POSITION_CENTER) {
+			tmp.x = parent_position.x + (parent_s.x / 2);
+		} else if (this->position == TAG_POSITION_LEFT) {
+			tmp.x = parent_position.x;
+		} else if (this->position == TAG_POSITION_RIGHT) {
+			tmp.x = parent_p.x + parent_s.x;
+		} else {
+			tmp.x = parent_p.x;
+		}
+		tmp.y = parent_p.y;
+		tmp.z = parent_p.z;
+	} else if (surface != NULL && this->position != TAG_POSITION_NULL) {
+		if (this->position == TAG_POSITION_CENTER) {
+			tmp.x = 0 + (surface->w / 2);
+		} else if (this->position == TAG_POSITION_RIGHT) {
+			tmp.x = 0 + surface->w;
+		}
+	}
+	tmp.x += this->transform.position.x;
+	tmp.y += this->transform.position.y;
+	tmp.z += this->transform.position.z;
+	return (tmp);
+}
+
+glm::vec3 const						Tag::getScale(void)
+{
+	glm::vec3		tmp = glm::vec3(0,0,0);
+
+	// if (this->parent != NULL && this->parent->id != this->id) {
+	// 	glm::vec3 parent_s = this->parent->getScale();
+    //
+	// 	tmp.x = parent_s.x;
+	// 	tmp.y = parent_s.y;
+	// 	tmp.z = parent_s.z;
+	// }
+	tmp.x += this->transform.scale.x;
+	tmp.y += this->transform.scale.y;
+	tmp.z += this->transform.scale.z;
+	return (tmp);
+}
+
 void						Tag::setFloat(e_tag_position position)
 {
 
+}
+
+void						Tag::setParent(Tag *parent)
+{
+	this->parent = parent;
 }
 
 void						Tag::setFontFamily(std::string const &fontname)
@@ -109,11 +163,6 @@ void						Tag::setStyle(std::string const &style)
 }
 
 void						Tag::draw(SDL_Surface *surface)
-{
-
-}
-
-void						Tag::draw(SDL_Surface *surface, glm::vec3 &parent_position)
 {
 
 }

@@ -906,6 +906,33 @@ srcs/scenes/MainMenuScene.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/MainMenuScene.cpp.s
 .PHONY : srcs/scenes/MainMenuScene.cpp.s
 
+srcs/scenes/SettingScene.o: srcs/scenes/SettingScene.cpp.o
+
+.PHONY : srcs/scenes/SettingScene.o
+
+# target to build an object file
+srcs/scenes/SettingScene.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/SettingScene.cpp.o
+.PHONY : srcs/scenes/SettingScene.cpp.o
+
+srcs/scenes/SettingScene.i: srcs/scenes/SettingScene.cpp.i
+
+.PHONY : srcs/scenes/SettingScene.i
+
+# target to preprocess a source file
+srcs/scenes/SettingScene.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/SettingScene.cpp.i
+.PHONY : srcs/scenes/SettingScene.cpp.i
+
+srcs/scenes/SettingScene.s: srcs/scenes/SettingScene.cpp.s
+
+.PHONY : srcs/scenes/SettingScene.s
+
+# target to generate assembly for a file
+srcs/scenes/SettingScene.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/scenes/SettingScene.cpp.s
+.PHONY : srcs/scenes/SettingScene.cpp.s
+
 srcs/scripts/GameScene/BombControllerScript.o: srcs/scripts/GameScene/BombControllerScript.cpp.o
 
 .PHONY : srcs/scripts/GameScene/BombControllerScript.o
@@ -1040,6 +1067,87 @@ srcs/ui/MainMenuInterface.s: srcs/ui/MainMenuInterface.cpp.s
 srcs/ui/MainMenuInterface.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/MainMenuInterface.cpp.s
 .PHONY : srcs/ui/MainMenuInterface.cpp.s
+
+srcs/ui/QuitMenuInterface.o: srcs/ui/QuitMenuInterface.cpp.o
+
+.PHONY : srcs/ui/QuitMenuInterface.o
+
+# target to build an object file
+srcs/ui/QuitMenuInterface.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/QuitMenuInterface.cpp.o
+.PHONY : srcs/ui/QuitMenuInterface.cpp.o
+
+srcs/ui/QuitMenuInterface.i: srcs/ui/QuitMenuInterface.cpp.i
+
+.PHONY : srcs/ui/QuitMenuInterface.i
+
+# target to preprocess a source file
+srcs/ui/QuitMenuInterface.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/QuitMenuInterface.cpp.i
+.PHONY : srcs/ui/QuitMenuInterface.cpp.i
+
+srcs/ui/QuitMenuInterface.s: srcs/ui/QuitMenuInterface.cpp.s
+
+.PHONY : srcs/ui/QuitMenuInterface.s
+
+# target to generate assembly for a file
+srcs/ui/QuitMenuInterface.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/QuitMenuInterface.cpp.s
+.PHONY : srcs/ui/QuitMenuInterface.cpp.s
+
+srcs/ui/SettingInterface.o: srcs/ui/SettingInterface.cpp.o
+
+.PHONY : srcs/ui/SettingInterface.o
+
+# target to build an object file
+srcs/ui/SettingInterface.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/SettingInterface.cpp.o
+.PHONY : srcs/ui/SettingInterface.cpp.o
+
+srcs/ui/SettingInterface.i: srcs/ui/SettingInterface.cpp.i
+
+.PHONY : srcs/ui/SettingInterface.i
+
+# target to preprocess a source file
+srcs/ui/SettingInterface.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/SettingInterface.cpp.i
+.PHONY : srcs/ui/SettingInterface.cpp.i
+
+srcs/ui/SettingInterface.s: srcs/ui/SettingInterface.cpp.s
+
+.PHONY : srcs/ui/SettingInterface.s
+
+# target to generate assembly for a file
+srcs/ui/SettingInterface.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/SettingInterface.cpp.s
+.PHONY : srcs/ui/SettingInterface.cpp.s
+
+srcs/ui/StartGameInterface.o: srcs/ui/StartGameInterface.cpp.o
+
+.PHONY : srcs/ui/StartGameInterface.o
+
+# target to build an object file
+srcs/ui/StartGameInterface.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/StartGameInterface.cpp.o
+.PHONY : srcs/ui/StartGameInterface.cpp.o
+
+srcs/ui/StartGameInterface.i: srcs/ui/StartGameInterface.cpp.i
+
+.PHONY : srcs/ui/StartGameInterface.i
+
+# target to preprocess a source file
+srcs/ui/StartGameInterface.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/StartGameInterface.cpp.i
+.PHONY : srcs/ui/StartGameInterface.cpp.i
+
+srcs/ui/StartGameInterface.s: srcs/ui/StartGameInterface.cpp.s
+
+.PHONY : srcs/ui/StartGameInterface.s
+
+# target to generate assembly for a file
+srcs/ui/StartGameInterface.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/ui/StartGameInterface.cpp.s
+.PHONY : srcs/ui/StartGameInterface.cpp.s
 
 srcs/utils/CSSInterpretor.o: srcs/utils/CSSInterpretor.cpp.o
 
@@ -1230,6 +1338,33 @@ srcs/utils/file_get_contents.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/file_get_contents.cpp.s
 .PHONY : srcs/utils/file_get_contents.cpp.s
 
+srcs/utils/replace_all.o: srcs/utils/replace_all.cpp.o
+
+.PHONY : srcs/utils/replace_all.o
+
+# target to build an object file
+srcs/utils/replace_all.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/replace_all.cpp.o
+.PHONY : srcs/utils/replace_all.cpp.o
+
+srcs/utils/replace_all.i: srcs/utils/replace_all.cpp.i
+
+.PHONY : srcs/utils/replace_all.i
+
+# target to preprocess a source file
+srcs/utils/replace_all.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/replace_all.cpp.i
+.PHONY : srcs/utils/replace_all.cpp.i
+
+srcs/utils/replace_all.s: srcs/utils/replace_all.cpp.s
+
+.PHONY : srcs/utils/replace_all.s
+
+# target to generate assembly for a file
+srcs/utils/replace_all.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/utils/replace_all.cpp.s
+.PHONY : srcs/utils/replace_all.cpp.s
+
 srcs/utils/split.o: srcs/utils/split.cpp.o
 
 .PHONY : srcs/utils/split.o
@@ -1380,6 +1515,9 @@ help:
 	@echo "... srcs/scenes/MainMenuScene.o"
 	@echo "... srcs/scenes/MainMenuScene.i"
 	@echo "... srcs/scenes/MainMenuScene.s"
+	@echo "... srcs/scenes/SettingScene.o"
+	@echo "... srcs/scenes/SettingScene.i"
+	@echo "... srcs/scenes/SettingScene.s"
 	@echo "... srcs/scripts/GameScene/BombControllerScript.o"
 	@echo "... srcs/scripts/GameScene/BombControllerScript.i"
 	@echo "... srcs/scripts/GameScene/BombControllerScript.s"
@@ -1395,6 +1533,15 @@ help:
 	@echo "... srcs/ui/MainMenuInterface.o"
 	@echo "... srcs/ui/MainMenuInterface.i"
 	@echo "... srcs/ui/MainMenuInterface.s"
+	@echo "... srcs/ui/QuitMenuInterface.o"
+	@echo "... srcs/ui/QuitMenuInterface.i"
+	@echo "... srcs/ui/QuitMenuInterface.s"
+	@echo "... srcs/ui/SettingInterface.o"
+	@echo "... srcs/ui/SettingInterface.i"
+	@echo "... srcs/ui/SettingInterface.s"
+	@echo "... srcs/ui/StartGameInterface.o"
+	@echo "... srcs/ui/StartGameInterface.i"
+	@echo "... srcs/ui/StartGameInterface.s"
 	@echo "... srcs/utils/CSSInterpretor.o"
 	@echo "... srcs/utils/CSSInterpretor.i"
 	@echo "... srcs/utils/CSSInterpretor.s"
@@ -1416,6 +1563,9 @@ help:
 	@echo "... srcs/utils/file_get_contents.o"
 	@echo "... srcs/utils/file_get_contents.i"
 	@echo "... srcs/utils/file_get_contents.s"
+	@echo "... srcs/utils/replace_all.o"
+	@echo "... srcs/utils/replace_all.i"
+	@echo "... srcs/utils/replace_all.s"
 	@echo "... srcs/utils/split.o"
 	@echo "... srcs/utils/split.i"
 	@echo "... srcs/utils/split.s"

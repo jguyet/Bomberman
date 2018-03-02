@@ -132,24 +132,17 @@ void						Image::setStyle(std::string const &style)
 
 void						Image::draw(SDL_Surface *surface)
 {
-	glm::vec3 parent_position = glm::vec3(0,0,0);
-
-	if (this->parent != NULL) {
-		parent_position.x = this->parent->transform.position.x;
-		parent_position.y = this->parent->transform.position.y;
-	}
-	this->draw(surface, parent_position);
-}
-
-void						Image::draw(SDL_Surface *surface, glm::vec3 &parent_position)
-{
 	SDL_Rect	text_position;
+	glm::vec3	final_position = glm::vec3(0,0,0);
+	glm::vec3	final_scale = glm::vec3(0,0,0);
 
 	if (this->image == NULL)
 		return ;
 
-	text_position.x = this->transform.position.x + parent_position.x;
-	text_position.y = this->transform.position.y + parent_position.y;
+	final_position = this->getPosition(surface);
+
+	text_position.x = final_position.x;
+	text_position.y = final_position.y;
 
 	SDL_BlitSurface(this->image, NULL, surface, &text_position);
 }

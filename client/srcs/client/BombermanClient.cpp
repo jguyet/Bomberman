@@ -89,8 +89,8 @@ void						BombermanClient::build_window( void )
 		exit(0);
 	}
 
-	this->screen = new Screen(width, height);
-	this->canvas = new Canvas(this->screen->width, this->screen->height);
+	this->screen = new Screen(width, height, fullscreen);
+	this->canvas = new Canvas(this->screen->canvas_width, this->screen->canvas_height);
 
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) == -1 )
     {
@@ -176,11 +176,18 @@ void						BombermanClient::delete_fonts( void )
 	this->fonts.clear();
 }
 
-void						BombermanClient::setWindowSize(int width, int height)
+void						BombermanClient::setWindowSize(int newWidth, int newHeight, bool fullscreen)
 {
-	SDL_SetWindowSize(this->window, width, height);
+	SDL_DestroyWindow(this->window);
+
+	int flags = SDL_WINDOW_OPENGL;
+	if (fullscreen)
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+	this->window = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, newWidth, newHeight, flags);
+	SDL_GL_MakeCurrent(this->window, this->context);
+
 	delete this->screen;
-	this->screen = new Screen(width, height);
+	this->screen = new Screen(newWidth, newHeight, fullscreen);
 }
 
 int	SDLCALL					input_callback_interval(void *userdata, SDL_Event* event)
