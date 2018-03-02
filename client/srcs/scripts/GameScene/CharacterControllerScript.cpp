@@ -190,17 +190,17 @@ void						CharacterControllerScript::Update(void)
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_W))
 		{
 
-			Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
-			if (c->obstacle != NULL)
-				return ;
-
-
-			GameObject *goomba = Factory::newGoomba();
-
-			goomba->transform.position = glm::vec3(c->position.x,-2,c->position.z-4);
-			goomba->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-			goomba->transform.rotation = glm::vec3(0,0,0);
-			this->scene->add(goomba);
+			// Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
+			// if (c->obstacle != NULL)
+			// 	return ;
+            //
+            //
+			// GameObject *goomba = Factory::newGoomba();
+            //
+			// goomba->transform.position = glm::vec3(c->position.x,-2,c->position.z-4);
+			// goomba->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
+			// goomba->transform.rotation = glm::vec3(0,0,0);
+			// this->scene->add(goomba);
 		}
 
 		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )

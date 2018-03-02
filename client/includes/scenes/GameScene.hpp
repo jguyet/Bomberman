@@ -12,6 +12,7 @@
 
 #include "models/Map.hpp"
 class MapManager;
+class SaveManager;
 class GameScene : public Scene
 {
 	public:
@@ -47,6 +48,7 @@ class GameScene : public Scene
 		std::vector<GameObject*>			all_player;
 		Map									*map;
 		MapManager							*mapManager;
+		SaveManager							*saveManager;
 		//ui
 		GameInterface						*interface;
 		StartGameInterface					*startGameInterface;

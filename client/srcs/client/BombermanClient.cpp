@@ -4,11 +4,9 @@
 
 // CANONICAL #####################################################
 
-
-
 BombermanClient::BombermanClient ( void )
 {
-	return ;
+	this->current_scene = NULL;
 }
 
 BombermanClient::BombermanClient ( BombermanClient const & src )
@@ -316,7 +314,6 @@ int main(void)
 	client->delete_properties();
 	client->delete_window();
 	delete client;
-	std::cout << "EXIT OK" << std::endl;
 	return (0);
 }
 
