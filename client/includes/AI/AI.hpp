@@ -4,12 +4,6 @@
 # include "Bomberman.hpp"
 # include <queue>
 
-enum e_action {
-	ATTACK,
-	SEARCH,
-	IDLE
-};
-
 class AI
 {
 	public:
