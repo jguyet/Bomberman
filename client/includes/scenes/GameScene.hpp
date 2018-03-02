@@ -8,6 +8,7 @@
 # include "scripts/GameScene/CharacterControllerScript.hpp"
 # include "scripts/GameScene/ExplosionControllerScript.hpp"
 # include "scripts/GameScene/BombControllerScript.hpp"
+# include "scripts/GameScene/GoombaControllerScript.hpp"
 
 #include "models/Map.hpp"
 class MapManager;

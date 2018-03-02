@@ -174,7 +174,6 @@ void								GameScene::calculPhisics(void)
 	}
 	//call parent method
 	this->_calculPhisics();
-	// std::cout << this->camera->transform
 }
 
 void								GameScene::drawGameObjects(void)

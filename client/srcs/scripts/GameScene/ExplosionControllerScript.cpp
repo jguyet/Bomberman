@@ -57,7 +57,8 @@ void						ExplosionControllerScript::Update(void)
 
 		float x = this->gameObject->transform.position.x / 2;
 		float z = this->gameObject->transform.position.z / 2;
-		Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z);
+		GameScene *scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
+		Case *b = scene->map->getCase(x, z);
 
 		if (b->obstacle != NULL) {
 			if (b->obstacle->tag == "Bomb") {
@@ -66,20 +67,17 @@ void						ExplosionControllerScript::Update(void)
 				if (b->obstacle->tag == "ice_block")
 				{
 					if (BombermanClient::getInstance()->sock->state == false) {
-						BombermanClient::getInstance()->current_scene->add(Factory::newPowerUp(x, z));
+						scene->add(Factory::newPowerUp(x, z));
 					} else {
 						BombermanClient::getInstance()->sock->newBonus(x, z);
 					}
 				}
-				BombermanClient::getInstance()->current_scene->remove(b->obstacle);
-				delete b->obstacle;
+				b->obstacle->toDelete = true;
 				b->obstacle = NULL;
 				b->walkable = true;
 			}
 		}
-
-		BombermanClient::getInstance()->current_scene->remove(this->gameObject);
-		delete this->gameObject;
+		this->gameObject->toDelete = true;
 	}
 }
 
