@@ -50,8 +50,8 @@ std::map<std::pair<int, int>, Case>			Map::getContent()
 
 Case						*Map::getCase(int x, int z)
 {
-	// if (this->content.count(std::make_pair(x, z)) == 0)
-	//  	return NULL;
+	if (this->content.count(std::make_pair(x, z)) == 0)
+	 	return NULL;
 	return &this->content[std::make_pair(x, z)];
 }
 

@@ -58,6 +58,7 @@ class CharacterControllerScript : public Script
 		glm::vec3							last_bomb_contact_1;
 		glm::vec3							last_bomb_contact_2;
 
+	protected:
 		GameScene							*scene;
 		// ####################################################################
 };

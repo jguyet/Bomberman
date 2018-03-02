@@ -1,0 +1,333 @@
+# Script
+# SoloMenuInterface :
+#
+<style>
+.mainmenu-css
+{
+	color:#000000;
+	font-size: 30px;
+	font-family: arial;
+}
+</style>
+
+<img>
+{
+	id: "background",
+	src: "assets/ui/mainmenuinterface/background.jpg",
+	width: 100%,
+	height: 100%,
+	w: 1024,
+	h: 819,
+	x: 0,
+	y: 0,
+	z-index: -1
+}
+</img>
+
+<square>
+{
+	id: "background_menu",
+	class: "mainmenu-css",
+	x: -200,
+	y: 25%,
+	width: 400,
+	height: 425,
+	style: "color:#2E2E2E;float:center;",
+	z-index: 1
+}
+</square>
+
+<text>
+{
+	id: "lbl_mainmenu",
+	class: "mainmenu-css",
+	value: "SOLO",
+	parent: "background_menu",
+	x: 155,
+	y: 7,
+	style: "color:#BDBDBD;font-size:40px;",
+	z-index: 2
+}
+</text>
+
+<if condition="$selected==0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		x: -150,
+		y: 35%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Niveau 1",
+		parent: "background_solo",
+		x: 100,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=0">
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		x: -150,
+		y: 35%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Niveau 1",
+		parent: "background_solo",
+		x: 100,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==1">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		x: -150,
+		y: 45%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Niveau 2",
+		parent: "background_multi",
+		x: 100,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=1">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		x: -150,
+		y: 45%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Niveau 2",
+		parent: "background_multi",
+		x: 100,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==2">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		x: -150,
+		y: 55%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Niveau 3",
+		parent: "background_btn_options",
+		x: 100,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=2">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		x: -150,
+		y: 55%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Niveau 3",
+		parent: "background_btn_options",
+		x: 100,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==3">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 65%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Niveau 4",
+		parent: "background_btn_credit",
+		x: 100,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=3">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 65%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Niveau 4",
+		parent: "background_btn_credit",
+		x: 100,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected==4">
+	<square>
+	{
+		id: "background_btn_exit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 75%,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_exit",
+		class: "mainmenu-css",
+		value: "Retour",
+		parent: "background_btn_exit",
+		x: 115,
+		y: 7,
+		style: "color:#000000;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected!=4">
+	<square>
+	{
+		id: "background_btn_exit",
+		class: "mainmenu-css",
+		x: -150,
+		y: 75%,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_exit",
+		class: "mainmenu-css",
+		value: "Retour",
+		parent: "background_btn_exit",
+		x: 125,
+		y: 7,
+		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<text>
+{
+	id: "credit",
+	class: "mainmenu-css",
+	value: "Credit: Frmarinh Dmoureu- Amerelo Jguyet",
+	x: 5,
+	y: 100%,
+	style: "color:#000000;font-size:10px;",
+	z-index: 1
+}
+</text>
