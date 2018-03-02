@@ -134,10 +134,8 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
-	if (BombermanClient::getInstance()->sock != NULL) {
-		BombermanClient::getInstance()->sock->state = false;
-		BombermanClient::getInstance()->sock = NULL;
-	}
+	BombermanClient::getInstance()->delete_socket();
+
 	if (this->current_player != NULL) {
 		this->remove(this->current_player);
 		delete this->current_player;

@@ -61,7 +61,10 @@ void 					Mouse::handle_event_mousemotion(SDL_Event *event)
 		return ;
 	}
 	//warn
-	BombermanClient::getInstance()->current_scene->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
+	Scene *scene = BombermanClient::getInstance()->getCurrentScene<Scene>();
+	if (scene == NULL)
+		return ;
+	scene->camera->MouseMove(Mouse::instance->lastPosition, Mouse::instance->position);
 }
 
 void					Mouse::handle_mousebutton(SDL_Event *event)

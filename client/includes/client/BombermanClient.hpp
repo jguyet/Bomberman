@@ -63,6 +63,10 @@ class BombermanClient : public IRenderLoop
 		template <typename T> T						*getCurrentScene(void);
 		template <typename T> T						*setCurrentScene(Scene *scene);
 
+		bool										new_socket( std::string const &ip, int port );
+		void										delete_socket( void );
+
+
 		void										setWindowSize(int newWidth, int newHeight, bool fullscreen);
 
 		void										run( void );

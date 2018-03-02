@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /Users/jguyet/sgoinfre/Bomberman/client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /sgoinfre/goinfre/Perso/jguyet/Bomberman/client
+CMAKE_BINARY_DIR = /Users/jguyet/sgoinfre/Bomberman/client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /sgoinfre/goinfre/Perso/jguyet/Bomberman/client/CMakeFiles /sgoinfre/goinfre/Perso/jguyet/Bomberman/client/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /sgoinfre/goinfre/Perso/jguyet/Bomberman/client/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jguyet/sgoinfre/Bomberman/client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -257,6 +257,33 @@ srcs/client/BombermanClient.s: srcs/client/BombermanClient.cpp.s
 srcs/client/BombermanClient.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/client/BombermanClient.cpp.s
 .PHONY : srcs/client/BombermanClient.cpp.s
+
+srcs/client/Loader.o: srcs/client/Loader.cpp.o
+
+.PHONY : srcs/client/Loader.o
+
+# target to build an object file
+srcs/client/Loader.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/client/Loader.cpp.o
+.PHONY : srcs/client/Loader.cpp.o
+
+srcs/client/Loader.i: srcs/client/Loader.cpp.i
+
+.PHONY : srcs/client/Loader.i
+
+# target to preprocess a source file
+srcs/client/Loader.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/client/Loader.cpp.i
+.PHONY : srcs/client/Loader.cpp.i
+
+srcs/client/Loader.s: srcs/client/Loader.cpp.s
+
+.PHONY : srcs/client/Loader.s
+
+# target to generate assembly for a file
+srcs/client/Loader.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/client/Loader.cpp.s
+.PHONY : srcs/client/Loader.cpp.s
 
 srcs/graphics/Camera.o: srcs/graphics/Camera.cpp.o
 
@@ -743,6 +770,33 @@ srcs/managers/MapManager.s: srcs/managers/MapManager.cpp.s
 srcs/managers/MapManager.cpp.s:
 	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/managers/MapManager.cpp.s
 .PHONY : srcs/managers/MapManager.cpp.s
+
+srcs/managers/SaveManager.o: srcs/managers/SaveManager.cpp.o
+
+.PHONY : srcs/managers/SaveManager.o
+
+# target to build an object file
+srcs/managers/SaveManager.cpp.o:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/managers/SaveManager.cpp.o
+.PHONY : srcs/managers/SaveManager.cpp.o
+
+srcs/managers/SaveManager.i: srcs/managers/SaveManager.cpp.i
+
+.PHONY : srcs/managers/SaveManager.i
+
+# target to preprocess a source file
+srcs/managers/SaveManager.cpp.i:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/managers/SaveManager.cpp.i
+.PHONY : srcs/managers/SaveManager.cpp.i
+
+srcs/managers/SaveManager.s: srcs/managers/SaveManager.cpp.s
+
+.PHONY : srcs/managers/SaveManager.s
+
+# target to generate assembly for a file
+srcs/managers/SaveManager.cpp.s:
+	$(MAKE) -f CMakeFiles/Bomberman.dir/build.make CMakeFiles/Bomberman.dir/srcs/managers/SaveManager.cpp.s
+.PHONY : srcs/managers/SaveManager.cpp.s
 
 srcs/models/ActionQueue.o: srcs/models/ActionQueue.cpp.o
 
@@ -1524,6 +1578,9 @@ help:
 	@echo "... srcs/client/BombermanClient.o"
 	@echo "... srcs/client/BombermanClient.i"
 	@echo "... srcs/client/BombermanClient.s"
+	@echo "... srcs/client/Loader.o"
+	@echo "... srcs/client/Loader.i"
+	@echo "... srcs/client/Loader.s"
 	@echo "... srcs/graphics/Camera.o"
 	@echo "... srcs/graphics/Camera.i"
 	@echo "... srcs/graphics/Camera.s"
@@ -1578,6 +1635,9 @@ help:
 	@echo "... srcs/managers/MapManager.o"
 	@echo "... srcs/managers/MapManager.i"
 	@echo "... srcs/managers/MapManager.s"
+	@echo "... srcs/managers/SaveManager.o"
+	@echo "... srcs/managers/SaveManager.i"
+	@echo "... srcs/managers/SaveManager.s"
 	@echo "... srcs/models/ActionQueue.o"
 	@echo "... srcs/models/ActionQueue.i"
 	@echo "... srcs/models/ActionQueue.s"
