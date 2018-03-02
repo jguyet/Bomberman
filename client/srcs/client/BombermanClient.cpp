@@ -73,6 +73,9 @@ void						BombermanClient::initialize_resources( void )
 	Model::load("bonus-bomb-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/bomb-up.obj");
 	Model::load("bonus-power-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/power-up.obj");
 	Model::load("bonus-speed-up", ShaderUtils::instance->get("dir"), "assets/textures/bonus/speed-up.obj");
+
+	Model::load("goomba", ShaderUtils::instance->get("dir"), "assets/Goomba/goomba.obj");
+
 }
 
 void						BombermanClient::build_window( void )
