@@ -20,6 +20,7 @@ class A_star
 		bool										path_finding(int y, int x, Module_h &target, std::list<Module_h> &moves, std::vector<BombControllerScript*> &bomb_l);
 		void										set_map(Map* map);
 		int											bomb_col(std::vector<BombControllerScript*> bomb_l, float x, float y);
+		int											stop_condition(Module_h &c_case, Module_h &target);
 		// #####################################################################
 		Map* 										map;
 		Module_h									start;

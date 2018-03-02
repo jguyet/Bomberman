@@ -55,9 +55,9 @@ void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 	// std::cout << "pos x " << x << " y " << y << " Nbr players " << players.size() << std::endl;
 	for (auto *player : players)
 	{
+		std::cout << "pos target x " << player->transform.position.x << " y " << player->transform.position.z << std::endl;
 		if (player->transform.position.x != x || player->transform.position.z != y)
 		{
-			std::cout << "pos target x " << player->transform.position.x << " y " << player->transform.position.z << std::endl;
 			this->target.pos_x = player->transform.position.x;
 			this->target.pos_y = player->transform.position.z;
 			this->tplayer = player;
@@ -74,28 +74,28 @@ void				AI::select_target(void)
 
 	if (this->select_t == false)
 	{
-		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
+		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
 
-		if (info == 0)
-		{
-			this->getInfos();
-			info = 1;
-		}
-
-		if (this->action != SEARCH)
-		{
-			GameObject *near;
-			near = this->getNearestBlock();
-
-			this->target.pos_x = near->transform.position.x;
-			this->target.pos_y = near->transform.position.z;
-			this->tplayer = near;
-			this->action = SEARCH;
-			std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
-		}
-		else {
-
-		}
+		// if (info == 0)
+		// {
+		// 	this->getInfos();
+		// 	info = 1;
+		// }
+        //
+		// if (this->action != SEARCH)
+		// {
+		// 	GameObject *near;
+		// 	near = this->getNearestBlock();
+        //
+		// 	this->target.pos_x = near->transform.position.x;
+		// 	this->target.pos_y = near->transform.position.z;
+		// 	this->tplayer = near;
+		// 	this->action = SEARCH;
+		// 	std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
+		// }
+		// else {
+        //
+		// }
 		this->select_t = true;
 	}
 	else if ((std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
@@ -208,22 +208,22 @@ int				AI::brain(void)
 
 int				AI::start_checks(void)
 {
-	if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
-	{
-		// info = 0;
-		this->select_t = false;
-		std::cout << " NO ice_block :)" << std::endl;
-		return (1);
-	}
+	// if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
+	// {
+	// 	// info = 0;
+	// 	this->select_t = false;
+	// 	std::cout << " NO ice_block :)" << std::endl;
+	// 	return (1);
+	// }
 
 	if (this->select_t == false)
 		return (1);
-
-	if (this->pause)
-	{
-		this->pause--;
-		return (1);
-	}
+    //
+	// if (this->pause)
+	// {
+	// 	this->pause--;
+	// 	return (1);
+	// }
 
 	return (0);
 }
