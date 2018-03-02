@@ -20,6 +20,8 @@ GameScene::GameScene (std::string selected_map)
 	this->quitInterface = NULL;
 	this->interface = new GameInterface(this);
 
+	Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
+
 	if (BombermanClient::getInstance()->sock->state == false)
 	{
 		this->StartSolo();
@@ -44,13 +46,13 @@ void GameScene::StartSolo(void)
 	this->all_player.push_back(playerObject);
 	this->add(playerObject);
 
-	// GameObject *player = Factory::newPlayer(100);
-	// this->all_player.push_back(player);
-	// this->players.push_back(player);
-	// player->transform.position = glm::vec3(4,1,36);
-	// player->transform.scale = glm::vec3(3,3,3);
-	// player->transform.rotation = glm::vec3(0,0,0);
-	// this->add(player);//add on scene
+	GameObject *player = Factory::newPlayer(100);
+	this->all_player.push_back(player);
+	this->players.push_back(player);
+	player->transform.position = glm::vec3(4,1,36);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
 }
 
 void					GameScene::removePlayer(GameObject *player)
