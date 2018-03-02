@@ -52,6 +52,9 @@ void						QuitMenuInterface::draw(void)
 {
 	this->variables["$selected"] = (std::ostringstream() << this->current_position).str();
 	this->build();
+	if (this->modified == true) {
+		this->canvas->setElementsMap(&this->elements);
+	}
 	this->canvas->draw();
 }
 

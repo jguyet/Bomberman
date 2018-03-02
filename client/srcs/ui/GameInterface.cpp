@@ -100,6 +100,9 @@ void						GameInterface::draw(void)
 	this->variables["$current_player_name"] = player_name;
 
 	this->build();
+	if (this->modified == true) {
+		this->canvas->setElementsMap(&this->elements);
+	}
 	this->canvas->draw();
 }
 

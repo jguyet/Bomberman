@@ -276,6 +276,7 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 		}
 		this->elements_params[parameters_map["id"]] = parameters_map;
 		this->elements[parameters_map["id"]] = tag;
+		this->modified = true;
 	}
 }
 

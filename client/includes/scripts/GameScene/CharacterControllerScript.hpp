@@ -40,6 +40,9 @@ class CharacterControllerScript : public Script
 		float								speed = SPEED;
 
 		bool								locked = false;
+
+		int									last_bomb_1 = 0;
+		int									last_bomb_2 = 0;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
@@ -49,10 +52,11 @@ class CharacterControllerScript : public Script
 		glm::vec3							lastPosition_direction;
 		glm::vec3							lastPosition;
 
-		bool								collide_with_mi_bomb = false;
-		bool								in_mi_bomb = false;
-		int									last_bomb_1 = 0;
-		int									last_bomb_2 = 0;
+		bool								collide_with_bomb = false;
+		bool								collide_with_bomb_1 = false;
+		bool								collide_with_bomb_2 = false;
+		glm::vec3							last_bomb_contact_1;
+		glm::vec3							last_bomb_contact_2;
 
 		GameScene							*scene;
 		// ####################################################################

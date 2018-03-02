@@ -71,7 +71,6 @@ void								CharacterControllerScript::Attack(void)
 	bomb->transform.rotation = glm::vec3(0,0,0);
 	this->scene->add(bomb);
 	c->obstacle = bomb;
-	this->in_mi_bomb = true;
 	this->last_bomb_2 = this->last_bomb_1;
 	this->last_bomb_1 = bomb->id;
 }
@@ -127,8 +126,31 @@ void								CharacterControllerScript::MRight(void)
 
 void						CharacterControllerScript::Update(void)
 {
-	if (this->collide_with_mi_bomb == false)
-		this->in_mi_bomb = false;
+	if (this->collide_with_bomb == true) {
+		bool lock_player = true;
+		if (this->collide_with_bomb_1 == true && this->collide_with_bomb_2 == true) {
+			lock_player = false;
+		}
+		if (this->collide_with_bomb_1 == true) {
+			lock_player = false;
+		}
+		if (this->collide_with_bomb_2 == false)
+			this->last_bomb_2 = 0;
+		if (this->collide_with_bomb_1 == false && this->collide_with_bomb_2 == false)
+			this->last_bomb_1 = 0;
+		// std::cout << "H1 " << this->last_bomb_contact_1.x << " " << this->last_bomb_contact_1.z << std::endl;
+		// std::cout << "H2 " << this->last_bomb_contact_2.x << " " << this->last_bomb_contact_2.z << std::endl;
+		if (this->last_bomb_contact_1.x <= this->last_bomb_contact_2.x && this->last_bomb_contact_1.z < this->last_bomb_contact_2.z) {
+			lock_player = false;
+		}
+		if (lock_player) {
+			this->gameObject->transform.position.x = this->lastPosition.x;
+			this->gameObject->transform.position.z = this->lastPosition.z;
+		}
+	} else {
+		this->last_bomb_1 = 0;
+		this->last_bomb_2 = 0;
+	}
 	this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
 	static std::map<int, P> cmd = {
 		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
@@ -229,7 +251,9 @@ void						CharacterControllerScript::Update(void)
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
 	}
-	this->collide_with_mi_bomb = false;
+	this->collide_with_bomb = false;
+	this->collide_with_bomb_1 = false;
+	this->collide_with_bomb_2 = false;
 }
 
 void								CharacterControllerScript::OnPreRender(void)
@@ -261,19 +285,20 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 
 	if (collider->tag == "Bomb") {
-		BombControllerScript *script = dynamic_cast<BombControllerScript*>(collider->GetComponent<Script>());
-		if (script->playerController->gameObject->id == this->gameObject->id) {
-			this->collide_with_mi_bomb = true;
+		BoxCollider *b = this->gameObject->GetComponent<BoxCollider>();
+		glm::vec3 contact_point = glm::vec3(0,0,0);
+		contact_point.x = fmax(abs(this->gameObject->transform.position.x - collider->transform.position.x) - ((2.f + b->size.x)/2.f), 0);
+		contact_point.z = fmax(abs(this->gameObject->transform.position.z - collider->transform.position.z) - ((2.f + b->size.z)/2.f), 0);
+
+		this->collide_with_bomb = true;
+		if (collider->id == this->last_bomb_1) {
+			this->collide_with_bomb_1 = true;
 		}
-		if (collider->id == this->last_bomb_1 || collider->id == this->last_bomb_2) {
-		} else {
-			this->in_mi_bomb = false;
+		if (collider->id == this->last_bomb_2) {
+			this->collide_with_bomb_2 = true;
+			this->last_bomb_contact_2 = this->last_bomb_contact_1;
+			this->last_bomb_contact_1 = contact_point;
 		}
-		if (this->in_mi_bomb == false) {//si c'est pas ma derniere bomb je suis bloquer
-			this->gameObject->transform.position.x = this->lastPosition.x;
-			this->gameObject->transform.position.z = this->lastPosition.z;
-		}
-		//}
 	}
 	else if (collider->tag == "Explosion") {
 		if (this->scene->current_player != NULL && this->gameObject->id == this->scene->current_player->id) {
