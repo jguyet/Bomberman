@@ -55,11 +55,7 @@ std::ostream &				operator<<(std::ostream & o, MainMenuScene const & i)
 
 bool								MainMenuScene::select_local(void)
 {
-	if (BombermanClient::getInstance()->sock != NULL) {
-		BombermanClient::getInstance()->sock->state = false;
-		BombermanClient::getInstance()->sock = NULL;
-	}
-	BombermanClient::getInstance()->sock = new Socket("", 0);
+	BombermanClient::getInstance()->new_socket("", 0);
 	BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
 	return true;
 }
@@ -80,17 +76,12 @@ bool								MainMenuScene::select_server(void)
 	}
 	std::string ip = string_split.at(0);
 	int port = atoi(string_split.at(1).c_str());
+	bool connected = BombermanClient::getInstance()->new_socket(ip, port);
 
-	if (BombermanClient::getInstance()->sock != NULL) {
-		BombermanClient::getInstance()->sock->state = false;
-		BombermanClient::getInstance()->sock = NULL;
-	}
-	BombermanClient::getInstance()->sock = new Socket(ip.c_str(), port);
-
-	if (BombermanClient::getInstance()->sock->state == true)
+	if (connected) {
 		return true;
-	BombermanClient::getInstance()->sock->state = false;
-	BombermanClient::getInstance()->sock = NULL;
+	}
+	BombermanClient::getInstance()->delete_socket();
 	return false;
 }
 

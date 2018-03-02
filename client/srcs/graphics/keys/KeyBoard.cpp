@@ -7,19 +7,15 @@ void			KeyBoard::key_callback(SDL_Event *event)
 {
 	if (event->type != SDL_KEYDOWN && event->type != SDL_KEYUP)
 		return ;
-	//std::cout << "Key entry : " << event->key.keysym.scancode << std::endl;
 	KeyBoard::instance->pressedKeys[event->key.keysym.scancode] = (event->type == SDL_KEYDOWN) ? true : false;
 
-	//copy handlers
+	KeyBoard::instance->mutex.lock();
 	std::map<const char*, KeyBoardEventHandler*> cpy = std::map<const char*, KeyBoardEventHandler*>(KeyBoard::instance->handlers);
-
+	KeyBoard::instance->mutex.unlock();
 	for (std::map<const char*, KeyBoardEventHandler*>::iterator it = cpy.begin(); it != cpy.end(); it++) {
 		if (event->type == SDL_KEYUP) {
 			it->second->handleUP(event->key.keysym.scancode);
 		}
-		// if (event->type == SDL_KEYRELEASE) {
-		// 	it->second->handleRELEASE(event->key.keysym.scancode);
-		// }
 		if (event->type == SDL_KEYDOWN) {
 			it->second->handleDOWN(event->key.keysym.scancode);
 		}
@@ -75,11 +71,13 @@ bool						KeyBoard::getKey(unsigned int key)
 
 void						KeyBoard::addHandler(const char *key, KeyBoardEventHandler *handler)
 {
+	std::lock_guard<std::mutex> lock(this->mutex);
 	this->handlers[key] = handler;
 }
 
 void						KeyBoard::removeHandler(const char *key)
 {
+	std::lock_guard<std::mutex> lock(this->mutex);
 	if (this->handlers.count(key) == 0)
 		return ;
 	this->handlers.erase(key);

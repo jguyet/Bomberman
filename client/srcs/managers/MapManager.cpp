@@ -192,7 +192,13 @@ void						MapManager::buildObjects(Map *selected)
 
 MapManager::~MapManager ()
 {
-	//pas besoin de delete
+	for (auto &elem : this->maps)
+	{
+		Map *current = elem.second;
+
+		delete current;
+	}
+	this->maps.clear();
 }
 
 std::ostream &				operator<<(std::ostream & o, MapManager const & i)

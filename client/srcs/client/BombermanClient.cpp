@@ -182,6 +182,28 @@ void						BombermanClient::initialize_inputs( void )
 	SDL_AddEventWatch(input_callback_interval, NULL);
 }
 
+bool						BombermanClient::new_socket( std::string const &ip, int port )
+{
+	this->delete_socket();
+	this->sock = new Socket(ip.c_str(), port);
+
+	return (this->sock->state);
+}
+
+void						BombermanClient::delete_socket( void )
+{
+	if (this->sock != NULL) {
+		if (this->sock->state == false) {
+			//if sock not connected manual delete
+			delete this->sock;
+		} else {
+			//automatique delete
+			this->sock->state = false;
+		}
+		this->sock = NULL;
+	}
+}
+
 
 void						BombermanClient::run( void )
 {

@@ -24,6 +24,7 @@ Map &				Map::operator=( Map const & rhs )
 
 Map::~Map ( void )
 {
+	this->content.clear();
 	return ;
 }
 

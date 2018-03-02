@@ -34,6 +34,7 @@ class KeyBoard
 		// PRIVATE #############################################################
 		std::map<const char*, KeyBoardEventHandler*>	handlers;
 		bool											pressedKeys[301];
+		std::mutex										mutex;
 		// #####################################################################
 };
 

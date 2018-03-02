@@ -48,7 +48,6 @@ class GameScene : public Scene
 		std::vector<GameObject*>			all_player;
 		Map									*map;
 		MapManager							*mapManager;
-		SaveManager							*saveManager;
 		//ui
 		GameInterface						*interface;
 		StartGameInterface					*startGameInterface;

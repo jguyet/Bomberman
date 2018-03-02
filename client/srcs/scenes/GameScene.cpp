@@ -13,15 +13,10 @@ GameScene::GameScene (std::string selected_map)
 	this->camera->buildFPSProjection();
 
 	this->mapManager = new MapManager(this);
-	this->saveManager = new SaveManager(this);
 
 	Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
-	if (selected_map.length() == 0) {
-		// load progression
-	} else {
-		this->map = this->mapManager->getMap(selected_map);
-		mapManager->buildObjects(this->map);
-	}
+	this->map = this->mapManager->getMap(selected_map);
+	mapManager->buildObjects(this->map);
 
 	this->current_player = NULL;
 	this->startGameInterface = NULL;
@@ -136,10 +131,8 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 
 GameScene::~GameScene ( void )
 {
-	if (BombermanClient::getInstance()->sock != NULL) {
-		BombermanClient::getInstance()->sock->state = false;
-		BombermanClient::getInstance()->sock = NULL;
-	}
+	BombermanClient::getInstance()->delete_socket();
+
 	if (this->current_player != NULL) {
 		this->remove(this->current_player);
 		delete this->current_player;
@@ -154,7 +147,6 @@ GameScene::~GameScene ( void )
 		delete this->quitInterface;
 	}
 	delete this->mapManager;
-	delete this->saveManager;
 }
 
 std::ostream &				operator<<(std::ostream & o, GameScene const & i)
