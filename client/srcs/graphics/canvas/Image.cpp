@@ -63,7 +63,9 @@ Image &				Image::operator=( Image const & rhs )
 
 Image::~Image ( void )
 {
-	SDL_FreeSurface(this->image);
+	if (this->image != NULL) {
+		SDL_FreeSurface(this->image);
+	}
 	return ;
 }
 
