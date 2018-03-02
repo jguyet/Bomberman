@@ -160,7 +160,6 @@ void								BombControllerScript::explode(void)
 				break;
 		}
 	}
-	BombermanClient::getInstance()->current_scene->remove(this->gameObject);
 	this->gameObject->toDelete = true;
 }
 

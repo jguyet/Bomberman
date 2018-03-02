@@ -137,6 +137,7 @@ void						Socket::Thread(Socket *socket)
 			}
 		}
 	}
+	delete socket->handler;
 	if (socket->sock != 0)
 		close(socket->sock);
 	if (socket->sockUdp != 0)

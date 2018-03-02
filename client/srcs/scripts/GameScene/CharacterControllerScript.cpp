@@ -138,8 +138,6 @@ void						CharacterControllerScript::Update(void)
 			this->last_bomb_2 = 0;
 		if (this->collide_with_bomb_1 == false && this->collide_with_bomb_2 == false)
 			this->last_bomb_1 = 0;
-		// std::cout << "H1 " << this->last_bomb_contact_1.x << " " << this->last_bomb_contact_1.z << std::endl;
-		// std::cout << "H2 " << this->last_bomb_contact_2.x << " " << this->last_bomb_contact_2.z << std::endl;
 		if (this->last_bomb_contact_1.x <= this->last_bomb_contact_2.x && this->last_bomb_contact_1.z < this->last_bomb_contact_2.z) {
 			lock_player = false;
 		}
@@ -319,12 +317,12 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		if (this->scene->current_player != NULL && this->gameObject->id == this->scene->current_player->id) {
 			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
 			this->scene->removePlayer(this->gameObject);
-			this->scene->current_player->toDelete = true;
+			this->gameObject->toDelete = true;
 			this->scene->current_player = NULL;
 		} else {
 			printf("Player id %d is dead !\n", this->getPlayerId());
-			this->gameObject->toDelete = true;
 			this->scene->removePlayer(this->gameObject);
+			this->gameObject->toDelete = true;
 		}
 	}
 	else if (collider->tag == "bonus-bomb-up") {
