@@ -91,6 +91,13 @@ void						BombermanClient::build_window( void )
 	this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
 	this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
 	this->music = Mix_LoadMUS("./assets/sound/stage2.mp3");
+
+
+		if(!this->music) {
+			printf("Mix_LoadMUS(\"music.mp3\"): %s\n", Mix_GetError());
+			// this might be a critical error...
+		}
+
 	this->music_menu = Mix_LoadMUS("./assets/sound/stage1.mp3");
 	Mix_VolumeMusic(20);
 
