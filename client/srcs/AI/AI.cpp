@@ -10,6 +10,7 @@ AI::AI (GameObject* my_player) : my_player(my_player)
 	this->a_star.set_map(BombermanClient::getInstance()->getCurrentScene<GameScene>()->map);
 	this->select_t = false;
 	this->pause = 0;
+	this->action = IDLE;
 	return ;
 }
 
@@ -72,29 +73,31 @@ void				AI::select_target(void)
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
+	if (this->action == ESCAPE)
+		return;
+
 	if (this->select_t == false)
 	{
-		this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
+		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
 
-		// if (info == 0)
-		// {
-		// 	this->getInfos();
-		// 	info = 1;
-		// }
-        //
-		// if (this->action != SEARCH)
-		// {
-		// 	GameObject *near;
-		// 	near = this->getNearestBlock();
-        //
-		// 	this->target.pos_x = near->transform.position.x;
-		// 	this->target.pos_y = near->transform.position.z;
-		// 	this->tplayer = near;
-		// 	this->action = SEARCH;
-		// 	std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
-		// }
-		// else {
-        //
+		if (info == 0)
+		{
+			this->getInfos();
+			info = 1;
+		}
+
+		if (this->action == IDLE)
+		{
+			GameObject *near;
+			near = this->getNearestBlock();
+
+			this->target.pos_x = near->transform.position.x;
+			this->target.pos_y = near->transform.position.z;
+			this->tplayer = near;
+			this->action = SEARCH;
+			// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
+		}
+		// else if (this->action == ESCAPE) {
 		// }
 		this->select_t = true;
 	}
@@ -164,7 +167,6 @@ int				AI::brain(void)
 
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
-	this->action = IDLE;
 
 	this->select_target();
 	// checker ##########################
@@ -177,15 +179,30 @@ int				AI::brain(void)
 	if (this->moves.size() > 0)
 	{
 		float t = SPEED; // Tolerance
+
 		//If current target close delete them
 		if (x >= this->moves.front().pos_x - t && x <= this->moves.front().pos_x + t && y >= this->moves.front().pos_y - t && y <= this->moves.front().pos_y + t)
-		{
 			this->moves.pop_front();
-			// std::cout << "target x " << this->moves.front().pos_x << " target y " << this->moves.front().pos_y << std::endl;
+
+		if (this->moves.size() == 0)
+		{
+			if (this->action != ESCAPE)
+			{
+				// this->action = ATTACK;
+				// TODO : deselect target FOR path_finding
+				this->action = ESCAPE;
+				return (SDL_SCANCODE_Q);
+			}
+			else
+			{
+				this->action = IDLE;
+				this->select_t = false;
+			}
 		}
-		if (this->moves.size() == 0 || this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
-			return (0);
-	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l) == false) {
+		// else if (this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
+		// 	return (0);
+
+	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false) {
 		return (0);
 	}
 	// move ############################
@@ -197,7 +214,13 @@ int				AI::brain(void)
 		return(SDL_SCANCODE_LEFT);
 	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
-	// return (SDL_SCANCODE_Q);
+
+	// if (this->action == ATTACK)
+	// {
+	// 	std::cout << "start Attack" << std::endl;
+	// 	this->action = ESCAPE;
+	// 	return (SDL_SCANCODE_Q);
+	// }
 
 	// #################################
 	return (0);
@@ -209,6 +232,7 @@ int				AI::brain(void)
 
 int				AI::start_checks(void)
 {
+		// test
 	// if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
 	// {
 	// 	// info = 0;
@@ -217,14 +241,15 @@ int				AI::start_checks(void)
 	// 	return (1);
 	// }
 
+	// test
+	if (this->pause)
+	{
+		this->pause--;
+		return (1);
+	}
+
 	if (this->select_t == false)
 		return (1);
-    //
-	// if (this->pause)
-	// {
-	// 	this->pause--;
-	// 	return (1);
-	// }
 
 	return (0);
 }
@@ -233,6 +258,7 @@ void				AI::restart_target_pos(void)
 {
 	this->target.pos_x = this->tplayer->transform.position.x;
 	this->target.pos_y = this->tplayer->transform.position.z;
+	this->action = SEARCH;
 	this->moves.clear();
 }
 
