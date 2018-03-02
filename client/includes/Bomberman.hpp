@@ -122,6 +122,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 */
 # include "scenes/GameScene.hpp"
 # include "scenes/MainMenuScene.hpp"
+# include "scenes/SoloMenuScene.hpp"
 
 /*
 ** Others
@@ -144,5 +145,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 # include "AI/Module_h.hpp"
 # include "AI/A_star.hpp"
 # include "AI/AI.hpp"
+
+# include "scripts/GameScene/GoombaControllerScript.hpp"
 
 #endif

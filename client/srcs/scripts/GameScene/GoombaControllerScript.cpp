@@ -8,7 +8,7 @@ std::vector<GoombaControllerScript*> GoombaControllerScript::List = std::vector<
 
 // CANONICAL #####################################################
 
-GoombaControllerScript::GoombaControllerScript ( void )
+GoombaControllerScript::GoombaControllerScript ( void ) : CharacterControllerScript(100)
 {
 	GoombaControllerScript::List.push_back(this);
 
@@ -17,12 +17,10 @@ GoombaControllerScript::GoombaControllerScript ( void )
 	this->sens = false;
 	this->max_scale = -0.1f;
 	this->min_scale = -0.05f;
-
-
 	return ;
 }
 
-GoombaControllerScript::GoombaControllerScript ( GoombaControllerScript const & src )
+GoombaControllerScript::GoombaControllerScript ( GoombaControllerScript const & src ) : CharacterControllerScript(100)
 {
 	*this = src;
 	return ;
@@ -53,6 +51,10 @@ std::ostream &				operator<<(std::ostream & o, GoombaControllerScript const & i)
 
 // PUBLIC METHOD #################################################
 
+void GoombaControllerScript::Start(void) {
+	this->robot = new AI(this->gameObject);
+}
+
 void								GoombaControllerScript::Update(void)
 {
 /*	if (TimeUtils::getCurrentSystemMillis() < this->anim_time + 40L)
@@ -76,6 +78,18 @@ void								GoombaControllerScript::Update(void)
 			this->sens = false;
 	}
 	this->anim_time = TimeUtils::getCurrentSystemMillis();*/
+
+	static std::map<int, P> cmd = {
+		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
+		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
+		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
+	};
+
+	int i = 0;
+	i = robot->brain();
+
+	if (i != 0)
+		(this->*cmd[i])();
 }
 
 void								GoombaControllerScript::OnPreRender(void)

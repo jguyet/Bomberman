@@ -7,7 +7,7 @@
 
 AI::AI (GameObject* my_player) : my_player(my_player)
 {
-	this->a_star.set_map(dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map);
+	this->a_star.set_map(BombermanClient::getInstance()->getCurrentScene<GameScene>()->map);
 	this->select_t = false;
 	this->pause = 0;
 	return ;
