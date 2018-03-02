@@ -90,15 +90,8 @@ void						BombermanClient::build_window( void )
 	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
 	this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
 	this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
-	this->music = Mix_LoadMUS("./assets/sound/stage2.mp3");
-
-
-		if(!this->music) {
-			printf("Mix_LoadMUS(\"music.mp3\"): %s\n", Mix_GetError());
-			// this might be a critical error...
-		}
-
-	this->music_menu = Mix_LoadMUS("./assets/sound/stage1.mp3");
+	this->music = Mix_LoadMUS("./assets/sound/stage1.ogg");
+	this->music_menu = Mix_LoadMUS("./assets/sound/stage2.ogg");
 	Mix_VolumeMusic(20);
 
 	//OPENGL version 3.3
