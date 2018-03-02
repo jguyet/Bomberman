@@ -159,7 +159,9 @@ int				AI::bombcol(int x, int y, int next_x, int next_y)
 
 int				AI::brain(void)
 {
-	this->bomb_l = BombControllerScript::List;
+	this->bomb_l.clear();
+	this->bomb_l = std::vector<BombControllerScript*>(BombControllerScript::List);
+
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 	this->action = IDLE;
@@ -186,7 +188,6 @@ int				AI::brain(void)
 	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l) == false) {
 		return (0);
 	}
-
 	// move ############################
 	if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_UP);
