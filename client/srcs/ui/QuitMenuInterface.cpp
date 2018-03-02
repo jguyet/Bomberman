@@ -61,8 +61,7 @@ void						QuitMenuInterface::draw(void)
 void						QuitMenuInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_RETURN && this->current_position == 0) {
-		BombermanClient::getInstance()->current_scene = new MainMenuScene();
-		delete this->scene;
+		BombermanClient::getInstance()->setCurrentScene<GameScene>(new MainMenuScene());
 		return ;
 	}
 	if (key == SDL_SCANCODE_RETURN && this->current_position == 1) {
