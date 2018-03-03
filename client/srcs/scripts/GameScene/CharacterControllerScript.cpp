@@ -9,6 +9,7 @@
 CharacterControllerScript::CharacterControllerScript ( int playerId )
 {
 	this->playerId = playerId;
+	this->unlockCharacterDirections();
 	return ;
 }
 
@@ -42,6 +43,14 @@ std::ostream &				operator<<(std::ostream & o, CharacterControllerScript const &
 
 // PUBLIC METHOD #################################################
 
+void						CharacterControllerScript::unlockCharacterDirections(void)
+{
+	this->lock_direction[DIRECTION_RIGHT] = false;
+	this->lock_direction[DIRECTION_LEFT] = false;
+	this->lock_direction[DIRECTION_FORWARD] = false;
+	this->lock_direction[DIRECTION_BACKWARD] = false;
+}
+
 void						CharacterControllerScript::Start(void)
 {
 	this->scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
@@ -71,8 +80,6 @@ void								CharacterControllerScript::Attack(void)
 	bomb->transform.rotation = glm::vec3(0,0,0);
 	this->scene->add(bomb);
 	c->obstacle = bomb;
-	this->last_bomb_2 = this->last_bomb_1;
-	this->last_bomb_1 = bomb->id;
 }
 
 void 								CharacterControllerScript::BombExplode()
@@ -82,7 +89,7 @@ void 								CharacterControllerScript::BombExplode()
 
 void								CharacterControllerScript::MUp(void)
 {
-	if (this->locked)
+	if (this->locked || this->lock_direction[DIRECTION_FORWARD])
 		return ;
 	if (this->gameObject->transform.rotation.y != 270.f) {
 		this->gameObject->transform.rotation.y = 270.f;
@@ -93,7 +100,7 @@ void								CharacterControllerScript::MUp(void)
 
 void								CharacterControllerScript::MDown(void)
 {
-	if (this->locked)
+	if (this->locked || this->lock_direction[DIRECTION_BACKWARD])
 		return ;
 	if (this->gameObject->transform.rotation.y != 90.f) {
 		this->gameObject->transform.rotation.y = 90.f;
@@ -104,7 +111,7 @@ void								CharacterControllerScript::MDown(void)
 
 void								CharacterControllerScript::MLeft(void)
 {
-	if (this->locked)
+	if (this->locked || this->lock_direction[DIRECTION_LEFT])
 		return ;
 	if (this->gameObject->transform.rotation.y != 0.f) {
 		this->gameObject->transform.rotation.y = 0.f;
@@ -115,7 +122,7 @@ void								CharacterControllerScript::MLeft(void)
 
 void								CharacterControllerScript::MRight(void)
 {
-	if (this->locked)
+	if (this->locked || this->lock_direction[DIRECTION_RIGHT])
 		return ;
 	if (this->gameObject->transform.rotation.y != 180.f) {
 		this->gameObject->transform.rotation.y = 180.f;
@@ -126,29 +133,6 @@ void								CharacterControllerScript::MRight(void)
 
 void						CharacterControllerScript::Update(void)
 {
-	if (this->collide_with_bomb == true) {
-		bool lock_player = true;
-		if (this->collide_with_bomb_1 == true && this->collide_with_bomb_2 == true) {
-			lock_player = false;
-		}
-		if (this->collide_with_bomb_1 == true) {
-			lock_player = false;
-		}
-		if (this->collide_with_bomb_2 == false)
-			this->last_bomb_2 = 0;
-		if (this->collide_with_bomb_1 == false && this->collide_with_bomb_2 == false)
-			this->last_bomb_1 = 0;
-		if (this->last_bomb_contact_1.x <= this->last_bomb_contact_2.x && this->last_bomb_contact_1.z < this->last_bomb_contact_2.z) {
-			lock_player = false;
-		}
-		if (lock_player) {
-			this->gameObject->transform.position.x = this->lastPosition.x;
-			this->gameObject->transform.position.z = this->lastPosition.z;
-		}
-	} else {
-		this->last_bomb_1 = 0;
-		this->last_bomb_2 = 0;
-	}
 	this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
 	static std::map<int, P> cmd = {
 		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
@@ -266,9 +250,7 @@ void						CharacterControllerScript::Update(void)
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
 	}
-	this->collide_with_bomb = false;
-	this->collide_with_bomb_1 = false;
-	this->collide_with_bomb_2 = false;
+	this->unlockCharacterDirections();
 }
 
 void								CharacterControllerScript::OnPreRender(void)
@@ -300,20 +282,28 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 
 	if (collider->tag == "Bomb") {
-		BoxCollider *b = this->gameObject->GetComponent<BoxCollider>();
-		glm::vec3 contact_point = glm::vec3(0,0,0);
-		contact_point.x = fmax(abs(this->gameObject->transform.position.x - collider->transform.position.x) - ((2.f + b->size.x)/2.f), 0);
-		contact_point.z = fmax(abs(this->gameObject->transform.position.z - collider->transform.position.z) - ((2.f + b->size.z)/2.f), 0);
 
-		this->collide_with_bomb = true;
-		if (collider->id == this->last_bomb_1) {
-			this->collide_with_bomb_1 = true;
+		Case *bomb_case = this->scene->map->getCase( fmax(0.5f + collider->transform.position.x / 2.f, 0), fmax(0.5f + collider->transform.position.z / 2.f, 0));
+
+		if (c == bomb_case) {//je suis sur une bomb (je peux bouger)
+			return ;
 		}
-		if (collider->id == this->last_bomb_2) {
-			this->collide_with_bomb_2 = true;
-			this->last_bomb_contact_2 = this->last_bomb_contact_1;
-			this->last_bomb_contact_1 = contact_point;
-		}
+		float x = fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0);
+		float z = fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0);
+
+		Case *case_left = this->scene->map->getCase(x, z - 1);
+		Case *case_right = this->scene->map->getCase(x, z + 1);
+		Case *case_forward = this->scene->map->getCase(x + 1, z);
+		Case *case_backward = this->scene->map->getCase(x - 1, z);
+
+		if (case_left != NULL && case_left->obstacle != NULL && case_left->obstacle->tag == "Bomb")
+			this->lock_direction[DIRECTION_LEFT] = true;
+		if (case_right != NULL && case_right->obstacle != NULL && case_right->obstacle->tag == "Bomb")
+			this->lock_direction[DIRECTION_RIGHT] = true;
+		if (case_forward != NULL && case_forward->obstacle != NULL && case_forward->obstacle->tag == "Bomb")
+			this->lock_direction[DIRECTION_FORWARD] = true;
+		if (case_backward != NULL && case_backward->obstacle != NULL && case_backward->obstacle->tag == "Bomb")
+			this->lock_direction[DIRECTION_BACKWARD] = true;
 	}
 	else if (collider->tag == "Explosion") {
 		if (this->scene->current_player != NULL && this->gameObject->id == this->scene->current_player->id) {
