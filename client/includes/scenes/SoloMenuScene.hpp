@@ -19,6 +19,7 @@ class SoloMenuScene : public Scene , public KeyBoardEventHandler
 		// @OVERRIDE Scene ###################################################
 		void								calculPhisics(void);
 		void								drawGameObjects(void);
+		void								loadCurrentLevel();
 		// Scene functions and vars ->
 		//void								_calculPhisics(void);
 		//void								_drawGameObjects(void);
@@ -31,8 +32,8 @@ class SoloMenuScene : public Scene , public KeyBoardEventHandler
 		// ####################################################################
 		// PUBLICS ############################################################
 		bool								select_server(void);
-		bool								select_local(void);
 		SoloMenuInterface					*interface;
+		int									current_level = 0;
 		// ####################################################################
 };
 

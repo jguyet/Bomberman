@@ -13,6 +13,8 @@ void			KeyBoard::key_callback(SDL_Event *event)
 	std::map<const char*, KeyBoardEventHandler*> cpy = std::map<const char*, KeyBoardEventHandler*>(KeyBoard::instance->handlers);
 	KeyBoard::instance->mutex.unlock();
 	for (std::map<const char*, KeyBoardEventHandler*>::iterator it = cpy.begin(); it != cpy.end(); it++) {
+		if (it->second == NULL)
+			continue;
 		if (event->type == SDL_KEYUP) {
 			it->second->handleUP(event->key.keysym.scancode);
 		}
@@ -78,9 +80,7 @@ void						KeyBoard::addHandler(const char *key, KeyBoardEventHandler *handler)
 void						KeyBoard::removeHandler(const char *key)
 {
 	std::lock_guard<std::mutex> lock(this->mutex);
-	if (this->handlers.count(key) == 0)
-		return ;
-	this->handlers.erase(key);
+	this->handlers[key] = NULL;
 }
 
 // ###############################################################

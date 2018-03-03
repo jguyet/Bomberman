@@ -32,7 +32,7 @@ void	MapManager::loadMaps()
 
 Map		*MapManager::getMap(std::string name)
 {
-	return this->maps[name];
+	return (this->maps.count(name) > 0) ? this->maps[name] : NULL;
 }
 
 Case	*MapManager::getRandomWalkableCase(Map *from)
