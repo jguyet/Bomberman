@@ -1,26 +1,27 @@
-#ifndef GOOMBACONTROLLERSCRIPT_HPP
-# define GOOMBACONTROLLERSCRIPT_HPP
+#ifndef BotControllerScript_HPP
+# define BotControllerScript_HPP
 
 # include "Bomberman.hpp"
 
-class GoombaControllerScript : public CharacterControllerScript
+class BotControllerScript : public CharacterControllerScript
 {
 	public:
 		// STATICS ############################################################
-		static std::vector<GoombaControllerScript*> List;
+		static std::vector<BotControllerScript*> List;
 		// ####################################################################
 		// CANONICAL ##########################################################
-											GoombaControllerScript( );
-											GoombaControllerScript( GoombaControllerScript const & src );
-		virtual								~GoombaControllerScript( void );
-		GoombaControllerScript &			operator=( GoombaControllerScript const & rhs );
-		friend std::ostream &				operator<<(std::ostream & o, GoombaControllerScript const & i);
+											BotControllerScript( );
+											BotControllerScript( BotControllerScript const & src );
+		virtual								~BotControllerScript( void );
+		BotControllerScript &			operator=( BotControllerScript const & rhs );
+		friend std::ostream &				operator<<(std::ostream & o, BotControllerScript const & i);
 		// ####################################################################
 		// @OVERRIDE Script ###################################################
 		void								Start(void);
 		void								Update(void);
 		void								OnPreRender(void);
 		void								OnEndRender(void);
+		void								OnCollisionEnter(GameObject *collider);
 		//bool								collide = false;
 		//std::vector<GameObject*>			colliders;
 		// ####################################################################
@@ -38,7 +39,7 @@ class GoombaControllerScript : public CharacterControllerScript
 		long								anim_time;
 
 		AI 									*robot;
-		// std::vector<GoombaControllerScript*>	bomb_l;
+		// std::vector<BotControllerScript*>	bomb_l;
 		// ####################################################################
 };
 

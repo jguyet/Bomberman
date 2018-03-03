@@ -94,7 +94,7 @@ void								MainMenuScene::handleUP(unsigned int key)
 		switch(this->interface->current_position)
 		{
 			case 0:
-				this->select_local();
+				BombermanClient::getInstance()->setCurrentScene<SoloMenuScene>(new SoloMenuScene());
 			break ;
 			case 1:
 				this->select_server();

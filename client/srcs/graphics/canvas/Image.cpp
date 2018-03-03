@@ -149,6 +149,19 @@ void						Image::draw(SDL_Surface *surface)
 	SDL_BlitSurface(this->image, NULL, surface, &text_position);
 }
 
+bool						Image::equals(Tag *tag)
+{
+	Image *image = dynamic_cast<Image*>(tag);
+
+	if (image->transform.position != this->transform.position)
+		return false;
+	if (image->width != this->width)
+		return false;
+	if (image->height != this->height)
+		return false;
+	return true;
+}
+
 // ###############################################################
 
 // GETTER METHOD #################################################

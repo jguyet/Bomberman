@@ -32,7 +32,7 @@ void	MapManager::loadMaps()
 
 Map		*MapManager::getMap(std::string name)
 {
-	return this->maps[name];
+	return (this->maps.count(name) > 0) ? this->maps[name] : NULL;
 }
 
 Case	*MapManager::getRandomWalkableCase(Map *from)
@@ -151,8 +151,9 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 	GameObject *block;
 	static std::map<int, std::string> links =
 	{
-		std::make_pair(0, "brick"), std::make_pair(1, "ice_block"), std::make_pair(2, "ground1")
+		std::make_pair(0, "brick"), std::make_pair(1, "ice_block"), std::make_pair(2, "ground1"), std::make_pair(3, "goomba")
 	};
+
 
 	block = Factory::newBlock(links[0]);
 	block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
@@ -166,14 +167,33 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 	if (value != 0)
 	{
 		if (links.count(value) != 0)
-			block = Factory::newBlock(links[value]);
+		{
+			if (value == 3)
+			{
+				// GameObject *goomba1 = Factory::newGoomba();
+                //
+				// goomba1->transform.position = glm::vec3(6.0f,0,35);
+				// goomba1->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
+				// this->add(goomba1);
+
+				block = Factory::newGoomba();
+				block->transform.position = glm::vec3(x * 2, WALL, y * 2);
+				block->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
+				block->transform.rotation = glm::vec3(0,0,0);
+				cube.obstacle = block;
+				cube.walkable = true;
+			}
+			else
+			{
+				block = Factory::newBlock(links[value]);
+				block->transform.position = glm::vec3(x * 2, WALL, y * 2);
+				block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
+				cube.obstacle = block;
+				cube.walkable = false;
+			}
+		}
 		else
 			return (1);
-
-		block->transform.position = glm::vec3(x * 2, WALL, y * 2);
-		block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
-		cube.obstacle = block;
-		cube.walkable = false;
 	}
 	map[std::make_pair(x, y)] = cube;
 	return (0);
@@ -181,10 +201,14 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 
 void						MapManager::buildObjects(Map *selected)
 {
+	//
 	for (auto & elem : selected->content)
 	{
 		if (elem.second.obstacle != NULL)
+		{
 			this->scene->add(elem.second.obstacle);
+			//std::cout << "tag :" << elem.second.obstacle->tag << std::endl;
+		}
 	}
 	this->scene->add(Factory::newBackground());
 	this->scene->add(Factory::newSkybox());

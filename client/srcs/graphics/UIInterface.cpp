@@ -101,8 +101,10 @@ bool					UIInterface::initialize( std::string const &ui_file )
 
 void						UIInterface::build(void)
 {
+	this->modified = false;
 	if (this->initialize(this->ui_file)) {
 		std::cout << this->ui_file << " Updated modification detected." << std::endl;
+		this->modified = true;
 	}
 
 	for (int i = 0; i < this->conditions.size(); i++)
@@ -271,6 +273,11 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 		}
 		if (this->elements.count(parameters_map["id"]) != 0) {
 			Tag *tmp = this->elements[parameters_map["id"]];
+
+			if (tmp->equals(tag) == true) {
+				delete tag;
+				return ;
+			}
 			delete tmp;
 			this->elements.erase(parameters_map["id"]);
 		}

@@ -3,6 +3,13 @@
 
 # include "Bomberman.hpp"
 
+enum e_direction {
+	DIRECTION_RIGHT = 0,
+	DIRECTION_LEFT = 1,
+	DIRECTION_FORWARD = 2,
+	DIRECTION_BACKWARD = 3
+};
+
 class CharacterControllerScript : public Script
 {
 	public:
@@ -40,23 +47,17 @@ class CharacterControllerScript : public Script
 		float								speed = SPEED;
 
 		bool								locked = false;
-
-		int									last_bomb_1 = 0;
-		int									last_bomb_2 = 0;
+		bool								lock_direction[4];
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
+		void								unlockCharacterDirections(void);
+
 		bool								has_moved = false;
 
 		long 								lastNetwork = 0;
 		glm::vec3							lastPosition_direction;
 		glm::vec3							lastPosition;
-
-		bool								collide_with_bomb = false;
-		bool								collide_with_bomb_1 = false;
-		bool								collide_with_bomb_2 = false;
-		glm::vec3							last_bomb_contact_1;
-		glm::vec3							last_bomb_contact_2;
 
 	protected:
 		GameScene							*scene;

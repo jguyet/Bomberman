@@ -1,4 +1,5 @@
 #include "Bomberman.hpp"
+#include "managers/SaveManager.hpp"
 
 // ###############################################################
 
@@ -8,6 +9,7 @@ BombermanClient::BombermanClient ( void )
 {
 	this->current_scene = NULL;
 	this->sock = NULL;
+	this->saveManager = new SaveManager();
 }
 
 BombermanClient::BombermanClient ( BombermanClient const & src )
@@ -18,7 +20,7 @@ BombermanClient::BombermanClient ( BombermanClient const & src )
 
 BombermanClient::~BombermanClient ( void )
 {
-	return ;
+	delete this->saveManager;
 }
 
 BombermanClient &			BombermanClient::operator=( BombermanClient const & rhs )
@@ -88,10 +90,11 @@ void						BombermanClient::build_window( void )
 
 
 	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
-	this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
-	this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
-	this->music = Mix_LoadMUS("./assets/sound/stage2.mp3");
-	this->music_menu = Mix_LoadMUS("./assets/sound/stage1.mp3");
+	// this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
+	// this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
+	// shit is getting my ears bleeding
+	this->music = Mix_LoadMUS("./assets/sound/stage1.ogg");
+	this->music_menu = Mix_LoadMUS("./assets/sound/stage2.ogg");
 	Mix_VolumeMusic(20);
 
 	//OPENGL version 3.3

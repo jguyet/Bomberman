@@ -116,6 +116,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 **	Managers
 */
 # include "managers/MapManager.hpp"
+# include "managers/SaveManager.hpp"
 
 /*
 ** Scenes
@@ -148,6 +149,6 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 # include "AI/A_star.hpp"
 # include "AI/AI.hpp"
 
-# include "scripts/GameScene/GoombaControllerScript.hpp"
+# include "scripts/GameScene/BotControllerScript.hpp"
 
 #endif

@@ -27,6 +27,7 @@ class Image : public Tag
 		void								setDisplay(bool visible);
 		void								setStyle(std::string const &style);
 		void								draw(SDL_Surface *surface);
+		bool								equals(Tag *tag);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

@@ -16,7 +16,7 @@ find_package(OpenAL REQUIRED)
 ################################################################################
 
 #version c++11
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11 -g3")
 
 #create lib directory
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../lib")

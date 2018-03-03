@@ -4,7 +4,6 @@
 
 Scene::~Scene ( void )
 {
-	std::cout << "DELETE SCENE" << std::endl;
 	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
 		GameObject *obj = it->second;
 		if (obj == NULL) {

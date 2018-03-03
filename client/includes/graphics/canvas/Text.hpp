@@ -28,6 +28,7 @@ class Text : public Tag
 		void								setStyle(std::string const &style);
 		void								setValue(std::string const &value);
 		void								draw(SDL_Surface *surface);
+		bool								equals(Tag *tag);
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

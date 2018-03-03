@@ -116,4 +116,21 @@ void						Square::initialize( int x, int y, int width, int height )
 	this->transform.scale.y = height;
 }
 
+bool						Square::equals(Tag *tag)
+{
+	Square *square = dynamic_cast<Square*>(tag);
+
+	if (square->transform.position != this->transform.position)
+		return false;
+	if (square->transform.scale != this->transform.scale)
+		return false;
+	if (square->color.r != this->color.r)
+		return false;
+	if (square->color.g != this->color.g)
+		return false;
+	if (square->color.b != this->color.b)
+		return false;
+	return true;
+}
+
 // ###############################################################
