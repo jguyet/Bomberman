@@ -110,7 +110,7 @@ int 				AI::getInfos(void)
 	Scene *scene = BombermanClient::getInstance()->current_scene;
 
 	this->Objects.clear();
-	std::map<long, GameObject*>  cpy_scene = std::map<long, GameObject*>(scene->gameObjects);
+	std::map<long, GameObject*>  cpy_scene = std::map<long, GameObject*>(scene->getGameObjects());
 	for (auto &it : cpy_scene) {
 		GameObject *current = it.second;
 

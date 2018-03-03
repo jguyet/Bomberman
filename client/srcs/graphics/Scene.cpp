@@ -3,12 +3,14 @@
 // CANONICAL #####################################################
 Scene::Scene( void )
 {
-
+	this->list = new GameObject_list();
 }
 
 Scene::~Scene ( void )
 {
-	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
+	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
+
+	for (std::map<long, GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++) {
 		GameObject *obj = it->second;
 		if (obj == NULL) {
 			continue ;
@@ -16,7 +18,7 @@ Scene::~Scene ( void )
 		delete obj;
 		it->second = NULL;
 	}
-	this->gameObjects.clear();
+	gameObjects.clear();
 	delete this->camera;
 	return ;
 }
@@ -25,10 +27,22 @@ Scene::~Scene ( void )
 
 // PUBLIC METHOD #################################################
 
+GameObject_list						*Scene::getGameObjects_list()
+{
+	return (this->list);
+}
+
+std::map<long, GameObject*>			&Scene::getGameObjects()
+{
+	return (getGameObjects_list()->gameObjects);
+}
+
 void								Scene::add(GameObject *obj)
 {
+	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
+
 	if (obj != NULL)
-		this->gameObjects[obj->id] = obj;
+		gameObjects[obj->id] = obj;
 }
 
 void								Scene::remove(GameObject *obj)
@@ -39,21 +53,26 @@ void								Scene::remove(GameObject *obj)
 void								Scene::private_remove(GameObject *obj)
 {
 	this->mutex.lock();
-	if (this->gameObjects.count(obj->id) != 0)
-		this->gameObjects.erase(obj->id);
+	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
+
+	if (gameObjects.count(obj->id) != 0)
+		gameObjects.erase(obj->id);
 	this->mutex.unlock();
 }
 
 void								Scene::_calculPhisics(void)
 {
 	//TODO by static Components
-	BoxCollider::Check3DCollisions(this->gameObjects);
+	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
 
-	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
-		GameObject *currentGameObject = it->second;
+	BoxCollider::Check3DCollisions(gameObjects);
+
+	for (auto &it : gameObjects) {
+		GameObject *currentGameObject = it.second;
 		//script calling
 		if (currentGameObject->toDelete) {
-			this->delete_list.push_back(currentGameObject);
+			this->delete_list[currentGameObject->id] = currentGameObject;
+			this->delete_list_ids.push_back(currentGameObject->id);
 			continue;
 		}
 		Script *script = currentGameObject->GetComponent<Script>();
@@ -61,25 +80,39 @@ void								Scene::_calculPhisics(void)
 			script->Update();
 		}
 		if (currentGameObject->toDelete) {
-			this->delete_list.push_back(currentGameObject);
+			this->delete_list[currentGameObject->id] = currentGameObject;
+			this->delete_list_ids.push_back(currentGameObject->id);
 			continue;
 		}
 	}
+	if (this->delete_list_ids.size() > 0) {
+		//this->mutex.lock();
+		std::cout << "COUCOU" << std::endl;
+		for (int i = 0; i < this->delete_list_ids.size(); i++) {
+			long id = this->delete_list_ids.at(i);
 
-	while (this->delete_list.size() > 0) {
-		GameObject *currentGameObject = this->delete_list.at(0);
-		this->private_remove(currentGameObject);
-		this->delete_list.erase(this->delete_list.begin());
-		delete currentGameObject;
+			std::cout << "COUCOU" << std::endl;
+			if (this->delete_list.count(id) == 0)
+				continue ;
+			GameObject *currentGameObject = this->delete_list[id];
+			this->private_remove(currentGameObject);
+			this->delete_list.erase(currentGameObject->id);
+			delete currentGameObject;
+		}
+		this->delete_list.clear();
+		this->delete_list_ids.clear();
+		//this->mutex.unlock();
 	}
-	this->delete_list.clear();
 }
 
 void								Scene::_drawGameObjects(void)
 {
+	//lock GameObject map
 	this->mutex.lock();
-	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
-		GameObject *currentGameObject = it->second;
+	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
+
+	for (auto &it : gameObjects) {
+		GameObject *currentGameObject = it.second;
 
 		Script *script = currentGameObject->GetComponent<Script>();
 		Animator *animator = currentGameObject->GetComponent<Animator>();
