@@ -1,6 +1,10 @@
 #include "Bomberman.hpp"
 
 // CANONICAL #####################################################
+Scene::Scene( void )
+{
+
+}
 
 Scene::~Scene ( void )
 {
@@ -21,13 +25,6 @@ Scene::~Scene ( void )
 
 // PUBLIC METHOD #################################################
 
-GameObject							*Scene::newGameObject(void)
-{
-	GameObject *obj = new GameObject();
-	this->add(obj);
-	return (obj);
-}
-
 void								Scene::add(GameObject *obj)
 {
 	if (obj != NULL)
@@ -36,39 +33,51 @@ void								Scene::add(GameObject *obj)
 
 void								Scene::remove(GameObject *obj)
 {
-	std::lock_guard<std::mutex> lock(mutex);
+	obj->toDelete = true;
+}
+
+void								Scene::private_remove(GameObject *obj)
+{
+	this->mutex.lock();
 	if (this->gameObjects.count(obj->id) != 0)
 		this->gameObjects.erase(obj->id);
+	this->mutex.unlock();
 }
 
 void								Scene::_calculPhisics(void)
 {
 	//TODO by static Components
-	std::map<long, GameObject*> cpy = std::map<long, GameObject*>(this->gameObjects);
+	BoxCollider::Check3DCollisions(this->gameObjects);
 
-	BoxCollider::Check3DCollisions(cpy);
-
-	for (std::map<long, GameObject*>::iterator it = cpy.begin(); it != cpy.end(); it++) {
+	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
 		GameObject *currentGameObject = it->second;
 		//script calling
-
-		if (currentGameObject->toDelete)
-		{
-			this->remove(currentGameObject);
-			delete currentGameObject;
+		if (currentGameObject->toDelete) {
+			this->delete_list.push_back(currentGameObject);
 			continue;
 		}
-
 		Script *script = currentGameObject->GetComponent<Script>();
 		if (script != NULL && script->frame != 0L) {
 			script->Update();
 		}
+		if (currentGameObject->toDelete) {
+			this->delete_list.push_back(currentGameObject);
+			continue;
+		}
 	}
+
+	while (this->delete_list.size() > 0) {
+		GameObject *currentGameObject = this->delete_list.at(0);
+		this->private_remove(currentGameObject);
+		this->delete_list.erase(this->delete_list.begin());
+		delete currentGameObject;
+	}
+	this->delete_list.clear();
 }
 
 void								Scene::_drawGameObjects(void)
 {
-	std::lock_guard<std::mutex> lock(mutex);
+	this->mutex.lock();
 	for (std::map<long, GameObject*>::iterator it = this->gameObjects.begin(); it != this->gameObjects.end(); it++) {
 		GameObject *currentGameObject = it->second;
 
@@ -98,6 +107,7 @@ void								Scene::_drawGameObjects(void)
 			script->OnEndRender();
 		}
 	}
+	this->mutex.unlock();
 }
 
 // ###############################################################
