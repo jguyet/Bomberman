@@ -3,6 +3,7 @@
 
 # include "Bomberman.hpp"
 # include <mutex>
+# include <atomic>
 
 class Scene
 {
@@ -10,15 +11,15 @@ class Scene
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
+											Scene( void );
 		virtual								~Scene( void );
 		// ####################################################################
 		virtual void						calculPhisics(void) = 0;
 		virtual void						drawGameObjects(void) = 0;
 		// PUBLICS ############################################################
-		GameObject							*newGameObject(void);
 		void								add(GameObject *obj);
 		void								remove(GameObject *obj);
-
+		
 		std::map<long, GameObject*>			gameObjects;
 		Camera								*camera;
 		// ####################################################################
@@ -28,6 +29,8 @@ class Scene
 		void								_drawGameObjects(void);
 		// ####################################################################
 	private:
+		void								private_remove(GameObject *obj);
+
 		std::vector<GameObject*>			delete_list;
 		std::mutex							mutex;
 };

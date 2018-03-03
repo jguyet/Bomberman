@@ -31,6 +31,8 @@ void						BoxCollider::Check3DCollisions(std::map<long, GameObject*> &gameObject
 			continue ;
 		if (script == NULL)
 			continue ;
+		if (script->frame == 0L)
+			continue ;
 		for (std::map<long, GameObject*>::iterator it2 = gameObjects.begin(); it2 != gameObjects.end(); it2++)
 		{
 			if (it->second->id == it2->second->id)
