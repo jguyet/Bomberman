@@ -47,7 +47,7 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 
 	this->init_var(x, y, target, action);
 	// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
-	if (this->get_heuristic(y, x, target, 0))
+	if (this->get_heuristic(y, x, target, 0, action))
 		return (false);
 
 	target.heuristic = this->open_list.top().heuristic;
@@ -78,26 +78,35 @@ void						A_star::set_map(Map* map)
 
 // PRIVATE METHOD ################################################
 
-void						A_star::get_adjacent(Module_h &c_case, Module_h &target, int x, int y, int p)
+void						A_star::get_adjacent(Module_h &c_case, Module_h &target, e_action action, int x, int y, int p)
 {
 	if (this->map->getCase(x, y) != NULL && this->close_list.count(std::make_pair(x, y)) == 0)
-		this->get_heuristic(y, x, target, p);
+		this->get_heuristic(y, x, target, p, action);
 }
 
 int							A_star::stop_condition(Module_h &c_case, Module_h &target, e_action action)
 {
-	// Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(fmax(0.5f + c_case.pos_x / 2.f, 0), fmax(0.5f + c_case.pos_y / 2.f, 0));
+	GameScene *scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
+	bool ice = false;
+	if (!scene)
+		return (0);
+	Case *c = scene->map->getCase(fmax(0.5f + c_case.pos_x / 2.f, 0), fmax(0.5f + c_case.pos_y / 2.f, 0));
+	if (c->obstacle && c->obstacle->tag == "ice_block")
+		ice = true;
 
-	if (action != ESCAPE && (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x))
+	if (action == ATTACK && (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x))
 		return (1);
 	else if (action == ESCAPE && this->bomb_col(this->bomb_list, c_case.pos_x, c_case.pos_y) == 0)
 	{
-		// std::cout << "nead to ESCAPE" << std::endl;
 		return (1);
 	}
-	if (action == ESCAPE)
+	else if (action == SEARCH && ice == false) // this->bomb_col(this->bomb_list, c_case.pos_x, c_case.pos_y) == 0
 	{
-		// std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ESCAPE" << std::endl;
+		return (1);
+	}
+
+	if (action == ESCAPE || action == SEARCH)
+	{
 		target.pos_x = c_case.pos_x;
 		target.pos_y = c_case.pos_y;
 	}
@@ -115,21 +124,21 @@ void						A_star::find_path(Module_h &target, e_action action)
 	{
 		p = c_case.p;
 		// UP
-		get_adjacent(c_case, target, c_case.pos_x, c_case.pos_y + 2, p);
+		get_adjacent(c_case, target, action, c_case.pos_x, c_case.pos_y + 2, p);
 		// Down
-		get_adjacent(c_case, target, c_case.pos_x, c_case.pos_y - 2, p);
+		get_adjacent(c_case, target, action, c_case.pos_x, c_case.pos_y - 2, p);
 		// Rhigt
-		get_adjacent(c_case, target, c_case.pos_x + 2, c_case.pos_y, p);
+		get_adjacent(c_case, target, action, c_case.pos_x + 2, c_case.pos_y, p);
 		// Left
-		get_adjacent(c_case, target, c_case.pos_x - 2, c_case.pos_y, p);
+		get_adjacent(c_case, target, action, c_case.pos_x - 2, c_case.pos_y, p);
 
 		if (i == max_i || this->open_list.empty())
 		{
+			// std::cout << ">>>>>>>>>>>>>>>> int  " << i << std::endl;
 			this->delete_lists();
 			return ;
 		}
 		c_case = this->open_list.top();
-		// std::cout << "case  x " << c_case.pos_x << " y " << c_case.pos_y << std::endl;
 		this->open_list.pop();
 		i++;
 	}
@@ -175,7 +184,7 @@ int 						A_star::FormatMoves(std::list<Module_h> &moves, int x, int y, int p, i
 	return (0);
 }
 
-int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
+int							A_star::get_heuristic(int y, int x, Module_h &target, int p, e_action action)
 {
 	Module_h elem;
 	bool flag_t = false;
@@ -184,7 +193,7 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 		return (0);
 
 	Case *c = scene->map->getCase(fmax(0.5f + x / 2.f, 0), fmax(0.5f + y / 2.f, 0));
-	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y))
+	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y) || (action == SEARCH && c->obstacle && c->obstacle->tag == "ice_block"))
 		flag_t = true;
 
 	if ((c->walkable == true || flag_t) && (x % 2) == 0 && (y % 2) == 0)
@@ -241,10 +250,10 @@ void						A_star::init_var(int &x, int &y, Module_h &target, e_action action)
 	if ((y % 2) != 0)
 		y++;
 
-	if (action == ESCAPE)
+	if (action == ESCAPE || action == SEARCH)
 	{
-		target.pos_x = 10000;
-		target.pos_y = 10000;
+		target.pos_x = ((rand() % 2) == 1) ? 10000 : -10000;
+		target.pos_y = ((rand() % 2) == 1) ? 10000 : -10000;
 	}
 	else
 	{
