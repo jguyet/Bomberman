@@ -11,7 +11,7 @@ AI::AI (GameObject* my_player) : my_player(my_player)
 	this->select_t = false;
 	this->pause = 0;
 	this->action = IDLE;
-	this->info = 0;
+	// this->info = 0;
 	return ;
 }
 
@@ -80,45 +80,21 @@ void				AI::select_target(void)
 	{
 		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
 
-		if (this->info == 0)
-		{
-			this->getInfos();
-			this->info = 1;
-		}
-
 		if (this->action == IDLE)
 		{
-			GameObject *near;
-			near = this->getNearestBlock();
-
-			this->target.pos_x = near->transform.position.x;
-			this->target.pos_y = near->transform.position.z;
-			this->tplayer = near;
 			this->action = SEARCH;
+			this->select_t = true;
 			// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
 		}
 		// else if (this->action == ESCAPE) {
 		// }
-		this->select_t = true;
 	}
-	else if ((std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
-		this->restart_target_pos();
+	// else if ((std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
+	// 	this->restart_target_pos();
 }
 
 int 				AI::getInfos(void)
 {
-	Scene *scene = BombermanClient::getInstance()->current_scene;
-
-	this->Objects.clear();
-	std::map<long, GameObject*>  cpy_scene = std::map<long, GameObject*>(scene->gameObjects);
-	for (auto &it : cpy_scene) {
-		GameObject *current = it.second;
-
-		if (current->tag == "ice_block")
-			this->Objects.push_back(current);
-		// if (current->tag == "ice_block")
-		// 	this->Objects.push_back(current);
-	}
 	return (0);
 }
 
@@ -162,14 +138,23 @@ int				AI::bombcol(int x, int y, int next_x, int next_y)
 
 int				AI::brain(void)
 {
+	float x = this->my_player->transform.position.x;
+	float y = this->my_player->transform.position.z;
+	int n_bomb = dynamic_cast<CharacterControllerScript *>(my_player->GetComponent<Script>())->bomb;
+
 	this->bomb_l.clear();
 	this->bomb_l = std::vector<BombControllerScript*>(BombControllerScript::List);
 
-	float x = this->my_player->transform.position.x;
-	float y = this->my_player->transform.position.z;
+	if (this->action == WAIT)
+	{
+		if (n_bomb == 0)
+			return (0);
+		this->pause = 120;
+		this->action = IDLE;
+	}
 
+	// select && checker ###############
 	this->select_target();
-	// checker ##########################
 	if (this->start_checks())
 		return (0);
 	// #################################
@@ -181,25 +166,24 @@ int				AI::brain(void)
 			this->moves.pop_front();
 		if (this->moves.size() == 0)
 		{
-			// if (this->action != ESCAPE)
-			// {
+			if (this->action == SEARCH)
+			{
 				// this->action = ATTACK;
 				// TODO : deselect target FOR path_finding
 				this->action = ESCAPE;
-				// std::cout << "start ESCAPE" << std::endl;
 				return (SDL_SCANCODE_Q);
 				// return (0);
-			// }
-			// else
-			// {
-			// 	this->action = IDLE;
-			// 	this->select_t = false;
-			// }
+			}
+			else
+			{
+				this->action = WAIT;
+				this->select_t = false;
+			}
 		}
 		// else if (this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
 		// 	return (0);
 	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false) {
-		// std::cout << "-------------- FAIL OF PATH path_finding" << std::endl;
+		std::cout << "-------------- FAIL OF PATH path_finding" << std::endl;
 		return (0);
 	}
 	// move ############################
@@ -227,7 +211,7 @@ int				AI::brain(void)
 
 int				AI::start_checks(void)
 {
-		// test
+	// test
 	// if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
 	// {
 	// 	// info = 0;
