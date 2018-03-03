@@ -5,10 +5,6 @@
 # include <mutex>
 # include <atomic>
 
-struct GameObject_list {
-	std::map<long, GameObject*> gameObjects;
-};
-
 class Scene
 {
 	public:
@@ -24,11 +20,8 @@ class Scene
 		void								add(GameObject *obj);
 		void								remove(GameObject *obj);
 
-		GameObject_list						*getGameObjects_list();
-		std::map<long, GameObject*>			&getGameObjects();
-		std::atomic<GameObject_list*>		list;
-		//std::map<long, GameObject*>			gameObjects;
 		Camera								*camera;
+		std::map<long, GameObject*>			gameObjects;
 		// ####################################################################
 	protected:
 		// PROTECTED ##########################################################
@@ -36,7 +29,8 @@ class Scene
 		void								_drawGameObjects(void);
 		// ####################################################################
 	private:
-		void								private_remove(GameObject *obj);
+		void								remove_all_toDelete( void );
+		bool								check_gameObject_toDelete(GameObject *obj);
 
 		std::map<long, GameObject*>			delete_list;
 		std::vector<long>					delete_list_ids;

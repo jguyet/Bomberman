@@ -3,22 +3,21 @@
 // CANONICAL #####################################################
 Scene::Scene( void )
 {
-	this->list = new GameObject_list();
+
 }
 
 Scene::~Scene ( void )
 {
-	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
+	for (auto &it : this->gameObjects) {
+		GameObject *obj = it.second;
 
-	for (std::map<long, GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++) {
-		GameObject *obj = it->second;
-		if (obj == NULL) {
+		if (obj == NULL)
 			continue ;
-		}
-		delete obj;
-		it->second = NULL;
+		obj->toDelete = true;
+		this->check_gameObject_toDelete(obj);
 	}
-	gameObjects.clear();
+	this->remove_all_toDelete();
+	this->gameObjects.clear();
 	delete this->camera;
 	return ;
 }
@@ -27,22 +26,10 @@ Scene::~Scene ( void )
 
 // PUBLIC METHOD #################################################
 
-GameObject_list						*Scene::getGameObjects_list()
-{
-	return (this->list);
-}
-
-std::map<long, GameObject*>			&Scene::getGameObjects()
-{
-	return (getGameObjects_list()->gameObjects);
-}
-
 void								Scene::add(GameObject *obj)
 {
-	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
-
 	if (obj != NULL)
-		gameObjects[obj->id] = obj;
+		this->gameObjects[obj->id] = obj;
 }
 
 void								Scene::remove(GameObject *obj)
@@ -50,68 +37,32 @@ void								Scene::remove(GameObject *obj)
 	obj->toDelete = true;
 }
 
-void								Scene::private_remove(GameObject *obj)
-{
-	this->mutex.lock();
-	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
-
-	if (gameObjects.count(obj->id) != 0)
-		gameObjects.erase(obj->id);
-	this->mutex.unlock();
-}
-
 void								Scene::_calculPhisics(void)
 {
 	//TODO by static Components
-	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
+	BoxCollider::Check3DCollisions(this->gameObjects);
 
-	BoxCollider::Check3DCollisions(gameObjects);
-
-	for (auto &it : gameObjects) {
+	for (auto &it : this->gameObjects) {
 		GameObject *currentGameObject = it.second;
 		//script calling
-		if (currentGameObject->toDelete) {
-			this->delete_list[currentGameObject->id] = currentGameObject;
-			this->delete_list_ids.push_back(currentGameObject->id);
+		if (this->check_gameObject_toDelete(currentGameObject))
 			continue;
-		}
 		Script *script = currentGameObject->GetComponent<Script>();
 		if (script != NULL && script->frame != 0L) {
 			script->Update();
 		}
-		if (currentGameObject->toDelete) {
-			this->delete_list[currentGameObject->id] = currentGameObject;
-			this->delete_list_ids.push_back(currentGameObject->id);
+		if (this->check_gameObject_toDelete(currentGameObject))
 			continue;
-		}
 	}
-	if (this->delete_list_ids.size() > 0) {
-		//this->mutex.lock();
-		std::cout << "COUCOU" << std::endl;
-		for (int i = 0; i < this->delete_list_ids.size(); i++) {
-			long id = this->delete_list_ids.at(i);
 
-			std::cout << "COUCOU" << std::endl;
-			if (this->delete_list.count(id) == 0)
-				continue ;
-			GameObject *currentGameObject = this->delete_list[id];
-			this->private_remove(currentGameObject);
-			this->delete_list.erase(currentGameObject->id);
-			delete currentGameObject;
-		}
-		this->delete_list.clear();
-		this->delete_list_ids.clear();
-		//this->mutex.unlock();
-	}
+	this->remove_all_toDelete();
 }
 
 void								Scene::_drawGameObjects(void)
 {
 	//lock GameObject map
 	this->mutex.lock();
-	std::map<long, GameObject*> &gameObjects = this->getGameObjects();
-
-	for (auto &it : gameObjects) {
+	for (auto &it : this->gameObjects) {
 		GameObject *currentGameObject = it.second;
 
 		Script *script = currentGameObject->GetComponent<Script>();
@@ -141,6 +92,43 @@ void								Scene::_drawGameObjects(void)
 		}
 	}
 	this->mutex.unlock();
+}
+
+// ###############################################################
+
+// PRIVATE #######################################################
+
+bool								Scene::check_gameObject_toDelete(GameObject *obj)
+{
+	if (obj->toDelete) {
+		this->delete_list[obj->id] = obj;
+		this->delete_list_ids.push_back(obj->id);
+		return true;
+	}
+	return false;
+}
+
+void								Scene::remove_all_toDelete( void )
+{
+
+	if (this->delete_list_ids.size() > 0) {
+		this->mutex.lock();
+		for (int i = 0; i < this->delete_list_ids.size(); i++) {
+			long id = this->delete_list_ids.at(i);
+
+			if (this->delete_list.count(id) == 0)
+				continue ;
+			GameObject *obj = this->delete_list[id];
+
+			if (this->gameObjects.count(obj->id) != 0) {
+				this->gameObjects.erase(obj->id);
+				delete obj;
+			}
+		}
+		this->delete_list.clear();
+		this->delete_list_ids.clear();
+		this->mutex.unlock();
+	}
 }
 
 // ###############################################################

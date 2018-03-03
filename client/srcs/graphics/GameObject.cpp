@@ -35,11 +35,11 @@ GameObject &				GameObject::operator=( GameObject const & rhs )
 GameObject::~GameObject ( void )
 {
 	this->mutex.lock();
-	for (std::map<std::string, Component*>::iterator it = this->components.begin(); it != this->components.end(); it++)
+	for (auto &it : this->components)
 	{
-		if (it->first == "Model")
+		if (it.first == "Model")
 			continue ;
-		//delete it->second;
+		delete it.second;
 	}
 	this->components.clear();
 	this->mutex.unlock();
