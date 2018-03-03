@@ -101,7 +101,7 @@ void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case>
 		if (std::distance(std::sregex_iterator(value.begin(), value.end(), any_regex), std::sregex_iterator())
 		!= std::distance(std::sregex_iterator(value.begin(), value.end(), number_regex),std::sregex_iterator()))
 		{
-			std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
+			std::cout << "ERROR to parse map " << path << " at line " << value << std::endl;
 			map.clear();
 			filestr.close();
 			return ;
@@ -116,15 +116,9 @@ void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case>
 				try {
 					std::string::size_type sz;
 					std::smatch match = *i;
-					int i_dec = std::stoi (match.str() ,&sz);
 
-					if (this->setBlock(map, x, y, i_dec))
-					{
-						std::cout << "ERROR to pars map " << path << " at line " << value << std::endl;
-						map.clear();
-						filestr.close();
-						return ;
-					}
+					int i_dec = std::stoi (match.str() ,&sz);
+					this->setBlock(map, x, y, i_dec);
 				} catch (std::exception& e) {
 					std::cout << "ERROR to pars map " << path << " at line " << value << " | " << e.what() << std::endl;
 					map.clear();
@@ -147,13 +141,16 @@ void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case>
 
 int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value)
 {
-	Case cube;
-	GameObject *block;
+	Case			cube;
+	GameObject		*block;
+
 	static std::map<int, std::string> links =
 	{
-		std::make_pair(0, "brick"), std::make_pair(1, "ice_block"), std::make_pair(2, "ground1"), std::make_pair(3, "goomba")
+		std::make_pair((int)BlockType::TYPE_BRICK, "brick"),
+		std::make_pair((int)BlockType::TYPE_ICE_BLOCK, "ice_block"),
+		std::make_pair((int)BlockType::TYPE_GROUND, "ground1"),
+		std::make_pair((int)BlockType::TYPE_GOOMBA, "goomba")
 	};
-
 
 	block = Factory::newBlock(links[0]);
 	block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
@@ -161,30 +158,23 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 	cube.ground = block;
 	cube.obstacle = NULL;
 	cube.walkable = true;
-
 	cube.position = glm::vec3(x * 2, 0, y * 2);
 
-	if (value != 0)
+	if (value != 0 && links.count(value) != 0)
 	{
-		if (links.count(value) != 0)
+		if (value != (int)BlockType::TYPE_GOOMBA) {
+			block = Factory::newBlock(links[value]);
+			block->transform.position = glm::vec3(x * 2, WALL, y * 2);
+			block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
+			cube.obstacle = block;
+			cube.walkable = false;
+		}
+		else if (BombermanClient::getInstance()->sock->state == false)
 		{
-			if (value == 3)
-			{
 				block = Factory::newGoomba();
 				block->transform.position = glm::vec3(x * 2, 0, y * 2);
 				cube.obstacle = block;
-			}
-			else
-			{
-				block = Factory::newBlock(links[value]);
-				block->transform.position = glm::vec3(x * 2, WALL, y * 2);
-				block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
-				cube.obstacle = block;
-				cube.walkable = false;
-			}
 		}
-		else
-			return (1);
 	}
 	map[std::make_pair(x, y)] = cube;
 	return (0);
@@ -192,6 +182,7 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 
 void						MapManager::buildObjects(Map *selected)
 {
+
 	for (auto & elem : selected->content)
 	{
 		if (elem.second.obstacle != NULL)

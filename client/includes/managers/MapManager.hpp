@@ -10,6 +10,7 @@
 # include <sys/stat.h>
 # include <exception>
 # include "utils/Random.hpp"
+# include "enums/BlockType.hpp"
 
 # define GROUND 2
 # define WALL 0
