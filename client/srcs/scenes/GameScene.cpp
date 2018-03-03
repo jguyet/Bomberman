@@ -47,13 +47,13 @@ void GameScene::StartSolo(void)
 	this->all_player.push_back(playerObject);
 	this->add(playerObject);
 
-	// GameObject *player = Factory::newPlayer(100);
-	// this->all_player.push_back(player);
-	// this->players.push_back(player);
-	// player->transform.position = glm::vec3(4,1,36);
-	// player->transform.scale = glm::vec3(3,3,3);
-	// player->transform.rotation = glm::vec3(0,0,0);
-	// this->add(player);//add on scene
+	GameObject *player = Factory::newPlayer(100);
+	this->all_player.push_back(player);
+	this->players.push_back(player);
+	player->transform.position = glm::vec3(4,1,38);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
 
 	// GameObject *goomba = Factory::newGoomba();
     //
@@ -71,12 +71,12 @@ void GameScene::StartSolo(void)
 	this->add(goomba1);
 */
 
-	GameObject *goomba2 = Factory::newGoomba();
-
-	goomba2->transform.position = glm::vec3(15,1,30);
-	goomba2->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-	goomba2->transform.rotation = glm::vec3(0,0,0);
-	this->add(goomba2);
+	// GameObject *goomba2 = Factory::newGoomba();
+    //
+	// goomba2->transform.position = glm::vec3(15,1,30);
+	// goomba2->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
+	// goomba2->transform.rotation = glm::vec3(0,0,0);
+	// this->add(goomba2);
 
 }
 

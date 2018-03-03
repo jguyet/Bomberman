@@ -170,20 +170,15 @@ int				AI::brain(void)
 
 	this->select_target();
 	// checker ##########################
-
 	if (this->start_checks())
 		return (0);
-
 	// #################################
-
 	if (this->moves.size() > 0)
 	{
 		float t = SPEED; // Tolerance
-
 		//If current target close delete them
 		if (x >= this->moves.front().pos_x - t && x <= this->moves.front().pos_x + t && y >= this->moves.front().pos_y - t && y <= this->moves.front().pos_y + t)
 			this->moves.pop_front();
-
 		if (this->moves.size() == 0)
 		{
 			// if (this->action != ESCAPE)
@@ -191,7 +186,9 @@ int				AI::brain(void)
 				// this->action = ATTACK;
 				// TODO : deselect target FOR path_finding
 				this->action = ESCAPE;
-				return (SDL_SCANCODE_Q);
+				// std::cout << "start ESCAPE" << std::endl;
+				// return (SDL_SCANCODE_Q);
+				return (0);
 			// }
 			// else
 			// {
@@ -201,41 +198,25 @@ int				AI::brain(void)
 		}
 		// else if (this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
 		// 	return (0);
-
 	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false) {
+		// std::cout << "-------------- FAIL OF PATH path_finding" << std::endl;
 		return (0);
 	}
 	// move ############################
-
-	int nb = rand() % 100 + 1;
-
-		if (nb > 50) {
-			if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
-				return(SDL_SCANCODE_UP);
-			if (x > this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
-				return(SDL_SCANCODE_DOWN);
-			if (y > this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
-				return(SDL_SCANCODE_LEFT);
-			if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
-				return(SDL_SCANCODE_RIGHT);
-		} else {
-			if (nb > 40)
-				return(SDL_SCANCODE_UP);
-			else if (nb > 30)
-				return(SDL_SCANCODE_DOWN);
-			else if (nb > 20)
-				return(SDL_SCANCODE_LEFT);
-			else if (nb > 10)
-				return(SDL_SCANCODE_RIGHT);
-		}
-
+	if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
+		return(SDL_SCANCODE_UP);
+	if (x > this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
+		return(SDL_SCANCODE_DOWN);
+	if (y > this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
+		return(SDL_SCANCODE_LEFT);
+	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
+		return(SDL_SCANCODE_RIGHT);
 	// if (this->action == ATTACK)
 	// {
 	// 	std::cout << "start Attack" << std::endl;
 	// 	this->action = ESCAPE;
 	// 	return (SDL_SCANCODE_Q);
 	// }
-
 	// #################################
 	return (0);
 }
@@ -262,6 +243,7 @@ int				AI::start_checks(void)
 		return (1);
 	}
 
+// std::cout << "start ESCAPE" << std::endl;
 	if (this->select_t == false)
 		return (1);
 

@@ -44,35 +44,16 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 {
 	moves.clear();
 	this->bomb_list = bomb_l;
+
+	this->init_var(x, y, target, action);
 	// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
-
-	///////// format
-	if ((x % 2) != 0)
-		x++;
-	if ((y % 2) != 0)
-		y++;
-
-	if ((target.pos_x % 2) != 0)
-		target.pos_x++;
-	if ((target.pos_y % 2) != 0)
-		target.pos_y++;
-	///////////////////////////////////////
-	// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
-
-	this->start.pos_x = x;
-	this->start.pos_y = y;
-
 	if (this->get_heuristic(y, x, target, 0))
 		return (false);
 
 	target.heuristic = this->open_list.top().heuristic;
 	int tmp_h = target.heuristic;
 
-	if (!this->open_list.empty()) // ???
-		this->find_path(target, action);
-	else// ???
-		return (false);// ???
-
+	this->find_path(target, action);
 	if (this->close_list.empty())
 		return (false);
 
@@ -81,12 +62,10 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 		moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
 
 	this->delete_lists();
-
 	// for (auto &elem : moves)
 	// {
 	// 	std::cout << "-x " << elem.pos_x << " -y " << elem.pos_y << std::endl;
 	// }
-
 	return (true);
 }
 
@@ -112,9 +91,13 @@ int							A_star::stop_condition(Module_h &c_case, Module_h &target, e_action ac
 	if (action != ESCAPE && (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x))
 		return (1);
 	else if (action == ESCAPE && this->bomb_col(this->bomb_list, c_case.pos_x, c_case.pos_y) == 0)
+	{
+		// std::cout << "nead to ESCAPE" << std::endl;
 		return (1);
+	}
 	if (action == ESCAPE)
 	{
+		// std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ESCAPE" << std::endl;
 		target.pos_x = c_case.pos_x;
 		target.pos_y = c_case.pos_y;
 	}
@@ -246,6 +229,30 @@ void						A_star::delete_lists(void)
 	this->close_list.clear();
 	while (!this->open_list.empty())
 		this->open_list.pop();
+}
+
+void						A_star::init_var(int &x, int &y, Module_h &target, e_action action)
+{
+	if ((x % 2) != 0)
+		x++;
+	if ((y % 2) != 0)
+		y++;
+
+	if (action == ESCAPE)
+	{
+		target.pos_x = 10000;
+		target.pos_y = 10000;
+	}
+	else
+	{
+		if ((target.pos_x % 2) != 0)
+			target.pos_x++;
+		if ((target.pos_y % 2) != 0)
+			target.pos_y++;
+	}
+
+	this->start.pos_x = x;
+	this->start.pos_y = y;
 }
 
 // ###############################################################

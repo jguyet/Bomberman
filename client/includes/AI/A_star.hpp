@@ -43,6 +43,7 @@ class A_star
 		void										find_path(Module_h &target, e_action action);
 		int											stop_condition(Module_h &c_case, Module_h &target, e_action action);
 		void										delete_lists(void);
+		void										init_var(int &x, int &y, Module_h &target, e_action action);
 		// #####################################################################
 		std::priority_queue<Module_h, std::vector<Module_h>, std::greater<Module_h>>	open_list;
 		std::map<std::pair<int, int>, Module_h>											close_list;
