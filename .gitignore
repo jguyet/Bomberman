@@ -8,3 +8,6 @@ CMakeFiles
 cmake_install.cmake
 libnetwork.a
 client/Makefile
+*.o
+server/objs
+server/bomber_server

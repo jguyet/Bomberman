@@ -51,6 +51,7 @@ void GameScene::StartSolo(void)
 	this->all_player.push_back(playerObject);
 	this->add(playerObject);
 
+/*
 	GameObject *player = Factory::newPlayer(100);
 	this->all_player.push_back(player);
 	this->players.push_back(player);
@@ -58,6 +59,7 @@ void GameScene::StartSolo(void)
 	player->transform.scale = glm::vec3(3,3,3);
 	player->transform.rotation = glm::vec3(0,0,0);
 	this->add(player);//add on scene
+	*/
 }
 
 void					GameScene::removePlayer(GameObject *player)

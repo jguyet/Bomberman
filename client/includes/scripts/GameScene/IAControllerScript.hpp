@@ -1,27 +1,20 @@
-#ifndef CHARACTERCONTROLLERSCRIPT_HPP
-# define CHARACTERCONTROLLERSCRIPT_HPP
+#ifndef IACONTROLLERSCRIPT_HPP
+# define IACONTROLLERSCRIPT_HPP
 
 # include "Bomberman.hpp"
 
-enum e_direction {
-	DIRECTION_RIGHT = 0,
-	DIRECTION_LEFT = 1,
-	DIRECTION_FORWARD = 2,
-	DIRECTION_BACKWARD = 3
-};
-
 class AI;
-class CharacterControllerScript : public Script
+class IAControllerScript : public Script
 {
 	public:
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											CharacterControllerScript( int playerId );
-											CharacterControllerScript( CharacterControllerScript const & src );
-		virtual								~CharacterControllerScript( void );
-		CharacterControllerScript &			operator=( CharacterControllerScript const & rhs );
-		friend std::ostream &				operator<<(std::ostream & o, CharacterControllerScript const & i);
+											IAControllerScript( int playerId );
+											IAControllerScript( IAControllerScript const & src );
+		virtual								~IAControllerScript( void );
+		IAControllerScript &			operator=( IAControllerScript const & rhs );
+		friend std::ostream &				operator<<(std::ostream & o, IAControllerScript const & i);
 		// ####################################################################
 		// @OVERRIDE Script ###################################################
 		void								Start(void);
@@ -53,6 +46,7 @@ class CharacterControllerScript : public Script
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
+		void								unlockCharacterDirections(void);
 
 		bool								has_moved = false;
 
@@ -61,12 +55,10 @@ class CharacterControllerScript : public Script
 		glm::vec3							lastPosition;
 
 	protected:
-		void								unlockCharacterDirections(void);
-		
 		GameScene							*scene;
 		// ####################################################################
 };
 
-typedef void (CharacterControllerScript::*P)(void);
+typedef void (IAControllerScript::*P)(void);
 
 #endif

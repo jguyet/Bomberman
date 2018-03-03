@@ -172,8 +172,6 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 			{
 				block = Factory::newGoomba();
 				block->transform.position = glm::vec3(x * 2, 0, y * 2);
-				block->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-				block->transform.rotation = glm::vec3(0,0,0);
 				cube.obstacle = block;
 			}
 			else
@@ -198,9 +196,18 @@ void						MapManager::buildObjects(Map *selected)
 	{
 		if (elem.second.obstacle != NULL)
 		{
+			if (elem.second.obstacle->tag == "Goomba")
+			{
+				GameObject *player = Factory::newGoomba();
+				// this->all_player.push_back(player);
+				// this->players.push_back(player);
+				player->transform.position = glm::vec3(elem.second.obstacle->transform.position.x,1,elem.second.obstacle->transform.position.z);
+				player->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
+				this->scene->add(player);//add on scene
+				elem.second.obstacle = NULL;
+			}
+			else
 				this->scene->add(elem.second.obstacle);
-				if (elem.second.obstacle->tag == "Goomba")
-					elem.second.obstacle = NULL;
 		}
 	}
 	this->scene->add(Factory::newBackground());

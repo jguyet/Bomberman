@@ -13,15 +13,15 @@ class BotControllerScript : public CharacterControllerScript
 											BotControllerScript( );
 											BotControllerScript( BotControllerScript const & src );
 		virtual								~BotControllerScript( void );
-		BotControllerScript &			operator=( BotControllerScript const & rhs );
+		BotControllerScript &				operator=( BotControllerScript const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, BotControllerScript const & i);
 		// ####################################################################
 		// @OVERRIDE Script ###################################################
 		void								Start(void);
 		void								Update(void);
 		void								OnPreRender(void);
-		void								OnEndRender(void);
-		void								OnCollisionEnter(GameObject *collider);
+		//void								OnEndRender(void);
+		//void								OnCollisionEnter(GameObject *collider);
 		//bool								collide = false;
 		//std::vector<GameObject*>			colliders;
 		// ####################################################################

@@ -58,64 +58,23 @@ void BotControllerScript::Start(void) {
 
 void								BotControllerScript::Update(void)
 {
-/*	if (TimeUtils::getCurrentSystemMillis() < this->anim_time + 40L)
-		return ;
-	if (this->sens == false)
-	{
-		this->gameObject->transform.scale.x -= 0.01f;
-		this->gameObject->transform.scale.y -= 0.01f;
-		this->gameObject->transform.scale.z -= 0.01f;
-
-		this->gameObject->transform.position.y += 0.01f;
-		if (this->gameObject->transform.scale.x >= this->min_scale)
-			this->sens = true;
-	} else {
-		this->gameObject->transform.scale.x += 0.01f;
-		this->gameObject->transform.scale.y += 0.01f;
-		this->gameObject->transform.scale.z += 0.01f;
-
-		this->gameObject->transform.position.y -= 0.01f;
-		if (this->gameObject->transform.scale.x <= this->max_scale)
-			this->sens = false;
-	}
-	this->anim_time = TimeUtils::getCurrentSystemMillis();*/
-
-	std::map<int, P> cmd = {
+	static std::map<int, P> cmd = {
 		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
 
 	int i = 0;
-	i = robot->brain();
+	i = this->robot->brain();
 
 	if (i != 0)
 		(this->*cmd[i])();
+	CharacterControllerScript::unlockCharacterDirections();
 }
 
 void								BotControllerScript::OnPreRender(void)
 {
-/*
-	float timer = 1.0f - ((this->startTime + BOMB_TIME - TimeUtils::getCurrentSystemMillis())/(float)BOMB_TIME);
 
-	Model *bombObjectModel = this->gameObject->GetComponent<Model>();
-	glUseProgram(bombObjectModel->shader);
-	bombObjectModel->shaderBind = true;
-
-	glm::vec3 colors = glm::vec3(timer,0.f,0.f);
-	glUniform3fv(bombObjectModel->color,1 , &colors[0]);
-*/
-	//TODO add meche color in shader
-}
-
-void								BotControllerScript::OnEndRender(void)
-{
-
-}
-
-void						BotControllerScript::OnCollisionEnter(GameObject *collider)
-{
-	CharacterControllerScript::OnCollisionEnter(collider);
 }
 
 // ###############################################################
