@@ -65,6 +65,7 @@ void						SoloMenuInterface::handleUP(unsigned int key)
 	if (key == SDL_SCANCODE_DOWN) {
 		this->current_position = (this->current_position + 1) % 5;
 	}
+	
 }
 
 // ###############################################################

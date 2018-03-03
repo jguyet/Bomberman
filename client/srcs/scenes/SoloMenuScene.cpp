@@ -16,11 +16,12 @@ SoloMenuScene::SoloMenuScene ( void )
 	this->camera->transform.rotation = glm::vec3(0,0,0);
 	this->camera->buildFPSProjection();
 
+	this->loadCurrentLevel();
+	BombermanClient::getInstance()->sock = new Socket("", 0);
 	this->interface = new SoloMenuInterface();
 	Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
 
 	KeyBoard::instance->addHandler("SoloMenuScene", this);
-	return ;
 }
 
 SoloMenuScene::SoloMenuScene ( SoloMenuScene const & src )
@@ -31,10 +32,6 @@ SoloMenuScene::SoloMenuScene ( SoloMenuScene const & src )
 
 SoloMenuScene &				SoloMenuScene::operator=( SoloMenuScene const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 
@@ -51,15 +48,22 @@ std::ostream &				operator<<(std::ostream & o, SoloMenuScene const & i)
 	return (o);
 }
 
-bool								SoloMenuScene::select_local(void)
+void								SoloMenuScene::loadCurrentLevel()
 {
-	if (BombermanClient::getInstance()->sock != NULL) {
-		BombermanClient::getInstance()->sock->state = false;
-		BombermanClient::getInstance()->sock = NULL;
+	SaveObject *save = BombermanClient::getInstance()->saveManager->saveObject;
+	if (save != NULL) {
+		std::string level(save->map_name);
+		if (level == "map_01")
+			this->current_level = 1;
+		else if (level == "map_02")
+			this->current_level = 2;
+		else if (level == "map_03")
+			this->current_level = 3;
+		else if (level == "map_04")
+			this->current_level = 4;
+	} else {
+		this->current_level = 1;
 	}
-	BombermanClient::getInstance()->sock = new Socket("", 0);
-	BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
-	return true;
 }
 
 void								SoloMenuScene::handleUP(unsigned int key)
@@ -71,14 +75,16 @@ void								SoloMenuScene::handleUP(unsigned int key)
 		switch(this->interface->current_position)
 		{
 			case 0:
-				this->select_local();
+				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
 			break ;
 			case 1:
-				//this->select_server();
+				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_02"));
 			break;
 			case 2:
+				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_03"));
 			break ;
 			case 3:
+				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_04"));
 			break;
 			case 4:
 				BombermanClient::getInstance()->setCurrentScene<GameScene>(new MainMenuScene());

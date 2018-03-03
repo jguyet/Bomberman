@@ -2,19 +2,27 @@
 # define SAVEMANAGER_HPP
 
 #include "Bomberman.hpp"
+#define MAP_NAME_LEN 256
+
+struct SaveObject
+{
+	char map_name[MAP_NAME_LEN];
+};
 
 class SaveManager
 {
 	public:
-
-		SaveManager(GameScene*);
+		SaveManager();
 		SaveManager( SaveManager const & src );
 		virtual ~SaveManager();
 
+		void		save(std::string);
+		SaveObject	*loadSave();
+
 		SaveManager &							operator=( SaveManager const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, SaveManager const & i);
-	private:
-		GameScene *scene;
+
+		SaveObject		*saveObject;
 };
 
 #endif

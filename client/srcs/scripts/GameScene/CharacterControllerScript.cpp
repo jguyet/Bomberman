@@ -175,8 +175,10 @@ void						CharacterControllerScript::Update(void)
 			this->Attack();
 			// std::cout << std::endl;
 		}
-		//if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
-			//BombermanClient::getInstance()->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
+		{
+			// BombermanClient::getInstance()->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+		}
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
 			this->MRight();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT))//LEFT

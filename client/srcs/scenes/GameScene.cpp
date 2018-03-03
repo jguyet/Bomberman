@@ -16,24 +16,28 @@ GameScene::GameScene (std::string selected_map)
 
 	Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
 	this->map = this->mapManager->getMap(selected_map);
-	mapManager->buildObjects(this->map);
+	if (this->map) {
+		mapManager->buildObjects(this->map);
 
-	this->current_player = NULL;
-	this->startGameInterface = NULL;
-	this->quitInterface = NULL;
-	this->interface = new GameInterface(this);
+		this->current_player = NULL;
+		this->startGameInterface = NULL;
+		this->quitInterface = NULL;
+		this->interface = new GameInterface(this);
 
-	if (BombermanClient::getInstance()->sock->state == false)
-	{
-		this->StartSolo();
+		if (BombermanClient::getInstance()->sock->state == false)
+		{
+			this->StartSolo();
+		} else {
+			this->startGameInterface = new StartGameInterface();
+		}
+		BombermanClient::getInstance()->saveManager->save(this->map->name);
 	} else {
-		this->startGameInterface = new StartGameInterface();
+		printf("Invalid map given !\n");
 	}
 
 	//if grab mouse
 	//SDL_ShowCursor(SDL_DISABLE);
 	//SDL_SetWindowGrab(BombermanClient::getInstance()->window, SDL_TRUE);
-	return ;
 }
 
 void GameScene::StartSolo(void)
