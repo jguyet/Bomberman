@@ -1,4 +1,5 @@
 #include "Bomberman.hpp"
+#include "AI/AI.hpp"
 
 // STATIC ########################################################
 
@@ -54,6 +55,9 @@ void						CharacterControllerScript::unlockCharacterDirections(void)
 void						CharacterControllerScript::Start(void)
 {
 	this->scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
+
+	if (this->playerId >= 100)
+		this->robot = new AI(this->gameObject);
 }
 
 void								CharacterControllerScript::Attack(void)
@@ -205,11 +209,10 @@ void						CharacterControllerScript::Update(void)
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
 	}
-	else if (this->playerId == 100)
+	else if (this->playerId >= 100)
 	{
-		static AI robot = AI(this->gameObject);
 		int i = 0;
-		i = robot.brain();
+		i = robot->brain();
 
 		this->has_moved = false;
 		if (i != 0)
@@ -221,10 +224,6 @@ void						CharacterControllerScript::Update(void)
 		} else {
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
-		// RIGHT KeyBoard::instance->getKey(SDL_SCANCODE_KP_6)
-		// LEFT KeyBoard::instance->getKey(SDL_SCANCODE_KP_4s)
-		// UP KeyBoard::instance->getKey(SDL_SCANCODE_KP_8)
-		// DOWN KeyBoard::instance->getKey(SDL_SCANCODE_KP_2)
 	} else { //other players
 		if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 100L)) {
 			if (this->gameObject->transform.position != this->lastPosition_direction)

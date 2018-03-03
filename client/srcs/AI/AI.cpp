@@ -187,8 +187,8 @@ int				AI::brain(void)
 				// TODO : deselect target FOR path_finding
 				this->action = ESCAPE;
 				// std::cout << "start ESCAPE" << std::endl;
-				// return (SDL_SCANCODE_Q);
-				return (0);
+				return (SDL_SCANCODE_Q);
+				// return (0);
 			// }
 			// else
 			// {

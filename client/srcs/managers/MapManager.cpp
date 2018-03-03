@@ -170,18 +170,12 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 		{
 			if (value == 3)
 			{
-				// GameObject *goomba1 = Factory::newGoomba();
-                //
-				// goomba1->transform.position = glm::vec3(6.0f,0,35);
-				// goomba1->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-				// this->add(goomba1);
-
 				block = Factory::newGoomba();
 				block->transform.position = glm::vec3(x * 2, 0, y * 2);
 				block->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
 				block->transform.rotation = glm::vec3(0,0,0);
 				cube.obstacle = block;
-				cube.walkable = true;
+				// cube.walkable = true;
 			}
 			else
 			{
@@ -206,8 +200,20 @@ void						MapManager::buildObjects(Map *selected)
 	{
 		if (elem.second.obstacle != NULL)
 		{
-			this->scene->add(elem.second.obstacle);
-			//std::cout << "tag :" << elem.second.obstacle->tag << std::endl;
+			// if (elem.second.obstacle->tag == "Goomba")
+			// {
+			// 	GameObject *player = Factory::newPlayer(100);
+			// 	// this->all_player.push_back(player);
+			// 	// this->players.push_back(player);
+			// 	player->transform.position = glm::vec3(4,1,38);
+			// 	player->transform.scale = glm::vec3(3,3,3);
+			// 	player->transform.rotation = glm::vec3(0,0,0);
+			// 	this->scene->add(player);//add on scene
+			// 	elem.second.obstacle = NULL;
+			// }
+			// else
+				this->scene->add(elem.second.obstacle);
+			// std::cout << "tag :" << elem.second.obstacle->tag << std::endl;
 		}
 	}
 	this->scene->add(Factory::newBackground());

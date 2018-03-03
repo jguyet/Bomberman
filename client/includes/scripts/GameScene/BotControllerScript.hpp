@@ -37,8 +37,6 @@ class BotControllerScript : public CharacterControllerScript
 		float								max_scale;
 		float								min_scale;
 		long								anim_time;
-
-		AI 									*robot;
 		// std::vector<BotControllerScript*>	bomb_l;
 		// ####################################################################
 };
