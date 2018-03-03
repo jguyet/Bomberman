@@ -150,6 +150,25 @@ void						Text::draw(SDL_Surface *surface)
 	SDL_FreeSurface(text_surface);
 }
 
+bool						Text::equals(Tag *tag)
+{
+	Text *text = dynamic_cast<Text*>(tag);
+
+	if (text->transform.position != this->transform.position)
+		return false;
+	if (text->transform.scale != this->transform.scale)
+		return false;
+	if (text->color.r != this->color.r)
+		return false;
+	if (text->color.g != this->color.g)
+		return false;
+	if (text->color.b != this->color.b)
+		return false;
+	if (std::string(text->text) != std::string(this->text))
+		return false;
+	return true;
+}
+
 // PRIVATE METHOD ################################################
 
 void						Text::initialize(const char *text, std::string const &style)

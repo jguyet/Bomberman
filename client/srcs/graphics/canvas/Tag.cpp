@@ -167,4 +167,9 @@ void						Tag::draw(SDL_Surface *surface)
 
 }
 
+bool						Tag::equals(Tag *tag)
+{
+	return false;
+}
+
 // ###############################################################

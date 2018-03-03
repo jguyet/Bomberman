@@ -43,6 +43,7 @@ class Tag : public GameObject
 		virtual void						setBackgroundImage(std::string const &path);
 		virtual void						setDisplay(bool visible);
 		virtual void						setValue(std::string const &value);
+		virtual bool						equals(Tag *tag);
 
 		//drawing
 		virtual void						draw(SDL_Surface *surface);
