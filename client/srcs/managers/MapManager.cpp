@@ -177,7 +177,7 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 				// this->add(goomba1);
 
 				block = Factory::newGoomba();
-				block->transform.position = glm::vec3(x * 2, WALL, y * 2);
+				block->transform.position = glm::vec3(x * 2, 0, y * 2);
 				block->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
 				block->transform.rotation = glm::vec3(0,0,0);
 				cube.obstacle = block;

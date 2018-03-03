@@ -66,7 +66,6 @@ void GameScene::StartSolo(void)
 	// goomba->transform.rotation = glm::vec3(0,0,0);
 	// this->add(goomba);
 
-
 	GameObject *goomba1 = Factory::newGoomba();
 
 	goomba1->transform.position = glm::vec3(6.0f,-2,35);
