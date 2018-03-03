@@ -113,4 +113,9 @@ void								BotControllerScript::OnEndRender(void)
 
 }
 
+void						BotControllerScript::OnCollisionEnter(GameObject *collider)
+{
+	CharacterControllerScript::OnCollisionEnter(collider);
+}
+
 // ###############################################################

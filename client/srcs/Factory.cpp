@@ -78,8 +78,9 @@ GameObject 							*Factory::newGoomba(void)
 
 	obj->tag = "Goomba";
 	obj->transform.position = glm::vec3(0, 0, 0);
-	obj->transform.scale = glm::vec3(1.0f,1.0f,1.0f);
+	obj->transform.scale = glm::vec3(1.0f,2.0f,1.0f);
 	obj->AddComponent<Model>(Model::model["goomba"]);
+	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
 	obj->AddComponent<Script>(new BotControllerScript());
 	return(obj);
 }

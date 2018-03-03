@@ -21,6 +21,7 @@ class BotControllerScript : public CharacterControllerScript
 		void								Update(void);
 		void								OnPreRender(void);
 		void								OnEndRender(void);
+		void								OnCollisionEnter(GameObject *collider);
 		//bool								collide = false;
 		//std::vector<GameObject*>			colliders;
 		// ####################################################################
