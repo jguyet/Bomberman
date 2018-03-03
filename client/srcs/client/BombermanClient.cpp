@@ -10,6 +10,9 @@ BombermanClient::BombermanClient ( void )
 	this->current_scene = NULL;
 	this->sock = NULL;
 	this->saveManager = new SaveManager();
+	this->wait_changing_scene = false;
+	this->waitThreads[0] = false;
+	this->waitThreads[1] = false;
 }
 
 BombermanClient::BombermanClient ( BombermanClient const & src )
@@ -239,6 +242,11 @@ void						BombermanClient::controllerLoop( void )//100fps
 	if (scene != NULL) {
 		scene->calculPhisics();
 	}
+
+	while (this->wait_changing_scene) {
+		this->waitThreads[0] = true;
+		usleep(10);
+	}
 }
 
 void						BombermanClient::renderLoop( void )//60fps
@@ -264,6 +272,19 @@ void						BombermanClient::renderLoop( void )//60fps
 			this->stop();
 			break ;
 		}
+	}
+
+	if (this->wait_changing_scene) {
+		while (this->wait_changing_scene && this->waitThreads[0] == false) {
+			usleep(10);
+		}
+		if (this->current_scene != NULL) {
+			delete this->current_scene;
+		}
+		this->current_scene = this->new_scene;
+		this->wait_changing_scene = false;
+		this->waitThreads[0] = false;
+		this->waitThreads[1] = false;
 	}
 }
 
@@ -299,8 +320,7 @@ int main(void)
 	client->initialize_resources();
 	client->initialize_inputs();
 
-
-	client->setCurrentScene<MainMenuScene>(new MainMenuScene());
+	client->current_scene = new MainMenuScene();
 
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));

@@ -19,9 +19,9 @@ class Scene
 		// PUBLICS ############################################################
 		void								add(GameObject *obj);
 		void								remove(GameObject *obj);
-		
-		std::map<long, GameObject*>			gameObjects;
+
 		Camera								*camera;
+		std::map<long, GameObject*>			gameObjects;
 		// ####################################################################
 	protected:
 		// PROTECTED ##########################################################
@@ -29,9 +29,11 @@ class Scene
 		void								_drawGameObjects(void);
 		// ####################################################################
 	private:
-		void								private_remove(GameObject *obj);
+		void								remove_all_toDelete( void );
+		bool								check_gameObject_toDelete(GameObject *obj);
 
-		std::vector<GameObject*>			delete_list;
+		std::map<long, GameObject*>			delete_list;
+		std::vector<long>					delete_list_ids;
 		std::mutex							mutex;
 };
 

@@ -21,11 +21,11 @@ bool	checkCollision(GameObject *a1, GameObject *b, BoxCollider *a)
 
 void						BoxCollider::Check3DCollisions(std::map<long, GameObject*> &gameObjects)
 {
-	for (std::map<long, GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); it++)
+	for (auto &it : gameObjects)
 	{
 		bool collide = false;
-		Script *script = it->second->GetComponent<Script>();
-		BoxCollider *boxcollider = it->second->GetComponent<BoxCollider>();
+		Script *script = it.second->GetComponent<Script>();
+		BoxCollider *boxcollider = it.second->GetComponent<BoxCollider>();
 
 		if (boxcollider == NULL)
 			continue ;
@@ -33,13 +33,13 @@ void						BoxCollider::Check3DCollisions(std::map<long, GameObject*> &gameObject
 			continue ;
 		if (script->frame == 0L)
 			continue ;
-		for (std::map<long, GameObject*>::iterator it2 = gameObjects.begin(); it2 != gameObjects.end(); it2++)
+		for (auto it2 : gameObjects)
 		{
-			if (it->second->id == it2->second->id)
+			if (it.second->id == it2.second->id)
 				continue ;
-			if (checkCollision(it->second, it2->second, boxcollider)) {
+			if (checkCollision(it.second, it2.second, boxcollider)) {
 				//TODO after collide
-				script->OnCollisionEnter(it2->second);
+				script->OnCollisionEnter(it2.second);
 			}
 		}
 	}

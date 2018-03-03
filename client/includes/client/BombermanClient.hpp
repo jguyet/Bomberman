@@ -111,6 +111,10 @@ class BombermanClient : public IRenderLoop
 		ALCcontext									*Context;
 
 		std::mutex									mutex;
+
+		bool										wait_changing_scene;
+		bool										waitThreads[2];
+		Scene										*new_scene;
 		// #####################################################################
 };
 
@@ -131,14 +135,11 @@ T							*BombermanClient::setCurrentScene( Scene *scene )
 	if (this->current_scene != NULL) {
 		last_scene = this->current_scene;
 	}
-	this->current_scene = scene;
-
-	if (last_scene != NULL) {
-		delete last_scene;
-	}
-	if (this->current_scene == NULL)
+	this->new_scene = scene;
+	this->wait_changing_scene = true;
+	if (scene == NULL)
 		return NULL;
-	return dynamic_cast<T*>(this->current_scene);
+	return dynamic_cast<T*>(scene);
 }
 
 #endif
