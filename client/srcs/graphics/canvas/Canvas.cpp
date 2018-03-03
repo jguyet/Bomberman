@@ -58,7 +58,7 @@ void						Canvas::build(void)
 	}
 	this->canvas = SDL_CreateRGBSurface(0, this->width, this->height, 32, 0,0,0,0);
 	SDL_FillRect(this->canvas, NULL, SDL_MapRGB(this->canvas->format, 0, 1, 0));
-	
+
 	for (std::map<const char*, Text*>::iterator it = this->texts.begin(); it != this->texts.end(); it++) {
 		(*it).second->draw(this->canvas);
 	}
