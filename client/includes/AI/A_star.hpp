@@ -7,6 +7,7 @@
 enum e_action {
 	ATTACK,
 	SEARCH,
+	WAIT,
 	ESCAPE,
 	IDLE
 };

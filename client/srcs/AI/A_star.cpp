@@ -179,8 +179,11 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p)
 {
 	Module_h elem;
 	bool flag_t = false;
-	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(fmax(0.5f + x / 2.f, 0), fmax(0.5f + y / 2.f, 0));
+	GameScene *scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
+	if (!scene)
+		return (0);
 
+	Case *c = scene->map->getCase(fmax(0.5f + x / 2.f, 0), fmax(0.5f + y / 2.f, 0));
 	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y))
 		flag_t = true;
 
