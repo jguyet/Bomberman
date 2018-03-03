@@ -157,6 +157,7 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 	block->transform.scale = glm::vec3(1.f, 1.f, 1.f);
 	cube.ground = block;
 	cube.obstacle = NULL;
+	cube.door = NULL;
 	cube.walkable = true;
 	cube.position = glm::vec3(x * 2, 0, y * 2);
 
@@ -171,9 +172,9 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 		}
 		else if (BombermanClient::getInstance()->sock->state == false)
 		{
-				block = Factory::newGoomba();
-				block->transform.position = glm::vec3(x * 2, 0, y * 2);
-				cube.obstacle = block;
+			block = Factory::newGoomba();
+			block->transform.position = glm::vec3(x * 2, 0, y * 2);
+			cube.obstacle = block;
 		}
 	}
 	map[std::make_pair(x, y)] = cube;
@@ -192,9 +193,9 @@ void						MapManager::buildObjects(Map *selected)
 				GameObject *player = Factory::newGoomba();
 				// this->all_player.push_back(player);
 				// this->players.push_back(player);
-				player->transform.position = glm::vec3(elem.second.obstacle->transform.position.x,0,elem.second.obstacle->transform.position.z);
+				player->transform.position = glm::vec3(elem.second.obstacle->transform.position.x, 0, elem.second.obstacle->transform.position.z);
 				player->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-				this->scene->add(player);//add on scene
+				this->scene->add(player); //add on scene
 				elem.second.obstacle = NULL;
 			}
 			else

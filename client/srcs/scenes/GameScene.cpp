@@ -43,13 +43,20 @@ GameScene::GameScene (std::string selected_map)
 void GameScene::StartSolo(void)
 {
 	GameObject 				*playerObject = Factory::newPlayer(1);
-	playerObject->transform.scale = glm::vec3(3,3,3);
-	playerObject->transform.rotation = glm::vec3(0,0,0);
-	playerObject->transform.position = glm::vec3(6.0f, 1.f, 2.0f);
-	this->current_player = playerObject;
-	this->players.push_back(playerObject);
-	this->all_player.push_back(playerObject);
-	this->add(playerObject);
+
+	DoorManager::setRandomDoor(this->map);
+	Case *spawn = this->mapManager->getRandomWalkableCase(this->map);
+	if (spawn) {
+		glm::vec3 pos = spawn->ground->transform.position;
+		playerObject->transform.scale = glm::vec3(3,3,3);
+		playerObject->transform.rotation = glm::vec3(0,0,0);
+		playerObject->transform.position = glm::vec3(pos.x, 1.f, pos.z);
+
+		this->current_player = playerObject;
+		this->players.push_back(playerObject);
+		this->all_player.push_back(playerObject);
+		this->add(playerObject);
+	}
 
 /*
 	GameObject *player = Factory::newPlayer(100);

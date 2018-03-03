@@ -95,9 +95,10 @@ void						BombermanClient::build_window( void )
 	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
 	// this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
 	// this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
+	// this->music = Mix_LoadMUS("./assets/sound/stage1.ogg");
+	// this->music_menu = Mix_LoadMUS("./assets/sound/stage2.ogg");
+
 	// shit is getting my ears bleeding
-	this->music = Mix_LoadMUS("./assets/sound/stage1.ogg");
-	this->music_menu = Mix_LoadMUS("./assets/sound/stage2.ogg");
 	Mix_VolumeMusic(20);
 
 	//OPENGL version 3.3
@@ -320,7 +321,7 @@ int main(void)
 	client->initialize_resources();
 	client->initialize_inputs();
 
-	client->current_scene = new MainMenuScene();
+	client->setCurrentScene<MainMenuScene>(new MainMenuScene());
 
 	printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	printf("Supported GLSL Shaders version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));

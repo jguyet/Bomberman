@@ -28,10 +28,6 @@ BotControllerScript::BotControllerScript ( BotControllerScript const & src ) : C
 
 BotControllerScript &				BotControllerScript::operator=( BotControllerScript const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 

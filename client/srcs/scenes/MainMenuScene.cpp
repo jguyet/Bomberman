@@ -17,7 +17,7 @@ MainMenuScene::MainMenuScene ( void )
 	this->camera->buildFPSProjection();
 
 	this->interface = new MainMenuInterface();
-	Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
+	// Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
 
 	KeyBoard::instance->addHandler("MainMenuScene", this);
 	return ;
@@ -31,10 +31,6 @@ MainMenuScene::MainMenuScene ( MainMenuScene const & src )
 
 MainMenuScene &				MainMenuScene::operator=( MainMenuScene const & rhs )
 {
-	if (this != &rhs)
-	{
-		// make stuff
-	}
 	return (*this);
 }
 
