@@ -41,8 +41,8 @@ class CharacterControllerScript : public Script
 		int									getPlayerId();
 
 		int 								playerId = 1;
-		int 								bomb = 5;
-		int 								power = 5;
+		int 								bomb = 1;
+		int 								power = 2;
 		int 								life = 5;
 		int									speed_count = 1;
 		float								speed = SPEED;

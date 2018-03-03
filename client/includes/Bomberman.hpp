@@ -65,7 +65,7 @@
 # define PRESS GLFW_PRESS
 # define REPEAT GLFW_REPEAT
 
-# define SPEED 0.1f
+# define SPEED 0.07f
 # define BOMB_TIME 5000L
 
 /*

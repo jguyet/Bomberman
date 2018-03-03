@@ -213,6 +213,8 @@ void						MapManager::buildObjects(Map *selected)
 			// }
 			// else
 				this->scene->add(elem.second.obstacle);
+				if (elem.second.obstacle->tag == "Goomba")
+					elem.second.obstacle = NULL;
 			// std::cout << "tag :" << elem.second.obstacle->tag << std::endl;
 		}
 	}

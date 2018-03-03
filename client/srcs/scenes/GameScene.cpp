@@ -59,30 +59,12 @@ void GameScene::StartSolo(void)
 	player->transform.rotation = glm::vec3(0,0,0);
 	this->add(player);//add on scene
 
-	player = Factory::newPlayer(100);
-	this->all_player.push_back(player);
-	this->players.push_back(player);
-	player->transform.position = glm::vec3(4,1,28);
-	player->transform.scale = glm::vec3(3,3,3);
-	player->transform.rotation = glm::vec3(0,0,0);
-	this->add(player);//add on scene
-
-
-	player = Factory::newPlayer(100);
-	this->all_player.push_back(player);
-	this->players.push_back(player);
-	player->transform.position = glm::vec3(4,1,10);
-	player->transform.scale = glm::vec3(3,3,3);
-	player->transform.rotation = glm::vec3(0,0,0);
-	this->add(player);//add on scene
-
 	// GameObject *goomba = Factory::newGoomba();
     //
 	// goomba->transform.position = glm::vec3(4,1,36);
 	// goomba->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
 	// goomba->transform.rotation = glm::vec3(0,0,0);
 	// this->add(goomba);
-
 }
 
 void					GameScene::removePlayer(GameObject *player)
@@ -216,7 +198,7 @@ void								GameScene::drawGameObjects(void)
 		//Eloignement sur x
 		this->camera->transform.position.x += 25;
 		//Eloignement sur y
-		this->camera->transform.position.y = 35;
+		this->camera->transform.position.y = 85;
 	}
 	this->camera->buildLookAtProjection(topoint);
 	//call parent method

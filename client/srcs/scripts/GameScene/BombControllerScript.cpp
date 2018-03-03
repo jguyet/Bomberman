@@ -117,6 +117,11 @@ void								BombControllerScript::explode(void)
 	c->walkable = true;
 	int puissance = this->power;
 	//z+
+
+	Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z);
+	if (b != NULL)
+		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z), 0));
+
 	for (int i = 1; i < (puissance + 1); i++) {
 		Case *b = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z + i);
 		if (b == NULL)

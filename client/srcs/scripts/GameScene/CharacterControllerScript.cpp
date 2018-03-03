@@ -279,6 +279,8 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 
 	if (c == NULL)
 		return ;
+	if (collider->tag == "Background")
+		return ;
 
 	if (collider->tag == "Bomb") {
 
@@ -323,16 +325,15 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	else if (collider->tag == "bonus-power-up") {
 		this->power++;
 		collider->toDelete = true;
-	}
-	else if (collider->tag == "bonus-speed-up") {
+	} else if (collider->tag == "bonus-speed-up") {
 		this->speed+= 0.003;
 		collider->toDelete = true;
 		this->speed_count++;
-	}
-	else if (collider->tag == "Player") {
+	} else if (collider->tag == "Player") {
 
-	}
-	else {
+	} else if (collider->tag == "Goomba") {
+
+	} else {
 		this->gameObject->transform.position.x = this->lastPosition.x;
 		this->gameObject->transform.position.z = this->lastPosition.z;
 	}
