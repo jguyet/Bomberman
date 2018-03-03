@@ -201,7 +201,7 @@ void						MapManager::buildObjects(Map *selected)
 				GameObject *player = Factory::newGoomba();
 				// this->all_player.push_back(player);
 				// this->players.push_back(player);
-				player->transform.position = glm::vec3(elem.second.obstacle->transform.position.x,1,elem.second.obstacle->transform.position.z);
+				player->transform.position = glm::vec3(elem.second.obstacle->transform.position.x,0,elem.second.obstacle->transform.position.z);
 				player->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
 				this->scene->add(player);//add on scene
 				elem.second.obstacle = NULL;
