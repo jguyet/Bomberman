@@ -10,6 +10,7 @@ enum e_direction {
 	DIRECTION_BACKWARD = 3
 };
 
+class AI;
 class CharacterControllerScript : public Script
 {
 	public:
@@ -48,6 +49,7 @@ class CharacterControllerScript : public Script
 
 		bool								locked = false;
 		bool								lock_direction[4];
+		AI 									*robot;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################

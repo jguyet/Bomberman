@@ -51,13 +51,30 @@ void GameScene::StartSolo(void)
 	this->all_player.push_back(playerObject);
 	this->add(playerObject);
 
-	// GameObject *player = Factory::newPlayer(100);
-	// this->all_player.push_back(player);
-	// this->players.push_back(player);
-	// player->transform.position = glm::vec3(4,1,36);
-	// player->transform.scale = glm::vec3(3,3,3);
-	// player->transform.rotation = glm::vec3(0,0,0);
-	// this->add(player);//add on scene
+	GameObject *player = Factory::newPlayer(100);
+	this->all_player.push_back(player);
+	this->players.push_back(player);
+	player->transform.position = glm::vec3(4,1,38);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
+
+	player = Factory::newPlayer(100);
+	this->all_player.push_back(player);
+	this->players.push_back(player);
+	player->transform.position = glm::vec3(4,1,28);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
+
+
+	player = Factory::newPlayer(100);
+	this->all_player.push_back(player);
+	this->players.push_back(player);
+	player->transform.position = glm::vec3(4,1,10);
+	player->transform.scale = glm::vec3(3,3,3);
+	player->transform.rotation = glm::vec3(0,0,0);
+	this->add(player);//add on scene
 
 	// GameObject *goomba = Factory::newGoomba();
     //
@@ -66,22 +83,6 @@ void GameScene::StartSolo(void)
 	// goomba->transform.rotation = glm::vec3(0,0,0);
 	// this->add(goomba);
 
-/*
-	GameObject *goomba1 = Factory::newGoomba();
-
-	goomba1->transform.position = glm::vec3(6.0f,-2,35);
-	goomba1->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-	goomba1->transform.rotation = glm::vec3(0,0,0);
-	this->add(goomba1);
-*/
-/*
-	GameObject *goomba2 = Factory::newGoomba();
-
-	goomba2->transform.position = glm::vec3(15,1,30);
-	goomba2->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-	goomba2->transform.rotation = glm::vec3(0,0,0);
-	this->add(goomba2);
-*/
 }
 
 void					GameScene::removePlayer(GameObject *player)
