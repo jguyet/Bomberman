@@ -146,8 +146,6 @@ void ActionQueueManager::doAction(ActionQueue *action)
 						bomb->transform.rotation = glm::vec3(0,0,0);
 						scene->add(bomb);
 						c->obstacle = bomb;
-						script->last_bomb_2 = script->last_bomb_1;
-						script->last_bomb_1 = bomb->id;
 					}
 				}
 			}
