@@ -20,15 +20,15 @@ class AI
 		friend std::ostream &						operator<<(std::ostream & o, AI const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
+		int											brain();
 		void										get_target(float x, float y, std::vector<GameObject*> players);
 		void										select_target(void);
-		int											brain();
-
-		// int 										getInfos(void);
-		// GameObject 									*getNearestBlock();
 		int											bombcol(int x, int y, int next_x, int next_y);
 		// #####################################################################
 		Module_h 									target;
+		float										last_pos_x;
+		float										last_pos_y;
+		int											count;
 		GameObject*									tplayer;
 		GameObject*									my_player;
 
