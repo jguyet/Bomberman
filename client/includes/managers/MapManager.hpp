@@ -26,13 +26,14 @@ class MapManager
 		MapManager &							operator=( MapManager const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, MapManager const & i);
 
-		void			loadMaps();
-		void			readMaps();
-		void			parseMaps(std::string name, std::map<std::pair<int, int>, Case> &map);
-		int				setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value);
-		Map				*getMap(std::string name);
-		void			buildObjects(Map *selected);
-		Case			*getRandomWalkableCase(Map *from);
+		void				loadMaps();
+		void				readMaps();
+		void				parseMaps(std::string name, std::map<std::pair<int, int>, Case> &map);
+		int					setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value);
+		Map					*getMap(std::string name);
+		void				buildObjects(Map *selected);
+		Case				*getRandomWalkableCase(Map *from);
+		std::vector<Case*>	getAllBlockingCase(Map *from);
 	private:
 		std::map<std::string, Map*>			maps;
 		Scene								*scene;

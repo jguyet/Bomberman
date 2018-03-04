@@ -50,6 +50,8 @@ void Loader::loadModels()
 	Model::load("N64", ShaderUtils::getInstance()->get("dir"), "assets/textures/N64 Cube/N64 Cube.obj");
 	Model::load("ice_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/mur1.obj");
 	Model::load("ground1", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/sol1.obj");
+	Model::load("dumpster", ShaderUtils::getInstance()->get("dir"), "assets/dumpster/Dumpster.obj");
+	Model::load("door", ShaderUtils::getInstance()->get("dir"), "assets/door/Door.obj");
 
 	Model::load("brick", ShaderUtils::getInstance()->get("dir"), "assets/textures/grass.obj");
 	Model::load("skybox", ShaderUtils::getInstance()->get("dir"), "assets/skybox/skybox2.obj");

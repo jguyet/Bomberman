@@ -14,7 +14,7 @@ GameScene::GameScene (std::string selected_map)
 
 	this->mapManager = new MapManager(this);
 
-	Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
+	// Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
 	this->map = this->mapManager->getMap(selected_map);
 	if (this->map) {
 		mapManager->buildObjects(this->map);
@@ -44,7 +44,7 @@ void GameScene::StartSolo(void)
 {
 	GameObject 				*playerObject = Factory::newPlayer(1);
 
-	DoorManager::setRandomDoor(this->map);
+	DoorManager::setRandomDoor(this);
 	Case *spawn = this->mapManager->getRandomWalkableCase(this->map);
 	if (spawn) {
 		glm::vec3 pos = spawn->ground->transform.position;

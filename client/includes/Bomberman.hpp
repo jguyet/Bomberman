@@ -117,6 +117,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 */
 # include "managers/MapManager.hpp"
 # include "managers/SaveManager.hpp"
+# include "managers/DoorManager.hpp"
 
 /*
 ** Scenes

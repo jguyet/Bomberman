@@ -71,6 +71,8 @@ void						ExplosionControllerScript::Update(void)
 					} else {
 						BombermanClient::getInstance()->sock->newBonus(x, z);
 					}
+					if (b->door != NULL)
+						scene->add(b->door);
 				}
 				b->obstacle->toDelete = true;
 				b->obstacle = NULL;
