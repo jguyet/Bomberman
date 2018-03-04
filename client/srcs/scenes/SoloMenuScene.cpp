@@ -19,7 +19,7 @@ SoloMenuScene::SoloMenuScene ( void )
 	this->loadCurrentLevel();
 	BombermanClient::getInstance()->sock = new Socket("", 0);
 	this->interface = new SoloMenuInterface();
-	Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
+	// Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
 
 	KeyBoard::instance->addHandler("SoloMenuScene", this);
 }

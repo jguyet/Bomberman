@@ -48,6 +48,18 @@ Case	*MapManager::getRandomWalkableCase(Map *from)
 	return (walkables.size() > 0) ? walkables[randomGen.getRandom(0, walkables.size())] : NULL;
 }
 
+std::vector<Case*>	MapManager::getAllBlockingCase(Map *from)
+{
+	std::vector<Case*> cases;
+	for (auto & elem : from->content)
+	{
+		if (elem.second.obstacle != NULL && elem.second.obstacle->tag == "ice_block") { // need to do a define or an enum
+			cases.push_back(&elem.second);
+		}
+	}
+	return cases;
+}
+
 void	MapManager::readMaps()
 {
 	DIR *dir;
@@ -120,7 +132,7 @@ void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case>
 					int i_dec = std::stoi (match.str() ,&sz);
 					this->setBlock(map, x, y, i_dec);
 				} catch (std::exception& e) {
-					std::cout << "ERROR to pars map " << path << " at line " << value << " | " << e.what() << std::endl;
+					std::cout << "ERROR to parse map " << path << " at line " << value << " | " << e.what() << std::endl;
 					map.clear();
 					filestr.close();
 					return ;
