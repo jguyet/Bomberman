@@ -73,85 +73,47 @@ void				AI::select_target(void)
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
-	if (this->action == ESCAPE)
-		return;
+	// if (this->action == ESCAPE)
+	// 	return;
 
 	if (this->select_t == false)
 	{
 		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
-
 		if (this->action == IDLE)
 		{
 			this->action = SEARCH;
 			this->select_t = true;
 			// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
 		}
-		// else if (this->action == ESCAPE) {
-		// }
 	}
 	// else if ((std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
 	// 	this->restart_target_pos();
 }
 
-int 				AI::getInfos(void)
-{
-	return (0);
-}
-
-GameObject			*AI::getNearestBlock()
-{
-	float x = this->my_player->transform.position.x;
-	float y = this->my_player->transform.position.z;
-
-	float distance = 999;
-	float dist;
-	GameObject *near = NULL;
-
-	for (GameObject *object : this->Objects)
-	{
-		dist = glm::distance(this->my_player->transform.position, object->transform.position);
-
-		if (dist < distance) {
-			distance = dist;
-			near = object;
-		}
-	}
-	return (near);
-}
-
-int				AI::bombcol(int x, int y, int next_x, int next_y)
-{
-	if (this->a_star.bomb_col(this->bomb_l, x, y) == 0 && this->a_star.bomb_col(this->bomb_l, this->moves.back().pos_x, this->moves.back().pos_y) == 0)
-	{
-		// std::cout << " DEAD :( last pos x " <<  this->moves.back().pos_x << " y " << this->moves.back().pos_y << std::endl;
-		this->restart_target_pos();
-		return (1);
-	}
-	// if (!this->a_star.bomb_col(this->bomb_l, next_x, next_y))
-	// {
-	// 	this->pause = 120;
-	// 	// this->restart_target_pos();
-	// 	return (2);
-	// }
-	return (0);
-}
+// int				AI::bombcol(int x, int y, int next_x, int next_y)
+// {
+// 	if (this->a_star.bomb_col(this->bomb_l, this->moves.back().pos_x, this->moves.back().pos_y) == 0) //this->a_star.bomb_col(this->bomb_l, x, y) == 0 &&
+// 	{
+// 		std::cout << "I Will DIE :( last pos x " <<  this->moves.back().pos_x << " y " << this->moves.back().pos_y << std::endl;
+// 		this->restart_target_pos();
+// 		return (1);
+// 	}
+// 	// if (!this->a_star.bomb_col(this->bomb_l, next_x, next_y))
+// 	// {
+// 	// 	this->pause = 120;
+// 	// 	// this->restart_target_pos();
+// 	// 	return (2);
+// 	// }
+// 	return (0);
+// }
 
 int				AI::brain(void)
 {
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
-	int n_bomb = dynamic_cast<CharacterControllerScript *>(my_player->GetComponent<Script>())->bomb;
 
 	this->bomb_l.clear();
 	this->bomb_l = std::vector<BombControllerScript*>(BombControllerScript::List);
-
-	if (this->action == WAIT)
-	{
-		if (n_bomb == 0)
-			return (0);
-		this->pause = 120;
-		this->action = IDLE;
-	}
 
 	// select && checker ###############
 	this->select_target();
@@ -164,15 +126,14 @@ int				AI::brain(void)
 		//If current target close delete them
 		if (x >= this->moves.front().pos_x - t && x <= this->moves.front().pos_x + t && y >= this->moves.front().pos_y - t && y <= this->moves.front().pos_y + t)
 			this->moves.pop_front();
+
 		if (this->moves.size() == 0)
 		{
 			if (this->action == SEARCH)
 			{
-				// this->action = ATTACK;
 				// TODO : deselect target FOR path_finding
 				this->action = ESCAPE;
 				return (SDL_SCANCODE_Q);
-				// return (0);
 			}
 			else
 			{
@@ -183,7 +144,8 @@ int				AI::brain(void)
 		// else if (this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
 		// 	return (0);
 	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false) {
-		std::cout << "-------------- FAIL OF PATH path_finding" << std::endl;
+		// std::cout << "-------------- FAIL OF PATH path_finding in action " << this->action << std::endl;
+		this->action = WAIT;
 		return (0);
 	}
 	// move ############################
@@ -195,12 +157,6 @@ int				AI::brain(void)
 		return(SDL_SCANCODE_LEFT);
 	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
-	// if (this->action == ATTACK)
-	// {
-	// 	std::cout << "start Attack" << std::endl;
-	// 	this->action = ESCAPE;
-	// 	return (SDL_SCANCODE_Q);
-	// }
 	// #################################
 	return (0);
 }
@@ -211,34 +167,46 @@ int				AI::brain(void)
 
 int				AI::start_checks(void)
 {
-	// test
-	// if (this->tplayer != NULL && this->tplayer->tag != "ice_block")
-	// {
-	// 	// info = 0;
-	// 	this->select_t = false;
-	// 	std::cout << " NO ice_block :)" << std::endl;
-	// 	return (1);
-	// }
+	if (this->action == WAIT)
+	{
+		this->pause = 120;
+		this->action = IDLE;
+		return (1);
+	}
 
-	// test
+	if (this->moves.size() > 0 && this->a_star.bomb_col(this->bomb_l, this->moves.back().pos_x, this->moves.back().pos_y) == 0)
+	{
+		// std::cout << "I Will DIE :( last pos x " <<  this->moves.back().pos_x << " y " << this->moves.back().pos_y << std::endl;
+		this->restart_target_pos();
+		return (1);
+	}
+
 	if (this->pause)
 	{
+		if (this->a_star.bomb_col(this->bomb_l, my_player->transform.position.x, my_player->transform.position.z) == 0)
+		{
+			// std::cout << "iminent DEAD x " <<  my_player->transform.position.x << " y " << my_player->transform.position.z << std::endl;
+			this->restart_target_pos();
+			return (0);
+		}
+		int n_bomb = dynamic_cast<CharacterControllerScript *>(my_player->GetComponent<Script>())->bomb;
+		if (n_bomb == 0)
+			return (1);
 		this->pause--;
 		return (1);
 	}
 
-// std::cout << "start ESCAPE" << std::endl;
 	if (this->select_t == false)
 		return (1);
-
 	return (0);
 }
 
 void				AI::restart_target_pos(void)
 {
-	this->target.pos_x = this->tplayer->transform.position.x;
-	this->target.pos_y = this->tplayer->transform.position.z;
-	this->action = SEARCH;
+	// this->target.pos_x = this->tplayer->transform.position.x;
+	// this->target.pos_y = this->tplayer->transform.position.z;
+	this->action = ESCAPE;
+	this->pause = 0;
 	this->moves.clear();
 }
 

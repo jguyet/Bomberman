@@ -24,8 +24,8 @@ class AI
 		void										select_target(void);
 		int											brain();
 
-		int 										getInfos(void);
-		GameObject 									*getNearestBlock();
+		// int 										getInfos(void);
+		// GameObject 									*getNearestBlock();
 		int											bombcol(int x, int y, int next_x, int next_y);
 		// #####################################################################
 		Module_h 									target;
