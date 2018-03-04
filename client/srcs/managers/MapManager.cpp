@@ -182,7 +182,7 @@ int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y
 			cube.obstacle = block;
 			cube.walkable = false;
 		}
-		else if (BombermanClient::getInstance()->sock->state == false)
+		else if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false)
 		{
 			block = Factory::newGoomba();
 			block->transform.position = glm::vec3(x * 2, 0, y * 2);

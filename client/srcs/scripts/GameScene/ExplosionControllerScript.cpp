@@ -66,10 +66,12 @@ void						ExplosionControllerScript::Update(void)
 			} else if (b->obstacle->tag != "ground1") {
 				if (b->obstacle->tag == "ice_block")
 				{
-					if (BombermanClient::getInstance()->sock->state == false) {
-						scene->add(Factory::newPowerUp(x, z));
-					} else {
-						BombermanClient::getInstance()->sock->newBonus(x, z);
+					if (BombermanClient::getInstance()->sock) {
+						if (BombermanClient::getInstance()->sock->state == false) {
+							scene->add(Factory::newPowerUp(x, z));
+						} else {
+							BombermanClient::getInstance()->sock->newBonus(x, z);
+						}
 					}
 					if (b->door != NULL)
 						scene->add(b->door);

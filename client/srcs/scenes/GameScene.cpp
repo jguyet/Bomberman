@@ -24,15 +24,15 @@ GameScene::GameScene (std::string selected_map)
 		this->quitInterface = NULL;
 		this->interface = new GameInterface(this);
 
-		if (BombermanClient::getInstance()->sock->state == false)
+		if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false)
 		{
+			BombermanClient::getInstance()->saveManager->save(this->map->name);
 			this->StartSolo();
 		} else {
 			this->startGameInterface = new StartGameInterface();
 		}
-		BombermanClient::getInstance()->saveManager->save(this->map->name);
 	} else {
-		printf("Invalid map given !\n");
+		BombermanClient::getInstance()->setCurrentScene<MainMenuScene>(new MainMenuScene());
 	}
 
 	//if grab mouse
