@@ -18,6 +18,9 @@ class SaveManager
 
 		void		save(std::string);
 		SaveObject	*loadSave();
+		int			getCurrentLevel();
+		void		loadNextLevel();
+		int			mapToLevel(std::string map);
 
 		SaveManager &							operator=( SaveManager const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, SaveManager const & i);

@@ -3,7 +3,8 @@
 
 SaveManager::SaveManager ()
 {
-	this->saveObject = this->loadSave();
+	this->saveObject = NULL;
+	this->loadSave();
 }
 
 SaveManager::SaveManager ( SaveManager const & src )
@@ -29,16 +30,21 @@ std::ostream &				operator<<(std::ostream & o, SaveManager const & i)
 
 void SaveManager::save(std::string map_name)
 {
-	std::ofstream outfile ("/tmp/.save.bomberman", std::ofstream::binary);
-	if (outfile.is_open()) {
-		SaveObject object;
-		memset((char*)&object.map_name, 0, (MAP_NAME_LEN - 1));
-		snprintf((char*)&object.map_name, (MAP_NAME_LEN - 1), "%s", map_name.c_str());
-		outfile.write((char*)&object, sizeof(SaveObject));
+	int mapLevel = this->mapToLevel(map_name);
+	if (mapLevel >= this->getCurrentLevel()) {
+		std::ofstream outfile ("/tmp/.save.bomberman", std::ofstream::binary);
+		if (outfile.is_open()) {
+			if (!this->saveObject) {
+				this->saveObject = new SaveObject();
+			}
+			memset((char*)&this->saveObject->map_name, 0, (MAP_NAME_LEN - 1));
+			snprintf((char*)&this->saveObject->map_name, (MAP_NAME_LEN - 1), "%s", map_name.c_str());
+			outfile.write((char*)this->saveObject, sizeof(SaveObject));
 
-		printf("Save loaded, currently on map: %s\n", object.map_name);
-	} else {
-		std::cerr << "Can't open save file to save current progression !" << std::endl;
+			printf("Save loaded, currently on map: %s\n", this->saveObject->map_name);
+		} else {
+			std::cerr << "Can't open save file to save current progression !" << std::endl;
+		}
 	}
 }
 
@@ -51,12 +57,46 @@ SaveObject *SaveManager::loadSave()
 {
 	std::ifstream	infile("/tmp/.save.bomberman", std::ios::binary);
 	if (infile.is_open()) {
-		SaveObject *object = new SaveObject();
-		infile.read(reinterpret_cast<char*>(object), sizeof(SaveObject));
-		binary_read(infile, object);
+		this->saveObject = new SaveObject();
+		infile.read(reinterpret_cast<char*>(this->saveObject), sizeof(SaveObject));
+		binary_read(infile, this->saveObject);
 
-		printf("Save loaded, currently on map: %s\n", object->map_name);
-		return object;
+		printf("Saved, currently on map: %s\n", this->saveObject->map_name);
+		return this->saveObject;
 	}
 	return NULL;
+}
+
+int SaveManager::getCurrentLevel()
+{
+	int current_level = 1;
+	if (this->saveObject) {
+		current_level = this->mapToLevel(this->saveObject->map_name);
+	}
+	return current_level;
+}
+
+int SaveManager::mapToLevel(std::string map)
+{
+	int level = 1;
+	if (map == "map_01")
+		level = 1;
+	else if (map == "map_02")
+		level = 2;
+	else if (map == "map_03")
+		level = 3;
+	else if (map == "map_04")
+		level = 4;
+	return level;
+}
+
+void SaveManager::loadNextLevel()
+{
+	BombermanClient *instance = BombermanClient::getInstance();
+	int	next_level = instance->saveManager->getCurrentLevel() + 1;
+
+	if (next_level > 4)
+		next_level = 4;
+	std::string level_name = "map_0" + std::to_string(next_level);
+	BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene(level_name));
 }

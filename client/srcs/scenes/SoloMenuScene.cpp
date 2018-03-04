@@ -50,20 +50,7 @@ std::ostream &				operator<<(std::ostream & o, SoloMenuScene const & i)
 
 void								SoloMenuScene::loadCurrentLevel()
 {
-	SaveObject *save = BombermanClient::getInstance()->saveManager->saveObject;
-	if (save != NULL) {
-		std::string level(save->map_name);
-		if (level == "map_01")
-			this->current_level = 1;
-		else if (level == "map_02")
-			this->current_level = 2;
-		else if (level == "map_03")
-			this->current_level = 3;
-		else if (level == "map_04")
-			this->current_level = 4;
-	} else {
-		this->current_level = 1;
-	}
+	this->current_level = BombermanClient::getInstance()->saveManager->getCurrentLevel();
 }
 
 void								SoloMenuScene::handleUP(unsigned int key)
@@ -72,23 +59,19 @@ void								SoloMenuScene::handleUP(unsigned int key)
 		BombermanClient::getInstance()->stop();
 	}
 	if (key == SDL_SCANCODE_KP_ENTER || key == SDL_SCANCODE_RETURN) {
-		switch(this->interface->current_position)
+		if (this->interface->current_position >= 0 && this->interface->current_position <= 3)
 		{
-			case 0:
-				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_01"));
-			break ;
-			case 1:
-				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_02"));
-			break;
-			case 2:
-				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_03"));
-			break ;
-			case 3:
-				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene("map_04"));
-			break;
-			case 4:
-				BombermanClient::getInstance()->setCurrentScene<GameScene>(new MainMenuScene());
-			break ;
+			this->interface->current_position++;
+			if (this->current_level >= this->interface->current_position) {
+				std::string level_name = "map_0" + std::to_string(this->interface->current_position);
+				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene(level_name));
+			}
+			else {
+				printf("You can't access to the stage %d, you are on the stage %d, sorry !\n", this->interface->current_position, this->current_level);
+			}
+		} else if (this->interface->current_position == 4)
+		{
+			BombermanClient::getInstance()->setCurrentScene<GameScene>(new MainMenuScene());
 		}
 	}
 }

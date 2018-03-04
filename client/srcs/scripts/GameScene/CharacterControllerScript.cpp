@@ -70,7 +70,7 @@ void								CharacterControllerScript::Attack(void)
 	c->walkable = false;
 	this->bomb--;
 
-	if (BombermanClient::getInstance()->sock->state) {
+	if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state) {
 		ActionType type = ActionType::TYPE_BOMB;
 		ActionObject object(type, fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), c->position.y, fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 		Packet packet(new ActionMessage(object, this->getPlayerId()));
@@ -195,13 +195,15 @@ void						CharacterControllerScript::Update(void)
 
 		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
 		{
-			BombermanClient::getInstance()->sock->updateMovement(this);
+			if (BombermanClient::getInstance()->sock != NULL)
+				BombermanClient::getInstance()->sock->updateMovement(this);
 			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 		}
 
 		if (this->has_moved) {
 			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
-				BombermanClient::getInstance()->sock->updateMovement(this);
+				if (BombermanClient::getInstance()->sock != NULL)
+					BombermanClient::getInstance()->sock->updateMovement(this);
 				this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 			}
 			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
@@ -273,6 +275,12 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
+	if (collider->tag == "door")
+	{
+		printf("You finished the level %d, congratulations !\n", BombermanClient::getInstance()->saveManager->getCurrentLevel());
+		BombermanClient::getInstance()->saveManager->loadNextLevel();
+		return;
+	}
 	if (this->scene->current_player == NULL)
 		return ;
 	Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
