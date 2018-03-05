@@ -115,6 +115,13 @@ void						UIInterface::build(void)
 		std::string content = cond_split.at(2);
 		this->buildCondition(tag_name, tag_params, content);
 	}
+
+	for (auto &element : this->elements) {
+		element.second->setParent(NULL);
+		if (element.second->parent_name != "" && this->elements.count(element.second->parent_name) == 1) {
+			element.second->setParent(this->elements[element.second->parent_name]);
+		}
+	}
 }
 
 int							UIInterface::scoop_enter(std::string const & value)
@@ -257,8 +264,8 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 		if (parameters_map.count("z-index") == 1) {
 			tag->transform.position.z = atoi(parameters_map["z-index"].c_str());
 		}
-		if (parameters_map.count("parent") == 1 && this->elements.count(parameters_map["parent"]) == 1) {
-			tag->setParent(this->elements[parameters_map["parent"]]);
+		if (parameters_map.count("parent") == 1) {
+			tag->setParent_name(parameters_map["parent"]);
 		}
 		if (parameters_map.count("class") == 1) {
 			for (std::map<std::string, std::string>::iterator it = this->styles.begin(); it != this->styles.end(); it++) {

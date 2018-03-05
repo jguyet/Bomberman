@@ -183,6 +183,19 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			}
 		}
 		break;
+
+		case GameStartedMessage::ID: {
+			GameStartedMessage	*message = (GameStartedMessage*)action->message;
+			GameScene			*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
+
+			scene->startGame();
+		}
+		break ;
+
+		case EndOfGameMessage::ID: {
+			std::cout << "ENDOFGAMEMESSAGE" << std::endl;
+		}
+		break ;
 	}
 }
 

@@ -19,6 +19,8 @@ BombControllerScript::BombControllerScript ( CharacterControllerScript *playerCo
 
 	this->power = playerController->getPower();
 	this->playerController = playerController;
+
+	this->color = glm::vec3(this->playerController->color.x, this->playerController->color.y, this->playerController->color.z);
 	return ;
 }
 
@@ -91,7 +93,8 @@ void								BombControllerScript::OnPreRender(void)
 	glUseProgram(bombObjectModel->shader);
 	bombObjectModel->shaderBind = true;
 
-	glm::vec3 colors = glm::vec3(timer,0.f,0.f);
+	glm::vec3 colors = glm::vec3(this->color.x + timer, this->color.y, this->color.z);
+
 	glUniform3fv(bombObjectModel->color,1 , &colors[0]);
 
 	//TODO add meche color in shader

@@ -146,6 +146,15 @@ std::ostream &				operator<<(std::ostream & o, GameScene const & i)
 
 // ###############################################################
 
+void								GameScene::startGame(void)
+{
+	if (this->startGameInterface != NULL) {
+		StartGameInterface *tmp = this->startGameInterface;
+		this->startGameInterface = NULL;
+		delete tmp;
+	}
+}
+
 void								GameScene::closeQuitInterface(void)
 {
 	QuitMenuInterface *tmp = this->quitInterface;
@@ -199,7 +208,7 @@ void								GameScene::build_camera(void)
 		//Eloignement sur x
 		this->camera->transform.position.x += 15;
 		//Eloignement sur y
-		this->camera->transform.position.y = 40;
+		this->camera->transform.position.y = 30;
 	}
 	this->camera->buildLookAtProjection(topoint);
 }

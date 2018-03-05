@@ -10,6 +10,7 @@ StartGameInterface::StartGameInterface ( void ) : UIInterface("themes/StartGameI
 {
 	this->canvas = new Canvas(BombermanClient::getInstance()->screen->canvas_width, BombermanClient::getInstance()->screen->canvas_height);
 	this->canvas->setElementsMap(&this->elements);
+	KeyBoard::instance->addHandler("StartGameInterface", this);
 	return ;
 }
 
@@ -31,6 +32,7 @@ StartGameInterface &				StartGameInterface::operator=( StartGameInterface const 
 StartGameInterface::~StartGameInterface ( void )
 {
 	delete this->canvas;
+	KeyBoard::instance->removeHandler("StartGameInterface");
 	return ;
 }
 
@@ -51,6 +53,14 @@ void						StartGameInterface::draw(void)
 		this->canvas->setElementsMap(&this->elements);
 	}
 	this->canvas->draw();
+}
+
+void						StartGameInterface::handleUP(unsigned int key)
+{
+	if (key == SDL_SCANCODE_RETURN) {
+		if (BombermanClient::getInstance()->sock != NULL)
+			BombermanClient::getInstance()->sock->sendGameStarted();
+	}
 }
 
 // ###############################################################

@@ -9,7 +9,7 @@
 SoloMenuInterface::SoloMenuInterface ( void ) : UIInterface("themes/SoloMenuInterface.html")
 {
 	this->current_position = 0;
-	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
+	this->canvas = new Canvas(BombermanClient::getInstance()->screen->canvas_width, BombermanClient::getInstance()->screen->canvas_height);
 	this->canvas->setElementsMap(&this->elements);
 	KeyBoard::instance->addHandler("SoloMenuInterface", this);
 	return ;
@@ -65,7 +65,7 @@ void						SoloMenuInterface::handleUP(unsigned int key)
 	if (key == SDL_SCANCODE_DOWN) {
 		this->current_position = (this->current_position + 1) % 5;
 	}
-	
+
 }
 
 // ###############################################################

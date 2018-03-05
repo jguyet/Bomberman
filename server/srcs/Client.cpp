@@ -21,6 +21,7 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 		Processor::getMessageId(NewPlayerMessage::ID), &Processor::NewPlayerMessageHandler,
 		Processor::getMessageId(ActionMessage::ID), &Processor::ActionMessageHandler,
 		Processor::getMessageId(PlayerDeadMessage::ID), &Processor::PlayerDeadMessageHandler,
+		Processor::getMessageId(GameStartedMessage::ID), &Processor::GameStartedMessageHandler,
 		END_OF_HANDLER);
 
 	if (!manager->gameState) {
@@ -58,7 +59,8 @@ void Client::clientThread(Client *client)
 		FD_SET(client->fd, &client->rdfs);
 		if (select(client->fd + 1, &client->rdfs, NULL, NULL, &tv) == -1) {
 			std::cerr << "An error occured " << strerror(errno) << std::endl;
-		  	exit(errno);
+			client->server->removeClient(client);
+		  	break ;
 		}
 		if (FD_ISSET(client->fd, &client->rdfs)) {
 			if ((res = recv(client->fd, buff, (BUFF_SIZE - 1), 0)) > 0) {

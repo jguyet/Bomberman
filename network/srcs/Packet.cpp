@@ -1,8 +1,8 @@
 #include "Packet.hpp"
 
-Packet::Packet (IMessage *message) : message(message)
+Packet::Packet (IMessage *message)
 {
-	//std::cout << std::to_string(message->packet_len) << std::endl;
+	this->message = message;
 }
 
 Packet::Packet ( Packet const & src )
@@ -21,12 +21,24 @@ t_byte *Packet::getMessageRaw()
 
 int Packet::sendPacket(SOCK socket)
 {
-	return (send(socket, (void*)this->getMessageRaw(), message->packet_len, 0));
+	t_byte *raw = this->getMessageRaw();
+
+	if (raw == NULL)
+		return 0;
+	int result = send(socket, (void*)raw, message->packet_len, 0);
+	free(raw);
+	return (result);
 }
 
 int Packet::sendUdpPacket(SOCK socket, struct sockaddr_in addr)
 {
-	return (sendto(socket, (void*)this->getMessageRaw(), message->packet_len, 0, (struct sockaddr*)&addr, sizeof(addr)));
+	t_byte *raw = this->getMessageRaw();
+
+	if (raw == NULL)
+		return 0;
+	int result = sendto(socket, (void*)this->getMessageRaw(), message->packet_len, 0, (struct sockaddr*)&addr, sizeof(addr));
+	free(raw);
+	return (result);
 }
 
 IMessage *Packet::getBaseMessage()

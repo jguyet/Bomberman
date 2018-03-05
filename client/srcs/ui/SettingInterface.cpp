@@ -52,19 +52,19 @@ void								SettingInterface::draw(void)
 	int height = BombermanClient::getInstance()->screen->height;
 	bool fullscreen = BombermanClient::getInstance()->screen->fullscreen;
 
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 0 && width < 2000) {
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 0 && width < 2000 && fullscreen == false) {
 		width += 10;
 		BombermanClient::getInstance()->setWindowSize(width, height, fullscreen);
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 1 && height < 2000) {
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 1 && height < 2000 && fullscreen == false) {
 		height += 10;
 		BombermanClient::getInstance()->setWindowSize(width, height, fullscreen);
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 0 && width > 0) {
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 0 && width > 0 && fullscreen == false) {
 		width -= 10;
 		BombermanClient::getInstance()->setWindowSize(width, height, fullscreen);
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 1&& height > 0) {
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 1 && height > 0 && fullscreen == false) {
 		height -= 10;
 		BombermanClient::getInstance()->setWindowSize(width, height, fullscreen);
 	}
@@ -82,7 +82,7 @@ void								SettingInterface::draw(void)
 	this->variables["$height"] = (std::ostringstream() << height).str();
 	this->variables["$h_size"] = (std::ostringstream() << (height * 300 / 2000)).str();
 	this->variables["$selected"] = (std::ostringstream() << this->current_position).str();
-	
+
 	this->build();
 	if (this->modified == true) {
 		this->canvas->setElementsMap(&this->elements);

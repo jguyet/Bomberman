@@ -9,7 +9,7 @@
 GameInterface::GameInterface ( GameScene *scene ) : UIInterface("themes/GameInterface.html")
 {
 	this->scene = scene;
-	this->canvas = new Canvas(BombermanClient::getInstance()->screen->canvas_width, BombermanClient::getInstance()->screen->canvas_height);
+	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
 	this->canvas->setElementsMap(&this->elements);
 	return ;
 }
