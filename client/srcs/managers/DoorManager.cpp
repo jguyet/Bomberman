@@ -26,16 +26,14 @@ std::ostream &				operator<<(std::ostream & o, DoorManager const & i)
 
 void DoorManager::setRandomDoor(GameScene *scene)
 {
-	std::vector<Case*>	possiblesCases = scene->mapManager->getAllBlockingCase(scene->map);
+	std::vector<Case*>	possiblesCases = scene->mapManager->getAllDestructibleCases();
 	Random				random;
 	if (possiblesCases.size() > 0)
 	{
 		Case *selectedCase = possiblesCases[random.getRandom(0, possiblesCases.size())];
-		selectedCase->obstacle->transform.scale = glm::vec3(10.5f, 10.5f, 10.5f);
-		
-		selectedCase->door = Factory::newBlock("door");
-		selectedCase->door->transform.scale = glm::vec3(0.01f, 0.01f, 0.01f);
-		selectedCase->door->transform.rotation = glm::vec3(0,0,0);
+		selectedCase->obstacle->transform.scale = glm::vec3(2.5f, 2.5f, 2.5f);
+
+		selectedCase->door = Factory::newDoor("door");
 		selectedCase->door->transform.position = selectedCase->obstacle->transform.position;
 	}
 }

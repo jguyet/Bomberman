@@ -4,6 +4,12 @@
 # include "Bomberman.hpp"
 # include "models/Case.hpp"
 
+struct MapObject {
+	int id;
+	std::string textureID;
+	std::string type;
+};
+
 class Map
 {
 	public:
@@ -19,10 +25,12 @@ class Map
 		// PUBLIC ##############################################################
 		Case										*getCase(int x, int z);
 		std::string									getName();
-		std::map<std::pair<int, int>, Case>			getContent();
 		// #####################################################################
 		std::map<std::pair<int, int>, Case>			content;
 		std::string									name;
+		std::map<int, MapObject>					objects;
+		std::vector<Case>							soloCases;
+		std::vector<Case>							pvpCases;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################

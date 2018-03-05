@@ -128,7 +128,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z + i), i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}
@@ -139,7 +139,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z - i), i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}
@@ -150,7 +150,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x + i), z, i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}
@@ -161,7 +161,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x - i), z, i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}

@@ -34,15 +34,17 @@ GameObject &				GameObject::operator=( GameObject const & rhs )
 
 GameObject::~GameObject ( void )
 {
-	this->mutex.lock();
-	for (auto &it : this->components)
-	{
-		if (it.first == "Model")
-			continue ;
-		delete it.second;
+	if (this->tag != "Default") {
+		this->mutex.lock();
+		for (auto &it : this->components)
+		{
+			if (it.first == "Model")
+				continue ;
+			delete it.second;
+		}
+		this->components.clear();
+		this->mutex.unlock();
 	}
-	this->components.clear();
-	this->mutex.unlock();
 	return ;
 }
 

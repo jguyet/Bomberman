@@ -10,15 +10,14 @@
 # include <sys/stat.h>
 # include <exception>
 # include "utils/Random.hpp"
-# include "enums/BlockType.hpp"
 
-# define GROUND 2
-# define WALL 0
+# define GROUND_POSITION_HEIGHT 2
+# define WALL_POSITION_HEIGHT 0
 
 class MapManager
 {
 	public:
-		MapManager(Scene *scene);
+		MapManager(Scene *scene, std::string const &map_name);
 		MapManager(void);
 		MapManager( MapManager const & src );
 		virtual ~MapManager();
@@ -26,17 +25,34 @@ class MapManager
 		MapManager &							operator=( MapManager const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, MapManager const & i);
 
-		void				loadMaps();
-		void				readMaps();
-		void				parseMaps(std::string name, std::map<std::pair<int, int>, Case> &map);
-		int					setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value);
-		Map					*getMap(std::string name);
-		void				buildObjects(Map *selected);
-		Case				*getRandomWalkableCase(Map *from);
-		std::vector<Case*>	getAllBlockingCase(Map *from);
+		bool				loadMap( void );
+		bool				parseMap(Map *map, std::string const &content);
+		Map					*getMap(void);
+		void				buildObjects(void);
+
+		std::vector<Case*>	getAllDestructibleCases(void);
+		std::vector<Case*>	getAllIndestructibleCases(void);
+
+		Case				*getRandomWalkableSoloCase(void);
+		Case				*getRandomWalkablePvPCase(void);
+
+		bool				addGroundToCase( Case &case_ref, std::string const &objectID );
+		bool				addDestructibleToCase( Case &case_ref, std::string const &objectID );
+		bool				addIndestructibleToCase( Case &case_ref, std::string const &objectID );
+		bool				addAIToCase( Case &case_ref, std::string const &objectID );
+		bool				addPvPCase( Case &case_ref, std::string const &objectID );
+		bool				addSoloCase( Case &case_ref, std::string const &objectID );
+
+
 	private:
-		std::map<std::string, Map*>			maps;
+		Map									*map;
+		std::string							map_path;
+		std::string							map_name;
+		std::string							content;
 		Scene								*scene;
+
+		typedef bool (MapManager::*LexerObjectsTypesMethods)( Case &case_ref, std::string const &objectID );
+		std::map<std::string, LexerObjectsTypesMethods>	map_lexer_types;
 };
 
 #endif

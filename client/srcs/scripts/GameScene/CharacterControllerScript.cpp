@@ -287,9 +287,8 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 
 	if (c == NULL)
 		return ;
-	if (collider->tag == "Background")
+	if (collider->tag == "Background" || collider->tag == "ground_block")
 		return ;
-
 	if (collider->tag == "Bomb") {
 
 		Case *bomb_case = this->scene->map->getCase( fmax(0.5f + collider->transform.position.x / 2.f, 0), fmax(0.5f + collider->transform.position.z / 2.f, 0));

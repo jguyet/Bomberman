@@ -47,9 +47,11 @@ void Loader::loadModels()
 	Model::load("bomb", ShaderUtils::getInstance()->get("bomb"), "assets/bomb/bomb.obj");
 	//textures
 	Model::load("flamme_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/Flamme.obj");
-	Model::load("N64", ShaderUtils::getInstance()->get("dir"), "assets/textures/N64 Cube/N64 Cube.obj");
-	Model::load("ice_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/mur1.obj");
-	Model::load("ground1", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/sol1.obj");
+	
+	Model::load("wall_ice_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/mur1.obj");
+	Model::load("wall_brick_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/brick.obj");
+	Model::load("wall_solid_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/sol1.obj");
+
 	Model::load("dumpster", ShaderUtils::getInstance()->get("dir"), "assets/dumpster/Dumpster.obj");
 	Model::load("door", ShaderUtils::getInstance()->get("dir"), "assets/door/Door.obj");
 

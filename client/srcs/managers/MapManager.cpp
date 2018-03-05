@@ -1,8 +1,17 @@
 #include "managers/MapManager.hpp"
 
-MapManager::MapManager (Scene *scene) : scene(scene)
+MapManager::MapManager (Scene *scene, std::string const &map_name) : scene(scene)
 {
-	this->loadMaps();
+	this->map_lexer_types["ground"] = &MapManager::addGroundToCase;
+	this->map_lexer_types["destructible"] = &MapManager::addDestructibleToCase;
+	this->map_lexer_types["indestructible"] = &MapManager::addIndestructibleToCase;
+	this->map_lexer_types["AI"] = &MapManager::addAIToCase;
+	this->map_lexer_types["solo_position"] = &MapManager::addSoloCase;
+	this->map_lexer_types["pvp_position"] = &MapManager::addPvPCase;
+
+	this->map_path = "maps/" + std::string(map_name);
+	this->map_name = std::string(map_name);
+	this->loadMap();
 }
 
 MapManager::MapManager (void)
@@ -15,222 +24,260 @@ MapManager::MapManager ( MapManager const & src )
 	*this = src;
 }
 
-MapManager &				MapManager::operator=( MapManager const & rhs )
+MapManager::~MapManager ()
+{
+	delete this->map;
+}
+
+MapManager &		MapManager::operator=( MapManager const & rhs )
 {
 	return (*this);
 }
 
-void	MapManager::loadMaps()
+std::ostream &		operator<<(std::ostream & o, MapManager const & i)
 {
-	this->readMaps();
-	for (auto &elem : this->maps)
-	{
-		Map *current = elem.second;
-		this->parseMaps(current->getName(), current->content);
-	}
+
+	return (o);
 }
 
-Map		*MapManager::getMap(std::string name)
+bool				MapManager::loadMap( void )
 {
-	return (this->maps.count(name) > 0) ? this->maps[name] : NULL;
+	std::ifstream ifs(this->map_path);
+
+	if (!ifs)
+		return false;
+	file_get_contents(this->content, this->map_path.c_str());
+
+	replaceAll(this->content, "\t", " ");
+	replaceAll(this->content, "\r", " ");
+	replaceAll(this->content, "\f", " ");
+	if (this->content == "")
+		return false;
+	this->map = new Map(this->map_name);
+	this->parseMap(this->map, this->content);
+	return true;
 }
 
-Case	*MapManager::getRandomWalkableCase(Map *from)
+Map					*MapManager::getMap(void)
 {
-	std::vector<Case*> walkables;
-	Random randomGen;
-	for (auto & elem : from->content)
-	{
-		if (elem.second.ground && !elem.second.obstacle) {
-			walkables.push_back(&elem.second);
-		}
-	}
-	return (walkables.size() > 0) ? walkables[randomGen.getRandom(0, walkables.size())] : NULL;
+	return (this->map);
 }
 
-std::vector<Case*>	MapManager::getAllBlockingCase(Map *from)
+Case				*MapManager::getRandomWalkableSoloCase(void)
+{
+	Random random;
+
+	if (this->map->soloCases.size() == 0)
+		return NULL;
+	return (&this->map->soloCases[random.getRandom(0, this->map->soloCases.size() - 1)]);
+}
+
+Case				*MapManager::getRandomWalkablePvPCase(void)
+{
+	Random random;
+
+	if (this->map->pvpCases.size() == 0)
+		return NULL;
+	return (&this->map->pvpCases.at(random.getRandom(0, this->map->pvpCases.size() - 1)));
+}
+
+std::vector<Case*>	MapManager::getAllDestructibleCases(void)
 {
 	std::vector<Case*> cases;
-	for (auto & elem : from->content)
+	for (auto & elem : this->map->content)
 	{
-		if (elem.second.obstacle != NULL && elem.second.obstacle->tag == "ice_block") { // need to do a define or an enum
+		if (elem.second.obstacle != NULL && elem.second.obstacle->tag == "destructible_block") { // need to do a define or an enum
 			cases.push_back(&elem.second);
 		}
 	}
 	return cases;
 }
 
-void	MapManager::readMaps()
+std::vector<Case*>	MapManager::getAllIndestructibleCases(void)
 {
-	DIR *dir;
-	struct dirent *ent;
-	struct stat info;
-
-	if (stat("maps/", &info ) != 0) {
-		std::cout << "Cannot access maps" << std::endl;
-		return ;
-	}
-	else if (info.st_mode & S_IFDIR)
+	std::vector<Case*> cases;
+	for (auto & elem : this->map->content)
 	{
-		if ((dir = opendir("maps/")) != NULL) {
-			while ((ent = readdir(dir)) != NULL) {
-				if (strcmp(ent->d_name, "..") != 0 && strcmp(ent->d_name, ".") != 0) {
-					this->maps.insert(std::pair<std::string, Map*>(ent->d_name, new Map(ent->d_name)));
+		if (elem.second.obstacle != NULL && elem.second.obstacle->tag == "indestructible_block") { // need to do a define or an enum
+			cases.push_back(&elem.second);
+		}
+	}
+	return cases;
+}
+
+bool				MapManager::addGroundToCase( Case &case_ref, std::string const &objectID )
+{
+	if (objectID == "" || Model::model.count(objectID) == 0) {
+		std::cerr << "MapManager : Model \"" << objectID << "\" doesn't exists." << std::endl;
+		return false;
+	}
+	if (case_ref.ground != NULL) {
+		delete case_ref.ground;
+		case_ref.ground = NULL;
+	}
+
+	GameObject	*ground = Factory::new_Ground_block(objectID);
+	ground->transform.position = glm::vec3(case_ref.position.x, GROUND_POSITION_HEIGHT, case_ref.position.z);
+	ground->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
+	case_ref.ground = ground;
+	return true;
+}
+
+bool				MapManager::addDestructibleToCase( Case &case_ref, std::string const &objectID )
+{
+	if (objectID == "" || Model::model.count(objectID) == 0) {
+		std::cerr << "MapManager : Model \"" << objectID << "\" doesn't exists." << std::endl;
+		return false;
+	}
+	if (case_ref.obstacle != NULL) {
+		delete case_ref.obstacle;
+		case_ref.obstacle = NULL;
+	}
+	GameObject	*obstacle = Factory::new_Destructible_block(objectID);
+	obstacle->transform.position = glm::vec3(case_ref.position.x, WALL_POSITION_HEIGHT, case_ref.position.z);
+	obstacle->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
+	case_ref.obstacle = obstacle;
+	return true;
+}
+
+bool				MapManager::addIndestructibleToCase( Case &case_ref, std::string const &objectID )
+{
+	if (objectID == "" || Model::model.count(objectID) == 0) {
+		std::cerr << "MapManager : Model \"" << objectID << "\" doesn't exists." << std::endl;
+		return false;
+	}
+	if (case_ref.obstacle != NULL) {
+		delete case_ref.obstacle;
+		case_ref.obstacle = NULL;
+	}
+	GameObject	*obstacle = Factory::new_Indestructible_block(objectID);
+	obstacle->transform.position = glm::vec3(case_ref.position.x, WALL_POSITION_HEIGHT, case_ref.position.z);
+	obstacle->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
+	case_ref.obstacle = obstacle;
+	return true;
+}
+
+bool				MapManager::addAIToCase( Case &case_ref, std::string const &objectID )
+{
+	if (BombermanClient::getInstance()->sock == NULL || BombermanClient::getInstance()->sock->state == true)
+		return false;
+	if (case_ref.obstacle != NULL) {
+		delete case_ref.obstacle;
+		case_ref.obstacle = NULL;
+	}
+
+	GameObject	*block = Factory::newGoomba();
+	block->transform.position = glm::vec3(case_ref.position.x, 0, case_ref.position.z);
+	block->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
+	case_ref.obstacle = block;
+	return true;
+}
+
+bool				MapManager::addPvPCase( Case &case_ref, std::string const &objectID )
+{
+	this->map->pvpCases.push_back(case_ref);
+	return true;
+}
+
+bool				MapManager::addSoloCase( Case &case_ref, std::string const &objectID )
+{
+	this->map->soloCases.push_back(case_ref);
+	return true;
+}
+
+bool				MapManager::parseMap(Map *map, std::string const &content)
+{
+	std::vector<std::string> splited_map = split(content, '\n');
+	std::vector<std::string> operators;
+	std::vector<std::string> map_lines;
+
+	//preload operators and map lines
+	for (int i = 0; i < splited_map.size(); i++) {
+		std::string line = trim(splited_map.at(i));
+
+		if (line == "")
+			continue ;
+		if (line.find("=") != std::string::npos && line.find("/") != std::string::npos) {
+			operators.push_back(line);
+			continue ;
+		}
+		map_lines.push_back(line);
+	}
+	//load operators to objects map
+	for (int i = 0; i < operators.size(); i++) {
+		std::vector<std::string> operation_line = split(operators.at(i), ' ');
+
+		if (operation_line.size() != 3) {
+			std::cerr << "Error syntax on Operation line : \"" << splited_map.at(i) << "\""  << std::endl;
+			return false;
+		}
+
+		int							id		= atoi(operation_line.at(0).c_str());
+		std::string					operand	= operation_line.at(1);
+		std::vector<std::string>	infos	= split(operation_line.at(2), '/');
+
+		if (infos.size() != 2) {
+			std::cerr << "Error syntax on Operation line : \"" << splited_map.at(i) << "\" doesn't contains separator textureID/TYPE "  << std::endl;
+			return false;
+		}
+		std::string					textureID	= infos.at(0);
+		std::string					type		= infos.at(1);
+
+		MapObject mapObject;
+
+		mapObject.id		= id;
+		mapObject.textureID = textureID;
+		mapObject.type		= type;
+
+		map->objects[id] = mapObject;
+	}
+	int position_map_x = 0, position_map_y = 0;
+	int height = map_lines.size();
+	//load map_lines map
+	for (int i = 0; i < map_lines.size(); i++) {
+		std::vector<std::string> cases_line = split(map_lines.at(i), ' ');
+
+		for (int width = cases_line.size() - 1; width >= 0; width--) {
+			std::vector<std::string> case_infos = split(cases_line.at(width), '/');
+			Case			cube;
+
+			cube.ground = NULL;
+			cube.obstacle = NULL;
+			cube.door = NULL;
+			cube.walkable = true;
+			cube.position = glm::vec3(height * 2, 0, width * 2);
+
+			for (int c = 0; c < case_infos.size(); c++) {
+				int currentID = atoi(case_infos.at(c).c_str());
+				if (map->objects.count(currentID) >= 1 && this->map_lexer_types.count(map->objects[currentID].type) >= 1) {
+					(*this.*this->map_lexer_types[map->objects[currentID].type])(cube, map->objects[currentID].textureID);
 				}
 			}
-			closedir(dir);
-			return ;
+			this->map->content[std::make_pair(height, width)] = cube;
 		}
+		height--;
 	}
+
+	return true;
 }
 
-/*
-**	Please lord understand that this is not my code
-*/
-
-void	MapManager::parseMaps(std::string name, std::map<std::pair<int, int>, Case> &map)
-{
-	std::fstream filestr;
-	std::string segment;
-	std::vector<std::string> segvec;
-	std::regex any_regex("(\\S+)");
-	std::regex number_regex("(\\d+)");
-	std::string path = "maps/";
-
-	path.append(name);
-	filestr.open(path);
-
-	auto ss = std::ostringstream{};
-	ss << filestr.rdbuf();
-	std::stringstream s(ss.str());
-
-	while (std::getline(s, segment, '\n'))
-		segvec.push_back(segment);
-
-	int y = 0;
-	for (auto const& value: segvec)
-	{
-		if (std::distance(std::sregex_iterator(value.begin(), value.end(), any_regex), std::sregex_iterator())
-		!= std::distance(std::sregex_iterator(value.begin(), value.end(), number_regex),std::sregex_iterator()))
-		{
-			std::cout << "ERROR to parse map " << path << " at line " << value << std::endl;
-			map.clear();
-			filestr.close();
-			return ;
-		}
-		else {
-			auto words_begin = std::sregex_iterator(value.begin(), value.end(), number_regex);
-			auto words_end = std::sregex_iterator();
-			int x = 0;
-
-			for (std::sregex_iterator i = words_begin; i != words_end; ++i)
-			{
-				try {
-					std::string::size_type sz;
-					std::smatch match = *i;
-
-					int i_dec = std::stoi (match.str() ,&sz);
-					this->setBlock(map, x, y, i_dec);
-				} catch (std::exception& e) {
-					std::cout << "ERROR to parse map " << path << " at line " << value << " | " << e.what() << std::endl;
-					map.clear();
-					filestr.close();
-					return ;
-				}
-				x++;
-			}
-			y++;
-		}
-	}
-	filestr.close();
-}
-
-/*
-**	This is not on me.
-*/
-
-// PRIVATE METHOD #################################################
-
-int		MapManager::setBlock(std::map<std::pair<int, int>, Case> &map, int x, int y, int value)
-{
-	Case			cube;
-	GameObject		*block;
-
-	static std::map<int, std::string> links =
-	{
-		std::make_pair((int)BlockType::TYPE_BRICK, "brick"),
-		std::make_pair((int)BlockType::TYPE_ICE_BLOCK, "ice_block"),
-		std::make_pair((int)BlockType::TYPE_GROUND, "ground1"),
-		std::make_pair((int)BlockType::TYPE_GOOMBA, "goomba")
-	};
-
-	block = Factory::newBlock(links[0]);
-	block->transform.position = glm::vec3(x * 2, GROUND, y * 2);
-	block->transform.scale = glm::vec3(1.f, 1.f, 1.f);
-	cube.ground = block;
-	cube.obstacle = NULL;
-	cube.door = NULL;
-	cube.walkable = true;
-	cube.position = glm::vec3(x * 2, 0, y * 2);
-
-	if (value != 0 && links.count(value) != 0)
-	{
-		if (value != (int)BlockType::TYPE_GOOMBA) {
-			block = Factory::newBlock(links[value]);
-			block->transform.position = glm::vec3(x * 2, WALL, y * 2);
-			block->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
-			cube.obstacle = block;
-			cube.walkable = false;
-		}
-		else if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false)
-		{
-			block = Factory::newGoomba();
-			block->transform.position = glm::vec3(x * 2, 0, y * 2);
-			cube.obstacle = block;
-		}
-	}
-	map[std::make_pair(x, y)] = cube;
-	return (0);
-}
-
-void						MapManager::buildObjects(Map *selected)
+void					MapManager::buildObjects(void)
 {
 
-	for (auto & elem : selected->content)
+	for (auto & elem : this->map->content)
 	{
-		if (elem.second.obstacle != NULL)
-		{
-			if (elem.second.obstacle->tag == "Goomba")
-			{
-				GameObject *player = Factory::newGoomba();
-				// this->all_player.push_back(player);
-				// this->players.push_back(player);
-				player->transform.position = glm::vec3(elem.second.obstacle->transform.position.x, 0, elem.second.obstacle->transform.position.z);
-				player->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-				this->scene->add(player); //add on scene
-				elem.second.obstacle = NULL;
-			}
-			else
-				this->scene->add(elem.second.obstacle);
+		if (elem.second.obstacle != NULL && elem.second.obstacle->tag == "Goomba") {
+
+			GameObject *goomba = elem.second.obstacle;
+			this->scene->add(goomba); //add on scene
+			elem.second.obstacle = NULL;
+		} else if (elem.second.obstacle != NULL) {
+			this->scene->add(elem.second.obstacle);
+		}
+		if (elem.second.ground != NULL) {
+			this->scene->add(elem.second.ground);
 		}
 	}
-	this->scene->add(Factory::newBackground());
+	//this->scene->add(Factory::newBackground());
 	this->scene->add(Factory::newSkybox());
-}
-
-MapManager::~MapManager ()
-{
-	for (auto &elem : this->maps)
-	{
-		Map *current = elem.second;
-
-		delete current;
-	}
-	this->maps.clear();
-}
-
-std::ostream &				operator<<(std::ostream & o, MapManager const & i)
-{
-
-	return (o);
 }

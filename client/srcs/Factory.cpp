@@ -2,11 +2,40 @@
 
 // STATIC ########################################################
 
-GameObject							*Factory::newBlock(std::string model)
+GameObject							*Factory::newDoor(std::string model)
 {
 	GameObject	*obj = new GameObject();
 
-	obj->tag = model;
+	obj->tag = "door";
+	obj->AddComponent<Model>(Model::model[model]);
+	obj->transform.scale = glm::vec3(0.003f, 0.005f, 0.003f);
+	obj->transform.rotation = glm::vec3(0,0,0);
+	return (obj);
+}
+
+GameObject							*Factory::new_Indestructible_block(std::string model)
+{
+	GameObject	*obj = new GameObject();
+
+	obj->tag = "indestructible_block";
+	obj->AddComponent<Model>(Model::model[model]);
+	return (obj);
+}
+
+GameObject							*Factory::new_Destructible_block(std::string model)
+{
+	GameObject	*obj = new GameObject();
+
+	obj->tag = "destructible_block";
+	obj->AddComponent<Model>(Model::model[model]);
+	return (obj);
+}
+
+GameObject							*Factory::new_Ground_block(std::string model)
+{
+	GameObject	*obj = new GameObject();
+
+	obj->tag = "ground_block";
 	obj->AddComponent<Model>(Model::model[model]);
 	return (obj);
 }
