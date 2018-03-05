@@ -116,7 +116,7 @@ GameObject							*Factory::newPowerUp(float x, float z)
 {
 	GameObject	*obj = new GameObject();
 	obj->transform.position = glm::vec3(x*2, 0, z*2);
-	obj->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+	obj->transform.scale = glm::vec3(0.6f, 0.9f, 0.9f);
 
 	int nb = rand() % 100 + 1;
 

@@ -233,10 +233,15 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 	}
 	int position_map_x = 0, position_map_y = 0;
 	int height = map_lines.size();
+	int max_width = 0;
+	map->height = height;
 	//load map_lines map
 	for (int i = 0; i < map_lines.size(); i++) {
 		std::vector<std::string> cases_line = split(map_lines.at(i), ' ');
 
+		if (cases_line.size() - 1 > max_width) {
+			max_width = cases_line.size() - 1;
+		}
 		for (int width = cases_line.size() - 1; width >= 0; width--) {
 			std::vector<std::string> case_infos = split(cases_line.at(width), '/');
 			Case			cube;
@@ -257,7 +262,7 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 		}
 		height--;
 	}
-
+	map->width = max_width;
 	return true;
 }
 

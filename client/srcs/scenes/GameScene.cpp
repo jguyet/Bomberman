@@ -190,10 +190,10 @@ void								GameScene::move_camera(void)
 void								GameScene::build_camera(void)
 {
 	//this->camera->buildFPSProjection();
-	if (this->current_player != NULL) {
-		topoint.x = -this->current_player->transform.position.x;
+	if (this->current_player != NULL && this->map != NULL) {
+		topoint.x = ((-this->current_player->transform.position.x) + -((this->map->height * 2) / 2)) / 2;
 		topoint.y = 0;
-		topoint.z = -this->current_player->transform.position.z;
+		topoint.z = ((-this->current_player->transform.position.z) + -((this->map->width * 2) / 2)) / 2;
 		this->camera->transform.position.x = topoint.x;
 		this->camera->transform.position.z = topoint.z;
 		//Eloignement sur x

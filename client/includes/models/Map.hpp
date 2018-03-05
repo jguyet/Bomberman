@@ -31,6 +31,8 @@ class Map
 		std::map<int, MapObject>					objects;
 		std::vector<Case>							soloCases;
 		std::vector<Case>							pvpCases;
+		int											width;
+		int											height;
 		// #####################################################################
 	private:
 		// PRIVATE #############################################################
