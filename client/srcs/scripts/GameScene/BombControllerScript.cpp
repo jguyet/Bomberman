@@ -93,7 +93,7 @@ void								BombControllerScript::OnPreRender(void)
 	glUseProgram(bombObjectModel->shader);
 	bombObjectModel->shaderBind = true;
 
-	glm::vec3 colors = glm::vec3(this->color.x + timer, this->color.y, this->color.z);
+	glm::vec3 colors = glm::vec3(this->color.x + timer, this->color.y + timer, this->color.z + timer);
 
 	glUniform3fv(bombObjectModel->color,1 , &colors[0]);
 

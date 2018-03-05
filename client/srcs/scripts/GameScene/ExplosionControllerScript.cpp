@@ -63,9 +63,6 @@ void						ExplosionControllerScript::Update(void)
 		if (b->obstacle != NULL) {
 			if (b->obstacle->tag == "Bomb") {
 				dynamic_cast<BombControllerScript*>(b->obstacle->GetComponent<Script>())->startTime = 0;
-				b->obstacle->toDelete = true;
-				b->obstacle = NULL;
-				b->walkable = true;
 			} else if (b->obstacle->tag == "destructible_block")
 			{
 				if (BombermanClient::getInstance()->sock) {

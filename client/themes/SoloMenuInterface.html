@@ -43,7 +43,7 @@
 	class: "mainmenu-css",
 	value: "SOLO",
 	parent: "background_menu",
-	x: 155,
+	x: 145,
 	y: 7,
 	style: "color:#BDBDBD;font-size:40px;",
 	z-index: 2
@@ -162,6 +162,34 @@
 	</text>
 </if>
 
+<if condition="$current_level <= 2">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 140,
+		width: 300,
+		height: 50,
+		style: "color:#3a1212;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Stage 2",
+		parent: "background_multi",
+		x: 100,
+		y: 7,
+		style: "color:#130606;",
+		z-index: 3
+	}
+	</text>
+</if>
+
 <if condition="$selected==2">
 	<square>
 	{
@@ -218,6 +246,34 @@
 	</text>
 </if>
 
+<if condition="$current_level <= 3">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 210,
+		width: 300,
+		height: 50,
+		style: "color:#3a1212;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Stage 3",
+		parent: "background_btn_options",
+		x: 100,
+		y: 7,
+		style: "color:#130606;",
+		z-index: 3
+	}
+	</text>
+</if>
+
 <if condition="$selected==3">
 	<square>
 	{
@@ -269,6 +325,34 @@
 		x: 100,
 		y: 7,
 		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$current_level <= 4">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 280,
+		width: 300,
+		height: 50,
+		style: "color:#3a1212;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Stage 4",
+		parent: "background_btn_credit",
+		x: 100,
+		y: 7,
+		style: "color:#130606;",
 		z-index: 3
 	}
 	</text>

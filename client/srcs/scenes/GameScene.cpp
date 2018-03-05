@@ -215,9 +215,6 @@ void								GameScene::build_camera(void)
 
 void								GameScene::calculPhisics(void)
 {
-	if (this->interface != NULL) {
-		this->interface->addPlayers();
-	}
 	this->openQuitInterface();
 	//call parent method
 	this->_calculPhisics();

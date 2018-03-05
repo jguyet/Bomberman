@@ -16,11 +16,11 @@ SoloMenuScene::SoloMenuScene ( void )
 	this->camera->transform.rotation = glm::vec3(0,0,0);
 	this->camera->buildFPSProjection();
 
+	this->interface = new SoloMenuInterface();
+
 	this->loadCurrentLevel();
 	BombermanClient::getInstance()->sock = new Socket("", 0);
-	this->interface = new SoloMenuInterface();
 	// Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
-
 	KeyBoard::instance->addHandler("SoloMenuScene", this);
 }
 
@@ -50,7 +50,7 @@ std::ostream &				operator<<(std::ostream & o, SoloMenuScene const & i)
 
 void								SoloMenuScene::loadCurrentLevel()
 {
-	this->current_level = BombermanClient::getInstance()->saveManager->getCurrentLevel();
+	this->interface->current_level = BombermanClient::getInstance()->saveManager->getCurrentLevel();
 }
 
 void								SoloMenuScene::handleUP(unsigned int key)
@@ -62,12 +62,12 @@ void								SoloMenuScene::handleUP(unsigned int key)
 		if (this->interface->current_position >= 0 && this->interface->current_position <= 3)
 		{
 			this->interface->current_position++;
-			if (this->current_level >= this->interface->current_position) {
+			if (this->interface->current_level >= this->interface->current_position) {
 				std::string level_name = "map_0" + std::to_string(this->interface->current_position);
 				BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene(level_name));
 			}
 			else {
-				printf("You can't access to the stage %d, you are on the stage %d, sorry !\n", this->interface->current_position, this->current_level);
+				printf("You can't access to the stage %d, you are on the stage %d, sorry !\n", this->interface->current_position, this->interface->current_level);
 			}
 		} else if (this->interface->current_position == 4)
 		{

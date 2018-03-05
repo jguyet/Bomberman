@@ -33,7 +33,6 @@ class SoloMenuScene : public Scene , public KeyBoardEventHandler
 		// PUBLICS ############################################################
 		bool								select_server(void);
 		SoloMenuInterface					*interface;
-		int									current_level = 0;
 		// ####################################################################
 };
 

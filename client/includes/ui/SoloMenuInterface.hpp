@@ -20,7 +20,8 @@ class SoloMenuInterface : public UIInterface , public KeyBoardEventHandler
 
 		void								draw(void);
 
-		int									current_position;
+		int									current_position = 0;
+		int									current_level = 0;
 	private:
 		Canvas								*canvas;
 };
