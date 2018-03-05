@@ -26,7 +26,6 @@ std::ostream &				operator<<(std::ostream & o, Random const & i)
 	return (o);
 }
 
-
 int Random::getRandom(int min, int max)
 {
 	return (rand() % (max - min + 1)) + min;

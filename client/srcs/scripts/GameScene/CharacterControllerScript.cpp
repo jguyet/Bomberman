@@ -11,6 +11,9 @@ CharacterControllerScript::CharacterControllerScript ( int playerId )
 {
 	this->playerId = playerId;
 	this->unlockCharacterDirections();
+	Random random;
+
+	this->color = glm::vec3(((float)random.getRandom(1,255) / 255.f), ((float)random.getRandom(1,255) / 255.f), ((float)random.getRandom(1,255) / 255.f));
 	return ;
 }
 
@@ -137,6 +140,8 @@ void								CharacterControllerScript::MRight(void)
 
 void						CharacterControllerScript::Update(void)
 {
+	if (this->scene->startGameInterface != NULL)
+		return ;
 	this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
 	static std::map<int, P> cmd = {
 		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
@@ -263,7 +268,7 @@ void								CharacterControllerScript::OnPreRender(void)
 
 	glm::vec3 colors = glm::vec3(0.8f,0.1f,0.0f);
 	if (this->gameObject == this->scene->current_player)
-		colors = glm::vec3(0.0f,0.1f,0.8f);
+		colors = glm::vec3(this->color.x,this->color.y,this->color.z);
 	glUniform3fv(playerObjectModel->color,1 , &colors[0]);
 }
 
@@ -275,6 +280,8 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
+	if (collider->tag == "Background" || collider->tag == "ground_block")
+		return ;
 	if (collider->tag == "door")
 	{
 		printf("You finished the level %d, congratulations !\n", BombermanClient::getInstance()->saveManager->getCurrentLevel());
@@ -287,9 +294,6 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 
 	if (c == NULL)
 		return ;
-	if (collider->tag == "Background")
-		return ;
-
 	if (collider->tag == "Bomb") {
 
 		Case *bomb_case = this->scene->map->getCase( fmax(0.5f + collider->transform.position.x / 2.f, 0), fmax(0.5f + collider->transform.position.z / 2.f, 0));

@@ -19,6 +19,8 @@ BombControllerScript::BombControllerScript ( CharacterControllerScript *playerCo
 
 	this->power = playerController->getPower();
 	this->playerController = playerController;
+
+	this->color = glm::vec3(this->playerController->color.x, this->playerController->color.y, this->playerController->color.z);
 	return ;
 }
 
@@ -91,7 +93,8 @@ void								BombControllerScript::OnPreRender(void)
 	glUseProgram(bombObjectModel->shader);
 	bombObjectModel->shaderBind = true;
 
-	glm::vec3 colors = glm::vec3(timer,0.f,0.f);
+	glm::vec3 colors = glm::vec3(this->color.x + timer, this->color.y + timer, this->color.z + timer);
+
 	glUniform3fv(bombObjectModel->color,1 , &colors[0]);
 
 	//TODO add meche color in shader
@@ -128,7 +131,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z + i), i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}
@@ -139,7 +142,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion(x, (z - i), i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}
@@ -150,7 +153,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x + i), z, i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}
@@ -161,7 +164,7 @@ void								BombControllerScript::explode(void)
 			break ;
 		BombermanClient::getInstance()->current_scene->add(Factory::newExplosion((x - i), z, i));
 		if (b->obstacle != NULL) {
-			if (b->obstacle->tag == "ground1" || b->obstacle->tag == "ice_block" || b->obstacle->tag == "Bomb")
+			if (b->obstacle->tag == "indestructible_block" || b->obstacle->tag == "destructible_block" || b->obstacle->tag == "Bomb")
 				break;
 		}
 	}

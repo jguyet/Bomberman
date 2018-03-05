@@ -9,7 +9,8 @@
 SoloMenuInterface::SoloMenuInterface ( void ) : UIInterface("themes/SoloMenuInterface.html")
 {
 	this->current_position = 0;
-	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
+	this->current_level = 0;
+	this->canvas = new Canvas(BombermanClient::getInstance()->screen->canvas_width, BombermanClient::getInstance()->screen->canvas_height);
 	this->canvas->setElementsMap(&this->elements);
 	KeyBoard::instance->addHandler("SoloMenuInterface", this);
 	return ;
@@ -49,6 +50,7 @@ std::ostream &				operator<<(std::ostream & o, SoloMenuInterface const & i)
 
 void						SoloMenuInterface::draw(void)
 {
+	this->variables["$current_level"] = (std::ostringstream() << this->current_level).str();
 	this->variables["$selected"] = (std::ostringstream() << this->current_position).str();
 	this->build();
 	if (this->modified == true) {
@@ -61,11 +63,19 @@ void						SoloMenuInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_UP) {
 		this->current_position = (this->current_position - 1) < 0 ? 4 : (this->current_position - 1) % 5;
+
+		if (this->current_position > (this->current_level - 1) && this->current_position != 4) {
+			this->current_position = this->current_level - 1;
+		}
 	}
 	if (key == SDL_SCANCODE_DOWN) {
 		this->current_position = (this->current_position + 1) % 5;
+
+		if (this->current_position > (this->current_level - 1) && this->current_position != 4) {
+			this->current_position = 4;
+		}
 	}
-	
+
 }
 
 // ###############################################################

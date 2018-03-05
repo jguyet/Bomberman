@@ -63,19 +63,17 @@ void						ExplosionControllerScript::Update(void)
 		if (b->obstacle != NULL) {
 			if (b->obstacle->tag == "Bomb") {
 				dynamic_cast<BombControllerScript*>(b->obstacle->GetComponent<Script>())->startTime = 0;
-			} else if (b->obstacle->tag != "ground1") {
-				if (b->obstacle->tag == "ice_block")
-				{
-					if (BombermanClient::getInstance()->sock) {
-						if (BombermanClient::getInstance()->sock->state == false) {
-							scene->add(Factory::newPowerUp(x, z));
-						} else {
-							BombermanClient::getInstance()->sock->newBonus(x, z);
-						}
+			} else if (b->obstacle->tag == "destructible_block")
+			{
+				if (BombermanClient::getInstance()->sock) {
+					if (BombermanClient::getInstance()->sock->state == false) {
+						scene->add(Factory::newPowerUp(x, z));
+					} else {
+						BombermanClient::getInstance()->sock->newBonus(x, z);
 					}
-					if (b->door != NULL)
-						scene->add(b->door);
 				}
+				if (b->door != NULL)
+					scene->add(b->door);
 				b->obstacle->toDelete = true;
 				b->obstacle = NULL;
 				b->walkable = true;

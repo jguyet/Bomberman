@@ -50,6 +50,7 @@ class CharacterControllerScript : public Script
 		bool								locked = false;
 		bool								lock_direction[4];
 		AI 									*robot;
+		glm::vec3							color;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
@@ -62,7 +63,7 @@ class CharacterControllerScript : public Script
 
 	protected:
 		void								unlockCharacterDirections(void);
-		
+
 		GameScene							*scene;
 		// ####################################################################
 };

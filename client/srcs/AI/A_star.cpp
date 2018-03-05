@@ -91,7 +91,7 @@ int							A_star::stop_condition(Module_h &c_case, Module_h &target, e_action ac
 	if (!scene)
 		return (0);
 	Case *c = scene->map->getCase(fmax(0.5f + c_case.pos_x / 2.f, 0), fmax(0.5f + c_case.pos_y / 2.f, 0));
-	if (c->obstacle && c->obstacle->tag == "ice_block")
+	if (c->obstacle && c->obstacle->tag == "destructible_block")
 		ice = true;
 
 	if (action == ATTACK && (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x))
@@ -193,7 +193,7 @@ int							A_star::get_heuristic(int y, int x, Module_h &target, int p, e_action 
 		return (0);
 
 	Case *c = scene->map->getCase(fmax(0.5f + x / 2.f, 0), fmax(0.5f + y / 2.f, 0));
-	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y) || (action == SEARCH && c->obstacle && c->obstacle->tag == "ice_block"))
+	if ((x == target.pos_x && y == target.pos_y) || (x == this->start.pos_x && y == this->start.pos_y) || (action == SEARCH && c->obstacle && c->obstacle->tag == "destructible_block"))
 		flag_t = true;
 
 	if ((c->walkable == true || flag_t) && (x % 2) == 0 && (y % 2) == 0)

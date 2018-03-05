@@ -85,9 +85,9 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			MapSelectMessage	*mapMessage = (MapSelectMessage*)action->message;
 			GameScene* scene = BombermanClient::getInstance()->setCurrentScene<GameScene>(new GameScene(mapMessage->name));
 
-			Case *spawn = scene->mapManager->getRandomWalkableCase(scene->map);
+			Case *spawn = scene->mapManager->getRandomWalkablePvPCase();
 			if (spawn) {
-				glm::vec3 pos = spawn->ground->transform.position;
+				glm::vec3 pos = spawn->position;
 				BombermanClient::getInstance()->sock->newPlayer(pos.x, 1, pos.z);
 			} else {
 				BombermanClient::getInstance()->sock->newPlayer(2, 1, 4);
@@ -183,6 +183,19 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			}
 		}
 		break;
+
+		case GameStartedMessage::ID: {
+			GameStartedMessage	*message = (GameStartedMessage*)action->message;
+			GameScene			*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
+
+			scene->startGame();
+		}
+		break ;
+
+		case EndOfGameMessage::ID: {
+			std::cout << "ENDOFGAMEMESSAGE" << std::endl;
+		}
+		break ;
 	}
 }
 

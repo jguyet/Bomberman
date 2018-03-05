@@ -9,6 +9,8 @@
 Tag::Tag ( void )
 {
 	this->position = TAG_POSITION_NULL;
+	this->parent = NULL;
+	this->parent_name = "";
 	return ;
 }
 
@@ -110,6 +112,11 @@ glm::vec3 const						Tag::getScale(void)
 void						Tag::setFloat(e_tag_position position)
 {
 
+}
+
+void						Tag::setParent_name(std::string const &parent_name)
+{
+	this->parent_name = parent_name;
 }
 
 void						Tag::setParent(Tag *parent)

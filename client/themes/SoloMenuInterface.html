@@ -29,7 +29,7 @@
 	id: "background_menu",
 	class: "mainmenu-css",
 	x: -200,
-	y: 25%,
+	y: 150,
 	width: 400,
 	height: 425,
 	style: "color:#2E2E2E;float:center;",
@@ -43,7 +43,7 @@
 	class: "mainmenu-css",
 	value: "SOLO",
 	parent: "background_menu",
-	x: 155,
+	x: 145,
 	y: 7,
 	style: "color:#BDBDBD;font-size:40px;",
 	z-index: 2
@@ -55,8 +55,9 @@
 	{
 		id: "background_solo",
 		class: "mainmenu-css",
-		x: -150,
-		y: 35%,
+		parent: "background_menu",
+		x: 290,
+		y: 70,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -67,7 +68,7 @@
 	{
 		id: "button_solo",
 		class: "mainmenu-css",
-		value: "Niveau 1",
+		value: "Stage 1",
 		parent: "background_solo",
 		x: 100,
 		y: 7,
@@ -82,8 +83,9 @@
 	{
 		id: "background_solo",
 		class: "mainmenu-css",
-		x: -150,
-		y: 35%,
+		parent: "background_menu",
+		x: 290,
+		y: 70,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -94,7 +96,7 @@
 	{
 		id: "button_solo",
 		class: "mainmenu-css",
-		value: "Niveau 1",
+		value: "Stage 1",
 		parent: "background_solo",
 		x: 100,
 		y: 7,
@@ -109,8 +111,9 @@
 	{
 		id: "background_multi",
 		class: "mainmenu-css",
-		x: -150,
-		y: 45%,
+		parent: "background_menu",
+		x: 290,
+		y: 140,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -121,7 +124,7 @@
 	{
 		id: "button_multi",
 		class: "mainmenu-css",
-		value: "Niveau 2",
+		value: "Stage 2",
 		parent: "background_multi",
 		x: 100,
 		y: 7,
@@ -136,8 +139,9 @@
 	{
 		id: "background_multi",
 		class: "mainmenu-css",
-		x: -150,
-		y: 45%,
+		parent: "background_menu",
+		x: 290,
+		y: 140,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -148,11 +152,39 @@
 	{
 		id: "button_multi",
 		class: "mainmenu-css",
-		value: "Niveau 2",
+		value: "Stage 2",
 		parent: "background_multi",
 		x: 100,
 		y: 7,
 		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$current_level <= 2">
+	<square>
+	{
+		id: "background_multi",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 140,
+		width: 300,
+		height: 50,
+		style: "color:#3a1212;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_multi",
+		class: "mainmenu-css",
+		value: "Stage 2",
+		parent: "background_multi",
+		x: 100,
+		y: 7,
+		style: "color:#130606;",
 		z-index: 3
 	}
 	</text>
@@ -163,8 +195,9 @@
 	{
 		id: "background_btn_options",
 		class: "mainmenu-css",
-		x: -150,
-		y: 55%,
+		parent: "background_menu",
+		x: 290,
+		y: 210,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -175,7 +208,7 @@
 	{
 		id: "button_options",
 		class: "mainmenu-css",
-		value: "Niveau 3",
+		value: "Stage 3",
 		parent: "background_btn_options",
 		x: 100,
 		y: 7,
@@ -190,8 +223,9 @@
 	{
 		id: "background_btn_options",
 		class: "mainmenu-css",
-		x: -150,
-		y: 55%,
+		parent: "background_menu",
+		x: 290,
+		y: 210,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -202,11 +236,39 @@
 	{
 		id: "button_options",
 		class: "mainmenu-css",
-		value: "Niveau 3",
+		value: "Stage 3",
 		parent: "background_btn_options",
 		x: 100,
 		y: 7,
 		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$current_level <= 3">
+	<square>
+	{
+		id: "background_btn_options",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 210,
+		width: 300,
+		height: 50,
+		style: "color:#3a1212;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_options",
+		class: "mainmenu-css",
+		value: "Stage 3",
+		parent: "background_btn_options",
+		x: 100,
+		y: 7,
+		style: "color:#130606;",
 		z-index: 3
 	}
 	</text>
@@ -217,8 +279,9 @@
 	{
 		id: "background_btn_credit",
 		class: "mainmenu-css",
-		x: -150,
-		y: 65%,
+		parent: "background_menu",
+		x: 290,
+		y: 280,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -229,7 +292,7 @@
 	{
 		id: "button_credit",
 		class: "mainmenu-css",
-		value: "Niveau 4",
+		value: "Stage 4",
 		parent: "background_btn_credit",
 		x: 100,
 		y: 7,
@@ -244,8 +307,9 @@
 	{
 		id: "background_btn_credit",
 		class: "mainmenu-css",
-		x: -150,
-		y: 65%,
+		parent: "background_menu",
+		x: 290,
+		y: 280,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -256,11 +320,39 @@
 	{
 		id: "button_credit",
 		class: "mainmenu-css",
-		value: "Niveau 4",
+		value: "Stage 4",
 		parent: "background_btn_credit",
 		x: 100,
 		y: 7,
 		style: "color:#848484;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$current_level <= 4">
+	<square>
+	{
+		id: "background_btn_credit",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 280,
+		width: 300,
+		height: 50,
+		style: "color:#3a1212;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "button_credit",
+		class: "mainmenu-css",
+		value: "Stage 4",
+		parent: "background_btn_credit",
+		x: 100,
+		y: 7,
+		style: "color:#130606;",
 		z-index: 3
 	}
 	</text>
@@ -271,8 +363,9 @@
 	{
 		id: "background_btn_exit",
 		class: "mainmenu-css",
-		x: -150,
-		y: 75%,
+		parent: "background_menu",
+		x: 290,
+		y: 350,
 		width: 300,
 		height: 50,
 		style: "color:#BDBDBD;float:center;",
@@ -285,7 +378,7 @@
 		class: "mainmenu-css",
 		value: "Retour",
 		parent: "background_btn_exit",
-		x: 115,
+		x: 105,
 		y: 7,
 		style: "color:#000000;",
 		z-index: 3
@@ -298,8 +391,9 @@
 	{
 		id: "background_btn_exit",
 		class: "mainmenu-css",
-		x: -150,
-		y: 75%,
+		parent: "background_menu",
+		x: 290,
+		y: 350,
 		width: 300,
 		height: 50,
 		style: "color:#424242;float:center;",
@@ -312,22 +406,10 @@
 		class: "mainmenu-css",
 		value: "Retour",
 		parent: "background_btn_exit",
-		x: 125,
+		x: 105,
 		y: 7,
 		style: "color:#848484;",
 		z-index: 3
 	}
 	</text>
 </if>
-
-<text>
-{
-	id: "credit",
-	class: "mainmenu-css",
-	value: "Credit: Frmarinh Dmoureu- Amerelo Jguyet",
-	x: 5,
-	y: 100%,
-	style: "color:#000000;font-size:10px;",
-	z-index: 1
-}
-</text>

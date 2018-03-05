@@ -99,10 +99,12 @@ void MessageHandler::PlayerDeadMessageHandler(SOCK socket, PlayerDeadMessage *me
 
 void MessageHandler::GameStartedMessageHandler(SOCK socket, GameStartedMessage *message)
 {
-	printf("On game started...\n");
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
+	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }
 
 void MessageHandler::EndOfGameMessageHandler(SOCK socket, EndOfGameMessage *message)
 {
-	printf("On game ended... (if you're still alive, you're the winner !)\n");
+	ActionQueueManager *queueManager = ActionQueueManager::Instance();
+	queueManager->addAction(new ActionQueue(message->packet_id, (IMessage*)message));
 }

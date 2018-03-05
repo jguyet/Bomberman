@@ -32,6 +32,7 @@ class Tag : public GameObject
 
 		virtual void						setFloat(e_tag_position position);
 		virtual void						setParent(Tag *parent);
+		virtual void						setParent_name(std::string const &parent_name);
 		//font
 		virtual void						setColor(glm::vec3 &color);
 		virtual void						setFontFamily(std::string const &fontname);
@@ -51,6 +52,7 @@ class Tag : public GameObject
 		//css updating
 		virtual void						setStyle(std::string const &style);
 		// ####################################################################
+		std::string							parent_name;
 		Tag									*parent = NULL;
 		glm::vec3							parent_position;
 		glm::vec3							parent_scale;

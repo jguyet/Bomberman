@@ -9,7 +9,7 @@
 GameInterface::GameInterface ( GameScene *scene ) : UIInterface("themes/GameInterface.html")
 {
 	this->scene = scene;
-	this->canvas = new Canvas(BombermanClient::getInstance()->screen->canvas_width, BombermanClient::getInstance()->screen->canvas_height);
+	this->canvas = new Canvas(BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height);
 	this->canvas->setElementsMap(&this->elements);
 	return ;
 }
@@ -44,40 +44,6 @@ std::ostream &				operator<<(std::ostream & o, GameInterface const & i)
 // ###############################################################
 
 // PUBLIC METHOD #################################################
-
-void						GameInterface::addPlayers(void)
-{
-	std::vector<GameObject*>	players = std::vector<GameObject*>(this->scene->players);
-
-	int order = 1;
-	for (int i = 0; i < players.size(); i++)
-	{
-		GameObject *player = players.at(i);
-
-		if (player == NULL)
-			continue ;
-		CharacterControllerScript *script = ((CharacterControllerScript*)player->GetComponent<Script>());
-		if (script == NULL)
-			continue ;
-		std::string key = (std::ostringstream() << "$player_name" << order).str();
-
-		std::string player_name;
-
-		if (script->playerId == 100) {
-			player_name = (std::ostringstream() << "bot (" << player->id << ")").str();
-		} else {
-			player_name = (std::ostringstream() << "player (" << script->playerId << ")").str();
-		}
-		this->variables[key] = player_name;
-		order++;
-	}
-
-	for (; order < 8; order++)
-	{
-		std::string key = (std::ostringstream() << "$player_name" << order).str();
-		this->variables[key] = "";
-	}
-}
 
 void						GameInterface::draw(void)
 {

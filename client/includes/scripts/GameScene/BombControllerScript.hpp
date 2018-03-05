@@ -36,6 +36,7 @@ class BombControllerScript : public Script
 		float								max_scale;
 		float								min_scale;
 		long								anim_time;
+		glm::vec3							color;
 
 		// std::vector<BombControllerScript*>	bomb_l;
 		// ####################################################################

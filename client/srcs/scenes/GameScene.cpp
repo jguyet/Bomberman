@@ -12,12 +12,12 @@ GameScene::GameScene (std::string selected_map)
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
 
-	this->mapManager = new MapManager(this);
+	this->mapManager = new MapManager(this, selected_map);
 
 	// Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
-	this->map = this->mapManager->getMap(selected_map);
+	this->map = this->mapManager->getMap();
 	if (this->map) {
-		mapManager->buildObjects(this->map);
+		this->mapManager->buildObjects();
 
 		this->current_player = NULL;
 		this->startGameInterface = NULL;
@@ -45,9 +45,10 @@ void GameScene::StartSolo(void)
 	GameObject 				*playerObject = Factory::newPlayer(1);
 
 	DoorManager::setRandomDoor(this);
-	Case *spawn = this->mapManager->getRandomWalkableCase(this->map);
+	Case *spawn = this->mapManager->getRandomWalkableSoloCase();
+
 	if (spawn) {
-		glm::vec3 pos = spawn->ground->transform.position;
+		glm::vec3 pos = spawn->position;
 		playerObject->transform.scale = glm::vec3(3,3,3);
 		playerObject->transform.rotation = glm::vec3(0,0,0);
 		playerObject->transform.position = glm::vec3(pos.x, 1.f, pos.z);
@@ -145,6 +146,15 @@ std::ostream &				operator<<(std::ostream & o, GameScene const & i)
 
 // ###############################################################
 
+void								GameScene::startGame(void)
+{
+	if (this->startGameInterface != NULL) {
+		StartGameInterface *tmp = this->startGameInterface;
+		this->startGameInterface = NULL;
+		delete tmp;
+	}
+}
+
 void								GameScene::closeQuitInterface(void)
 {
 	QuitMenuInterface *tmp = this->quitInterface;
@@ -156,11 +166,8 @@ void								GameScene::closeQuitInterface(void)
 	script->locked = false;
 }
 
-void								GameScene::calculPhisics(void)
+void								GameScene::openQuitInterface(void)
 {
-	if (this->interface != NULL) {
-		this->interface->addPlayers();
-	}
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_ESCAPE) && this->quitInterface == NULL) {//ESC
 		this->quitInterface = new QuitMenuInterface(this);
 		if (this->current_player != NULL) {
@@ -168,6 +175,10 @@ void								GameScene::calculPhisics(void)
 			script->locked = true;
 		}
 	}
+}
+
+void								GameScene::move_camera(void)
+{
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_W) && this->quitInterface == NULL) {//UP
 		this->camera->move(glm::vec3(0, 0, 2));
 	}
@@ -183,26 +194,36 @@ void								GameScene::calculPhisics(void)
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_SPACE) && this->quitInterface == NULL) {//DOWN
 		this->camera->transform.position.y += 0.5f;
 	}
+}
+
+void								GameScene::build_camera(void)
+{
+	//this->camera->buildFPSProjection();
+	if (this->current_player != NULL && this->map != NULL) {
+		topoint.x = ((-this->current_player->transform.position.x) + -((this->map->height * 2) / 2)) / 2;
+		topoint.y = 0;
+		topoint.z = ((-this->current_player->transform.position.z) + -((this->map->width * 2) / 2)) / 2;
+		this->camera->transform.position.x = topoint.x;
+		this->camera->transform.position.z = topoint.z;
+		//Eloignement sur x
+		this->camera->transform.position.x += 15;
+		//Eloignement sur y
+		this->camera->transform.position.y = 30;
+	}
+	this->camera->buildLookAtProjection(topoint);
+}
+
+void								GameScene::calculPhisics(void)
+{
+	this->openQuitInterface();
 	//call parent method
 	this->_calculPhisics();
 }
 
 void								GameScene::drawGameObjects(void)
 {
-	//build Matrixs
-	//this->camera->buildFPSProjection();
-	if (this->current_player != NULL) {
-		topoint.x = -this->current_player->transform.position.x;
-		topoint.y = 0;//this->current_player->transform.position.y;
-		topoint.z = -this->current_player->transform.position.z;
-		this->camera->transform.position.x = topoint.x;
-		this->camera->transform.position.z = topoint.z;
-		//Eloignement sur x
-		this->camera->transform.position.x += 25;
-		//Eloignement sur y
-		this->camera->transform.position.y = 85;
-	}
-	this->camera->buildLookAtProjection(topoint);
+	this->move_camera();
+	this->build_camera();
 	//call parent method
 	this->_drawGameObjects();
 	//draw canvas

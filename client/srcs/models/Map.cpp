@@ -43,11 +43,6 @@ std::string									Map::getName()
 	return this->name;
 }
 
-std::map<std::pair<int, int>, Case>			Map::getContent()
-{
-	return this->content;
-}
-
 Case						*Map::getCase(int x, int z)
 {
 	//if (this->content.count(std::make_pair(x, z)) == 0)
