@@ -322,7 +322,9 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "Explosion") {
 		if (this->scene->current_player != NULL && this->gameObject->id == this->scene->current_player->id) {
-			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
+			if (BombermanClient::getInstance()->sock != NULL) {
+				BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
+			}
 			this->scene->removePlayer(this->gameObject);
 			this->gameObject->toDelete = true;
 			this->scene->current_player = NULL;
