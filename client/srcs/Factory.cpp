@@ -41,6 +41,15 @@ GameObject							*Factory::new_Ground_block(std::string model)
 	return (obj);
 }
 
+GameObject							*Factory::new_Environement_block(std::string model)
+{
+	GameObject	*obj = new GameObject();
+
+	obj->tag = "env";
+	obj->AddComponent<Model>(Model::model[model]);
+	return (obj);
+}
+
 GameObject							*Factory::newPlayer(int id)
 {
 	GameObject	*obj = new GameObject();

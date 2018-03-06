@@ -8,6 +8,7 @@ MapManager::MapManager (Scene *scene, std::string const &map_name) : scene(scene
 	this->map_lexer_types["AI"] = &MapManager::addAIToCase;
 	this->map_lexer_types["solo_position"] = &MapManager::addSoloCase;
 	this->map_lexer_types["pvp_position"] = &MapManager::addPvPCase;
+	this->map_lexer_types["environement"] = &MapManager::addEnvironmentToCase;
 
 	this->map_path = "maps/" + std::string(map_name);
 	this->map_name = std::string(map_name);
@@ -51,7 +52,7 @@ bool				MapManager::loadMap( void )
 	replaceAll(this->content, "\t", " ");
 	replaceAll(this->content, "\r", " ");
 	replaceAll(this->content, "\f", " ");
-	if (this->content == "")
+	if (this->content.empty())
 		return false;
 	this->map = new Map(this->map_name);
 	this->parseMap(this->map, this->content);
@@ -105,10 +106,10 @@ std::vector<Case*>	MapManager::getAllIndestructibleCases(void)
 	return cases;
 }
 
-bool				MapManager::addGroundToCase( Case &case_ref, std::string const &objectID )
+bool				MapManager::addGroundToCase( Case &case_ref, MapObject const &mapObject )
 {
-	if (objectID == "" || Model::model.count(objectID) == 0) {
-		std::cerr << "MapManager : Model \"" << objectID << "\" doesn't exists." << std::endl;
+	if (mapObject.textureID == "" || Model::model.count(mapObject.textureID) == 0) {
+		std::cerr << "MapManager : Model \"" << mapObject.textureID << "\" doesn't exists." << std::endl;
 		return false;
 	}
 	if (case_ref.ground != NULL) {
@@ -116,50 +117,88 @@ bool				MapManager::addGroundToCase( Case &case_ref, std::string const &objectID
 		case_ref.ground = NULL;
 	}
 
-	GameObject	*ground = Factory::new_Ground_block(objectID);
+	GameObject	*ground = Factory::new_Ground_block(mapObject.textureID);
 	ground->transform.position = glm::vec3(case_ref.position.x, GROUND_POSITION_HEIGHT, case_ref.position.z);
 	ground->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
 	case_ref.ground = ground;
+	this->build_scale_height_To_GameObject(case_ref, mapObject, ground);
 	return true;
 }
 
-bool				MapManager::addDestructibleToCase( Case &case_ref, std::string const &objectID )
+bool				MapManager::addDestructibleToCase( Case &case_ref, MapObject const &mapObject )
 {
-	if (objectID == "" || Model::model.count(objectID) == 0) {
-		std::cerr << "MapManager : Model \"" << objectID << "\" doesn't exists." << std::endl;
+	if (mapObject.textureID == "" || Model::model.count(mapObject.textureID) == 0) {
+		std::cerr << "MapManager : Model \"" << mapObject.textureID << "\" doesn't exists." << std::endl;
 		return false;
 	}
 	if (case_ref.obstacle != NULL) {
 		delete case_ref.obstacle;
 		case_ref.obstacle = NULL;
 	}
-	GameObject	*obstacle = Factory::new_Destructible_block(objectID);
+	GameObject	*obstacle = Factory::new_Destructible_block(mapObject.textureID);
 	obstacle->transform.position = glm::vec3(case_ref.position.x, WALL_POSITION_HEIGHT, case_ref.position.z);
 	obstacle->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
 	case_ref.obstacle = obstacle;
 	case_ref.walkable = false;
+	this->build_scale_height_To_GameObject(case_ref, mapObject, obstacle);
 	return true;
 }
 
-bool				MapManager::addIndestructibleToCase( Case &case_ref, std::string const &objectID )
+bool				MapManager::addEnvironmentToCase( Case &case_ref, MapObject const &mapObject )
 {
-	if (objectID == "" || Model::model.count(objectID) == 0) {
-		std::cerr << "MapManager : Model \"" << objectID << "\" doesn't exists." << std::endl;
+	if (mapObject.textureID == "" || Model::model.count(mapObject.textureID) == 0) {
+		std::cerr << "MapManager : Model \"" << mapObject.textureID << "\" doesn't exists." << std::endl;
+		return false;
+	}
+	if (case_ref.environement != NULL) {
+		delete case_ref.environement;
+		case_ref.environement = NULL;
+	}
+	GameObject	*env = Factory::new_Environement_block(mapObject.textureID);
+	env->transform.position = glm::vec3(case_ref.position.x, WALL_POSITION_HEIGHT + mapObject.height, case_ref.position.z);
+	env->transform.scale = glm::vec3(1, 1, 1);
+	env->transform.rotation = glm::vec3(0.f, (float)(rand()*180-1), 0.f);
+	case_ref.environement = env;
+	this->build_scale_height_To_GameObject(case_ref, mapObject, env);
+	return true;
+}
+
+bool				MapManager::addIndestructibleToCase( Case &case_ref, MapObject const &mapObject )
+{
+	if (mapObject.textureID == "" || Model::model.count(mapObject.textureID) == 0) {
+		std::cerr << "MapManager : Model \"" << mapObject.textureID << "\" doesn't exists." << std::endl;
 		return false;
 	}
 	if (case_ref.obstacle != NULL) {
 		delete case_ref.obstacle;
 		case_ref.obstacle = NULL;
 	}
-	GameObject	*obstacle = Factory::new_Indestructible_block(objectID);
+	GameObject	*obstacle = Factory::new_Indestructible_block(mapObject.textureID);
 	obstacle->transform.position = glm::vec3(case_ref.position.x, WALL_POSITION_HEIGHT, case_ref.position.z);
 	obstacle->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
 	case_ref.obstacle = obstacle;
 	case_ref.walkable = false;
+	this->build_scale_height_To_GameObject(case_ref, mapObject, obstacle);
 	return true;
 }
 
-bool				MapManager::addAIToCase( Case &case_ref, std::string const &objectID )
+void				MapManager::build_scale_height_To_GameObject(Case &case_ref, MapObject const &mapObject, GameObject *obj)
+{
+	if (mapObject.scale != glm::vec3(0,0,0)) {
+		obj->transform.scale = glm::vec3(mapObject.scale.x, mapObject.scale.y, mapObject.scale.z);
+	}
+	if (mapObject.height != 0) {
+		obj->transform.position.y = mapObject.height;
+	}
+	if (mapObject.walkable == "true") {
+		case_ref.walkable = true;
+	}
+	if (mapObject.walkable == "false") {
+		case_ref.walkable = false;
+	}
+}
+
+bool				MapManager::addAIToCase( Case &case_ref, MapObject const &mapObject )
 {
 	if (BombermanClient::getInstance()->sock == NULL || BombermanClient::getInstance()->sock->state == true)
 		return false;
@@ -175,13 +214,13 @@ bool				MapManager::addAIToCase( Case &case_ref, std::string const &objectID )
 	return true;
 }
 
-bool				MapManager::addPvPCase( Case &case_ref, std::string const &objectID )
+bool				MapManager::addPvPCase( Case &case_ref, MapObject const &mapObject )
 {
 	this->map->pvpCases.push_back(case_ref);
 	return true;
 }
 
-bool				MapManager::addSoloCase( Case &case_ref, std::string const &objectID )
+bool				MapManager::addSoloCase( Case &case_ref, MapObject const &mapObject )
 {
 	this->map->soloCases.push_back(case_ref);
 	return true;
@@ -197,7 +236,7 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 	for (int i = 0; i < splited_map.size(); i++) {
 		std::string line = trim(splited_map.at(i));
 
-		if (line == "")
+		if (line.empty())
 			continue ;
 		if (line.find("=") != std::string::npos && line.find("/") != std::string::npos) {
 			operators.push_back(line);
@@ -218,18 +257,58 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 		std::string					operand	= operation_line.at(1);
 		std::vector<std::string>	infos	= split(operation_line.at(2), '/');
 
-		if (infos.size() != 2) {
+		if (infos.size() < 2) {
 			std::cerr << "Error syntax on Operation line : \"" << splited_map.at(i) << "\" doesn't contains separator textureID/TYPE "  << std::endl;
 			return false;
 		}
 		std::string					textureID	= infos.at(0);
 		std::string					type		= infos.at(1);
+		glm::vec3 					scale = glm::vec3(0,0,0);
+		float 	  					h = 0.f;
+		std::string					walkable_flag = "";
+
+		if (operation_line.at(2).find("walkable==true") != std::string::npos) {
+			walkable_flag = "true";
+		} else if (operation_line.at(2).find("walkable==false") != std::string::npos) {
+			walkable_flag = "false";
+		}
+
+		for (int i = 2; i < infos.size(); i++) {
+			std::string arg = infos.at(i);
+
+			if (arg.find("scale(") != std::string::npos)
+			{
+				replaceAll(arg, "scale(", "");
+				replaceAll(arg, ")", "");
+				replaceAll(arg, " ", "");
+
+				std::vector<std::string> data = split(arg, ',');
+				if (data.size() == 3) {
+					scale = glm::vec3(
+						stof(data.at(0)),
+						stof(data.at(1)),
+						stof(data.at(2))
+					);
+				}
+			}
+			if (arg.find("height(") != std::string::npos)
+			{
+				replaceAll(arg, "height(", "");
+				replaceAll(arg, ")", "");
+				replaceAll(arg, " ", "");
+
+				h = stof(arg);
+			}
+		}
 
 		MapObject mapObject;
 
 		mapObject.id		= id;
 		mapObject.textureID = textureID;
 		mapObject.type		= type;
+		mapObject.scale		= scale;
+		mapObject.height	= h;
+		mapObject.walkable	= walkable_flag;
 
 		map->objects[id] = mapObject;
 	}
@@ -252,12 +331,13 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 			cube.obstacle = NULL;
 			cube.door = NULL;
 			cube.walkable = true;
+			cube.environement = NULL;
 			cube.position = glm::vec3(height * 2, 0, width * 2);
 
 			for (int c = 0; c < case_infos.size(); c++) {
 				int currentID = atoi(case_infos.at(c).c_str());
 				if (map->objects.count(currentID) >= 1 && this->map_lexer_types.count(map->objects[currentID].type) >= 1) {
-					(*this.*this->map_lexer_types[map->objects[currentID].type])(cube, map->objects[currentID].textureID);
+					(*this.*this->map_lexer_types[map->objects[currentID].type])(cube, map->objects[currentID]);
 				}
 			}
 			this->map->content[std::make_pair(height, width)] = cube;
@@ -283,6 +363,9 @@ void					MapManager::buildObjects(void)
 		}
 		if (elem.second.ground != NULL) {
 			this->scene->add(elem.second.ground);
+		}
+		if (elem.second.environement != NULL) {
+			this->scene->add(elem.second.environement);
 		}
 	}
 	//this->scene->add(Factory::newBackground());

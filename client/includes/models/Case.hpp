@@ -10,6 +10,7 @@ struct Case {
 	GameObject		*ground;
 	GameObject		*obstacle;
 	GameObject		*door;
+	GameObject		*environement;
 
 	bool			walkable;
 	glm::vec3		position;

@@ -36,12 +36,14 @@ class MapManager
 		Case				*getRandomWalkableSoloCase(void);
 		Case				*getRandomWalkablePvPCase(void);
 
-		bool				addGroundToCase( Case &case_ref, std::string const &objectID );
-		bool				addDestructibleToCase( Case &case_ref, std::string const &objectID );
-		bool				addIndestructibleToCase( Case &case_ref, std::string const &objectID );
-		bool				addAIToCase( Case &case_ref, std::string const &objectID );
-		bool				addPvPCase( Case &case_ref, std::string const &objectID );
-		bool				addSoloCase( Case &case_ref, std::string const &objectID );
+		bool				addGroundToCase( Case &case_ref, MapObject const &mapObject );
+		bool				addDestructibleToCase( Case &case_ref, MapObject const &mapObject );
+		bool				addIndestructibleToCase( Case &case_ref, MapObject const &mapObject );
+		bool				addAIToCase( Case &case_ref, MapObject const &mapObject );
+		bool				addPvPCase( Case &case_ref, MapObject const &mapObject );
+		bool				addSoloCase( Case &case_ref, MapObject const &mapObject );
+		bool				addEnvironmentToCase( Case &case_ref, MapObject const &mapObject );
+		void				build_scale_height_To_GameObject(Case &case_ref, MapObject const &mapObject, GameObject *obj);
 
 
 	private:
@@ -51,7 +53,7 @@ class MapManager
 		std::string							content;
 		Scene								*scene;
 
-		typedef bool (MapManager::*LexerObjectsTypesMethods)( Case &case_ref, std::string const &objectID );
+		typedef bool (MapManager::*LexerObjectsTypesMethods)( Case &case_ref, MapObject const &mapObject );
 		std::map<std::string, LexerObjectsTypesMethods>	map_lexer_types;
 };
 
