@@ -70,10 +70,10 @@ void								SettingInterface::draw(void)
 	}
 
 	//FULLSCREEN
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 2) {
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 2 && fullscreen == false) {
 		BombermanClient::getInstance()->setWindowSize(width, height, true);
 	}
-	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 2) {
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 2 && fullscreen == true) {
 		BombermanClient::getInstance()->setWindowSize(width, height, false);
 	}
 

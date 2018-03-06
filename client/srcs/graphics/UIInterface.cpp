@@ -216,19 +216,21 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 		if (parameters_map.count("width") && parameters_map.count("height") && parameters_map.count("w") && parameters_map.count("h")) {
 			int w = atoi(parameters_map["w"].c_str());
 			int h = atoi(parameters_map["h"].c_str());
-			int width = atoi(parameters_map["width"].c_str()) % 101;
-			int height = atoi(parameters_map["height"].c_str()) % 101;
+			int width = atoi(parameters_map["width"].c_str());
+			int height = atoi(parameters_map["height"].c_str());
 
 			if (parameters_map["width"].find("%") != std::string::npos) {
-				width = BombermanClient::getInstance()->screen->width * width / 100;
+				width = width % 101;
+				width = BombermanClient::getInstance()->screen->canvas_width * width / 100;
 			}
 			if (parameters_map["height"].find("%") != std::string::npos) {
-				height = BombermanClient::getInstance()->screen->height * height / 100;
+				height = height % 101;
+				height = BombermanClient::getInstance()->screen->canvas_height * height / 100;
 			}
 
-			tag = new Image(parameters_map["src"].c_str(), w, h, width, height);
+			tag = new Image(parameters_map["src"], w, h, width, height);
 		} else {
-			tag = new Image(parameters_map["src"].c_str());
+			std::cerr << "Error tag <img> dont have width,height,w,h." << std::endl;
 		}
 	} else if (tag_name == "text") {
 		std::string text = parameters_map.count("value") ? parameters_map["value"] : "";

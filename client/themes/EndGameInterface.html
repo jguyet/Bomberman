@@ -24,7 +24,8 @@
 }
 </square>
 
-<if condition="$is_winner == NULL">
+
+<if condition="$is_winner == true">
 	<text>
 	{
 		id: "lbl_mainmenu",
@@ -42,12 +43,12 @@
 		id: "winner0_img",
 		src: "assets/ui/endgameinterface/winner_0.png",
 		parent: "background_menu",
-		width: 800,
-		height: 1000,
+		width: 80,
+		height: 120,
 		w: 1280,
 		h: 2302,
 		x: -10,
-		y: -80,
+		y: -90,
 		z-index: 1
 	}
 	</img>
@@ -56,18 +57,18 @@
 		id: "winner1_img",
 		src: "assets/ui/endgameinterface/winner_1.png",
 		parent: "background_menu",
-		width: 800,
-		height: 800,
+		width: 80,
+		height: 90,
 		w: 360,
 		h: 490,
-		x: 300,
-		y: -90,
+		x: 330,
+		y: -80,
 		z-index: 1
 	}
 	</img>
 </if>
 
-<if condition="$is_winner == false">
+<if condition="$is_winner == NULL">
 	<text>
 	{
 		id: "lbl_mainmenu",
@@ -80,6 +81,34 @@
 		z-index: 2
 	}
 	</text>
+	<img>
+	{
+		id: "looser0_img",
+		src: "assets/ui/endgameinterface/loose_0.png",
+		parent: "background_menu",
+		width: 80,
+		height: 120,
+		w: 670,
+		h: 1191,
+		x: -10,
+		y: -90,
+		z-index: 1
+	}
+	</img>
+	<img>
+	{
+		id: "looser1_img",
+		src: "assets/ui/endgameinterface/loose_1.png",
+		parent: "background_menu",
+		width: 80,
+		height: 90,
+		w: 1000,
+		h: 1416,
+		x: 330,
+		y: -80,
+		z-index: 1
+	}
+	</img>
 </if>
 
 <square>
