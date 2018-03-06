@@ -96,6 +96,8 @@ class BombermanClient : public IRenderLoop
 		Mix_Chunk *bomb;
 		Mix_Chunk *bomb2;
 
+		bool 										lockCam = true;
+
 		std::map<std::string, TTF_Font*>			fonts;
 
 		//managers

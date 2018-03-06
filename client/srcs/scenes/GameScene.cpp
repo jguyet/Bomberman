@@ -38,6 +38,7 @@ GameScene::GameScene (std::string selected_map)
 	//if grab mouse
 	//SDL_ShowCursor(SDL_DISABLE);
 	//SDL_SetWindowGrab(BombermanClient::getInstance()->window, SDL_TRUE);
+	KeyBoard::instance->addHandler("GameScene", this);
 }
 
 void GameScene::StartSolo(void)
@@ -68,6 +69,14 @@ void GameScene::StartSolo(void)
 	player->transform.rotation = glm::vec3(0,0,0);
 	this->add(player);//add on scene
 	*/
+}
+
+void					GameScene::handleUP(unsigned int key)
+{
+	if (key == SDL_SCANCODE_KP_PLUS)
+	{
+		BombermanClient::getInstance()->lockCam = !BombermanClient::getInstance()->lockCam;
+	}
 }
 
 void					GameScene::removePlayer(GameObject *player)
@@ -122,6 +131,7 @@ GameScene &				GameScene::operator=( GameScene const & rhs )
 GameScene::~GameScene ( void )
 {
 	BombermanClient::getInstance()->delete_socket();
+	KeyBoard::instance->removeHandler("GameScene");
 
 	if (this->current_player != NULL) {
 		this->current_player = NULL;
@@ -206,19 +216,23 @@ void								GameScene::move_camera(void)
 
 void								GameScene::build_camera(void)
 {
-	//this->camera->buildFPSProjection();
-	if (this->current_player != NULL && this->map != NULL) {
-		topoint.x = ((-this->current_player->transform.position.x) + -((this->map->height * 2) / 2)) / 2;
-		topoint.y = 0;
-		topoint.z = ((-this->current_player->transform.position.z) + -((this->map->width * 2) / 2)) / 2;
-		this->camera->transform.position.x = topoint.x;
-		this->camera->transform.position.z = topoint.z;
-		//Eloignement sur x
-		this->camera->transform.position.x += 15;
-		//Eloignement sur y
-		this->camera->transform.position.y = 30;
+	if (BombermanClient::getInstance()->lockCam)
+	{
+		if (this->current_player != NULL && this->map != NULL) {
+			topoint.x = ((-this->current_player->transform.position.x) + -((this->map->height * 2) / 2)) / 2;
+			topoint.y = 0;
+			topoint.z = ((-this->current_player->transform.position.z) + -((this->map->width * 2) / 2)) / 2;
+			this->camera->transform.position.x = topoint.x;
+			this->camera->transform.position.z = topoint.z;
+			//Eloignement sur x
+			this->camera->transform.position.x += 15;
+			//Eloignement sur y
+			this->camera->transform.position.y = 30;
+		}
+		this->camera->buildLookAtProjection(topoint);
+	} else {
+		this->camera->buildFPSProjection();
 	}
-	this->camera->buildLookAtProjection(topoint);
 }
 
 void								GameScene::calculPhisics(void)
@@ -247,5 +261,6 @@ void								GameScene::drawGameObjects(void)
 	if (this->quitInterface != NULL)
 		this->quitInterface->draw();
 	//reset mouse to center of screen
-	//SDL_WarpMouseInWindow(BombermanClient::getInstance()->window, BombermanClient::getInstance()->screen->middleWidth, BombermanClient::getInstance()->screen->middleHeight);
+	if (!BombermanClient::getInstance()->lockCam)
+		SDL_WarpMouseInWindow(BombermanClient::getInstance()->window, BombermanClient::getInstance()->screen->middleWidth, BombermanClient::getInstance()->screen->middleHeight);
 }

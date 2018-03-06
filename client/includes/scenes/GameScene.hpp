@@ -16,7 +16,7 @@
 #include "models/Map.hpp"
 class MapManager;
 class SaveManager;
-class GameScene : public Scene
+class GameScene : public Scene, public KeyBoardEventHandler
 {
 	public:
 		// STATICS ############################################################
@@ -50,6 +50,8 @@ class GameScene : public Scene
 		void								move_camera(void);
 		void								startGame(void);
 		void								openEndGameInterface(bool is_winner);
+
+		void								handleUP(unsigned int key);
 
 		glm::vec3							topoint;
 		GameObject							*current_player;

@@ -350,11 +350,9 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 
 void					MapManager::buildObjects(void)
 {
-
 	for (auto & elem : this->map->content)
 	{
 		if (elem.second.obstacle != NULL && elem.second.obstacle->tag == "Goomba") {
-
 			GameObject *goomba = elem.second.obstacle;
 			this->scene->add(goomba); //add on scene
 			elem.second.obstacle = NULL;
@@ -368,6 +366,5 @@ void					MapManager::buildObjects(void)
 			this->scene->add(elem.second.environement);
 		}
 	}
-	//this->scene->add(Factory::newBackground());
 	this->scene->add(Factory::newSkybox());
 }
