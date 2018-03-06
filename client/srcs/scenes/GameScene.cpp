@@ -23,7 +23,7 @@ GameScene::GameScene (std::string selected_map)
 	if (this->map) {
 		this->mapManager->buildObjects();
 		this->interface = new GameInterface(this);
-		if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false)
+		if (BombermanClient::getInstance()->sock == NULL || BombermanClient::getInstance()->sock->state == false)
 		{
 			BombermanClient::getInstance()->saveManager->save(this->map->name);
 			this->StartSolo();

@@ -13,7 +13,7 @@ SaveManager::SaveManager ()
 	} else {
 		this->save_file = "/tmp/.save.bomberman";
 	}
-	std::cout << "Save folder is " << this->save_file << std::endl;
+	std::cout << "Save file is " << this->save_file << std::endl;
 	this->saveObject = NULL;
 	this->loadSave();
 }
