@@ -85,8 +85,8 @@ void								SettingInterface::draw(void)
 		BombermanClient::getInstance()->enableSound = false;
 	}
 
-	this->variables["$sound"] = (std::ostringstream() << BombermanClient::getInstance()->enableSound).str();
-	this->variables["$music"] = (std::ostringstream() << BombermanClient::getInstance()->enableMusic).str();
+	this->variables["$sound"] = BombermanClient::getInstance()->enableSound ? "true" : "false";
+	this->variables["$music"] = BombermanClient::getInstance()->enableMusic ? "true" : "false";
 	this->variables["$fullscreen"] = fullscreen ? "true" : "false";
 	this->variables["$width"] = (std::ostringstream() << width).str();
 	this->variables["$w_size"] = (std::ostringstream() << (width * 300 / 2000)).str();
