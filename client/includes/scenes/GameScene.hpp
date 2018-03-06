@@ -11,6 +11,7 @@
 # include "scripts/GameScene/BombControllerScript.hpp"
 # include "scripts/GameScene/BotControllerScript.hpp"
 # include "scripts/GameScene/DoorControllerScript.hpp"
+# include "scripts/GameScene/BonusControllerScript.hpp"
 
 
 #include "models/Map.hpp"

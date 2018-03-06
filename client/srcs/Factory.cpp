@@ -61,7 +61,7 @@ GameObject							*Factory::newPlayer(int id)
 	animator->newAnimation("walk", 100L, 4, Model::model["walk_0"], Model::model["walk_1"], Model::model["walk_2"], Model::model["walk_3"]);
 	animator->handleAnimation("idle");
 	obj->AddComponent<Animator>(animator);
-	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
+	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,1.f,0.4f)));
 	obj->AddComponent<Script>(new CharacterControllerScript(id));
 	return (obj);
 }
@@ -125,8 +125,9 @@ GameObject 							*Factory::newGoomba(void)
 GameObject							*Factory::newPowerUp(float x, float z)
 {
 	GameObject	*obj = new GameObject();
-	obj->transform.position = glm::vec3(x*2, 0, z*2);
-	obj->transform.scale = glm::vec3(0.6f, 0.9f, 0.9f);
+	obj->transform.position = glm::vec3(x*2, -0.5f, z*2);
+	obj->transform.scale = glm::vec3(0.9f, 0.9f, 0.9f);
+	obj->AddComponent<Script>(new BonusControllerScript());
 
 	int nb = rand() % 100 + 1;
 
