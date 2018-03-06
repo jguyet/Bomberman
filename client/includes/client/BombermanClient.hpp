@@ -87,6 +87,8 @@ class BombermanClient : public IRenderLoop
 		Socket 										*sock;
 		Properties									*properties;
 
+		bool 										enableSound = 0;
+		bool 										enableMusic = 0;
 
 		//sound
 		Mix_Music *music;
@@ -104,11 +106,6 @@ class BombermanClient : public IRenderLoop
 		void										updateFps( void );
 		RenderLoop									*loop;
 		Canvas										*canvas;
-
-		//InitOpenAL
-
-		ALCdevice									*Device;
-		ALCcontext									*Context;
 
 		std::mutex									mutex;
 

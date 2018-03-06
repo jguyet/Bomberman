@@ -8,8 +8,9 @@ GameObject							*Factory::newDoor(std::string model)
 
 	obj->tag = "door";
 	obj->AddComponent<Model>(Model::model[model]);
-	obj->transform.scale = glm::vec3(0.003f, 0.005f, 0.003f);
-	obj->transform.rotation = glm::vec3(0,0,0);
+	obj->AddComponent<Script>(new DoorControllerScript());
+	obj->transform.scale = glm::vec3(1.f, 1.f, 1.f);
+	obj->transform.rotation = glm::vec3(0,90,100);
 	return (obj);
 }
 

@@ -9,7 +9,8 @@
 # include "scripts/GameScene/ExplosionControllerScript.hpp"
 # include "scripts/GameScene/BombControllerScript.hpp"
 # include "scripts/GameScene/BotControllerScript.hpp"
-//# include "scripts/GameScene/IAControllerScript.hpp"
+# include "scripts/GameScene/DoorControllerScript.hpp"
+
 
 #include "models/Map.hpp"
 class MapManager;

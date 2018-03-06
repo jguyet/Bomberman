@@ -150,6 +150,4 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 # include "AI/A_star.hpp"
 # include "AI/AI.hpp"
 
-// # include "scripts/GameScene/CharacterControllerScript.hpp"
-
 #endif
