@@ -4,6 +4,11 @@
 #include "Bomberman.hpp"
 #define MAP_NAME_LEN 256
 
+#include <sys/types.h>
+#include <pwd.h>
+#include <uuid/uuid.h>
+#include <unistd.h>
+
 struct SaveObject
 {
 	char map_name[MAP_NAME_LEN];
@@ -26,6 +31,7 @@ class SaveManager
 		friend std::ostream &				operator<<(std::ostream & o, SaveManager const & i);
 
 		SaveObject		*saveObject;
+		std::string		save_file;
 };
 
 #endif

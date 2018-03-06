@@ -3,6 +3,17 @@
 
 SaveManager::SaveManager ()
 {
+	const char		*homedir;
+
+	if ((homedir = getenv("HOME")) == NULL) {
+    	homedir = getpwuid(getuid())->pw_dir;
+	}
+	if (homedir != NULL) {
+		this->save_file = std::string(homedir) + "/.save.bomberman";
+	} else {
+		this->save_file = "/tmp/.save.bomberman";
+	}
+	std::cout << "Save folder is " << this->save_file << std::endl;
 	this->saveObject = NULL;
 	this->loadSave();
 }
@@ -32,7 +43,7 @@ void SaveManager::save(std::string map_name)
 {
 	int mapLevel = this->mapToLevel(map_name);
 	if (mapLevel >= this->getCurrentLevel()) {
-		std::ofstream outfile ("/tmp/.save.bomberman", std::ofstream::binary);
+		std::ofstream outfile (this->save_file, std::ofstream::binary);
 		if (outfile.is_open()) {
 			if (!this->saveObject) {
 				this->saveObject = new SaveObject();
@@ -55,7 +66,7 @@ std::istream & binary_read(std::istream& stream, T& value){
 
 SaveObject *SaveManager::loadSave()
 {
-	std::ifstream	infile("/tmp/.save.bomberman", std::ios::binary);
+	std::ifstream	infile(this->save_file, std::ios::binary);
 	if (infile.is_open()) {
 		this->saveObject = new SaveObject();
 		infile.read(reinterpret_cast<char*>(this->saveObject), sizeof(SaveObject));
