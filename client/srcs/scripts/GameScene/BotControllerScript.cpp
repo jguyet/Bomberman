@@ -17,6 +17,7 @@ BotControllerScript::BotControllerScript ( void ) : CharacterControllerScript(10
 	this->sens = false;
 	this->max_scale = -0.1f;
 	this->min_scale = -0.05f;
+	this->robot = NULL;
 	return ;
 }
 
@@ -33,6 +34,9 @@ BotControllerScript &				BotControllerScript::operator=( BotControllerScript con
 
 BotControllerScript::~BotControllerScript ( void )
 {
+	if (this->robot != NULL) {
+		delete this->robot;
+	}
 	BotControllerScript::List.erase(std::remove(BotControllerScript::List.begin(), BotControllerScript::List.end(), this));
 	return ;
 }
@@ -54,6 +58,8 @@ void BotControllerScript::Start(void) {
 
 void								BotControllerScript::Update(void)
 {
+	this->lastPosition = glm::vec3(this->gameObject->transform.position.x, this->gameObject->transform.position.y, this->gameObject->transform.position.z);
+
 	static std::map<int, P> cmd = {
 		std::make_pair(SDL_SCANCODE_Q, &CharacterControllerScript::Attack), std::make_pair(SDL_SCANCODE_UP, &CharacterControllerScript::MUp),
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),

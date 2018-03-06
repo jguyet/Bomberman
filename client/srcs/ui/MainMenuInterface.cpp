@@ -15,7 +15,7 @@ MainMenuInterface::MainMenuInterface ( void ) : UIInterface("themes/MainMenuInte
 	return ;
 }
 
-MainMenuInterface::MainMenuInterface ( MainMenuInterface const & src ) : UIInterface("")
+MainMenuInterface::MainMenuInterface ( MainMenuInterface const & src ) : UIInterface("unknow")
 {
 	*this = src;
 	return ;

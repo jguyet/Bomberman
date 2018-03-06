@@ -11,7 +11,7 @@ AI::AI (GameObject* my_player) : my_player(my_player)
 	this->select_t = false;
 	this->pause = 0;
 	this->action = IDLE;
-	// this->info = 0;
+	this->count = 150;
 	return ;
 }
 
@@ -31,6 +31,8 @@ AI &				AI::operator=( AI const & rhs )
 	if (this != &rhs)
 	{
 		this->my_player = rhs.my_player;
+		this->last_pos_x = this->my_player->transform.position.x;
+		this->last_pos_y = this->my_player->transform.position.z;
 	}
 	return (*this);
 }
@@ -73,9 +75,6 @@ void				AI::select_target(void)
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
-	// if (this->action == ESCAPE)
-	// 	return;
-
 	if (this->select_t == false)
 	{
 		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
@@ -90,32 +89,31 @@ void				AI::select_target(void)
 	// 	this->restart_target_pos();
 }
 
-// int				AI::bombcol(int x, int y, int next_x, int next_y)
-// {
-// 	if (this->a_star.bomb_col(this->bomb_l, this->moves.back().pos_x, this->moves.back().pos_y) == 0) //this->a_star.bomb_col(this->bomb_l, x, y) == 0 &&
-// 	{
-// 		std::cout << "I Will DIE :( last pos x " <<  this->moves.back().pos_x << " y " << this->moves.back().pos_y << std::endl;
-// 		this->restart_target_pos();
-// 		return (1);
-// 	}
-// 	// if (!this->a_star.bomb_col(this->bomb_l, next_x, next_y))
-// 	// {
-// 	// 	this->pause = 120;
-// 	// 	// this->restart_target_pos();
-// 	// 	return (2);
-// 	// }
-// 	return (0);
-// }
 
 int				AI::brain(void)
 {
-	float x = this->my_player->transform.position.x;
-	float y = this->my_player->transform.position.z;
-
 	this->bomb_l.clear();
 	this->bomb_l = std::vector<BombControllerScript*>(BombControllerScript::List);
 
 	// select && checker ###############
+	float x = this->my_player->transform.position.x;
+	float y = this->my_player->transform.position.z;
+
+	if (this->action == SEARCH || this->action == ESCAPE)
+	{
+		float res = (std::abs(this->last_pos_x - x) + std::abs(this->last_pos_y - y));
+		if (res < 0.2)
+			this->count--;
+		else
+		{
+			this->count = 150;
+			this->last_pos_x = this->my_player->transform.position.x;
+			this->last_pos_y = this->my_player->transform.position.z;
+		}
+		if (this->count == 0)
+			this->restart_target_pos();
+	}
+
 	this->select_target();
 	if (this->start_checks())
 		return (0);
@@ -149,13 +147,13 @@ int				AI::brain(void)
 		return (0);
 	}
 	// move ############################
-	if (x <= this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
+	if (x <= this->moves.front().pos_x && (abs(x - this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_UP);
-	if (x > this->moves.front().pos_x && (abs(x-this->moves.front().pos_x) > SPEED))
+	if (x > this->moves.front().pos_x && (abs(x - this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_DOWN);
-	if (y > this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
+	if (y > this->moves.front().pos_y && (abs(y - this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_LEFT);
-	if (y < this->moves.front().pos_y && (abs(y-this->moves.front().pos_y) > SPEED))
+	if (y < this->moves.front().pos_y && (abs(y - this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
 	// #################################
 	return (0);
@@ -176,7 +174,6 @@ int				AI::start_checks(void)
 
 	if (this->moves.size() > 0 && this->a_star.bomb_col(this->bomb_l, this->moves.back().pos_x, this->moves.back().pos_y) == 0)
 	{
-		// std::cout << "I Will DIE :( last pos x " <<  this->moves.back().pos_x << " y " << this->moves.back().pos_y << std::endl;
 		this->restart_target_pos();
 		return (1);
 	}
@@ -185,7 +182,6 @@ int				AI::start_checks(void)
 	{
 		if (this->a_star.bomb_col(this->bomb_l, my_player->transform.position.x, my_player->transform.position.z) == 0)
 		{
-			// std::cout << "iminent DEAD x " <<  my_player->transform.position.x << " y " << my_player->transform.position.z << std::endl;
 			this->restart_target_pos();
 			return (0);
 		}
@@ -207,6 +203,7 @@ void				AI::restart_target_pos(void)
 	// this->target.pos_y = this->tplayer->transform.position.z;
 	this->action = ESCAPE;
 	this->pause = 0;
+	this->count = 150;
 	this->moves.clear();
 }
 

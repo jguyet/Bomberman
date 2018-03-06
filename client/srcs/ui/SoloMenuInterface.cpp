@@ -16,7 +16,7 @@ SoloMenuInterface::SoloMenuInterface ( void ) : UIInterface("themes/SoloMenuInte
 	return ;
 }
 
-SoloMenuInterface::SoloMenuInterface ( SoloMenuInterface const & src ) : UIInterface("")
+SoloMenuInterface::SoloMenuInterface ( SoloMenuInterface const & src ) : UIInterface("unknow")
 {
 	*this = src;
 	return ;

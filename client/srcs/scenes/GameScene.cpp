@@ -6,6 +6,11 @@
 
 GameScene::GameScene (std::string selected_map)
 {
+	this->current_player = NULL;
+	this->startGameInterface = NULL;
+	this->quitInterface = NULL;
+	this->endGameInterface = NULL;
+
 	this->camera = new Camera();
 	this->camera->setProjection(45.0f, BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height, 0.1f, 1000000.0f);
 	this->camera->transform.position = glm::vec3(-3.4917f,36.6297f,-17.5657f);
@@ -18,12 +23,7 @@ GameScene::GameScene (std::string selected_map)
 	this->map = this->mapManager->getMap();
 	if (this->map) {
 		this->mapManager->buildObjects();
-
-		this->current_player = NULL;
-		this->startGameInterface = NULL;
-		this->quitInterface = NULL;
 		this->interface = new GameInterface(this);
-
 		if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false)
 		{
 			BombermanClient::getInstance()->saveManager->save(this->map->name);
@@ -135,6 +135,9 @@ GameScene::~GameScene ( void )
 	if (this->quitInterface != NULL) {
 		delete this->quitInterface;
 	}
+	if (this->endGameInterface != NULL) {
+		delete this->endGameInterface;
+	}
 	delete this->mapManager;
 }
 
@@ -177,6 +180,11 @@ void								GameScene::openQuitInterface(void)
 	}
 }
 
+void								GameScene::openEndGameInterface(bool is_winner)
+{
+	this->endGameInterface = new EndGameInterface(is_winner);
+}
+
 void								GameScene::move_camera(void)
 {
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_W) && this->quitInterface == NULL) {//UP
@@ -215,6 +223,9 @@ void								GameScene::build_camera(void)
 
 void								GameScene::calculPhisics(void)
 {
+	if (KeyBoard::instance->getKey(SDL_SCANCODE_G) && this->endGameInterface == NULL) {
+		this->openEndGameInterface(true);
+	}
 	this->openQuitInterface();
 	//call parent method
 	this->_calculPhisics();
@@ -231,6 +242,8 @@ void								GameScene::drawGameObjects(void)
 		this->interface->draw();
 	if (this->startGameInterface != NULL)
 		this->startGameInterface->draw();
+	if (this->endGameInterface != NULL)
+		this->endGameInterface->draw();
 	if (this->quitInterface != NULL)
 		this->quitInterface->draw();
 	//reset mouse to center of screen

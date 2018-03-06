@@ -280,6 +280,8 @@ void								CharacterControllerScript::OnEndRender(void)
 
 void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 {
+	if (this->lastPosition.x == 0 && this->lastPosition.y == 0 && this->lastPosition.z == 0)
+		return ;
 	if (collider->tag == "Background" || collider->tag == "ground_block")
 		return ;
 	if (collider->tag == "door")
