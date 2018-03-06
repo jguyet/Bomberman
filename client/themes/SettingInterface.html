@@ -663,7 +663,7 @@
 		id: "background_music_on",
 		parent: "background_menu",
 		x: 250,
-		y: 280,
+		y: 350,
 		width: 100,
 		height: 40,
 		style: "color:#424242;float:center;",
@@ -687,10 +687,61 @@
 		id: "background_music_off",
 		parent: "background_menu",
 		x: 450,
-		y: 280,
+		y: 350,
 		width: 100,
 		height: 40,
 		style: "color:#DF7401;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "music_off",
+		class: "mainmenu-css",
+		value: "OFF",
+		parent: "background_music_off",
+		x: 22,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$music == true">
+	<square>
+	{
+		id: "background_music_on",
+		parent: "background_menu",
+		x: 250,
+		y: 350,
+		width: 100,
+		height: 40,
+		style: "color:#DF7401;float:center;",
+		z-index: 2
+	}
+	</square>
+	<text>
+	{
+		id: "music_on",
+		class: "mainmenu-css",
+		value: "ON",
+		parent: "background_music_on",
+		x: 25,
+		y: 2,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+	<square>
+	{
+		id: "background_music_off",
+		parent: "background_menu",
+		x: 450,
+		y: 350,
+		width: 100,
+		height: 40,
+		style: "color:#424242;float:center;",
 		z-index: 2
 	}
 	</square>

@@ -68,7 +68,6 @@ void								SettingInterface::draw(void)
 		height -= 10;
 		BombermanClient::getInstance()->setWindowSize(width, height, fullscreen);
 	}
-
 	//FULLSCREEN
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 2 && fullscreen == false) {
 		BombermanClient::getInstance()->setWindowSize(width, height, true);
@@ -76,7 +75,6 @@ void								SettingInterface::draw(void)
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 2 && fullscreen == true) {
 		BombermanClient::getInstance()->setWindowSize(width, height, false);
 	}
-
 	//SOUND
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 3) {
 		BombermanClient::getInstance()->enableSound = true;
