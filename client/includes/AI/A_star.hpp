@@ -9,7 +9,8 @@ enum e_action {
 	SEARCH,
 	WAIT,
 	ESCAPE,
-	IDLE
+	IDLE,
+	END
 };
 
 class A_star

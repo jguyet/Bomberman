@@ -100,21 +100,6 @@ int				AI::brain(void)
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
-	if (this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK)
-	{
-		float res = (std::abs(this->last_pos_x - x) + std::abs(this->last_pos_y - y));
-		if (res < 0.2)
-			this->count--;
-		else
-		{
-			this->count = 150;
-			this->last_pos_x = this->my_player->transform.position.x;
-			this->last_pos_y = this->my_player->transform.position.z;
-		}
-		if (this->count == 0)
-			this->restart_target_pos(ESCAPE);
-	}
-
 	this->select_target();
 	if (this->start_checks())
 		return (0);
@@ -142,7 +127,10 @@ int				AI::brain(void)
 		}
 	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false) {
 		// std::cout << "-------------- FAIL OF PATH path_finding in action " << this->action << std::endl;
-		this->action = WAIT;
+		if (this->action == SEARCH)
+			this->action = END;
+		else
+			this->action = WAIT;
 		return (0);
 	}
 	// move ############################
@@ -164,6 +152,27 @@ int				AI::brain(void)
 
 int				AI::start_checks(void)
 {
+	float x = this->my_player->transform.position.x;
+	float y = this->my_player->transform.position.z;
+
+	if (this->action == END)
+		return (1);
+
+	if (this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK)
+	{
+		float res = (std::abs(this->last_pos_x - x) + std::abs(this->last_pos_y - y));
+		if (res < 0.2)
+			this->count--;
+		else
+		{
+			this->count = 150;
+			this->last_pos_x = this->my_player->transform.position.x;
+			this->last_pos_y = this->my_player->transform.position.z;
+		}
+		if (this->count == 0)
+			this->restart_target_pos(ESCAPE);
+	}
+
 	if (this->action == WAIT)
 	{
 		this->pause = 120;
