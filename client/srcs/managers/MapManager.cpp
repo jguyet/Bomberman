@@ -137,6 +137,7 @@ bool				MapManager::addDestructibleToCase( Case &case_ref, std::string const &ob
 	obstacle->transform.position = glm::vec3(case_ref.position.x, WALL_POSITION_HEIGHT, case_ref.position.z);
 	obstacle->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
 	case_ref.obstacle = obstacle;
+	case_ref.walkable = false;
 	return true;
 }
 
@@ -154,6 +155,7 @@ bool				MapManager::addIndestructibleToCase( Case &case_ref, std::string const &
 	obstacle->transform.position = glm::vec3(case_ref.position.x, WALL_POSITION_HEIGHT, case_ref.position.z);
 	obstacle->transform.scale = glm::vec3(3.5f, 3.5f, 3.5f);
 	case_ref.obstacle = obstacle;
+	case_ref.walkable = false;
 	return true;
 }
 

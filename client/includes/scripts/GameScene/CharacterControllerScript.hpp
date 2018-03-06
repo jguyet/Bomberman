@@ -59,11 +59,11 @@ class CharacterControllerScript : public Script
 
 		long 								lastNetwork = 0;
 		glm::vec3							lastPosition_direction;
-		glm::vec3							lastPosition;
 
 	protected:
 		void								unlockCharacterDirections(void);
 
+		glm::vec3							lastPosition;
 		GameScene							*scene;
 		// ####################################################################
 };
