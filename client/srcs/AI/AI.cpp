@@ -54,17 +54,19 @@ std::ostream &		operator<<(std::ostream & o, AI const & i)
 
 void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 {
-	// TODO : get nearest target
+	this->target.pos_x = 0;
+	this->target.pos_y = 0;
+	this->tplayer = NULL;
+	this->select_t = false;
 
-	// std::cout << "pos x " << x << " y " << y << " Nbr players " << players.size() << std::endl;
 	for (auto *player : players)
 	{
-		std::cout << "pos target x " << player->transform.position.x << " y " << player->transform.position.z << std::endl;
-		if (player->transform.position.x != x || player->transform.position.z != y)
+		if (player->transform.position.x != x && player->transform.position.z != y)
 		{
 			this->target.pos_x = player->transform.position.x;
 			this->target.pos_y = player->transform.position.z;
 			this->tplayer = player;
+			this->action = ATTACK;
 			this->select_t = true;
 		}
 	}
@@ -82,11 +84,10 @@ void				AI::select_target(void)
 		{
 			this->action = SEARCH;
 			this->select_t = true;
-			// std::cout << "start x " << x << " y " << y << " t x " << target.pos_x << " t y" << target.pos_y << std::endl;
 		}
 	}
-	// else if ((std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
-	// 	this->restart_target_pos();
+	else if (this->action == ATTACK && (std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
+		this->restart_target_pos(ATTACK);
 }
 
 
@@ -99,7 +100,7 @@ int				AI::brain(void)
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
-	if (this->action == SEARCH || this->action == ESCAPE)
+	if (this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK)
 	{
 		float res = (std::abs(this->last_pos_x - x) + std::abs(this->last_pos_y - y));
 		if (res < 0.2)
@@ -111,7 +112,7 @@ int				AI::brain(void)
 			this->last_pos_y = this->my_player->transform.position.z;
 		}
 		if (this->count == 0)
-			this->restart_target_pos();
+			this->restart_target_pos(ESCAPE);
 	}
 
 	this->select_target();
@@ -121,16 +122,16 @@ int				AI::brain(void)
 	if (this->moves.size() > 0)
 	{
 		float t = SPEED; // Tolerance
-		//If current target close delete them
+		// If current target close delete them
 		if (x >= this->moves.front().pos_x - t && x <= this->moves.front().pos_x + t && y >= this->moves.front().pos_y - t && y <= this->moves.front().pos_y + t)
 			this->moves.pop_front();
 
 		if (this->moves.size() == 0)
 		{
-			if (this->action == SEARCH)
+			if (this->action == SEARCH || this->action == ATTACK)
 			{
 				// TODO : deselect target FOR path_finding
-				this->action = ESCAPE;
+				this->restart_target_pos(ESCAPE);
 				return (SDL_SCANCODE_Q);
 			}
 			else
@@ -139,8 +140,6 @@ int				AI::brain(void)
 				this->select_t = false;
 			}
 		}
-		// else if (this->bombcol(x, y, this->moves.front().pos_x, this->moves.front().pos_y))
-		// 	return (0);
 	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false) {
 		// std::cout << "-------------- FAIL OF PATH path_finding in action " << this->action << std::endl;
 		this->action = WAIT;
@@ -174,7 +173,7 @@ int				AI::start_checks(void)
 
 	if (this->moves.size() > 0 && this->a_star.bomb_col(this->bomb_l, this->moves.back().pos_x, this->moves.back().pos_y) == 0)
 	{
-		this->restart_target_pos();
+		this->restart_target_pos(ESCAPE);
 		return (1);
 	}
 
@@ -182,7 +181,7 @@ int				AI::start_checks(void)
 	{
 		if (this->a_star.bomb_col(this->bomb_l, my_player->transform.position.x, my_player->transform.position.z) == 0)
 		{
-			this->restart_target_pos();
+			this->restart_target_pos(ESCAPE);
 			return (0);
 		}
 		int n_bomb = dynamic_cast<CharacterControllerScript *>(my_player->GetComponent<Script>())->bomb;
@@ -197,11 +196,14 @@ int				AI::start_checks(void)
 	return (0);
 }
 
-void				AI::restart_target_pos(void)
+void				AI::restart_target_pos(e_action action)
 {
-	// this->target.pos_x = this->tplayer->transform.position.x;
-	// this->target.pos_y = this->tplayer->transform.position.z;
-	this->action = ESCAPE;
+	if (action == ATTACK)
+	{
+		this->target.pos_x = this->tplayer->transform.position.x;
+		this->target.pos_y = this->tplayer->transform.position.z;
+	}
+	this->action = action;
 	this->pause = 0;
 	this->count = 150;
 	this->moves.clear();
