@@ -72,6 +72,7 @@ void Loader::loadModels()
 
 
 	Model::load("palm_tree", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/palm.obj");
+	Model::load("plant", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/plant.obj");
 	Model::load("crate", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/crate.obj");
 	Model::load("skybox", ShaderUtils::getInstance()->get("dir"), "assets/skybox/skybox2.obj");
 }

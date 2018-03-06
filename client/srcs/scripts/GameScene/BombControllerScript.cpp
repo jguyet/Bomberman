@@ -107,8 +107,17 @@ void								BombControllerScript::OnEndRender(void)
 
 void								BombControllerScript::explode(void)
 {
+//BombermanClient::getInstance()->bomb
+/*
+	void SoundPlay(Mix_Chunk *sound) {
 
-	Mix_PlayChannel(-1, BombermanClient::getInstance()->bomb, 0);
+		if(Mix_PlayChannel(-1, sound, 0)==-1) {
+		    printf("Mix_PlayChannel: %s\n",Mix_GetError());
+		    // may be critical error, or maybe just no channels were free.
+		    // you could allocated another channel in that case...
+		}
+	}
+*/
 
 	int x = this->gameObject->transform.position.x / 2;
 	int z = this->gameObject->transform.position.z / 2;

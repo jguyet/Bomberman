@@ -8,6 +8,9 @@ struct MapObject {
 	int id;
 	std::string textureID;
 	std::string type;
+	glm::vec3	scale;
+	float		height;
+	std::string walkable;
 };
 
 class Map
