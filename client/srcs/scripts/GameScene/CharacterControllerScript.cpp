@@ -198,13 +198,6 @@ void						CharacterControllerScript::Update(void)
 			// this->scene->add(goomba);
 		}
 
-		if (this->lastNetwork < TimeUtils::getCurrentSystemMillis() - 100L )
-		{
-			if (BombermanClient::getInstance()->sock != NULL)
-				BombermanClient::getInstance()->sock->updateMovement(this);
-			this->lastNetwork = TimeUtils::getCurrentSystemMillis();
-		}
-
 		if (this->has_moved) {
 			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
 				if (BombermanClient::getInstance()->sock != NULL)
@@ -284,14 +277,14 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 	if (collider->tag == "Background" || collider->tag == "ground_block")
 		return ;
-	if (collider->tag == "door")
+	if (this->scene->current_player == NULL)
+		return ;
+	if (collider->tag == "door" && this->gameObject->id == this->scene->current_player->id)
 	{
 		printf("You finished the level %d, congratulations !\n", BombermanClient::getInstance()->saveManager->getCurrentLevel());
 		BombermanClient::getInstance()->saveManager->loadNextLevel();
 		return;
 	}
-	if (this->scene->current_player == NULL)
-		return ;
 	Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
 	if (c == NULL)
@@ -300,7 +293,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 
 		Case *bomb_case = this->scene->map->getCase( fmax(0.5f + collider->transform.position.x / 2.f, 0), fmax(0.5f + collider->transform.position.z / 2.f, 0));
 
-		if (c == bomb_case) {//je suis sur une bomb (je peux bouger)
+		if (c == bomb_case) {
 			return ;
 		}
 		float x = fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0);
@@ -322,11 +315,31 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	else if (collider->tag == "Explosion") {
 		if (this->scene->current_player != NULL && this->gameObject->id == this->scene->current_player->id) {
-			BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
+			// for (int i = 0; i < 100; i++)
+			// {
+			// 	this->gameObject->transform.position.y -= 1;
+			// 	this->gameObject->transform.rotation.x += 10;
+			// 	this->gameObject->transform.rotation.z += 10;
+			// 	usleep(20 * 1000);
+			// }
+			if (BombermanClient::getInstance()->sock != NULL) {
+				BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
+			}
 			this->scene->removePlayer(this->gameObject);
 			this->gameObject->toDelete = true;
 			this->scene->current_player = NULL;
 		} else {
+			// printf("Player id %d is dead !\n", this->getPlayerId());
+			// this->scene->removePlayer(this->gameObject);
+			// this->gameObject->toDelete = true;
+
+			// for (int i = 0; i < 100; i++)
+			// {
+			// 	this->gameObject->transform.position.y -= 1;
+			// 	this->gameObject->transform.rotation.x += 10;
+			// 	this->gameObject->transform.rotation.z += 10;
+			// 	usleep(20 * 1000);
+			// }
 			printf("Player id %d is dead !\n", this->getPlayerId());
 			this->scene->removePlayer(this->gameObject);
 			this->gameObject->toDelete = true;

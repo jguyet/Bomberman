@@ -52,7 +52,7 @@ bool				MapManager::loadMap( void )
 	replaceAll(this->content, "\t", " ");
 	replaceAll(this->content, "\r", " ");
 	replaceAll(this->content, "\f", " ");
-	if (this->content == "")
+	if (this->content.empty())
 		return false;
 	this->map = new Map(this->map_name);
 	this->parseMap(this->map, this->content);
@@ -236,7 +236,7 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 	for (int i = 0; i < splited_map.size(); i++) {
 		std::string line = trim(splited_map.at(i));
 
-		if (line == "")
+		if (line.empty())
 			continue ;
 		if (line.find("=") != std::string::npos && line.find("/") != std::string::npos) {
 			operators.push_back(line);

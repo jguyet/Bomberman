@@ -93,7 +93,7 @@ int SaveManager::mapToLevel(std::string map)
 void SaveManager::loadNextLevel()
 {
 	BombermanClient *instance = BombermanClient::getInstance();
-	int	next_level = instance->saveManager->getCurrentLevel() + 1;
+	int	next_level = this->mapToLevel(BombermanClient::getInstance()->getCurrentScene<GameScene>()->map->name) + 1;
 
 	if (next_level > 4)
 		next_level = 4;
