@@ -19,7 +19,6 @@ GameScene::GameScene (std::string selected_map)
 
 	this->mapManager = new MapManager(this, selected_map);
 
-	// Mix_PlayMusic(BombermanClient::getInstance()->music, 1);
 	this->map = this->mapManager->getMap();
 	if (this->map) {
 		this->mapManager->buildObjects();
@@ -58,6 +57,7 @@ void GameScene::StartSolo(void)
 		this->players.push_back(playerObject);
 		this->all_player.push_back(playerObject);
 		this->add(playerObject);
+		BombermanClient::getInstance()->MusicPlay(STAGE1);
 	}
 
 /*

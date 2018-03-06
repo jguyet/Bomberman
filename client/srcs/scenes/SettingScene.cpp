@@ -76,6 +76,8 @@ void								SettingScene::handleUP(unsigned int key)
 			case 3:
 			break;
 			case 4:
+			break;
+			case 5:
 				BombermanClient::getInstance()->setCurrentScene<MainMenuScene>(new MainMenuScene());
 			break ;
 		}

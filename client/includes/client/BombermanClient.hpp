@@ -23,6 +23,21 @@ struct Screen {
 		bool fullscreen;
 };
 
+enum Sound {
+	BOMB_EXPLODE,
+	BOMB_DROP,
+	MENU_MOVE,
+	MENU_ENTER,
+	DIE,
+	WIN,
+	LOOSE
+};
+
+enum Music {
+	MENU,
+	STAGE1
+};
+
 class BombermanClient : public IRenderLoop
 {
 	public:
@@ -65,7 +80,8 @@ class BombermanClient : public IRenderLoop
 
 		bool										new_socket( std::string const &ip, int port );
 		void										delete_socket( void );
-
+		void 										SoundPlay(Sound toPlay);
+		void 										MusicPlay(Music toPlay);
 
 		void										setWindowSize(int newWidth, int newHeight, bool fullscreen);
 
@@ -91,10 +107,11 @@ class BombermanClient : public IRenderLoop
 		bool 										enableMusic = 0;
 
 		//sound
-		Mix_Music *music;
-		Mix_Music *music_menu;
-		Mix_Chunk *bomb;
-		Mix_Chunk *bomb2;
+		Mix_Music 									*music      = NULL;
+		Mix_Music 									*music_menu = NULL;
+		Mix_Chunk 									*bomb       = NULL;
+		Mix_Chunk 									*bomb2      = NULL;
+		Mix_Chunk									*menu_enter = NULL;
 
 		bool 										lockCam = true;
 

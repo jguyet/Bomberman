@@ -61,9 +61,11 @@ void						MainMenuInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_UP) {
 		this->current_position = (this->current_position - 1) < 0 ? 4 : (this->current_position - 1) % 5;
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 	}
 	if (key == SDL_SCANCODE_DOWN) {
 		this->current_position = (this->current_position + 1) % 5;
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 	}
 }
 

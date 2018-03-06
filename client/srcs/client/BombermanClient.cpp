@@ -91,12 +91,17 @@ void						BombermanClient::build_window( void )
 	    exit(0);
 	}
 
+	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024)==-1) {
+	    printf("Mix_OpenAudio: %s\n", Mix_GetError());
+	    this->enableSound = false;
+	}
 
-	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
-	// this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
-	// this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
-	// this->music = Mix_LoadMUS("./assets/sound/stage1.ogg");
-	// this->music_menu = Mix_LoadMUS("./assets/sound/stage2.ogg");
+	this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
+	this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
+
+	this->menu_enter = Mix_LoadWAV("./assets/sound/DONE.WAV");
+	this->music = Mix_LoadMUS("./assets/sound/stage1.ogg");
+	this->music_menu = Mix_LoadMUS("./assets/sound/stage2.ogg");
 
 	// shit is getting my ears bleeding
 	Mix_VolumeMusic(20);
@@ -123,6 +128,43 @@ void						BombermanClient::build_window( void )
 	glEnable(GL_MULTISAMPLE);
 	//0 for immediate updates, 1 for updates synchronized with the vertical retrace, -1 for late swap tearing
 	SDL_GL_SetSwapInterval(0);
+}
+
+void BombermanClient::SoundPlay(Sound toPlay) {
+	if (!this->enableSound)
+		return ;
+	Mix_Chunk *sound = NULL;
+	if (toPlay == BOMB_EXPLODE) {
+		if (rand() % 2 == 0)
+			sound = this->bomb;
+		else
+			sound = this->bomb2;
+	}
+	if (toPlay == MENU_ENTER)
+		sound = this->menu_enter;
+	if (sound)
+		if(Mix_PlayChannel(-1, sound, 0)==-1) {
+			printf("Mix_PlayChannel: %s\n",Mix_GetError());
+		}
+}
+
+void BombermanClient::MusicPlay(Music toPlay)
+{
+	if (!this->enableMusic)
+		return ;
+	Mix_Music *music = NULL;
+
+	if (toPlay == MENU)
+		music = this->music_menu;
+	if (toPlay == STAGE1)
+		music = this->music;
+
+	if (music)
+	{
+		if (Mix_PlayMusic(music, 1) == -1) {
+			printf("Mix_PlayMusic: %s\n",Mix_GetError());
+		}
+	}
 }
 
 void						BombermanClient::delete_inputs( void )
