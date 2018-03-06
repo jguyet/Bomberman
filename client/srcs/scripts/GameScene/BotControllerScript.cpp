@@ -17,6 +17,7 @@ BotControllerScript::BotControllerScript ( void ) : CharacterControllerScript(10
 	this->sens = false;
 	this->max_scale = -0.1f;
 	this->min_scale = -0.05f;
+	this->robot = NULL;
 	return ;
 }
 
@@ -33,6 +34,9 @@ BotControllerScript &				BotControllerScript::operator=( BotControllerScript con
 
 BotControllerScript::~BotControllerScript ( void )
 {
+	if (this->robot != NULL) {
+		delete this->robot;
+	}
 	BotControllerScript::List.erase(std::remove(BotControllerScript::List.begin(), BotControllerScript::List.end(), this));
 	return ;
 }

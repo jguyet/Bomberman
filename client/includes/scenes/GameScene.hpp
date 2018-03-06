@@ -3,13 +3,13 @@
 
 # include "Bomberman.hpp"
 # include "ui/StartGameInterface.hpp"
+# include "ui/EndGameInterface.hpp"
 # include "ui/GameInterface.hpp"
 # include "ui/QuitMenuInterface.hpp"
 # include "scripts/GameScene/CharacterControllerScript.hpp"
 # include "scripts/GameScene/ExplosionControllerScript.hpp"
 # include "scripts/GameScene/BombControllerScript.hpp"
 # include "scripts/GameScene/BotControllerScript.hpp"
-//# include "scripts/GameScene/IAControllerScript.hpp"
 
 #include "models/Map.hpp"
 class MapManager;
@@ -47,6 +47,7 @@ class GameScene : public Scene
 		void								build_camera(void);
 		void								move_camera(void);
 		void								startGame(void);
+		void								openEndGameInterface(bool is_winner);
 
 		glm::vec3							topoint;
 		GameObject							*current_player;
@@ -58,6 +59,7 @@ class GameScene : public Scene
 		GameInterface						*interface;
 		StartGameInterface					*startGameInterface;
 		QuitMenuInterface					*quitInterface;
+		EndGameInterface					*endGameInterface;
 		// ####################################################################
 };
 

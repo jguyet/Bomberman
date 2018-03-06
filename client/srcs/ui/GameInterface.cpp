@@ -14,7 +14,7 @@ GameInterface::GameInterface ( GameScene *scene ) : UIInterface("themes/GameInte
 	return ;
 }
 
-GameInterface::GameInterface ( GameInterface const & src ) : UIInterface("")
+GameInterface::GameInterface ( GameInterface const & src ) : UIInterface("unknow")
 {
 	*this = src;
 	return ;
