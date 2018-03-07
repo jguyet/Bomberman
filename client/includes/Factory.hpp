@@ -17,7 +17,7 @@ class Factory
 		static GameObject					*newExplosion(float x, float z, long timer);
 		static GameObject					*newBackground(void);
 		static GameObject					*newSkybox(void);
-		static GameObject 					*newGoomba(void);
+		static GameObject 					*newGoomba(int level);
 		static GameObject					*newPowerUp(float x, float z);
 
 		Factory( void );

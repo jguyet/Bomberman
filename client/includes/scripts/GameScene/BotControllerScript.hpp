@@ -10,7 +10,7 @@ class BotControllerScript : public CharacterControllerScript
 		static std::vector<BotControllerScript*> List;
 		// ####################################################################
 		// CANONICAL ##########################################################
-											BotControllerScript( );
+											BotControllerScript( int level );
 											BotControllerScript( BotControllerScript const & src );
 		virtual								~BotControllerScript( void );
 		BotControllerScript &				operator=( BotControllerScript const & rhs );
@@ -37,6 +37,8 @@ class BotControllerScript : public CharacterControllerScript
 		float								max_scale;
 		float								min_scale;
 		long								anim_time;
+
+		int 								level;
 		// std::vector<BotControllerScript*>	bomb_l;
 		// ####################################################################
 };

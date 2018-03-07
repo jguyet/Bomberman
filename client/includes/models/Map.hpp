@@ -11,6 +11,7 @@ struct MapObject {
 	glm::vec3	scale;
 	float		height;
 	std::string walkable;
+	int 		level;
 };
 
 class Map

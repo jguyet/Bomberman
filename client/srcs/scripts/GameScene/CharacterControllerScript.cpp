@@ -296,7 +296,14 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 	if (collider->tag == "door" && this->gameObject->id == this->scene->current_player->id)
 	{
-		this->scene->endGame(true);
+		std::cout << "NB Bots: " << BotControllerScript::List.size() << std::endl;
+
+		if (BotControllerScript::List.size() == 0)
+			this->scene->endGame(true);
+		return;
+	}
+	else if (collider->tag == "door" && this->gameObject->id != this->scene->current_player->id)
+	{
 		return;
 	}
 	Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
@@ -336,14 +343,17 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		this->lastDying = TimeUtils::getCurrentSystemMillis();
 	}
 	else if (collider->tag == "bonus-bomb-up") {
-		this->bomb++;
+		if (this->playerId < 100)
+			this->bomb++;
 		collider->toDelete = true;
 	}
 	else if (collider->tag == "bonus-power-up") {
-		this->power++;
+		if (this->playerId < 100)
+			this->power++;
 		collider->toDelete = true;
 	} else if (collider->tag == "bonus-speed-up") {
-		this->speed+= 0.003;
+		if (this->playerId < 100)
+			this->speed+= 0.003;
 		collider->toDelete = true;
 		this->speed_count++;
 	} else if (collider->tag == "Player") {

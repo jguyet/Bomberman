@@ -33,8 +33,6 @@
 #   include <SDL2/SDL_mixer.h>
 # endif
 
-#include <OpenAL/OpenAL.h>
-
 # include <SOIL2.h>
 # include <glm/glm.hpp>
 # include <glm/vec3.hpp> // glm::vec3

@@ -111,14 +111,15 @@ GameObject 							*Factory::newSkybox(void)
 	return (obj);
 }
 
-GameObject 							*Factory::newGoomba(void)
+GameObject 							*Factory::newGoomba(int level)
 {
 	GameObject *obj = new GameObject();
 
 	obj->tag = "Goomba";
+	std::cout << "newGoomba(" << level << ")" << std::endl;
 	obj->AddComponent<Model>(Model::model["goomba"]);
 	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
-	obj->AddComponent<Script>(new BotControllerScript());
+	obj->AddComponent<Script>(new BotControllerScript(level));
 	return(obj);
 }
 

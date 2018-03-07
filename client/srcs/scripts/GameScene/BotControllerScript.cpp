@@ -8,7 +8,7 @@ std::vector<BotControllerScript*> BotControllerScript::List = std::vector<BotCon
 
 // CANONICAL #####################################################
 
-BotControllerScript::BotControllerScript ( void ) : CharacterControllerScript(100)
+BotControllerScript::BotControllerScript ( int level ) : CharacterControllerScript(100)
 {
 	BotControllerScript::List.push_back(this);
 
@@ -18,6 +18,7 @@ BotControllerScript::BotControllerScript ( void ) : CharacterControllerScript(10
 	this->max_scale = -0.1f;
 	this->min_scale = -0.05f;
 	this->robot = NULL;
+	this->level = level;
 	return ;
 }
 

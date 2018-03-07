@@ -207,7 +207,7 @@ bool				MapManager::addAIToCase( Case &case_ref, MapObject const &mapObject )
 		case_ref.obstacle = NULL;
 	}
 
-	GameObject	*block = Factory::newGoomba();
+	GameObject	*block = Factory::newGoomba(mapObject.level);
 	block->transform.position = glm::vec3(case_ref.position.x, 0, case_ref.position.z);
 	block->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
 	case_ref.obstacle = block;
@@ -266,6 +266,7 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 		glm::vec3 					scale = glm::vec3(0,0,0);
 		float 	  					h = 0.f;
 		std::string					walkable_flag = "";
+		int 						level = 0;
 
 		if (operation_line.at(2).find("walkable==true") != std::string::npos) {
 			walkable_flag = "true";
@@ -299,6 +300,14 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 
 				h = stof(arg);
 			}
+			if (arg.find("level(") != std::string::npos)
+			{
+				replaceAll(arg, "level(", "");
+				replaceAll(arg, ")", "");
+				replaceAll(arg, " ", "");
+				std::cout << "arg:" << arg << std::endl;
+				level = stoi(arg);
+			}
 		}
 
 		MapObject mapObject;
@@ -309,6 +318,7 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 		mapObject.scale		= scale;
 		mapObject.height	= h;
 		mapObject.walkable	= walkable_flag;
+		mapObject.level		= level;
 
 		map->objects[id] = mapObject;
 	}
