@@ -56,9 +56,8 @@ bool						A_star::path_finding(int x, int y, Module_h &target, std::list<Module_
 	this->find_path(target, action);
 	if (this->close_list.empty())
 		return (false);
-
 	this->FormatMoves(moves, target.pos_x, target.pos_y, this->close_list[std::make_pair(target.pos_x, target.pos_y)].p, x, y);
-	if (action == ESCAPE)
+	if (action == ESCAPE || action == WALK)
 		moves.push_back(this->close_list[std::make_pair(target.pos_x, target.pos_y)]);
 
 	this->delete_lists();
@@ -84,6 +83,17 @@ void						A_star::get_adjacent(Module_h &c_case, Module_h &target, e_action acti
 		this->get_heuristic(y, x, target, p, action);
 }
 
+int							A_star::walk_cond(Module_h &c_case, Module_h &target)
+{
+	if (this->rand_walk > 0)
+	{
+		this->last_wallk_pos = c_case;
+		this->rand_walk--;
+		return (1);
+	}
+	return (0);
+}
+
 int							A_star::stop_condition(Module_h &c_case, Module_h &target, e_action action)
 {
 	GameScene *scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
@@ -97,15 +107,13 @@ int							A_star::stop_condition(Module_h &c_case, Module_h &target, e_action ac
 	if (action == ATTACK && (c_case.pos_y != target.pos_y || c_case.pos_x != target.pos_x))
 		return (1);
 	else if (action == ESCAPE && this->bomb_col(this->bomb_list, c_case.pos_x, c_case.pos_y) == 0)
-	{
 		return (1);
-	}
-	else if (action == SEARCH && ice == false) // this->bomb_col(this->bomb_list, c_case.pos_x, c_case.pos_y) == 0
-	{
+	else if (action == SEARCH && ice == false)
 		return (1);
-	}
+	else if (action == WALK && c->walkable == true && this->walk_cond(c_case, target))
+		return (1);
 
-	if (action == ESCAPE || action == SEARCH)
+	if (action == ESCAPE || action == SEARCH || action == WALK)
 	{
 		target.pos_x = c_case.pos_x;
 		target.pos_y = c_case.pos_y;
@@ -135,7 +143,10 @@ void						A_star::find_path(Module_h &target, e_action action)
 		if (i == max_i || this->open_list.empty())
 		{
 			// std::cout << ">>>>>>>>>>>>>>>> int  " << i << std::endl;
-			this->delete_lists();
+			if (action == WALK && this->last_wallk_pos.pos_x != 0 && this->last_wallk_pos.pos_y != 0)
+				target = this->last_wallk_pos;
+			else
+				this->delete_lists();
 			return ;
 		}
 		c_case = this->open_list.top();
@@ -269,6 +280,14 @@ void						A_star::init_var(int &x, int &y, Module_h &target, e_action action)
 
 	this->start.pos_x = x;
 	this->start.pos_y = y;
+
+	if (action == WALK)
+	{
+		this->rand_walk = rand() % 60;
+		// std::cout << "================================ rand " << this->rand_walk << std::endl;
+		this->last_wallk_pos.pos_x = 0;
+		this->last_wallk_pos.pos_y = 0;
+	}
 }
 
 // ###############################################################

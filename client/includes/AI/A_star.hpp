@@ -10,6 +10,7 @@ enum e_action {
 	WAIT,
 	ESCAPE,
 	IDLE,
+	WALK
 	// END
 };
 
@@ -34,6 +35,8 @@ class A_star
 		// #####################################################################
 		Map* 										map;
 		Module_h									start;
+		Module_h									last_wallk_pos;
+		int											rand_walk;
 		std::vector<BombControllerScript*>			bomb_list;
 		// #####################################################################
 	private:
@@ -43,6 +46,7 @@ class A_star
 		int											get_heuristic(int y, int x, Module_h &target, int p, e_action action);
 		void										get_adjacent(Module_h &c_case, Module_h &target, e_action action, int x, int y, int p);
 		void										find_path(Module_h &target, e_action action);
+		int											walk_cond(Module_h &c_case, Module_h &target);
 		int											stop_condition(Module_h &c_case, Module_h &target, e_action action);
 		void										delete_lists(void);
 		void										init_var(int &x, int &y, Module_h &target, e_action action);
