@@ -28,13 +28,13 @@ class AI
 		Module_h 									target;
 		float										last_pos_x;
 		float										last_pos_y;
-		int											count;
+		long										t_last_move;
+		long										pause;
 		GameObject*									tplayer;
 		GameObject*									my_player;
 
 		std::list<Module_h> 						moves;
 		A_star										a_star;
-		int											pause;
 		bool										select_t;
 		e_action									action;
 

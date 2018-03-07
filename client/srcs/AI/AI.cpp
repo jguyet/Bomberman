@@ -11,7 +11,7 @@ AI::AI (GameObject* my_player) : my_player(my_player)
 	this->select_t = false;
 	this->pause = 0;
 	this->action = IDLE;
-	this->count = 150;
+	this->t_last_move = TimeUtils::getCurrentSystemMillis();
 	return ;
 }
 
@@ -80,14 +80,16 @@ void				AI::select_target(void)
 	if (this->select_t == false)
 	{
 		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
+
 		if (this->action == IDLE)
 		{
 			this->action = SEARCH;
 			this->select_t = true;
 		}
+		this->t_last_move = TimeUtils::getCurrentSystemMillis();
 	}
-	else if (this->action == ATTACK && (std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
-		this->restart_target_pos(ATTACK);
+	// else if (this->action == ATTACK && (std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
+	// 	this->restart_target_pos(ATTACK);
 }
 
 
@@ -120,16 +122,13 @@ int				AI::brain(void)
 				return (SDL_SCANCODE_Q);
 			}
 			else
-			{
 				this->action = WAIT;
-				this->select_t = false;
-			}
 		}
 	} else if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false) {
 		// std::cout << "-------------- FAIL OF PATH path_finding in action " << this->action << std::endl;
-		if (this->action == SEARCH)
-			this->action = END;
-		else
+		// if (this->action == SEARCH)
+		// 	this->action = END;
+		// else
 			this->action = WAIT;
 		return (0);
 	}
@@ -155,28 +154,30 @@ int				AI::start_checks(void)
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
-	if (this->action == END)
-		return (1);
+	// if (this->action == END)
+	// 	return (1);
 
-	if (this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK)
+	long t_current = TimeUtils::getCurrentSystemMillis();
+	float res = (std::abs(this->last_pos_x - x) + std::abs(this->last_pos_y - y));
+	if ((this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK) && res > 0.2)
 	{
-		float res = (std::abs(this->last_pos_x - x) + std::abs(this->last_pos_y - y));
-		if (res < 0.2)
-			this->count--;
-		else
+		if ((t_current - this->t_last_move) > 1000)
 		{
-			this->count = 150;
-			this->last_pos_x = this->my_player->transform.position.x;
-			this->last_pos_y = this->my_player->transform.position.z;
-		}
-		if (this->count == 0)
+			// std::cout << "-------------- TIMEOUT ESCAPE " << this->action << std::endl;
+			// this->t_last_move = t_current;
 			this->restart_target_pos(ESCAPE);
+		}
+		this->last_pos_x = this->my_player->transform.position.x;
+		this->last_pos_y = this->my_player->transform.position.z;
 	}
+	else
+		this->t_last_move = t_current;
 
 	if (this->action == WAIT)
 	{
-		this->pause = 120;
+		this->pause = TimeUtils::getCurrentSystemMillis() + 6000;
 		this->action = IDLE;
+		this->select_t = false;
 		return (1);
 	}
 
@@ -186,7 +187,7 @@ int				AI::start_checks(void)
 		return (1);
 	}
 
-	if (this->pause)
+	if (this->pause != 0)
 	{
 		if (this->a_star.bomb_col(this->bomb_l, my_player->transform.position.x, my_player->transform.position.z) == 0)
 		{
@@ -196,7 +197,9 @@ int				AI::start_checks(void)
 		int n_bomb = dynamic_cast<CharacterControllerScript *>(my_player->GetComponent<Script>())->bomb;
 		if (n_bomb == 0)
 			return (1);
-		this->pause--;
+
+		if (this->pause < TimeUtils::getCurrentSystemMillis())
+			this->pause = 0;
 		return (1);
 	}
 
@@ -214,7 +217,6 @@ void				AI::restart_target_pos(e_action action)
 	}
 	this->action = action;
 	this->pause = 0;
-	this->count = 150;
 	this->moves.clear();
 }
 

@@ -10,7 +10,7 @@ enum e_action {
 	WAIT,
 	ESCAPE,
 	IDLE,
-	END
+	// END
 };
 
 class A_star

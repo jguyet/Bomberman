@@ -116,7 +116,7 @@ int							A_star::stop_condition(Module_h &c_case, Module_h &target, e_action ac
 void						A_star::find_path(Module_h &target, e_action action)
 {
 	int i = 0;
-	int max_i = 500;
+	int max_i = 250;
 
 	Module_h c_case = this->open_list.top();
 	int p;
@@ -219,19 +219,23 @@ int							A_star::bomb_col(std::vector<BombControllerScript*> bomb_l, float x, f
 	for (auto &elem : bomb_l)
 	{
 		float powe = elem->power * 2;
+		// long rest_time = BOMB_TIME - (TimeUtils::getCurrentSystemMillis() - elem->startTime);
+
+		// if (rest_time > 1000)
+		// 	continue;
 		float tx = elem->gameObject->transform.position.x;
 		float ty = elem->gameObject->transform.position.z;
 		if (x >= tx - t && x <= tx + t + powe && y >= ty - 1.0f - t && y <= ty + 1.0f + t)
-			return (0);
+		return (0);
 
 		if (x >= tx - t - powe && x <= tx + t && y >= ty - 1.0f - t && y <= ty + 1.0f + t)
-			return (0);
+		return (0);
 
 		if (x >= tx - 1.0f - t && x <= tx + 1.0f + t && y >= ty - t && y <= ty + t + powe)
-			return (0);
+		return (0);
 
 		if (x >= tx - 1.0f - t && x <= tx + 1.0f + t && y >= ty - t - powe  && y <= ty + t)
-			return (0);
+		return (0);
 	}
 	return (1);
 }
