@@ -85,7 +85,8 @@ void				AI::select_target(void)
 
 		if (this->action == IDLE)
 		{
-			this->action = SEARCH;
+			// this->action = SEARCH;
+			this->action = WALK;
 			this->select_t = true;
 		}
 		this->t_last_move = TimeUtils::getCurrentSystemMillis();
@@ -96,7 +97,6 @@ void				AI::select_target(void)
 		this->t_last_move = TimeUtils::getCurrentSystemMillis();
 	}
 }
-
 
 int				AI::brain(void)
 {
@@ -138,14 +138,17 @@ int				AI::brain(void)
 		return (0);
 	}
 	// move ############################
-	if (x <= this->moves.front().pos_x && (abs(x - this->moves.front().pos_x) > SPEED))
+	if (this->moves.size() > 0 &&  (this->action == WALK || this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK))
+	{
+		if (x <= this->moves.front().pos_x && (abs(x - this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_UP);
-	if (x > this->moves.front().pos_x && (abs(x - this->moves.front().pos_x) > SPEED))
+		if (x > this->moves.front().pos_x && (abs(x - this->moves.front().pos_x) > SPEED))
 		return(SDL_SCANCODE_DOWN);
-	if (y > this->moves.front().pos_y && (abs(y - this->moves.front().pos_y) > SPEED))
+		if (y > this->moves.front().pos_y && (abs(y - this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_LEFT);
-	if (y < this->moves.front().pos_y && (abs(y - this->moves.front().pos_y) > SPEED))
+		if (y < this->moves.front().pos_y && (abs(y - this->moves.front().pos_y) > SPEED))
 		return(SDL_SCANCODE_RIGHT);
+	}
 	// #################################
 	return (0);
 }
@@ -164,7 +167,7 @@ int				AI::start_checks(void)
 
 	long t_current = TimeUtils::getCurrentSystemMillis();
 	float res = (std::abs(this->last_pos_x - x) + std::abs(this->last_pos_y - y));
-	if ((this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK) && res > 0.2)
+	if ((this->action == WALK || this->action == SEARCH || this->action == ESCAPE || this->action == ATTACK) && res > 0.2)
 	{
 		if ((t_current - this->t_last_move) > 1000)
 		{
@@ -180,7 +183,7 @@ int				AI::start_checks(void)
 
 	if (this->action == WAIT)
 	{
-		this->pause = TimeUtils::getCurrentSystemMillis() + 6000;
+		this->pause = TimeUtils::getCurrentSystemMillis() + 1000;
 		this->action = IDLE;
 		this->select_t = false;
 		return (1);
