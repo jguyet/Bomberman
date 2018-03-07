@@ -126,6 +126,7 @@ void							replaceAll(std::string& source, const std::string& from, const std::s
 # include "scenes/MainMenuScene.hpp"
 # include "scenes/SoloMenuScene.hpp"
 # include "scenes/SettingScene.hpp"
+# include "scenes/EndGameScene.hpp"
 
 /*
 ** Others

@@ -28,46 +28,63 @@ Scene::~Scene ( void )
 
 void								Scene::add(GameObject *obj)
 {
-	if (obj != NULL)
-		this->gameObjects[obj->id] = obj;
+	if (obj == NULL)
+		return ;
+	if (this->gameObjects.count(obj->id) != 0)
+		return ;
+	if (obj->GetComponent<Script>() != NULL)
+		this->gameObjects_script[obj->id] = obj;
+	this->gameObjects[obj->id] = obj;
 }
 
 void								Scene::remove(GameObject *obj)
 {
+	if (obj == NULL)
+		return ;
 	obj->toDelete = true;
+}
+
+void								test()
+{
+
 }
 
 void								Scene::_calculPhisics(void)
 {
 	//TODO by static Components
+	this->mutex.lock();
 	BoxCollider::Check3DCollisions(this->gameObjects);
 
-	for (auto &it : this->gameObjects) {
-		GameObject *currentGameObject = it.second;
+	for (auto const &it : this->gameObjects_script) {
+		GameObject		*currentGameObject	= it.second;
 		//script calling
-		if (this->check_gameObject_toDelete(currentGameObject))
-			continue;
+		if (currentGameObject->toDelete)
+			continue ;
 		Script *script = currentGameObject->GetComponent<Script>();
-		if (script != NULL && script->frame != 0L) {
+
+		if (script == NULL) {
+			continue ;
+		}
+		if (script->frame != 0L) {
 			script->Update();
 		}
-		if (this->check_gameObject_toDelete(currentGameObject))
-			continue;
 	}
-
-	this->remove_all_toDelete();
+	this->mutex.unlock();
 }
 
 void								Scene::_drawGameObjects(void)
 {
 	//lock GameObject map
-	this->mutex.lock();
-	for (auto &it : this->gameObjects) {
+	for (auto const &it : this->gameObjects) {
 		GameObject *currentGameObject = it.second;
 
-		Script *script = currentGameObject->GetComponent<Script>();
-		Animator *animator = currentGameObject->GetComponent<Animator>();
-		Model *model = currentGameObject->GetComponent<Model>();
+		this->check_gameObject_toDelete(currentGameObject);
+		if (currentGameObject->toDelete)
+			continue ;
+
+		Script		*script		= currentGameObject->GetComponent<Script>();
+		Animator	*animator	= currentGameObject->GetComponent<Animator>();
+		Model		*model		= currentGameObject->GetComponent<Model>();
 
 		if (script != NULL) {
 			if (script->frame == 0L) {
@@ -91,7 +108,7 @@ void								Scene::_drawGameObjects(void)
 			script->OnEndRender();
 		}
 	}
-	this->mutex.unlock();
+	this->remove_toDelete(5);
 }
 
 // ###############################################################
@@ -100,7 +117,7 @@ void								Scene::_drawGameObjects(void)
 
 bool								Scene::check_gameObject_toDelete(GameObject *obj)
 {
-	if (obj->toDelete) {
+	if (obj->toDelete && this->delete_list.count(obj->id) == 0) {
 		this->delete_list[obj->id] = obj;
 		this->delete_list_ids.push_back(obj->id);
 		return true;
@@ -108,27 +125,51 @@ bool								Scene::check_gameObject_toDelete(GameObject *obj)
 	return false;
 }
 
+void								Scene::remove_toDelete( int number )
+{
+	if (this->delete_list_ids.size() == 0)
+		return ;
+	this->mutex.lock();
+	for (int i = 0; i < this->delete_list_ids.size() && i < number; i++) {
+		long id = this->delete_list_ids.at(i);
+
+		if (this->delete_list.count(id) == 0)
+			continue ;
+		GameObject *obj = this->delete_list[id];
+
+		if (this->gameObjects.count(obj->id) != 0) {
+			this->gameObjects.erase(obj->id);
+			this->delete_list.erase(obj->id);
+			this->gameObjects_script.erase(obj->id);
+			this->delete_list_ids.erase(this->delete_list_ids.begin() + i);
+			delete obj;
+		}
+	}
+	this->mutex.unlock();
+}
+
 void								Scene::remove_all_toDelete( void )
 {
 
-	if (this->delete_list_ids.size() > 0) {
-		this->mutex.lock();
-		for (int i = 0; i < this->delete_list_ids.size(); i++) {
-			long id = this->delete_list_ids.at(i);
+	if (this->delete_list_ids.size() == 0)
+		return ;
+	this->mutex.lock();
+	for (int i = 0; i < this->delete_list_ids.size(); i++) {
+		long id = this->delete_list_ids.at(i);
 
-			if (this->delete_list.count(id) == 0)
-				continue ;
-			GameObject *obj = this->delete_list[id];
+		if (this->delete_list.count(id) == 0)
+			continue ;
+		GameObject *obj = this->delete_list[id];
 
-			if (this->gameObjects.count(obj->id) != 0) {
-				this->gameObjects.erase(obj->id);
-				delete obj;
-			}
+		if (this->gameObjects.count(obj->id) != 0) {
+			this->gameObjects.erase(obj->id);
+			this->gameObjects_script.erase(obj->id);
+			delete obj;
 		}
-		this->delete_list.clear();
-		this->delete_list_ids.clear();
-		this->mutex.unlock();
 	}
+	this->delete_list.clear();
+	this->delete_list_ids.clear();
+	this->mutex.unlock();
 }
 
 // ###############################################################

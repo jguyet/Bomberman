@@ -28,13 +28,9 @@ class GameScene : public Scene, public KeyBoardEventHandler
 		GameScene &							operator=( GameScene const & rhs );
 		friend std::ostream &				operator<<(std::ostream & o, GameScene const & i);
 		// ####################################################################
-		// @OVERRIDE Scene ###################################################
-		void 								StartSolo(void);
+		// @OVERRIDE Scene ####################################################
 		void								calculPhisics(void);
 		void								drawGameObjects(void);
-		GameObject							*findPlayer(GameObject*);
-		GameObject							*findPlayerById(int playerId);
-		void								removePlayer(GameObject*);
 		// Scene functions and vars ->
 		//void								_calculPhisics(void);
 		//void								_drawGameObjects(void);
@@ -45,6 +41,10 @@ class GameScene : public Scene, public KeyBoardEventHandler
 		//Camera							*camera;
 		// ####################################################################
 		// PUBLICS ############################################################
+		void 								StartSolo(void);
+		GameObject							*findPlayer(GameObject*);
+		GameObject							*findPlayerById(int playerId);
+		void								removePlayer(GameObject*);
 		void								closeQuitInterface(void);
 		void								openQuitInterface(void);
 		void								build_camera(void);
@@ -64,7 +64,6 @@ class GameScene : public Scene, public KeyBoardEventHandler
 		GameInterface						*interface;
 		StartGameInterface					*startGameInterface;
 		QuitMenuInterface					*quitInterface;
-		EndGameInterface					*endGameInterface;
 		// ####################################################################
 };
 

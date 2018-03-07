@@ -45,8 +45,6 @@ std::string									Map::getName()
 
 Case						*Map::getCase(int x, int z)
 {
-	//if (this->content.count(std::make_pair(x, z)) == 0)
-		//return NULL;
 	return &this->content[std::make_pair(x, z)];
 }
 

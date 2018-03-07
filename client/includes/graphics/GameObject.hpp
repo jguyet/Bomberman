@@ -96,13 +96,11 @@ T*							GameObject::GetComponent(void)
 	std::string name = std::string(typeid(T).name());
 	T			*comp = NULL;
 	name.erase(std::remove_if(name.begin(), name.end(), &isdigit), name.end());
-	this->mutex.lock();
+
 	if (this->components.count(name) == 0) {
-		this->mutex.unlock();
 		return NULL;
 	}
 	comp = dynamic_cast<T*>(this->components[name]);
-	this->mutex.unlock();
 	return (comp);
 }
 // #############################################################################

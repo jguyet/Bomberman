@@ -3,11 +3,13 @@
 
 # include "Bomberman.hpp"
 
+# include <unordered_map>
+
 class BoxCollider : public Component
 {
 	public:
 		// STATICS ############################################################
-		static void							Check3DCollisions(std::map<long, GameObject*> &gameObjects);
+		static void							Check3DCollisions(std::unordered_map<long, GameObject*> const &gameObjects);
 		// ####################################################################
 		// CANONICAL ##########################################################
 											BoxCollider( glm::vec3 center, glm::vec3 size );

@@ -4,6 +4,7 @@
 # include "Bomberman.hpp"
 # include <mutex>
 # include <atomic>
+# include <unordered_map>
 
 class Scene
 {
@@ -21,7 +22,8 @@ class Scene
 		void								remove(GameObject *obj);
 
 		Camera								*camera;
-		std::map<long, GameObject*>			gameObjects;
+		std::unordered_map<long, GameObject*>			gameObjects;
+		std::unordered_map<long, GameObject*>			gameObjects_script;
 		// ####################################################################
 	protected:
 		// PROTECTED ##########################################################
@@ -29,6 +31,7 @@ class Scene
 		void								_drawGameObjects(void);
 		// ####################################################################
 	private:
+		void								remove_toDelete( int number );
 		void								remove_all_toDelete( void );
 		bool								check_gameObject_toDelete(GameObject *obj);
 

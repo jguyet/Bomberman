@@ -112,10 +112,12 @@ void								BombControllerScript::explode(void)
 	int z = this->gameObject->transform.position.z / 2;
 	this->playerController->BombExplode();
 	Case *c = dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->map->getCase(x, z);
-	if (c == NULL)
+	if (c == NULL) {
 		return ;
+	}
 	c->obstacle = NULL;
 	c->walkable = true;
+	this->gameObject->toDelete = true;
 	int puissance = this->power;
 	//z+
 
@@ -166,7 +168,6 @@ void								BombControllerScript::explode(void)
 				break;
 		}
 	}
-	this->gameObject->toDelete = true;
 }
 
 // ###############################################################
