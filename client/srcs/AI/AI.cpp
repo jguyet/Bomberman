@@ -61,14 +61,16 @@ void				AI::get_target(float x, float y, std::vector<GameObject*> players)
 
 	for (auto *player : players)
 	{
-		if (player->transform.position.x != x && player->transform.position.z != y)
-		{
-			this->target.pos_x = player->transform.position.x;
-			this->target.pos_y = player->transform.position.z;
-			this->tplayer = player;
-			this->action = ATTACK;
-			this->select_t = true;
-		}
+		float dist1 = std::abs(x - this->target.pos_x) + std::abs(y - this->target.pos_y);
+		float dist2 = std::abs(x - player->transform.position.x) + std::abs(y - player->transform.position.z);
+		if ((player->transform.position.x == x && player->transform.position.z == y) || (this->tplayer != NULL && dist1 < dist2))
+			continue ;
+
+		this->target.pos_x = player->transform.position.x;
+		this->target.pos_y = player->transform.position.z;
+		this->tplayer = player;
+		this->action = ATTACK;
+		this->select_t = true;
 	}
 }
 
@@ -88,8 +90,11 @@ void				AI::select_target(void)
 		}
 		this->t_last_move = TimeUtils::getCurrentSystemMillis();
 	}
-	// else if (this->action == ATTACK && (std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
-	// 	this->restart_target_pos(ATTACK);
+	else if (this->action == ATTACK && (std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
+	{
+		this->restart_target_pos(ATTACK);
+		this->t_last_move = TimeUtils::getCurrentSystemMillis();
+	}
 }
 
 
