@@ -3,7 +3,7 @@
 
 # include "Bomberman.hpp"
 
-class EndGameInterface : public UIInterface
+class EndGameInterface : public UIInterface, public KeyBoardEventHandler
 {
 	public:
 
@@ -16,6 +16,9 @@ class EndGameInterface : public UIInterface
 
 		void								draw(void);
 
+		void								handleUP(unsigned int key);
+
+		int									current_position;
 	private:
 		Canvas									*canvas;
 		bool									is_winner;

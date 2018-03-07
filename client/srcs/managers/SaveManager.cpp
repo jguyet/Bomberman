@@ -101,6 +101,26 @@ int SaveManager::mapToLevel(std::string map)
 	return level;
 }
 
+void SaveManager::levelToMap(std::string &get, int level)
+{
+	if (level == 1)
+		get = "map_01";
+	if (level == 2)
+		get = "map_02";
+	if (level == 3)
+		get = "map_03";
+	if (level >= 4)
+		get = "map_04";
+}
+
+void SaveManager::levelUP(void)
+{
+	std::string	next_map;
+
+	this->levelToMap(next_map, this->mapToLevel(BombermanClient::getInstance()->getCurrentScene<GameScene>()->map->name) + 1);
+	this->save(next_map);
+}
+
 void SaveManager::loadNextLevel()
 {
 	BombermanClient *instance = BombermanClient::getInstance();

@@ -18,7 +18,7 @@
 	x: -200,
 	y: 150,
 	width: 400,
-	height: 160,
+	height: 230,
 	style: "color:#2E2E2E;float:center;",
 	z-index: 1
 }
@@ -68,7 +68,7 @@
 	</img>
 </if>
 
-<if condition="$is_winner == NULL">
+<if condition="$is_winner == false">
 	<text>
 	{
 		id: "lbl_mainmenu",
@@ -111,29 +111,118 @@
 	</img>
 </if>
 
-<square>
-{
-	id: "background_solo",
-	class: "mainmenu-css",
-	parent: "background_menu",
-	x: 290,
-	y: 80,
-	width: 300,
-	height: 50,
-	style: "color:#424242;float:center;",
-	z-index: 2
-}
-</square>
+<if condition="$selected == 0" >
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 80,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
 
-<text>
-{
-	id: "button_solo",
-	class: "mainmenu-css",
-	value: "Return to solo menu",
-	parent: "background_solo",
-	x: 13,
-	y: 7,
-	style: "color:#848484;font-size: 30px;",
-	z-index: 3
-}
-</text>
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Solo menu",
+		parent: "background_solo",
+		x: 75,
+		y: 7,
+		style: "color:#000000;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected != 0" >
+	<square>
+	{
+		id: "background_solo",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 80,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+
+	<text>
+	{
+		id: "button_solo",
+		class: "mainmenu-css",
+		value: "Solo menu",
+		parent: "background_solo",
+		x: 75,
+		y: 7,
+		style: "color:#848484;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected == 1" >
+	<square>
+	{
+		id: "background_main",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 150,
+		width: 300,
+		height: 50,
+		style: "color:#BDBDBD;float:center;",
+		z-index: 2
+	}
+	</square>
+
+	<text>
+	{
+		id: "button_main",
+		class: "mainmenu-css",
+		value: "Main menu",
+		parent: "background_main",
+		x: 75,
+		y: 7,
+		style: "color:#000000;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>
+
+<if condition="$selected != 1" >
+	<square>
+	{
+		id: "background_main",
+		class: "mainmenu-css",
+		parent: "background_menu",
+		x: 290,
+		y: 150,
+		width: 300,
+		height: 50,
+		style: "color:#424242;float:center;",
+		z-index: 2
+	}
+	</square>
+
+	<text>
+	{
+		id: "button_main",
+		class: "mainmenu-css",
+		value: "Main menu",
+		parent: "background_main",
+		x: 75,
+		y: 7,
+		style: "color:#848484;font-size: 30px;",
+		z-index: 3
+	}
+	</text>
+</if>

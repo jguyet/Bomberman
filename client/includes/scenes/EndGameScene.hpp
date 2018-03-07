@@ -10,7 +10,7 @@ class EndGameScene : public Scene, public KeyBoardEventHandler
 		// STATICS ############################################################
 		// ####################################################################
 		// CANONICAL ##########################################################
-											EndGameScene( void );
+											EndGameScene( bool is_winner );
 											EndGameScene( EndGameScene const & src );
 		virtual								~EndGameScene( void );
 		EndGameScene &						operator=( EndGameScene const & rhs );

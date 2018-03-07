@@ -25,6 +25,8 @@ class SaveManager
 		SaveObject	*loadSave();
 		int			getCurrentLevel();
 		void		loadNextLevel();
+		void		levelToMap(std::string &get, int level);
+		void 		levelUP(void);
 		int			mapToLevel(std::string map);
 
 		SaveManager &							operator=( SaveManager const & rhs );

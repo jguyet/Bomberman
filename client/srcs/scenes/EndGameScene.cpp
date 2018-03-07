@@ -6,7 +6,7 @@
 
 // CANONICAL #####################################################
 
-EndGameScene::EndGameScene ( void )
+EndGameScene::EndGameScene ( bool is_winner )
 {
 	this->camera = new Camera();
 	this->camera->setProjection(45.0f, BombermanClient::getInstance()->screen->width, BombermanClient::getInstance()->screen->height, 0.1f, 1000000.0f);
@@ -14,7 +14,7 @@ EndGameScene::EndGameScene ( void )
 	this->camera->transform.rotation = glm::vec3(78.0803f,269.888f,0);
 	this->camera->buildFPSProjection();
 
-	this->interface = new EndGameInterface(true);
+	this->interface = new EndGameInterface(is_winner);
 
 	KeyBoard::instance->addHandler("EndGameScene", this);
 	return ;
@@ -57,9 +57,16 @@ std::ostream &				operator<<(std::ostream & o, EndGameScene const & i)
 
 void						EndGameScene::handleUP(unsigned int key)
 {
-	if (key == SDL_SCANCODE_KP_PLUS)
-	{
-		//TODO switch
+	if (key == SDL_SCANCODE_KP_ENTER || key == SDL_SCANCODE_RETURN) {
+		switch(this->interface->current_position)
+		{
+			case 0:
+				BombermanClient::getInstance()->setCurrentScene<SoloMenuScene>(new SoloMenuScene());
+			break ;
+			case 1:
+				BombermanClient::getInstance()->setCurrentScene<MainMenuScene>(new MainMenuScene());
+			break;
+		}
 	}
 }
 
