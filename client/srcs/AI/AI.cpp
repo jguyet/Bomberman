@@ -85,8 +85,8 @@ void				AI::select_target(void)
 
 		if (this->action == IDLE)
 		{
-			// this->action = SEARCH;
-			this->action = WALK;
+			this->action = SEARCH;
+			// this->action = WALK;
 			this->select_t = true;
 		}
 		this->t_last_move = TimeUtils::getCurrentSystemMillis();
@@ -183,7 +183,7 @@ int				AI::start_checks(void)
 
 	if (this->action == WAIT)
 	{
-		this->pause = TimeUtils::getCurrentSystemMillis() + 1000;
+		this->pause = TimeUtils::getCurrentSystemMillis() + 1000 + BOMB_TIME;
 		this->action = IDLE;
 		this->select_t = false;
 		return (1);
