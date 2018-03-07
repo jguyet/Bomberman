@@ -49,6 +49,7 @@ class GameScene : public Scene, public KeyBoardEventHandler
 		void								openQuitInterface(void);
 		void								build_camera(void);
 		void								move_camera(void);
+		void								endGame(bool is_winner);
 		void								startGame(void);
 		void								openEndGameInterface(bool is_winner);
 

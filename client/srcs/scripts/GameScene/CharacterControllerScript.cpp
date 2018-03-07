@@ -195,8 +195,7 @@ void						CharacterControllerScript::Update(void)
 					BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
 				}
 				this->scene->removePlayer(this->gameObject);
-				this->gameObject->toDelete = true;
-				this->scene->current_player = NULL;
+				this->scene->endGame(false);
 			} else { // Other players
 				printf("Player id %d is dead !\n", this->getPlayerId());
 				this->scene->removePlayer(this->gameObject);
@@ -297,8 +296,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 	if (collider->tag == "door" && this->gameObject->id == this->scene->current_player->id)
 	{
-		printf("You finished the level %d, congratulations !\n", BombermanClient::getInstance()->saveManager->getCurrentLevel());
-		BombermanClient::getInstance()->saveManager->loadNextLevel();
+		this->scene->endGame(true);
 		return;
 	}
 	Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));

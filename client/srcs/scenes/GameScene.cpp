@@ -24,7 +24,6 @@ GameScene::GameScene (std::string selected_map)
 		this->interface = new GameInterface(this);
 		if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false)
 		{
-			BombermanClient::getInstance()->saveManager->save(this->map->name);
 			this->StartSolo();
 		} else {
 			this->startGameInterface = new StartGameInterface();
@@ -162,6 +161,20 @@ void								GameScene::startGame(void)
 		this->startGameInterface = NULL;
 		delete tmp;
 	}
+}
+
+void								GameScene::endGame(bool is_winner)
+{
+	if (this->current_player != NULL)
+	{
+		this->current_player = NULL;
+	}
+	if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false && is_winner) {
+		BombermanClient::getInstance()->saveManager->levelUP();
+	}
+	BombermanClient::getInstance()->setCurrentScene<EndGameScene>(new EndGameScene(is_winner));
+	//printf("You finished the level %d, congratulations !\n", BombermanClient::getInstance()->saveManager->getCurrentLevel());
+	//BombermanClient::getInstance()->saveManager->loadNextLevel();
 }
 
 void								GameScene::closeQuitInterface(void)
