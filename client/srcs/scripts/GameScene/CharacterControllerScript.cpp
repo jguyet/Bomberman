@@ -303,6 +303,11 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 	}
 	Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 
+	if (collider->tag == "Goomba" && this->gameObject->tag != "Goomba")
+	{
+		this->lastDying = TimeUtils::getCurrentSystemMillis();
+		return;
+	}
 	if (c == NULL)
 		return ;
 	if (collider->tag == "Bomb") {
