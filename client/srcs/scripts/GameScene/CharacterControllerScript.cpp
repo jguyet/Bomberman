@@ -138,6 +138,22 @@ void								CharacterControllerScript::MRight(void)
 	this->has_moved = true;
 }
 
+void 						CharacterControllerScript::checkRotation()
+{
+	if ((this->gameObject->transform.position.z - this->lastPosition_direction.z) > 0) {
+		this->gameObject->transform.rotation.y = 180.f;
+	}
+	if ((this->gameObject->transform.position.z - this->lastPosition_direction.z) < 0) {
+		this->gameObject->transform.rotation.y = 0.f;
+	}
+	if ((this->gameObject->transform.position.x - this->lastPosition_direction.x) > 0) {
+		this->gameObject->transform.rotation.y = 270.f;
+	}
+	if ((this->gameObject->transform.position.x - this->lastPosition_direction.x) < 0) {
+		this->gameObject->transform.rotation.y = 90.f;
+	}
+}
+
 void						CharacterControllerScript::Update(void)
 {
 	if (this->scene->startGameInterface != NULL)
@@ -148,7 +164,6 @@ void						CharacterControllerScript::Update(void)
 		std::make_pair(SDL_SCANCODE_DOWN, &CharacterControllerScript::MDown), std::make_pair(SDL_SCANCODE_LEFT, &CharacterControllerScript::MLeft),
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
-
 
 	int currentPlayerId = -1;
 
@@ -162,15 +177,42 @@ void						CharacterControllerScript::Update(void)
 
 	this->has_moved = false;
 
-	if (this->playerId == currentPlayerId) {
-		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q))//Q
+	if (this->lastDying != 0)
+	{
+		if (this->startDying == 0) {
+			this->startDying = TimeUtils::getCurrentSystemMillis();
+		}
+		if (this->lastDying < (TimeUtils::getCurrentSystemMillis() - 20L))
 		{
+			this->lastDying = TimeUtils::getCurrentSystemMillis();
+			this->gameObject->transform.position.y -= 1;
+			this->gameObject->transform.rotation.x += 10;
+			this->gameObject->transform.rotation.z += 10;
+		}
+		if ((TimeUtils::getCurrentSystemMillis() - this->startDying) >= 1000L) {
+			if (this->playerId == currentPlayerId) { // Current player
+				if (BombermanClient::getInstance()->sock != NULL) {
+					BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
+				}
+				this->scene->removePlayer(this->gameObject);
+				this->gameObject->toDelete = true;
+				this->scene->current_player = NULL;
+			} else { // Other players
+				printf("Player id %d is dead !\n", this->getPlayerId());
+				this->scene->removePlayer(this->gameObject);
+				this->gameObject->toDelete = true;
+			}
+		}
+		return;
+	}
+
+	if (this->playerId == currentPlayerId) {
+		if (KeyBoard::instance->getKey(SDL_SCANCODE_Q)) {
 			this->Attack();
-			// std::cout << std::endl;
 		}
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_P))
 		{
-			// BombermanClient::getInstance()->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
+			BombermanClient::getInstance()->current_scene->add(Factory::newPowerUp(fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0)));
 		}
 		if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT)) //RIGHT
 			this->MRight();
@@ -182,21 +224,6 @@ void						CharacterControllerScript::Update(void)
 			this->MDown();
 		else if (KeyBoard::instance->getKey(SDL_SCANCODE_E))
 			std::cout << "X:" << this->gameObject->transform.position.x << "Z:" << this->gameObject->transform.position.z << " " << std::endl;
-		else if (KeyBoard::instance->getKey(SDL_SCANCODE_W))
-		{
-
-			// Case *c = this->scene->map->getCase( fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
-			// if (c->obstacle != NULL)
-			// 	return ;
-            //
-            //
-			// GameObject *goomba = Factory::newGoomba();
-            //
-			// goomba->transform.position = glm::vec3(c->position.x,-2,c->position.z-4);
-			// goomba->transform.scale = glm::vec3(0.05f,0.05f,0.05f);
-			// goomba->transform.rotation = glm::vec3(0,0,0);
-			// this->scene->add(goomba);
-		}
 
 		if (this->has_moved) {
 			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
@@ -229,18 +256,7 @@ void						CharacterControllerScript::Update(void)
 			if (this->gameObject->transform.position != this->lastPosition_direction)
 				this->has_moved = true;
 			if (this->has_moved) {
-				if ((this->gameObject->transform.position.z - this->lastPosition_direction.z) > 0) {
-					this->gameObject->transform.rotation.y = 180.f;
-				}
-				if ((this->gameObject->transform.position.z - this->lastPosition_direction.z) < 0) {
-					this->gameObject->transform.rotation.y = 0.f;
-				}
-				if ((this->gameObject->transform.position.x - this->lastPosition_direction.x) > 0) {
-					this->gameObject->transform.rotation.y = 270.f;
-				}
-				if ((this->gameObject->transform.position.x - this->lastPosition_direction.x) < 0) {
-					this->gameObject->transform.rotation.y = 90.f;
-				}
+				this->checkRotation();
 				this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
 			} else {
 				this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
@@ -314,36 +330,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 			this->lock_direction[DIRECTION_BACKWARD] = true;
 	}
 	else if (collider->tag == "Explosion") {
-		if (this->scene->current_player != NULL && this->gameObject->id == this->scene->current_player->id) {
-			// for (int i = 0; i < 100; i++)
-			// {
-			// 	this->gameObject->transform.position.y -= 1;
-			// 	this->gameObject->transform.rotation.x += 10;
-			// 	this->gameObject->transform.rotation.z += 10;
-			// 	usleep(20 * 1000);
-			// }
-			if (BombermanClient::getInstance()->sock != NULL) {
-				BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
-			}
-			this->scene->removePlayer(this->gameObject);
-			this->gameObject->toDelete = true;
-			this->scene->current_player = NULL;
-		} else {
-			// printf("Player id %d is dead !\n", this->getPlayerId());
-			// this->scene->removePlayer(this->gameObject);
-			// this->gameObject->toDelete = true;
-
-			// for (int i = 0; i < 100; i++)
-			// {
-			// 	this->gameObject->transform.position.y -= 1;
-			// 	this->gameObject->transform.rotation.x += 10;
-			// 	this->gameObject->transform.rotation.z += 10;
-			// 	usleep(20 * 1000);
-			// }
-			printf("Player id %d is dead !\n", this->getPlayerId());
-			this->scene->removePlayer(this->gameObject);
-			this->gameObject->toDelete = true;
-		}
+		this->lastDying = TimeUtils::getCurrentSystemMillis();
 	}
 	else if (collider->tag == "bonus-bomb-up") {
 		this->bomb++;

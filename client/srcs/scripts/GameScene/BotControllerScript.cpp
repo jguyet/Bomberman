@@ -66,6 +66,26 @@ void								BotControllerScript::Update(void)
 		std::make_pair(SDL_SCANCODE_RIGHT, &CharacterControllerScript::MRight)
 	};
 
+	if (CharacterControllerScript::lastDying != 0)
+	{
+		if (CharacterControllerScript::startDying == 0) {
+			CharacterControllerScript::startDying = TimeUtils::getCurrentSystemMillis();
+		}
+		if (CharacterControllerScript::lastDying < (TimeUtils::getCurrentSystemMillis() - 20L))
+		{
+			CharacterControllerScript::lastDying = TimeUtils::getCurrentSystemMillis();
+			this->gameObject->transform.position.y -= 1;
+			this->gameObject->transform.rotation.x += 10;
+			this->gameObject->transform.rotation.z += 10;
+		}
+
+		if ((TimeUtils::getCurrentSystemMillis() - CharacterControllerScript::startDying) >= 1000L) {
+			this->scene->removePlayer(this->gameObject);
+			this->gameObject->toDelete = true;
+		}
+		return;
+	}
+
 	int i = 0;
 	i = this->robot->brain();
 

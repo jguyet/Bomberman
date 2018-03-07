@@ -36,6 +36,7 @@ class CharacterControllerScript : public Script
 		void								MLeft(void);
 		void								MRight(void);
 
+		void 								checkRotation();
 		void 								BombExplode();
 		int 								getPower();
 		int									getPlayerId();
@@ -51,13 +52,15 @@ class CharacterControllerScript : public Script
 		bool								lock_direction[4];
 		AI 									*robot;
 		glm::vec3							color;
+		long								lastDying = 0;
+		long								startDying = 0;
 		// ####################################################################
 	private:
 		// PRIVATES ###########################################################
 
 		bool								has_moved = false;
 
-		long 								lastNetwork = 0;
+		long 								lastNetwork = 0;;
 		glm::vec3							lastPosition_direction;
 
 	protected:
