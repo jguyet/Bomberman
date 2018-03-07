@@ -62,9 +62,11 @@ std::ostream &				operator<<(std::ostream & o, SettingScene const & i)
 void								SettingScene::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_ESCAPE) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 		BombermanClient::getInstance()->stop();
 	}
 	if (key == SDL_SCANCODE_KP_ENTER || key == SDL_SCANCODE_RETURN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 		switch(this->interface->current_position)
 		{
 			case 0:

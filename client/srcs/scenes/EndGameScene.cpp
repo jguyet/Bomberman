@@ -58,6 +58,7 @@ std::ostream &				operator<<(std::ostream & o, EndGameScene const & i)
 void						EndGameScene::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_KP_ENTER || key == SDL_SCANCODE_RETURN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 		switch(this->interface->current_position)
 		{
 			case 0:
@@ -67,6 +68,8 @@ void						EndGameScene::handleUP(unsigned int key)
 				BombermanClient::getInstance()->setCurrentScene<MainMenuScene>(new MainMenuScene());
 			break;
 		}
+		BombermanClient::getInstance()->MusicStop();
+		BombermanClient::getInstance()->MusicPlay(MENU);
 	}
 }
 

@@ -80,17 +80,15 @@ class BombermanClient : public IRenderLoop
 
 		bool										new_socket( std::string const &ip, int port );
 		void										delete_socket( void );
+
 		void 										SoundPlay(Sound toPlay);
 		void 										MusicPlay(Music toPlay);
+		void 										MusicStop(void);
 
 		void										setWindowSize(int newWidth, int newHeight, bool fullscreen);
 
 		void										run( void );
 		void										stop( void );
-
-		bool 										InitOpenAL();
-		void 										ShutdownOpenAL();
-
 
 		//sdl dependencies
 		SDL_Window									*window;
@@ -103,15 +101,18 @@ class BombermanClient : public IRenderLoop
 		Socket 										*sock;
 		Properties									*properties;
 
-		bool 										enableSound = 0;
-		bool 										enableMusic = 0;
+		bool 										enableSound;
+		bool 										enableMusic;
 
 		//sound
 		Mix_Music 									*music      = NULL;
 		Mix_Music 									*music_menu = NULL;
-		Mix_Chunk 									*bomb       = NULL;
+		Mix_Chunk 									*bomb1      = NULL;
 		Mix_Chunk 									*bomb2      = NULL;
+		Mix_Chunk 									*bomb3      = NULL;
+		Mix_Chunk 									*bomb4      = NULL;
 		Mix_Chunk									*menu_enter = NULL;
+		Mix_Chunk									*menu_move  = NULL;
 
 		bool 										lockCam = true;
 
