@@ -9,7 +9,6 @@ project(${PROJECT_NAME})
 set(CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build")
 
 find_package(OpenGL REQUIRED)
-find_package(OpenAL REQUIRED)
 
 ################################################################################
 # APPLE INSTALL LIBS
@@ -178,5 +177,4 @@ file(GLOB_RECURSE CLIENT_SRC srcs/*.cpp)
 add_executable(${PROJECT_NAME} ${CLIENT_SRC})
 
 include_directories(${PROJECT_NAME} includes)
-message(${OPENAL_LIBRARY})
-target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image sdl2_mixer glm assimp SOIL2 network ${OPENGL_gl_LIBRARY} ${OPENAL_LIBRARY})
+target_link_libraries(${PROJECT_NAME} SDL2 sdl2_ttf sdl2_image sdl2_mixer glm assimp SOIL2 network ${OPENGL_gl_LIBRARY})
