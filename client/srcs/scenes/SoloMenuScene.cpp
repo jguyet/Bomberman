@@ -56,9 +56,11 @@ void								SoloMenuScene::loadCurrentLevel()
 void								SoloMenuScene::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_ESCAPE) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 		BombermanClient::getInstance()->stop();
 	}
 	if (key == SDL_SCANCODE_KP_ENTER || key == SDL_SCANCODE_RETURN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 		if (this->interface->current_position >= 0 && this->interface->current_position <= 3)
 		{
 			this->interface->current_position++;

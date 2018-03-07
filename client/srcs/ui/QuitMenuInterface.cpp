@@ -61,16 +61,22 @@ void						QuitMenuInterface::draw(void)
 void						QuitMenuInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_RETURN && this->current_position == 0) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
+		BombermanClient::getInstance()->MusicStop();
+		BombermanClient::getInstance()->MusicPlay(MENU);
 		BombermanClient::getInstance()->setCurrentScene<GameScene>(new MainMenuScene());
 		return ;
 	}
 	if (key == SDL_SCANCODE_RETURN && this->current_position == 1) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 		this->scene->closeQuitInterface();
 	}
 	if (key == SDL_SCANCODE_UP) {
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
 		this->current_position = (this->current_position - 1) < 0 ? 1 : (this->current_position - 1) % 2;
 	}
 	if (key == SDL_SCANCODE_DOWN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
 		this->current_position = (this->current_position + 1) % 2;
 	}
 }

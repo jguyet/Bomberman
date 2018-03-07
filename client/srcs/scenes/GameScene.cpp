@@ -36,6 +36,8 @@ GameScene::GameScene (std::string selected_map)
 	//SDL_ShowCursor(SDL_DISABLE);
 	//SDL_SetWindowGrab(BombermanClient::getInstance()->window, SDL_TRUE);
 	KeyBoard::instance->addHandler("GameScene", this);
+	BombermanClient::getInstance()->MusicStop();
+	BombermanClient::getInstance()->MusicPlay(STAGE1);
 }
 
 void GameScene::StartSolo(void)
@@ -55,7 +57,6 @@ void GameScene::StartSolo(void)
 		this->players.push_back(playerObject);
 		this->all_player.push_back(playerObject);
 		this->add(playerObject);
-		BombermanClient::getInstance()->MusicPlay(STAGE1);
 	}
 
 /*

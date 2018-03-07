@@ -63,6 +63,8 @@ void						BombermanClient::build_window( void )
 	width = this->properties->getInt("BombermanClient.screen.width");
 	height = this->properties->getInt("BombermanClient.screen.height");
 	fullscreen = this->properties->getBool("BombermanClient.screen.fullscreen");
+	this->enableSound = this->properties->getBool("BombermanClient.enableSound");
+	this->enableMusic = this->properties->getBool("BombermanClient.enableMusic");
 
 	if (width < 500 || height < 500 || width > 3000 || height > 3000) {
 		printf( "Error not conform display: width:%d, height:%d\n", width, height);
@@ -96,15 +98,19 @@ void						BombermanClient::build_window( void )
 	    this->enableSound = false;
 	}
 
-	this->bomb = Mix_LoadWAV("./assets/sound/bombe.wav");
-	this->bomb2 = Mix_LoadWAV("./assets/sound/bombe2.wav");
+	this->bomb1 = Mix_LoadWAV("./assets/sound/bomb1.wav");
+	this->bomb2 = Mix_LoadWAV("./assets/sound/bomb2.wav");
+	this->bomb3 = Mix_LoadWAV("./assets/sound/bomb3.wav");
+	this->bomb4 = Mix_LoadWAV("./assets/sound/bomb4.wav");
 
 	this->menu_enter = Mix_LoadWAV("./assets/sound/DONE.WAV");
+	this->menu_move = Mix_LoadWAV("./assets/sound/BUTT.WAV");
+
 	this->music = Mix_LoadMUS("./assets/sound/stage1.ogg");
 	this->music_menu = Mix_LoadMUS("./assets/sound/stage2.ogg");
 
 	// shit is getting my ears bleeding
-	Mix_VolumeMusic(20);
+	Mix_VolumeMusic(30);
 
 	//OPENGL version 3.3
 	//################################################
@@ -128,6 +134,8 @@ void						BombermanClient::build_window( void )
 	glEnable(GL_MULTISAMPLE);
 	//0 for immediate updates, 1 for updates synchronized with the vertical retrace, -1 for late swap tearing
 	SDL_GL_SetSwapInterval(0);
+
+	BombermanClient::getInstance()->MusicPlay(MENU);
 }
 
 void BombermanClient::SoundPlay(Sound toPlay) {
@@ -135,17 +143,27 @@ void BombermanClient::SoundPlay(Sound toPlay) {
 		return ;
 	Mix_Chunk *sound = NULL;
 	if (toPlay == BOMB_EXPLODE) {
-		if (rand() % 2 == 0)
-			sound = this->bomb;
-		else
+		int r = (rand() % 4) + 1;
+		if (r == 1)
+			sound = this->bomb1;
+		else if (r==2)
 			sound = this->bomb2;
+		else if (r==3)
+			sound = this->bomb3;
+		else if (r==4)
+			sound = this->bomb4;
 	}
 	if (toPlay == MENU_ENTER)
 		sound = this->menu_enter;
+	if (toPlay == MENU_MOVE)
+		sound = this->menu_move;
 	if (sound)
+	{
+		Mix_VolumeChunk(sound, MIX_MAX_VOLUME/2);
 		if(Mix_PlayChannel(-1, sound, 0)==-1) {
 			printf("Mix_PlayChannel: %s\n",Mix_GetError());
 		}
+	}
 }
 
 void BombermanClient::MusicPlay(Music toPlay)
@@ -165,6 +183,12 @@ void BombermanClient::MusicPlay(Music toPlay)
 			printf("Mix_PlayMusic: %s\n",Mix_GetError());
 		}
 	}
+}
+
+void BombermanClient::MusicStop(void)
+{
+	Mix_FadeOutMusic(500);
+	//Mix_HaltMusic();
 }
 
 void						BombermanClient::delete_inputs( void )

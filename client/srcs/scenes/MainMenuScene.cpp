@@ -17,7 +17,6 @@ MainMenuScene::MainMenuScene ( void )
 	this->camera->buildFPSProjection();
 
 	this->interface = new MainMenuInterface();
-	// Mix_PlayMusic(BombermanClient::getInstance()->music_menu, 1);
 
 	KeyBoard::instance->addHandler("MainMenuScene", this);
 	return ;
@@ -87,6 +86,7 @@ void								MainMenuScene::handleUP(unsigned int key)
 		BombermanClient::getInstance()->stop();
 	}
 	if (key == SDL_SCANCODE_KP_ENTER || key == SDL_SCANCODE_RETURN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_ENTER);
 		switch(this->interface->current_position)
 		{
 			case 0:

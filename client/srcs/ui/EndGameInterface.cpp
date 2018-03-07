@@ -51,9 +51,11 @@ std::ostream &				operator<<(std::ostream & o, EndGameInterface const & i)
 void					EndGameInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_UP) {
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
 		this->current_position = (this->current_position - 1) < 0 ? 1 : (this->current_position - 1) % 2;
 	}
 	if (key == SDL_SCANCODE_DOWN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
 		this->current_position = (this->current_position + 1) % 2;
 	}
 }

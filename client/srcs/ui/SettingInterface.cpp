@@ -88,9 +88,11 @@ void								SettingInterface::draw(void)
 
 	//Music
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_LEFT) && this->current_position == 4) {
+		BombermanClient::getInstance()->MusicPlay(MENU);
 		BombermanClient::getInstance()->enableMusic = true;
 	}
 	if (KeyBoard::instance->getKey(SDL_SCANCODE_RIGHT) && this->current_position == 4) {
+		BombermanClient::getInstance()->MusicStop();
 		BombermanClient::getInstance()->enableMusic = false;
 	}
 
@@ -113,9 +115,11 @@ void								SettingInterface::draw(void)
 void								SettingInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_UP) {
-		this->current_position = (this->current_position - 1) < 0 ? 4 : (this->current_position - 1) % 6;
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
+		this->current_position = (this->current_position - 1) < 0 ? 5 : (this->current_position - 1) % 6;
 	}
 	if (key == SDL_SCANCODE_DOWN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
 		this->current_position = (this->current_position + 1) % 6;
 	}
 }

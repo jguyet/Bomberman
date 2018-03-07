@@ -62,6 +62,7 @@ void						SoloMenuInterface::draw(void)
 void						SoloMenuInterface::handleUP(unsigned int key)
 {
 	if (key == SDL_SCANCODE_UP) {
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
 		this->current_position = (this->current_position - 1) < 0 ? 4 : (this->current_position - 1) % 5;
 
 		if (this->current_position > (this->current_level - 1) && this->current_position != 4) {
@@ -69,6 +70,7 @@ void						SoloMenuInterface::handleUP(unsigned int key)
 		}
 	}
 	if (key == SDL_SCANCODE_DOWN) {
+		BombermanClient::getInstance()->SoundPlay(MENU_MOVE);
 		this->current_position = (this->current_position + 1) % 5;
 
 		if (this->current_position > (this->current_level - 1) && this->current_position != 4) {
