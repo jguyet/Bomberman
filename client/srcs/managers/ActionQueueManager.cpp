@@ -193,12 +193,10 @@ void ActionQueueManager::doAction(ActionQueue *action)
 		break ;
 
 		case EndOfGameMessage::ID: {
-			std::cout << "ENDOFGAMEMESSAGE" << std::endl;
 			EndOfGameMessage	*message = (EndOfGameMessage*)action->message;
 			GameScene			*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 
-			//TODO get is_winner or looser in received message
-			scene->endGame(true);
+			BombermanClient::getInstance()->setCurrentScene<EndGameScene>(new EndGameScene(message->is_winner));
 		}
 		break ;
 	}

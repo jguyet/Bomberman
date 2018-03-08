@@ -170,10 +170,12 @@ void								GameScene::endGame(bool is_winner)
 	{
 		this->current_player = NULL;
 	}
-	if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false && is_winner) {
-		BombermanClient::getInstance()->saveManager->levelUP();
+	if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false) {
+		if (is_winner) {
+			BombermanClient::getInstance()->saveManager->levelUP();
+		}
+		BombermanClient::getInstance()->setCurrentScene<EndGameScene>(new EndGameScene(is_winner));
 	}
-	BombermanClient::getInstance()->setCurrentScene<EndGameScene>(new EndGameScene(is_winner));
 	//printf("You finished the level %d, congratulations !\n", BombermanClient::getInstance()->saveManager->getCurrentLevel());
 	//BombermanClient::getInstance()->saveManager->loadNextLevel();
 }

@@ -74,6 +74,7 @@ Socket::Socket (const char *host, int port) : basePort(port), baseHost(host)
 		 this->getId(ActionMessage::ID), &MessageHandler::ActionMessageHandler,
 		 this->getId(PlayerDeadMessage::ID), &MessageHandler::PlayerDeadMessageHandler,
 		 this->getId(GameStartedMessage::ID), &MessageHandler::GameStartedMessageHandler,
+		 this->getId(EndOfGameMessage::ID), &MessageHandler::EndOfGameMessageHandler,
 		 	END_OF_HANDLER);
 
 		std::thread thread(Socket::Thread, this);
