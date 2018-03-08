@@ -296,9 +296,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 	if (collider->tag == "door" && this->gameObject->id == this->scene->current_player->id)
 	{
-		std::cout << "NB Bots: " << BotControllerScript::List.size() << std::endl;
-
-		if (BotControllerScript::List.size() == 0)
+		if (BotControllerScript::List.size() == 0) // Si tous les bots sont mort !
 			this->scene->endGame(true);
 		return;
 	}

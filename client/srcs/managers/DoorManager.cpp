@@ -36,5 +36,6 @@ void DoorManager::setRandomDoor(GameScene *scene)
 
 		selectedCase->door = Factory::newDoor("door");
 		selectedCase->door->transform.position = selectedCase->obstacle->transform.position;
+		selectedCase->door->transform.position.y -= 1.5;
 	}
 }

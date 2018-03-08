@@ -58,7 +58,6 @@ void Loader::loadModels()
 	Model::load("yellow_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/yellow.obj");
 	Model::load("carled_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/carled.obj");
 
-	Model::load("dumpster", ShaderUtils::getInstance()->get("dir"), "assets/dumpster/Dumpster.obj");
 	Model::load("door", ShaderUtils::getInstance()->get("door"), "assets/door/dor.obj");
 
 	Model::load("brick", ShaderUtils::getInstance()->get("dir"), "assets/textures/grass.obj");
@@ -74,5 +73,10 @@ void Loader::loadModels()
 	Model::load("palm_tree", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/palm.obj");
 	Model::load("plant", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/plant.obj");
 	Model::load("crate", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/crate.obj");
-	Model::load("skybox", ShaderUtils::getInstance()->get("dir"), "assets/skybox/skybox2.obj");
+
+
+	Model::load("grass", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/grass.obj");
+	//Model::load("skybox", ShaderUtils::getInstance()->get("dir"), "assets/skybox/skybox.obj");
+	//Model::load("house", ShaderUtils::getInstance()->get("door"), "assets/house/house.obj");
+	Model::load("skybox2", ShaderUtils::getInstance()->get("dir"), "assets/skybox/skybox2.obj");
 }

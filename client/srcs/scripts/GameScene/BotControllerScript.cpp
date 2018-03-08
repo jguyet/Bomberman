@@ -19,6 +19,10 @@ BotControllerScript::BotControllerScript ( int level ) : CharacterControllerScri
 	this->min_scale = -0.05f;
 	this->robot = NULL;
 	this->level = level;
+
+	//TODO make something change on bot level, for now just speed
+	this->speed = (SPEED/5 * level) + 0.02;
+
 	return ;
 }
 

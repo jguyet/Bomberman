@@ -10,7 +10,7 @@ GameObject							*Factory::newDoor(std::string model)
 	obj->AddComponent<Model>(Model::model[model]);
 	obj->AddComponent<Script>(new DoorControllerScript());
 	obj->transform.scale = glm::vec3(1.f, 1.f, 1.f);
-	obj->transform.rotation = glm::vec3(0,90,100);
+	obj->transform.rotation = glm::vec3(0,90,-70);
 	return (obj);
 }
 
@@ -106,8 +106,8 @@ GameObject 							*Factory::newSkybox(void)
 
 	obj->tag = "Skybox";
 	obj->transform.position = glm::vec3(0, 1000, 0);
-	obj->transform.scale = glm::vec3(10000.f, -10000.f, 10000.f);
-	obj->AddComponent<Model>(Model::model["skybox"]);
+	obj->transform.scale = glm::vec3(10000.f, 10000.f, 10000.f);
+	obj->AddComponent<Model>(Model::model["skybox2"]);
 	return (obj);
 }
 
@@ -116,7 +116,6 @@ GameObject 							*Factory::newGoomba(int level)
 	GameObject *obj = new GameObject();
 
 	obj->tag = "Goomba";
-	std::cout << "newGoomba(" << level << ")" << std::endl;
 	obj->AddComponent<Model>(Model::model["goomba"]);
 	obj->AddComponent<BoxCollider>(new BoxCollider(glm::vec3(0,0,0), glm::vec3(0.4f,0.25f,0.4f)));
 	obj->AddComponent<Script>(new BotControllerScript(level));
