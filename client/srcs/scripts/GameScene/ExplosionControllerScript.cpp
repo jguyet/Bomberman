@@ -72,8 +72,12 @@ void						ExplosionControllerScript::Update(void)
 					} else {
 						BombermanClient::getInstance()->sock->newBonus(x, z);
 					}
-				if (b->door != NULL)
-					scene->add(b->door);
+				if (b->door == true) {
+					GameObject *door = Factory::newDoor("door");
+					door->transform.position = b->obstacle->transform.position;
+					door->transform.position.y = 0;
+					scene->add(door);
+				}
 				b->obstacle->toDelete = true;
 				b->obstacle = NULL;
 				b->walkable = true;

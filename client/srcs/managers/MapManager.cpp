@@ -281,8 +281,7 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 			{
 				replaceAll(arg, "scale(", "");
 				replaceAll(arg, ")", "");
-				replaceAll(arg, " ", "");
-
+				arg = trim(arg);
 				std::vector<std::string> data = split(arg, ',');
 				if (data.size() == 3) {
 					scale = glm::vec3(
@@ -296,16 +295,14 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 			{
 				replaceAll(arg, "height(", "");
 				replaceAll(arg, ")", "");
-				replaceAll(arg, " ", "");
-
+				arg = trim(arg);
 				h = stof(arg);
 			}
 			if (arg.find("level(") != std::string::npos)
 			{
 				replaceAll(arg, "level(", "");
 				replaceAll(arg, ")", "");
-				replaceAll(arg, " ", "");
-				std::cout << "arg:" << arg << std::endl;
+				arg = trim(arg);
 				level = stoi(arg);
 			}
 		}
@@ -339,7 +336,7 @@ bool				MapManager::parseMap(Map *map, std::string const &content)
 
 			cube.ground = NULL;
 			cube.obstacle = NULL;
-			cube.door = NULL;
+			cube.door = false;
 			cube.walkable = true;
 			cube.environement = NULL;
 			cube.position = glm::vec3(height * 2, 0, width * 2);

@@ -58,16 +58,6 @@ void GameScene::StartSolo(void)
 		this->all_player.push_back(playerObject);
 		this->add(playerObject);
 	}
-
-/*
-	GameObject *player = Factory::newPlayer(100);
-	this->all_player.push_back(player);
-	this->players.push_back(player);
-	player->transform.position = glm::vec3(4,1,38);
-	player->transform.scale = glm::vec3(3,3,3);
-	player->transform.rotation = glm::vec3(0,0,0);
-	this->add(player);//add on scene
-	*/
 }
 
 void					GameScene::handleUP(unsigned int key)
@@ -170,14 +160,12 @@ void								GameScene::endGame(bool is_winner)
 	{
 		this->current_player = NULL;
 	}
-	if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == false) {
-		if (is_winner) {
-			BombermanClient::getInstance()->saveManager->levelUP();
-		}
-		BombermanClient::getInstance()->setCurrentScene<EndGameScene>(new EndGameScene(is_winner));
+	if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == true)
+		return ;
+	if (is_winner) {
+		BombermanClient::getInstance()->saveManager->levelUP();
 	}
-	//printf("You finished the level %d, congratulations !\n", BombermanClient::getInstance()->saveManager->getCurrentLevel());
-	//BombermanClient::getInstance()->saveManager->loadNextLevel();
+	BombermanClient::getInstance()->setCurrentScene<EndGameScene>(new EndGameScene(is_winner));
 }
 
 void								GameScene::closeQuitInterface(void)
