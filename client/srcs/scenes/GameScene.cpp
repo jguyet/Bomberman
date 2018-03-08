@@ -156,12 +156,9 @@ void								GameScene::startGame(void)
 
 void								GameScene::endGame(bool is_winner)
 {
-	if (this->current_player != NULL)
-	{
-		this->current_player = NULL;
-	}
-	if (BombermanClient::getInstance()->sock && BombermanClient::getInstance()->sock->state == true)
+	if (this->current_player == NULL)
 		return ;
+	this->current_player = NULL;
 	if (is_winner) {
 		BombermanClient::getInstance()->saveManager->levelUP();
 	}

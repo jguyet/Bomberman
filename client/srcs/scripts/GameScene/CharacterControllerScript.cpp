@@ -191,11 +191,14 @@ void						CharacterControllerScript::Update(void)
 		}
 		if ((TimeUtils::getCurrentSystemMillis() - this->startDying) >= 1000L) {
 			if (this->playerId == currentPlayerId) { // Current player
-				if (BombermanClient::getInstance()->sock != NULL) {
+				if (BombermanClient::getInstance()->sock == NULL || BombermanClient::getInstance()->sock->state == false)
+				{
+					this->scene->endGame(false);
+				}
+				if (BombermanClient::getInstance()->sock != NULL && BombermanClient::getInstance()->sock->state == true) {
 					BombermanClient::getInstance()->sock->playerDead(this->getPlayerId());
 				}
 				this->scene->removePlayer(this->gameObject);
-				this->scene->endGame(false);
 			} else { // Other players
 				printf("Player id %d is dead !\n", this->getPlayerId());
 				this->scene->removePlayer(this->gameObject);
@@ -226,7 +229,7 @@ void						CharacterControllerScript::Update(void)
 
 		if (this->has_moved) {
 			if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 50L)) {
-				if (BombermanClient::getInstance()->sock != NULL)
+				if (BombermanClient::getInstance()->sock != NULL && BombermanClient::getInstance()->sock->state == true)
 					BombermanClient::getInstance()->sock->updateMovement(this);
 				this->lastNetwork = TimeUtils::getCurrentSystemMillis();
 			}
@@ -296,7 +299,7 @@ void						CharacterControllerScript::OnCollisionEnter(GameObject *collider)
 		return ;
 	if (collider->tag == "door" && this->gameObject->id == this->scene->current_player->id)
 	{
-		if (BotControllerScript::List.size() == 0) // Si tous les bots sont mort !
+		if (BotControllerScript::List.size() == 0 && (BombermanClient::getInstance()->sock == NULL || BombermanClient::getInstance()->sock->state == false)) // Si tous les bots sont mort !
 			this->scene->endGame(true);
 		return;
 	}

@@ -3,8 +3,9 @@
 #include "All.hpp"
 #include "IMessage.hpp"
 
-EndOfGameMessage::EndOfGameMessage () : IMessage(EndOfGameMessage::ID, sizeof(IMessage) + sizeof(EndOfGameMessage))
+EndOfGameMessage::EndOfGameMessage (bool is_winner) : IMessage(EndOfGameMessage::ID, sizeof(IMessage) + sizeof(EndOfGameMessage))
 {
+	this->is_winner = is_winner;
 	return ;
 }
 

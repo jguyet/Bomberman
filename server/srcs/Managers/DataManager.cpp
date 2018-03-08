@@ -78,8 +78,18 @@ void DataManager::updatePlayers(DataManager *instance)
 			}
 			instance->playersPos.clear();
 		}
-		if (instance->gameState && instance->players.size() <= 1) {
+		if (instance->gameState && instance->players.size() == 1) {
+			Packet packet(new EndOfGameMessage(true));
+
+			for (int i = 0; i < instance->server->clients.size(); i++) {
+				Player *player = instance->server->clients[i]->player;
+				if (player != NULL) {
+					packet.sendPacket(instance->server->clients[i]->getSocket());
+				}
+			}
 			instance->disconnectClients();
+		}
+		if (instance->gameState && instance->players.size() <= 1) {
 			instance->gameState = false;
 		}
 		usleep(50 * 1000);

@@ -27,6 +27,7 @@ class Player
 		float				x;
 		float				y;
 		float				z;
+		bool				alive;
 };
 
 #endif

@@ -58,7 +58,6 @@ void Client::clientThread(Client *client)
 		FD_ZERO(&client->rdfs);
 		FD_SET(client->fd, &client->rdfs);
 		if (select(client->fd + 1, &client->rdfs, NULL, NULL, &tv) == -1) {
-			std::cerr << "An error occured " << strerror(errno) << std::endl;
 			client->server->removeClient(client);
 		  	break ;
 		}

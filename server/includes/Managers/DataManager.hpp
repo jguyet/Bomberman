@@ -9,6 +9,7 @@
 #include "objs/PlayerPositionObject.hpp"
 #include "Packet.hpp"
 #include "messages/PlayersPositionMessage.hpp"
+#include "messages/EndOfGameMessage.hpp"
 
 class Client;
 class Server;

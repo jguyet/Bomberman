@@ -10,6 +10,7 @@
 #include "messages/ActionMessage.hpp"
 #include "messages/PlayerDeadMessage.hpp"
 #include "messages/GameStartedMessage.hpp"
+#include "messages/EndOfGameMessage.hpp"
 
 class Processor
 {

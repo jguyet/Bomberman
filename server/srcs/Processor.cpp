@@ -67,18 +67,41 @@ void Processor::ActionMessageHandler(SOCK socket, ActionMessage *message)
 
 void Processor::PlayerDeadMessageHandler(SOCK socket, PlayerDeadMessage *message)
 {
-	DataManager	*manager	= DataManager::Instance();
-	Player		*player		= NULL;
+	DataManager	*manager		= DataManager::Instance();
+	Player		*player			= NULL;
+	int			player_alive	= 0;
 	if ((player = manager->findPlayerById(message->playerId)) != NULL)
 	{
 		Packet packet(new PlayerDeadMessage(message->playerId));
 		for (int i = 0; i < manager->server->clients.size(); i++) {
-			Player *player = manager->server->clients[i]->player;
-			if (player != NULL) {
+			Player *p = manager->server->clients[i]->player;
+			if (p != NULL) {
+
+				if (p->getId() == message->playerId)
+					p->alive = false;
+				if (p->alive == true)
+					player_alive++;
 				packet.sendPacket(manager->server->clients[i]->getSocket());
 			}
 		}
-		manager->removePlayer(player);
+		if (player_alive == 1) {
+			for (int i = 0; i < manager->server->clients.size(); i++) {
+				Player *p = manager->server->clients[i]->player;
+				if (p != NULL) {
+
+					if (p->alive) {
+						Packet packet(new EndOfGameMessage(true));
+						packet.sendPacket(manager->server->clients[i]->getSocket());
+					}
+					else {
+						Packet packet(new EndOfGameMessage(false));
+						packet.sendPacket(manager->server->clients[i]->getSocket());
+					}
+					manager->removePlayer(p);
+				}
+			}
+			manager->gameState = false;
+		}
 	}
 }
 

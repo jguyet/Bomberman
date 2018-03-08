@@ -4,6 +4,7 @@ Player::Player (int id, int socket, int udpPort)
 {
 	this->id = id;
 	this->setAddr(socket, udpPort);
+	this->alive = true;
 }
 
 Player::Player ( Player const & src )

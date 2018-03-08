@@ -196,7 +196,7 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			EndOfGameMessage	*message = (EndOfGameMessage*)action->message;
 			GameScene			*scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
 
-			BombermanClient::getInstance()->setCurrentScene<EndGameScene>(new EndGameScene(message->is_winner));
+			scene->endGame(message->is_winner);
 		}
 		break ;
 	}
