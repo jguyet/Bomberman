@@ -5,7 +5,7 @@
 
 // CANONICAL #####################################################
 
-AI::AI (GameObject* my_player) : my_player(my_player)
+AI::AI (GameObject* my_player, int level) : my_player(my_player), level(level)
 {
 	this->a_star.set_map(BombermanClient::getInstance()->getCurrentScene<GameScene>()->map);
 	this->select_t = false;
@@ -31,6 +31,7 @@ AI &				AI::operator=( AI const & rhs )
 	if (this != &rhs)
 	{
 		this->my_player = rhs.my_player;
+		this->level = rhs.level;
 		this->last_pos_x = this->my_player->transform.position.x;
 		this->last_pos_y = this->my_player->transform.position.z;
 	}
@@ -79,16 +80,21 @@ void				AI::select_target(void)
 	float x = this->my_player->transform.position.x;
 	float y = this->my_player->transform.position.z;
 
-	if (this->select_t == false)
+	// this->select_t == false ||
+	if ( this->action == IDLE)
 	{
-		// this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
+		int rand_action = rand() % this->level + 1;
 
-		if (this->action == IDLE)
-		{
+		// std::cout << "select action " << rand_action << std::endl;
+
+		if (rand_action <= 1)
+			this->action = WALK;
+		else if (rand_action <= 5)
 			this->action = SEARCH;
-			// this->action = WALK;
-			this->select_t = true;
-		}
+		else
+			this->get_target(x, y, dynamic_cast<GameScene*>(BombermanClient::getInstance()->current_scene)->all_player);
+
+		this->select_t = true;
 		this->set_last_move();
 	}
 	else if (this->action == ATTACK && (std::abs(this->target.pos_x - this->tplayer->transform.position.x) + std::abs(this->target.pos_y - this->tplayer->transform.position.z)) > 5)
@@ -139,7 +145,9 @@ int				AI::brain(void)
 			}
 			else
 			{
-				this->pause = TimeUtils::getCurrentSystemMillis() + 600 + BOMB_TIME;
+				// this->restart_target_pos(IDLE);
+				int n_bomb = dynamic_cast<CharacterControllerScript *>(my_player->GetComponent<Script>())->bomb;
+				this->pause = (n_bomb != 0) ? TimeUtils::getCurrentSystemMillis() + 300 : TimeUtils::getCurrentSystemMillis() + BOMB_TIME;
 				this->action = WAIT;
 				return (0);
 			}
@@ -164,8 +172,9 @@ int				AI::start_path_finding(float x, float y)
 	if (this->a_star.path_finding(x, y, this->target, moves, this->bomb_l, this->action) == false)
 	{
 		// std::cout << "-------------- FAIL OF PATH path_finding in action " << this->action << std::endl;
-		this->pause = TimeUtils::getCurrentSystemMillis() + 600 + BOMB_TIME;
-		this->action = WAIT;
+		this->restart_target_pos(IDLE);
+		// this->pause = TimeUtils::getCurrentSystemMillis() + 600 + BOMB_TIME;
+		// this->action = WAIT;
 		return (1);
 	}
 	return (0);

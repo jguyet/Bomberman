@@ -58,7 +58,7 @@ std::ostream &				operator<<(std::ostream & o, BotControllerScript const & i)
 
 void BotControllerScript::Start(void) {
 	this->scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
-	this->robot = new AI(this->gameObject);
+	this->robot = new AI(this->gameObject, this->level);
 }
 
 void								BotControllerScript::Update(void)

@@ -58,9 +58,6 @@ void						CharacterControllerScript::unlockCharacterDirections(void)
 void						CharacterControllerScript::Start(void)
 {
 	this->scene = BombermanClient::getInstance()->getCurrentScene<GameScene>();
-
-	if (this->playerId >= 100)
-		this->robot = new AI(this->gameObject);
 }
 
 void								CharacterControllerScript::Attack(void)
@@ -238,22 +235,7 @@ void						CharacterControllerScript::Update(void)
 			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
 		}
 	}
-	else if (this->playerId >= 100)
-	{
-		int i = 0;
-		i = robot->brain();
-
-		this->has_moved = false;
-		if (i != 0)
-			(this->*cmd[i])();
-
-		if (this->has_moved) {
-			this->gameObject->GetComponent<Animator>()->handleAnimation("walk");
-			BombermanClient::getInstance()->sock->updateMovement(this);
-		} else {
-			this->gameObject->GetComponent<Animator>()->handleAnimation("idle");
-		}
-	} else { //other players
+	else { //other players
 		if (this->lastNetwork < (TimeUtils::getCurrentSystemMillis() - 100L)) {
 			if (this->gameObject->transform.position != this->lastPosition_direction)
 				this->has_moved = true;

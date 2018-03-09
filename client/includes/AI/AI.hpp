@@ -11,7 +11,7 @@ class AI
 		// #####################################################################
 		// CANONICAL ###########################################################
 													AI( void );
-													AI(GameObject* my_player);
+													AI(GameObject* my_player, int level);
 													AI( AI const & src );
 		virtual										~AI( void );
 		AI &										operator=( AI const & rhs );
@@ -20,7 +20,7 @@ class AI
 		friend std::ostream &						operator<<(std::ostream & o, AI const & i);
 		// #####################################################################
 		// PUBLIC ##############################################################
-		int											brain();
+		int											brain(void);
 		int											move(float x, float y);
 		void										get_target(float x, float y, std::vector<GameObject*> players);
 		void										select_target(void);
@@ -31,6 +31,7 @@ class AI
 		float										last_pos_y;
 		long										t_last_move;
 		long										pause;
+		int											level;
 		GameObject*									tplayer;
 		GameObject*									my_player;
 
