@@ -3,7 +3,7 @@
 2	= wall_ice_block/destructible
 3	= wall_brick_block/indestructible
 4	= wall_solid_block/indestructible
-8	= NULL/AI
+8	= NULL/AI/level(10)
 9	= NULL/solo_position
 10	= NULL/pvp_position
 

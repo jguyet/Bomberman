@@ -1,0 +1,99 @@
+# Script
+# CreditInterface :
+#
+
+<style>
+.css
+{
+	color:#000000;
+	font-size: 30px;
+	font-family: arial;
+}
+
+.names
+{
+	color:#000000;
+	font-size: 20px;
+	font-family: arial;
+}
+</style>
+
+<square>
+{
+	id: "background_menu",
+	class: "mainmenu-css",
+	x: 0,
+	y: 0,
+	width: 100%,
+	height: 100%,
+	style: "color:#000000;",
+	z-index: 1
+}
+</square>
+
+<if condition="$selected != 0" >
+	<text>
+	{
+		id: "top",
+		class: "css",
+		value: "BOMBERMAN",
+		x: -120,
+		y: 10%,
+		style: "color:#ffffff;float:center;font-size: 40px;",
+		z-index: 3
+	}
+	</text>
+
+	<text>
+	{
+		id: "sound",
+		class: "css",
+		value: "SOUND EFFECTS",
+		parent: "top",
+		x: 20,
+		y: 80,
+		style: "color:#ffffff;font-size: 25px;",
+		z-index: 3
+	}
+	</text>
+
+	<text>
+	{
+		id: "1",
+		class: "names",
+		value: "MAIN-MENU MUSIC            DMOUREUX",
+		parent: "top",
+		x: -100,
+		y: 120,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+
+	<text>
+	{
+		id: "2",
+		class: "names",
+		value: "SETTINGS MUSIC               DMOUREUX",
+		parent: "top",
+		x: -100,
+		y: 150,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+
+	<text>
+	{
+		id: "3",
+		class: "names",
+		value: "GAME MUSIC                      DMOUREUX",
+		parent: "top",
+		x: -100,
+		y: 180,
+		style: "color:#ffffff;",
+		z-index: 3
+	}
+	</text>
+
+</if>

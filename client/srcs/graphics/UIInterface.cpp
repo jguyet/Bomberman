@@ -242,6 +242,15 @@ void						UIInterface::addElement(std::string const &tag_name, std::string const
 			int width = atoi(parameters_map["width"].c_str());
 			int height = atoi(parameters_map["height"].c_str());
 
+			if (parameters_map["width"].find("%") != std::string::npos) {
+				width = width % 101;
+				width = BombermanClient::getInstance()->screen->canvas_width * width / 100;
+			}
+			if (parameters_map["height"].find("%") != std::string::npos) {
+				height = height % 101;
+				height = BombermanClient::getInstance()->screen->canvas_height * height / 100;
+			}
+
 			tag = new Square(x, y, width, height);
 		}
 	}

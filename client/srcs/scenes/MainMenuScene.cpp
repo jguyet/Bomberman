@@ -99,6 +99,7 @@ void								MainMenuScene::handleUP(unsigned int key)
 				this->select_settings();
 			break ;
 			case 3:
+				BombermanClient::getInstance()->setCurrentScene<CreditScene>(new CreditScene());
 			break;
 			case 4:
 				delete this;

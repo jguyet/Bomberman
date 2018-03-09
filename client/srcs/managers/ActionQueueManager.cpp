@@ -152,20 +152,23 @@ void ActionQueueManager::doAction(ActionQueue *action)
 			else
 			{
 				GameObject	*obj = new GameObject();
-				obj->transform.position = glm::vec3(object.x * 2, 0, object.z * 2);
-				obj->transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+				obj->transform.position = glm::vec3(object.x*2, -0.5f, object.z*2);
+				obj->transform.scale = glm::vec3(0.9f, 0.9f, 0.9f);
 
 				if (object.type == ActionType::TYPE_BONUS_POWER_UP) {
 					obj->tag = "bonus-power-up";
 					obj->AddComponent<Model>(Model::model["bonus-power-up"]);
+					obj->AddComponent<Script>(new BonusControllerScript());
 				}
 				else if (object.type == ActionType::TYPE_BONUS_SPEED_UP) {
 					obj->tag = "bonus-speed-up";
 					obj->AddComponent<Model>(Model::model["bonus-speed-up"]);
+					obj->AddComponent<Script>(new BonusControllerScript());
 				}
 				else if (object.type == ActionType::TYPE_BONUS_BOMB_UP) {
 					obj->tag = "bonus-bomb-up";
 					obj->AddComponent<Model>(Model::model["bonus-bomb-up"]);
+					obj->AddComponent<Script>(new BonusControllerScript());
 				}
 				scene->add(obj);
 			}
