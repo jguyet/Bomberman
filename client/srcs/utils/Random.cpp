@@ -28,5 +28,8 @@ std::ostream &				operator<<(std::ostream & o, Random const & i)
 
 int Random::getRandom(int min, int max)
 {
-	return (rand() % (max - min + 1)) + min;
+	static int tmp = 0;
+
+	tmp++;
+	return ((((rand() + 1) / tmp) % (max - min + 1)) + min);
 }

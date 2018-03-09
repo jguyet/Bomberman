@@ -28,10 +28,11 @@ void DoorManager::setRandomDoor(GameScene *scene)
 {
 	std::vector<Case*>	possiblesCases = scene->mapManager->getAllDestructibleCases();
 	Random				random;
+	int					r = random.getRandom(0, possiblesCases.size() - 1);
 
-	if (possiblesCases.size() > 0)
+	if (possiblesCases.size() > 0 && r >= 0)
 	{
-		Case *selectedCase = possiblesCases[random.getRandom(0, possiblesCases.size() - 1)];
+		Case *selectedCase = possiblesCases[r];
 		selectedCase->obstacle->transform.scale = glm::vec3(1.f, 1.f, 1.f);
 		selectedCase->walkable = false;
 
