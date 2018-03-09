@@ -5,12 +5,12 @@
 # include <queue>
 
 enum e_action {
-	ATTACK,
-	SEARCH,
-	WAIT,
-	ESCAPE,
 	IDLE,
-	WALK
+	WAIT,
+	WALK,
+	ESCAPE,
+	SEARCH,
+	ATTACK,
 	// END
 };
 

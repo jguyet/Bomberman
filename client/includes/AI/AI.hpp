@@ -21,6 +21,7 @@ class AI
 		// #####################################################################
 		// PUBLIC ##############################################################
 		int											brain();
+		int											move(float x, float y);
 		void										get_target(float x, float y, std::vector<GameObject*> players);
 		void										select_target(void);
 		int											bombcol(int x, int y, int next_x, int next_y);
@@ -44,6 +45,9 @@ class AI
 	private:
 		// PRIVATE #############################################################
 		void										restart_target_pos(e_action action);
+		int											start_path_finding(float x, float y);
+		int											set_next_move(float x, float y);
+		void										set_last_move(void);
 		int											start_checks(void);
 		// #####################################################################
 };
