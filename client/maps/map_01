@@ -27,7 +27,7 @@
 34  = NULL/NULL
 35	= grass/environement/scale(6,6,6)/height(0.2)
 
-50	= plant/AI/level(3)
+50	= plant/AI/level(1)
 51	= NULL/solo_position
 52	= NULL/pvp_position
 

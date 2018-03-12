@@ -21,7 +21,7 @@ BotControllerScript::BotControllerScript ( int level ) : CharacterControllerScri
 	this->level = level;
 
 	//TODO make something change on bot level, for now just speed
-	this->speed = (SPEED/5 * level) + 0.02;
+	this->speed = (SPEED/10 * level) + 0.02;
 	return ;
 }
 

@@ -3,7 +3,7 @@
 2	= carled_block/destructible
 3	= red_block/indestructible
 4	= wall_brick_block/indestructible
-8	= NULL/AI/level(5)
+8	= NULL/AI/level(2)
 9	= NULL/solo_position
 10	= NULL/pvp_position
 
