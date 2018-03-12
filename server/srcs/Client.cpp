@@ -25,7 +25,7 @@ Client::Client (SOCK sock, struct sockaddr_in &in, Server *server) : fd(sock), i
 		END_OF_HANDLER);
 
 	if (!manager->gameState) {
-		Packet mapPacket = Packet(new MapSelectMessage("map_01"));
+		Packet mapPacket = Packet(new MapSelectMessage("map_03"));
 		mapPacket.sendPacket(sock);
 
 		fcntl(this->fd, F_SETFL, 0 | O_NONBLOCK);
