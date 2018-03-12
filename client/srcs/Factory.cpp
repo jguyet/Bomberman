@@ -107,6 +107,7 @@ GameObject 							*Factory::newSkybox(void)
 	obj->tag = "Skybox";
 	obj->transform.position = glm::vec3(0, 1000, 0);
 	obj->transform.scale = glm::vec3(10000.f, 10000.f, 10000.f);
+	obj->transform.rotation = glm::vec3(0, 0, 52);
 	obj->AddComponent<Model>(Model::model["skybox2"]);
 	return (obj);
 }

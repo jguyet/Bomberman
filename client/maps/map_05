@@ -25,7 +25,7 @@
 30 = palm_tree/environement/scale(3,3,3)/height(1)
 31	= plant/environement/scale(1.2,1.2,1.2)/height(-1)
 
-50	= plant/AI/level(1)
+50	= plant/AI/level(10)
 51	= NULL/solo_position
 52	= NULL/pvp_position
 
