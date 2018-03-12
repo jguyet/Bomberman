@@ -36,7 +36,6 @@ void Loader::loadShaders()
 void Loader::loadModels()
 {
 	Model::load("canvas", ShaderUtils::getInstance()->get("canvas"), "assets/reserved/canvas.obj");
-
 	//Player
 	Model::load("bomberman", ShaderUtils::getInstance()->get("player"), "assets/bomberman_animations/test.obj");
 	Model::load("bomberman2", ShaderUtils::getInstance()->get("player"), "assets/bomberman_animations/test.obj");
@@ -48,35 +47,21 @@ void Loader::loadModels()
 	Model::load("bomb", ShaderUtils::getInstance()->get("bomb"), "assets/bomb/bomb.obj");
 	//textures
 	Model::load("flamme_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/Flamme.obj");
-
 	Model::load("wall_ice_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/mur1.obj");
 	Model::load("wall_brick_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/brick.obj");
-
 	Model::load("wall_solid_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/sol1.obj");
-
 	Model::load("red_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/red.obj");
 	Model::load("yellow_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/yellow.obj");
 	Model::load("carled_block", ShaderUtils::getInstance()->get("dir"), "assets/textures/blocks/carled.obj");
-
 	Model::load("door", ShaderUtils::getInstance()->get("door"), "assets/door/dor.obj");
-
 	Model::load("brick", ShaderUtils::getInstance()->get("dir"), "assets/textures/grass.obj");
-
-
 	Model::load("bonus-bomb-up", ShaderUtils::getInstance()->get("dir"), "assets/textures/bonus/bomb-up.obj");
 	Model::load("bonus-power-up", ShaderUtils::getInstance()->get("dir"), "assets/textures/bonus/power-up.obj");
 	Model::load("bonus-speed-up", ShaderUtils::getInstance()->get("dir"), "assets/textures/bonus/speed-up.obj");
-
 	Model::load("goomba", ShaderUtils::getInstance()->get("dir"), "assets/Goomba/goomba.obj");
-
-
 	Model::load("palm_tree", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/palm.obj");
 	Model::load("plant", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/plant.obj");
 	Model::load("crate", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/crate.obj");
-
-
 	Model::load("grass", ShaderUtils::getInstance()->get("door"), "assets/Vegetation/grass.obj");
-	//Model::load("skybox", ShaderUtils::getInstance()->get("dir"), "assets/skybox/skybox.obj");
-	//Model::load("house", ShaderUtils::getInstance()->get("door"), "assets/house/house.obj");
 	Model::load("skybox2", ShaderUtils::getInstance()->get("dir"), "assets/skybox/skybox2.obj");
 }
