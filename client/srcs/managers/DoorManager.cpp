@@ -33,7 +33,7 @@ void DoorManager::setRandomDoor(GameScene *scene)
 	if (possiblesCases.size() > 0 && r >= 0)
 	{
 		Case *selectedCase = possiblesCases[r];
-		selectedCase->obstacle->transform.scale = glm::vec3(1.f, 1.f, 1.f);
+		selectedCase->obstacle->transform.scale = glm::vec3(1.8f, 1.8f, 1.8f);
 		selectedCase->walkable = false;
 
 		selectedCase->door = true;

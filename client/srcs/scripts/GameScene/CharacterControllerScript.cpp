@@ -75,15 +75,14 @@ void								CharacterControllerScript::Attack(void)
 		ActionObject object(type, fmax(0.5f + this->gameObject->transform.position.x / 2.f, 0), c->position.y, fmax(0.5f + this->gameObject->transform.position.z / 2.f, 0));
 		Packet packet(new ActionMessage(object, this->getPlayerId()));
 		packet.sendPacket(BombermanClient::getInstance()->sock->getSocket());
+	} else {
+		GameObject *bomb = Factory::newBomb(this);
+		bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
+		bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
+		bomb->transform.rotation = glm::vec3(0,0,0);
+		this->scene->add(bomb);
+		c->obstacle = bomb;
 	}
-
-	GameObject *bomb = Factory::newBomb(this);
-
-	bomb->transform.position = glm::vec3(c->position.x,0,c->position.z);
-	bomb->transform.scale = glm::vec3(1.5f,1.5f,1.5f);
-	bomb->transform.rotation = glm::vec3(0,0,0);
-	this->scene->add(bomb);
-	c->obstacle = bomb;
 }
 
 void 								CharacterControllerScript::BombExplode()
