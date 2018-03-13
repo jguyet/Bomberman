@@ -1,8 +1,8 @@
 all:
 	@cd ./client ; cmake . ; cd ..
+	@make -C ./network
 	@make -C ./client -j20
 	@make -C ./server
-	@make -C ./network
 	@mv ./client/Bomberman .
 	@cp -r ./client/assets .
 	@cp -r ./client/themes .
