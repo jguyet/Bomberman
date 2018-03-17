@@ -12,17 +12,26 @@ make minimum VERSION 3.8
 git minimum VERSION 2.1  
 opengl framework minimum VERSION 3.3.0  
 openal framework minimum VERSION 1.0  
+(MACOS) brew  
 
 ##### use :
 Compilation command :  
-`cd Build`  
-`cmake ..`  
 `make`  
 `./Bomberman`  
-Recompilation command `make`  
+Recompilation command `make re`  
 
-##### developement :
-Trello -> [https://trello.com/b/GyST89x2/bomberman](https://trello.com/b/GyST89x2/bomberman)  
+##### use server :
+`./server/bomber_server`   
+
+##### client properties :
+open `bomberman.properties` file on text editor  
+`BombermanClient.screen.width=1280`  
+`BombermanClient.screen.height=720`  
+`BombermanClient.screen.fullscreen=false`  
+`BombermanClient.enableSound=true`  
+`BombermanClient.enableMusic=false`  
+`Network.address=localhost:8964`  
+change this settings  
 
 ##### sdl2 documentation :
 [https://www.libsdl.org/](https://www.libsdl.org/)  
